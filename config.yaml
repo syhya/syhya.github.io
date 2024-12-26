@@ -1,0 +1,75 @@
+baseURL: "https://syhya.github.io/"
+title: "Yue Shui Blog"
+theme: "PaperMod"
+languageCode: "en-us"
+publishDir: "public"
+
+# Multilingual Configuration
+languages:
+  en:
+    languageName: "English"         # Display name for English
+    weight: 1                       # Language weight for sorting
+    contentDir: "content/en"        # Directory for English content
+    languageCode: "en-us"           # Language code
+    title: "Yue Shui Blog"          # English site title
+    params:
+      subtitle: "An experienced NLP Algorithm Engineer"  # Subtitle for English
+      contact:
+        email: "syhya925666582@gmail.com"                # Contact email
+      menu:
+        main:
+          - name: "Home"            # Main menu for English
+            url: "/en/"
+            weight: 1
+          - name: "Posts"
+            url: "/en/posts/"
+            weight: 2
+          - name: "About"
+            url: "/en/about/"
+            weight: 3
+
+  zh:
+    languageName: "简体中文"          # Display name for Chinese
+    weight: 2                       # Language weight for sorting
+    contentDir: "content/zh"        # Directory for Chinese content
+    languageCode: "zh-cn"           # Language code
+    title: "Yue Shui 博客"           # Chinese site title
+    params:
+      subtitle: "专注于大语言模型和NLP技术的算法工程师"  # Subtitle for Chinese
+      contact:
+        email: "syhya925666582@gmail.com"                # Contact email
+      menu:
+        main:
+          - name: "首页"            # Main menu for Chinese
+            url: "/zh/"
+            weight: 1
+          - name: "文章"
+            url: "/zh/posts/"
+            weight: 2
+          - name: "关于"
+            url: "/zh/about/"
+            weight: 3
+
+# Global Parameters
+params:
+  author: "Yue Shui"                # Global author name
+  dateFormat: "2006-01-02"          # Date format for posts
+  showPostDate: true                # Show post date
+  showLastmod: true                 # Show last modified date
+  toc: true                         # Enable Table of Contents
+  math: true                        # Enable MathJax for math rendering
+  customCSS: ["css/custom.css"]     # Custom CSS for styling
+  enableReadingTime: true           # Enable reading time estimation
+  showTableOfContents: true         # Show Table of Contents in posts
+
+# Syntax Highlighting Configuration
+markup:
+  highlight:
+    noClasses: false                # Use classes for code highlighting
+    style: "monokai"                # Highlighting style
+    lineNos: true                   # Enable line numbers for code blocks
+
+  
+
+
+

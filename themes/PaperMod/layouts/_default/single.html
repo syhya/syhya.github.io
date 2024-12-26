@@ -1,0 +1,87 @@
+{{- define "main" }}
+
+<article class="post-single">
+  <header class="post-header">
+    <!-- Breadcrumb navigation -->
+    {{ partial "breadcrumbs.html" . }}
+    
+    <!-- Post title -->
+    <h1 class="post-title entry-hint-parent">
+      {{ .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <!-- Draft icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+      {{- end }}
+    </h1>
+
+    <!-- Post description (optional) -->
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description }}
+    </div>
+    {{- end }}
+
+    <!-- Post metadata -->
+    <div class="post-meta">
+      <p>
+        {{ if .Date }}Date: {{ .Date.Format "January 2, 2006" }}{{ end }}
+        {{ if .Params.readingTime }} | Estimated Reading Time: {{ .Params.readingTime }} min{{ end }}
+        {{ if .Params.author }} | Author: {{ .Params.author }}{{ end }}
+      </p>
+    </div>
+
+    <!-- Table of contents (optional) -->
+    {{- if (.Param "ShowToc") }}
+    <nav class="post-toc">
+      <strong>Table of Contents</strong>
+      {{- partial "toc.html" . }}
+    </nav>
+    {{- end }}
+  </header>
+
+  <!-- Cover image (optional) -->
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+
+  <!-- Post content -->
+  {{- if .Content }}
+  <div class="post-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  <!-- Post footer -->
+  <footer class="post-footer">
+    <!-- Tags section -->
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    <ul class="post-tags">
+      {{- range ($.GetTerms $tags) }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+
+    <!-- Navigation links for previous/next post -->
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- partial "post_nav_links.html" . }}
+    {{- end }}
+
+    <!-- Social share buttons -->
+    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end }}
+  </footer>
+
+  <!-- Comments section (optional) -->
+  {{- if (.Param "comments") }}
+  {{- partial "comments.html" . }}
+  {{- end }}
+</article>
+
+{{- end }}{{/* end main */}}

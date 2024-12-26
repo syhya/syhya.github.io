@@ -5,29 +5,11 @@ author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "RTX 4090", "AI Hardware", "PC Assembly"]
 categories: ["Tech Blog"]
 readingTime: 10
-description: "A comprehensive guide to assembling a high-performance home deep learning rig equipped with dual RTX 4090 GPUs."
 toc: true
+ShowToc: true
+TocOpen: false
 draft: false
----
 
-## Table of Contents
-
-- [Rent a GPU or Buy Your Own?](#rent-a-gpu-or-buy-your-own)
-- [Background](#background)
-- [Assembly Strategy & Configuration Details](#assembly-strategy--configuration-details)
-  - [GPU Selection](#gpu-selection)
-  - [CPU & Motherboard](#cpu--motherboard)
-  - [Memory](#memory)
-  - [Storage](#storage)
-  - [Power Supply](#power-supply)
-  - [Cooling & Fans](#cooling--fans)
-  - [Chassis](#chassis)
-- [System & Software Environment](#system--software-environment)
-- [Recommended Tools & Frameworks](#recommended-tools--frameworks)
-- [Advanced Suggestions](#advanced-suggestions)
-- [Summary](#summary)
-- [References](#references)
-- [Copyright & Citation](#copyright--citation)
 
 ---
 

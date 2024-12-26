@@ -1,1 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>组装主机 on Yue Shui 博客</title><link>https://syhya.github.io/zh/tags/%E7%BB%84%E8%A3%85%E4%B8%BB%E6%9C%BA/</link><description>Recent content in 组装主机 on Yue Shui 博客</description><generator>Hugo -- 0.140.1</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Dec 2024 12:00:00 +0800</lastBuildDate><atom:link href="https://syhya.github.io/zh/tags/%E7%BB%84%E8%A3%85%E4%B8%BB%E6%9C%BA/index.xml" rel="self" type="application/rss+xml"/><item><title>基于双卡 RTX 4090 搭建家用深度学习主机</title><link>https://syhya.github.io/zh/posts/2024-12-21-build-gpu-server/</link><pubDate>Sat, 21 Dec 2024 12:00:00 +0800</pubDate><guid>https://syhya.github.io/zh/posts/2024-12-21-build-gpu-server/</guid><description>基于双 RTX 4090 显卡组装高性能家用深度学习主机的全指南。</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>组装主机 on Yue Shui 博客</title><link>https://syhya.github.io/zh/tags/%E7%BB%84%E8%A3%85%E4%B8%BB%E6%9C%BA/</link><description>Recent content in 组装主机 on Yue Shui 博客</description><generator>Hugo -- 0.140.1</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Dec 2024 12:00:00 +0800</lastBuildDate><atom:link href="https://syhya.github.io/zh/tags/%E7%BB%84%E8%A3%85%E4%B8%BB%E6%9C%BA/index.xml" rel="self" type="application/rss+xml"/><item><title>基于双卡 RTX 4090 搭建家用深度学习主机</title><link>https://syhya.github.io/zh/posts/2024-12-21-build-gpu-server/</link><pubDate>Sat, 21 Dec 2024 12:00:00 +0800</pubDate><guid>https://syhya.github.io/zh/posts/2024-12-21-build-gpu-server/</guid><description>&lt;h2 id="租用-gpu-还是购买-gpu">租用 GPU 还是购买 GPU？&lt;/h2>
+&lt;p>在构建深度学习工作环境之前，首先需要综合考虑 &lt;strong>使用周期&lt;/strong>、&lt;strong>预算&lt;/strong>、&lt;strong>数据隐私&lt;/strong> 以及 &lt;strong>维护成本&lt;/strong>。如果长期（例如超过一年以上）且对数据安全要求较高，自建 GPU 服务器通常能带来更低的综合成本和更可控的环境；如果只是短期项目，或对数据隐私不敏感，那么租用云上 GPU（如 Azure、AWS、GCP 等）或使用免费平台（Colab、Kaggle）则更加灵活。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>租用 GPU 的优点&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>无需一次性投入高额硬件成本&lt;/li>
+&lt;li>可根据项目需求弹性扩容&lt;/li>
+&lt;li>云厂商通常提供数据合规与安全保障，省去硬件运维烦恼&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>购买 GPU 的优点&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>长期大规模使用时，整体成本更低&lt;/li>
+&lt;li>对内部数据和模型有更高的隐私与可控性&lt;/li>
+&lt;li>硬件可随时调整、升级，部署更灵活&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>&lt;strong>个人建议&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>如果预算有限或只是初学阶段，可先使用 Colab、Kaggle 或云 GPU；&lt;/li>
+&lt;li>当算力需求和隐私需求上升时，再考虑自建多卡服务器或租用多机多卡集群。&lt;/li>
+&lt;/ol>
+&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="背景">背景&lt;/h2>
+&lt;p>在 2023 年 9 月，为了在工作之余继续对大模型（LLM）进行探索和研究，我组装了一台 &lt;strong>双 RTX 4090&lt;/strong> 的个人 AI 实验服务器。该服务器已运行近一年，整体体验如下：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>噪音&lt;/strong>：服务器放在脚边，满负荷训练时风扇噪音较大，但在日常推理或中等负载下可接受&lt;/li>
+&lt;li>&lt;strong>推理性能&lt;/strong>：双卡共计 48GB 显存，采用 4bit 量化方案时可运行到 70B 级别的模型（如 Llama 70B、Qwen 72B）&lt;/li>
+&lt;li>&lt;strong>训练性能&lt;/strong>：在使用 &lt;a href="https://github.com/microsoft/DeepSpeed">DeepSpeed&lt;/a> 的分布式和 offload 技术（ZeRO-3 + CPU offload）后，可对 34B 左右的模型（如 CodeLlama 34B）进行微调&lt;/li>
+&lt;li>&lt;strong>性价比&lt;/strong>：对于个人或小团队的日常实验和中小规模模型训练而言，该配置较为实用；但若进行超大规模模型的全参数训练，仍需更多专业卡（如多卡 A100 或 H100 集群）&lt;/li>
+&lt;/ul>
+&lt;p>下图展示了不同大小模型、不同训练方法对显存的需求（参考 &lt;a href="https://github.com/hiyouga/LLaMA-Factory#hardware-requirement">LLaMA-Factory&lt;/a>）：&lt;/p></description></item></channel></rss>

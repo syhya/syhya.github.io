@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://syhya.github.io/sitemap.xml

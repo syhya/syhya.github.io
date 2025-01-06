@@ -21,11 +21,7 @@
     {{- end }}
     {{- if not (.Param "hideMeta") }}
     <div class="post-meta">
-      <p>
-        {{ if .Date }}Date: {{ .Date.Format "January 2, 2006" }}{{ end }}
-        {{ if .Params.readingTime }} | Estimated Reading Time: {{ .Params.readingTime }} min{{ end }}
-        {{ if .Params.author }} | Author: {{ .Params.author }}{{ end }}
-      </p>
+      {{- partial "post_meta.html" . -}}
       {{- partial "translation_list.html" . -}}
       {{- partial "edit_post.html" . -}}
       {{- partial "post_canonical.html" . -}}

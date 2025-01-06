@@ -2,15 +2,15 @@
 title: "Building a Home Deep Learning Rig with Dual RTX 4090 GPUs"
 date: 2024-12-21T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "LLM", "RTX 4090", "AI Hardware", "PC Assembly"]
+tags: ["Deep Learning", "AI", "LLM", "RTX 4090", "AI Hardware", "GPU"]
 categories: ["Tech Blog"]
-readingTime: 10
+# readingTime: 10
+ShowReadingTime: true
 toc: true
 ShowToc: true
 TocOpen: false
+searchHidden: false
 draft: false
-
-
 ---
 
 ## Rent a GPU or Buy Your Own?
@@ -255,5 +255,23 @@ From personal experience, dual 4090 GPUs provide sufficient performance within a
 
 ## Copyright & Citation
 
-> **Disclaimer**: The configurations, prices, and recommendations in this article are for technical discussion and research purposes only. Actual purchases and deployments should be carefully evaluated based on individual budgets and requirements. The author assumes no liability for any direct or indirect consequences resulting from following or adapting the information provided herein.  
+> **Disclaimer**: The configurations, prices, and recommendations in this article are for technical discussion and research purposes only. Actual purchases and deployments should be carefully evaluated based on individual budgets and requirements. The author assumes no liability for any direct or indirect consequences resulting from following or adapting the information provided herein.
+>
 > **Citation**: When reposting or referencing this content, please credit the original author and source.
+
+**Cited as:**
+
+Yue Shui. (Dec 2024). Building a Home Deep Learning Rig with Dual RTX 4090 GPUs.
+https://syhya.github.io/posts/2024-12-21-build-gpu-server
+
+Or
+
+```bibtex
+@article{syhya2024build,
+  title   = "Building a Home Deep Learning Rig with Dual RTX 4090 GPUs",
+  author  = "Yue Shui",
+  journal = "syhya.github.io",
+  year    = "2024",
+  month   = "Dec",
+  url     = "https://syhya.github.io/posts/2024-12-21-build-gpu-server/"
+  

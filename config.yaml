@@ -1,75 +1,316 @@
+# Base Configuration
 baseURL: "https://syhya.github.io/"
 title: "Yue Shui Blog"
-theme: "PaperMod"
-languageCode: "en-us"
-publishDir: "public"
+pagination:
+  pagerSize: 5
+theme: ["PaperMod"]
 
+# Default Language Code
+languageCode: "en-us"
+
+publishDir: "public"
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+# Disable RSS
+disableKinds:
+  - RSS
+
+
+googleAnalytics: UA-123-45
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # necessary for search
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Multilingual Configuration
+# ──────────────────────────────────────────────────────────────────────────────
 languages:
   en:
-    languageName: "English"         # Display name for English
-    weight: 1                       # Language weight for sorting
-    contentDir: "content/en"        # Directory for English content
-    languageCode: "en-us"           # Language code
-    title: "Yue Shui Blog"          # English site title
+    languageName: "English"
+    weight: 1
+    contentDir: "content/en"
+    languageCode: "en-us"
+    title: "Yue Shui Blog"
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # PaperMod Parameters
+    # ──────────────────────────────────────────────────────────────────────────
     params:
-      subtitle: "An experienced NLP Algorithm Engineer"  # Subtitle for English
-      contact:
-        email: "syhya925666582@gmail.com"                # Contact email
-      menu:
-        main:
-          - name: "Home"            # Main menu for English
-            url: "/en/"
-            weight: 1
+      env: production
+
+      title: "Yue Shui Blog"
+      description: "ExampleSite description"
+      keywords: [Blog, Portfolio, PaperMod]
+
+      author: "Yue Shui"
+
+      images: ["<link or path of image for opengraph, twitter-cards>"]
+
+      DateFormat: "2006-01-02"
+
+      defaultTheme: auto
+      disableThemeToggle: false
+
+      ShowReadingTime: true
+      ShowWordCount: true
+      ShowShareButtons: true
+      ShowPostNavLinks: true
+      ShowBreadCrumbs: true
+      ShowCodeCopyButtons: true
+      ShowRssButtonInSectionTermList: true
+      UseHugoToc: true
+      showtoc: true
+      tocopen: false
+      disableSpecial1stPost: false
+      disableScrollToTop: false
+      comments: true
+      hidemeta: false
+      hideSummary: false
+
+      assets:
+        favicon: "<link / abs url>"
+        favicon16x16: "<link / abs url>"
+        favicon32x32: "<link / abs url>"
+        apple_touch_icon: "<link / abs url>"
+        safari_pinned_tab: "<link / abs url>"
+
+      label:
+        text: "Home"
+        icon: /apple-touch-icon.png
+        iconHeight: 35
+
+      profileMode:
+        enabled: false
+        title: "ExampleSite"
+        subtitle: "This is subtitle"
+        imageUrl: "<img location>"
+        imageWidth: 120
+        imageHeight: 120
+        imageTitle: "my image"
+        buttons:
           - name: "Posts"
-            url: "/en/posts/"
-            weight: 2
-          - name: "About"
-            url: "/en/about/"
-            weight: 3
+            url: "posts"
+          - name: "Tags"
+            url: "tags"
+
+      homeInfoParams:
+        Title: "\U0001F44B Welcome to Yue's blog"
+        Content: "Hi, this is Yue Shui, an LLM Algorithm Engineer at PwC. I am working on applying LLMs in finance, accounting, and code generation. This blog serves as a space to document and share insights from my work and learning journey. If you spot any grammar mistakes, blame ChatGPT \U0001F609—let me know! My interests include pre-training, fine tuning, RAG and multi-agent systems. Feel free to connect!"
+
+      socialIcons:
+        - name: linkedin
+          url: "https://www.linkedin.com/in/yue-shui/"
+        - name: github
+          url: "https://github.com/syhya"
+        - name: email
+          url: "mailto:syhya925666582@gmail.com"
+
+      analytics:
+        google:
+          SiteVerificationTag: "XYZabc"
+        bing:
+          SiteVerificationTag: "XYZabc"
+        yandex:
+          SiteVerificationTag: "XYZabc"
+
+      cover:
+        hidden: true
+        hiddenInList: true
+        hiddenInSingle: true
+
+      # Enable Fuse.js Search
+      fuseOpts:
+        isCaseSensitive: false
+        shouldSort: true
+        location: 0
+        distance: 1000
+        threshold: 0.4
+        minMatchCharLength: 0
+        limit: 10
+        keys: ["title", "permalink", "summary", "content"]
+
+      contact:
+        email: "syhya925666582@gmail.com"
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Navigation Menu
+    # ──────────────────────────────────────────────────────────────────────────
+    menu:
+      main:
+        - name: Archive
+          url: /archives/
+          weight: 5
+        - name: Search
+          url: /search/
+          weight: 10
+        - identifier: tags
+          name: Tags
+          url: /tags/
+          weight: 20
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Code Highlighting
+    # ──────────────────────────────────────────────────────────────────────────
+    pygmentsUseClasses: true
+    markup:
+      highlight:
+        noClasses: false
+        style: "monokai"
+        # lineNos: true   # Uncomment to enable line numbers
 
   zh:
-    languageName: "简体中文"          # Display name for Chinese
-    weight: 2                       # Language weight for sorting
-    contentDir: "content/zh"        # Directory for Chinese content
-    languageCode: "zh-cn"           # Language code
-    title: "Yue Shui 博客"           # Chinese site title
+    languageName: "简体中文"
+    weight: 2
+    contentDir: "content/zh"
+    languageCode: "zh-cn"
+    title: "Yue Shui 博客"
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # PaperMod Parameters
+    # ──────────────────────────────────────────────────────────────────────────
     params:
-      subtitle: "专注于大语言模型和NLP技术的算法工程师"  # Subtitle for Chinese
+      env: production
+
+      title: "Yue Shui 博客"
+      description: "示例网站描述"
+      keywords: [博客, 作品集, PaperMod]
+
+      author: "Yue Shui"
+
+      images: ["<opengraph、twitter-cards 图片的链接或路径>"]
+
+      DateFormat: "2006-01-02"
+
+      defaultTheme: auto
+      disableThemeToggle: false
+
+      ShowReadingTime: false
+      ShowWordCount: false
+      ShowShareButtons: true
+      ShowPostNavLinks: true
+      ShowBreadCrumbs: true
+      ShowCodeCopyButtons: true
+      ShowRssButtonInSectionTermList: true
+      UseHugoToc: true
+      showtoc: true
+      tocopen: false
+      disableSpecial1stPost: false
+      disableScrollToTop: false
+      comments: true
+      hidemeta: false
+      hideSummary: false
+
+      assets:
+        favicon: "<链接 / 绝对URL>"
+        favicon16x16: "<链接 / 绝对URL>"
+        favicon32x32: "<链接 / 绝对URL>"
+        apple_touch_icon: "<链接 / 绝对URL>"
+        safari_pinned_tab: "<链接 / 绝对URL>"
+
+      label:
+        text: "首页"
+        icon: /apple-touch-icon.png
+        iconHeight: 35
+
+      profileMode:
+        enabled: false
+        title: "示例网站"
+        subtitle: "这是副标题"
+        imageUrl: "<图片位置>"
+        imageWidth: 120
+        imageHeight: 120
+        imageTitle: "我的图片"
+        buttons:
+          - name: "帖子"
+            url: "posts"
+          - name: "标签"
+            url: "tags"
+
+      homeInfoParams:
+        Title: "\U0001F44B 欢迎访问我的博客"
+        Content: "你好，我是Yue Shui，目前在PwC的LLM算法工程师，专注于将大型语言模型应用于金融、会计和代码生成领域。这个博客是我用来记录和分享工作与学习过程中见解。如果发现语法错误，说明目前ChatGPT语言能力还有所欠缺，请责备他 \U0001F609——记得告诉我！我的兴趣包括预训练、微调、RAG以及多智能体系统。欢迎交流！"
+
+      socialIcons:
+        - name: linkedin
+          url: "https://www.linkedin.com/in/yue-shui/"
+        - name: github
+          url: "https://github.com/syhya"
+        - name: email
+          url: "mailto:syhya925666582@gmail.com"
+        
+
+      analytics:
+        google:
+          SiteVerificationTag: "XYZabc"
+        bing:
+          SiteVerificationTag: "XYZabc"
+        yandex:
+          SiteVerificationTag: "XYZabc"
+
+      cover:
+        hidden: true
+        hiddenInList: true
+        hiddenInSingle: true
+
+
+      fuseOpts:
+        isCaseSensitive: false
+        shouldSort: true
+        location: 0
+        distance: 1000
+        threshold: 0.4
+        minMatchCharLength: 0
+        limit: 10
+        keys: ["title", "permalink", "summary", "content"]
+
       contact:
-        email: "syhya925666582@gmail.com"                # Contact email
-      menu:
-        main:
-          - name: "首页"            # Main menu for Chinese
-            url: "/zh/"
-            weight: 1
-          - name: "文章"
-            url: "/zh/posts/"
-            weight: 2
-          - name: "关于"
-            url: "/zh/about/"
-            weight: 3
+        email: "syhya925666582@gmail.com"
 
-# Global Parameters
-params:
-  author: "Yue Shui"                # Global author name
-  dateFormat: "2006-01-02"          # Date format for posts
-  showPostDate: true                # Show post date
-  showLastmod: true                 # Show last modified date
-  toc: true                         # Enable Table of Contents
-  math: true                        # Enable MathJax for math rendering
-  customCSS: ["css/custom.css"]     # Custom CSS for styling
-  enableReadingTime: true           # Enable reading time estimation
-  showTableOfContents: true         # Show Table of Contents in posts
+    # ──────────────────────────────────────────────────────────────────────────
+    # Navigation Menu
+    # ──────────────────────────────────────────────────────────────────────────
+    menu:
+      main:
+        - name: 归档
+          url: /archives/
+          weight: 5
+        - name: 搜索
+          url: /search/
+          weight: 10
+        - identifier: tags
+          name: 标签
+          url: /tags/
+          weight: 20
 
-# Syntax Highlighting Configuration
-markup:
-  highlight:
-    noClasses: false                # Use classes for code highlighting
-    style: "monokai"                # Highlighting style
-    lineNos: true                   # Enable line numbers for code blocks
+    # ──────────────────────────────────────────────────────────────────────────
+    # Code Highlighting
+    # ──────────────────────────────────────────────────────────────────────────
+    pygmentsUseClasses: true
+    markup:
+      highlight:
+        noClasses: false
+        style: "monokai"
+        # lineNos: true   # Uncomment to enable line numbers
 
-  
+# ──────────────────────────────────────────────────────────────────────────────
+# Global Configuration (if any additional global settings are needed)
+# ──────────────────────────────────────────────────────────────────────────────
 
-
-
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+pygmentsUseClasses: true
+mainsections: ["posts", "papermod"]

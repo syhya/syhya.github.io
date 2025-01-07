@@ -214,7 +214,7 @@
                 href="https://syhya.github.io/archives/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/en/search/</loc>
+    <loc>https://syhya.github.io/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -223,7 +223,7 @@
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="https://syhya.github.io/en/search/"
+                href="https://syhya.github.io/search/"
                 />
   </url>
 </urlset>

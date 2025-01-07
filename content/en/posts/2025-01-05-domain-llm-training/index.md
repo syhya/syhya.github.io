@@ -4,14 +4,13 @@ date: 2025-01-05T12:00:00+08:00
 author: "Yue Shui"
 tags: ["AI", "NLP", "LLM", "Pre-training", "Post-training", "DPO", "Domain Models", "DeepSpeed"]
 categories: ["Technical Blog"]
-# readingTime: 25
 ShowReadingTime: true
 toc: true
 ShowToc: true
 TocOpen: false
 draft: false
 ---
-
+ 
 ## Background
 
 With the widespread application of Large Language Models (LLMs) across various industries, enterprises and research teams face an urgent need to adapt general-purpose models to specific domains. Foundational LLMs often fail to meet deep domain-specific requirements when handling specialized tasks. For example, in the application of closed-source programming languages, existing open-source models lack sufficient understanding of their syntax and semantics, leading to poor performance in tasks such as code generation and error correction. Therefore, injecting domain knowledge and training dedicated LLMs has become a key step in enhancing development efficiency and code quality.
@@ -21,26 +20,65 @@ Based on my work experience, this article summarizes how to build LLMs equipped 
 ## Why Inject Domain Knowledge into the Foundational LLMs?
 
 ### Challenge 1: Limited Domain Knowledge
+
 Existing pre-trained models (such as GPT-4 and Llama 3) are primarily trained on general-purpose corpora, lacking in-depth understanding of niche languages or proprietary domains. This deficiency leads to subpar performance when the models handle programming code.
 
 ### Challenge 2: Data Security and Compliance
+
 When enterprises handle sensitive data, they must adhere to strict data sovereignty and compliance requirements. Uploading proprietary business data to third-party cloud services poses security risks, necessitating data processing and model training within local environments.
 
 ### Challenge 3: Limitations of OpenAI Fine-Tuning
+
 Mainstream commercial APIs for fine-tuning are typically basic and struggle to achieve deep alignment and optimization. For highly customized domain models, such approaches often fail to meet the required specifications.
 
 ---
 
 ## Two Approaches of Injecting Knowledge
 
-In practical projects, the common methods for injecting domain knowledge into base models include **Fine-Tuning** and **Retrieval-Augmented Generation (RAG)**. The table below provides a detailed comparison of these methods to aid in selecting the most suitable strategy.
+In practical projects, the common methods for injecting domain knowledge into base models include **Fine-Tuning** and **Retrieval-Augmented Generation (RAG)**. The following sections provide a detailed comparison of these methods to aid in selecting the most suitable strategy.
 
 ### Method Comparison
 
-| **Method**                  | **Core Concept**                                                                                                                                                                                                          | **Technical Details**                                                                                                                                                                                                                                                                                                                                                             | **Advantages**                                                                                                                                                            | **Disadvantages**                                                                                                                                                                                                                 |
-|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Fine-Tuning**            | Directly updating model parameters through continued pre-training, supervised fine-tuning, and preference alignment to enable the model to master domain-specific knowledge and task patterns.                                                                   | - **Continued Pre-Training (CPT)**: Continue pre-training the base model on a large volume of domain-specific unsupervised data.<br>- **Supervised Fine-Tuning (SFT)**: Perform supervised fine-tuning using high-quality labeled data.<br>- **Preference Alignment (DPO)**: Optimize model outputs based on user feedback.<br>- Utilize full-parameter fine-tuning or combine with PEFT methods like LoRA to freeze some parameters and add adapters. | - **Deep Customization**: Updating the internal weights of the model enables a profound understanding of domain knowledge.<br>- **No External Retrieval Dependency**: Inference does not require additional knowledge bases, reducing latency and total token consumption.<br>- **Enhanced Overall Performance**: Significantly outperforms general models in domain-specific tasks. | - **High Computational Cost**: Requires substantial computational resources for training, especially during the CPT phase.<br>- **Long Training Cycles**: From data preparation to model training and optimization, the process is time-consuming.<br>- **Catastrophic Forgetting**: The model may forget its original general capabilities while learning new knowledge. |
-| **Retrieval-Augmented Generation (RAG)** | Building a domain-specific knowledge base and retrieving relevant documents during inference to assist the model in generating more accurate responses without directly altering model parameters.                                                     | - **Data Processing**: Preprocess domain documents by chunking them based on size and overlap.<br>- **Vectorization**: Convert text chunks into vectors using text embedding models and store them in a vector database.<br>- **Retrieval**: During inference, retrieve relevant documents through similarity search to provide contextual information or few-shot examples to the base model.                         | - **Preserves General Capabilities**: Model parameters remain unchanged, retaining general language abilities.<br>- **Quick Updates**: The knowledge base can be dynamically updated without retraining the model.<br>- **Computational Efficiency**: Avoids large-scale training, saving computational resources.                             | - **Dependence on Knowledge Base Quality**: The quality of retrieved documents directly impacts response quality.<br>- **Inference Speed**: The retrieval process may increase inference latency and require more tokens.<br>- **Limited Knowledge Coverage**: The model’s internal knowledge is still restricted by the base model’s pre-training data.         |
+#### Fine-Tuning
+
+**Core Concept**  
+Through continued pre-training, supervised fine-tuning, and preference alignment, directly update the model parameters to enable it to master domain-specific knowledge and task patterns.
+
+**Technical Details**
+- **Continued Pre-Training (CPT)**: Continue pre-training the base model on a large volume of domain-specific unsupervised data.
+- **Supervised Fine-Tuning (SFT)**: Perform supervised fine-tuning using high-quality labeled data.
+- **Preference Alignment (DPO)**: Optimize model outputs based on user feedback.
+- **Parameter Tuning Methods**: Utilize full-parameter fine-tuning or combine with PEFT methods like LoRA to freeze some parameters and add adapters.
+
+**Advantages**
+- **Deep Customization**: Updating the internal weights of the model enables a profound understanding of domain knowledge.
+- **No External Retrieval Dependency**: Inference does not require additional knowledge bases, reducing latency and total token consumption.
+- **Enhanced Overall Performance**: Significantly outperforms general models in domain-specific tasks.
+
+**Disadvantages**
+- **High Computational Cost**: Requires substantial computational resources for training, especially during the CPT phase.
+- **Long Training Cycles**: From data preparation to model training and optimization, the process is time-consuming.
+- **Catastrophic Forgetting**: The model may forget its original general capabilities while learning new knowledge.
+
+#### Retrieval-Augmented Generation (RAG)
+
+**Core Concept**  
+Build a domain-specific knowledge base and retrieve relevant documents during inference to assist the model in generating more accurate responses without directly altering model parameters.
+
+**Technical Details**
+- **Data Processing**: Preprocess domain documents by chunking them based on size and overlap.
+- **Vectorization**: Embedding text chunks as vectors using embedding models and storing them in a Vector Store for retrieval.
+- **Retrieval**: During inference, retrieve relevant documents through similarity search to provide contextual information or few-shot examples to the base model.
+
+**Advantages**
+- **Preserves General Capabilities**: Model parameters remain unchanged, retaining general language abilities.
+- **Quick Updates**: The knowledge base can be dynamically updated without retraining the model.
+- **Computational Efficiency**: Avoids large-scale training, saving computational resources.
+
+**Disadvantages**
+- **Dependence on Knowledge Base Quality**: The quality of retrieved documents directly impacts response quality.
+- **Inference Speed**: The retrieval process may increase inference latency and require more tokens.
+- **Limited Knowledge Coverage**: The model’s internal knowledge is still restricted by the base model’s pre-training data.
 
 ---
 
@@ -80,24 +118,38 @@ Training large language models requires robust computational resources and effic
 
 ## DeepSpeed ZeRO Sharding Strategies Comparison
 
-| **ZeRO Stage**                 | **Description**                                                                                                                                                                                        | **GPU Memory Usage** | **Training Speed**<br>(Under Same Batch Size)                               | **Communication Overhead**                                                                                                                                                   |
-|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **ZeRO-0**                     | Pure data parallelism without any sharding. All optimizer states, gradients, and parameters are fully replicated on each GPU.                                                                          | Highest             | **Fastest**                                                                    | **Lowest**<br>Only requires gradient synchronization (All-Reduce).                                                                                                                                  |
-| **ZeRO-1**                     | Shards optimizer states (e.g., momentum and second moments), reducing GPU memory usage, but gradients and parameters remain data parallel.                                                               | High                | Slightly slower than ZeRO-0                                                   | Same as ZeRO-0<br>Still primarily gradient synchronization; unsharded parameters require full replication.                                                                                                              |
-| **ZeRO-2**                     | Shards optimizer states and gradients, further reducing GPU memory usage based on ZeRO-1.                                                                                                               | Medium              | Slower than ZeRO-1                                                            | Same as ZeRO-0<br>Mainly gradient synchronization; gradients are sharded, but sharding computation introduces some overhead.                                                                                               |
-| **ZeRO-3**                     | Shards optimizer states, gradients, and model parameters, achieving the lowest GPU memory usage, suitable for extremely large models. Requires parameter broadcasting (All-Gather/All-Reduce) during forward/backward passes, significantly increasing communication overhead. | Low                 | Significantly slower than ZeRO-2<br>Depends on model size and network bandwidth | **Significantly higher than ZeRO-0/1/2**<br>Requires broadcasting model parameters, greatly increasing communication volume compared to only gradient synchronization.                                                   |
-| **ZeRO-1 + CPU Offload**       | Extends ZeRO-1 by offloading optimizer states to CPU memory, further reducing GPU memory usage but necessitating CPU-GPU data transfer, relying on PCIe bandwidth, and occupying CPU memory.           | Medium-low          | Slower than ZeRO-1<br>Affected by CPU performance and PCIe bandwidth           | Same as ZeRO-0<br>Only gradient synchronization + CPU-GPU data transfer; additional transfer volume is typically small since only optimizer states are offloaded.                                                                |
-| **ZeRO-2 + CPU Offload**       | Extends ZeRO-2 by offloading optimizer states to CPU memory, further reducing GPU memory usage for larger models but increasing CPU-GPU data transfer overhead.                                        | Lower               | Slower than ZeRO-2<br>Affected by CPU performance and PCIe bandwidth           | Same as ZeRO-0<br>Mainly gradient synchronization + CPU-GPU data transfer; saves more GPU memory compared to ZeRO-1 + CPU Offload.                                                                                                    |
-| **ZeRO-3 + CPU Offload**       | Extends ZeRO-3 by offloading optimizer states and model parameters to CPU, achieving minimal GPU memory usage but with extremely high CPU-GPU communication volume and CPU bandwidth significantly lower than GPU-GPU communication. | Extremely Low       | Very Slow<br>Especially noticeable when CPU memory and bandwidth are constrained | **Highest**<br>Includes parameter broadcasting + substantial CPU-GPU data transfers, typically a greater performance bottleneck than NVMe Offload.                                                                                  |
-| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, offloads optimizer states, gradients, and parameters to NVMe, breaking CPU memory limits and suitable for ultra-large-scale models; performance highly depends on NVMe parallel read/write speeds.                           | Extremely Low<br>Requires NVMe support | Slower than ZeRO-3 but generally faster than ZeRO-3 + CPU Offload<br>Can achieve better throughput if NVMe bandwidth is sufficient | **High**<br>Includes model parameter broadcasting + NVMe-GPU data transfers; overall efficiency can surpass CPU Offload if NVMe performance is adequate.                                               |
+### ZeRO Stage Sharding Strategies
 
-### Communication Volume and Performance Impact
+| **ZeRO Stage** | **Description**                                                                                                                                                                                        | **GPU Memory Usage** | **Training Speed** |
+|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|---------------------|
+| **ZeRO-0**     | Pure data parallelism without any sharding. All optimizer states, gradients, and parameters are fully replicated on each GPU.                                                                        | Highest              | **Fastest**         |
+| **ZeRO-1**     | Shards optimizer states (e.g., momentum and second moments), reducing GPU memory usage, but gradients and parameters remain data parallel.                                                             | High                 | Slightly slower than ZeRO-0 |
+| **ZeRO-2**     | Shards optimizer states and gradients, further reducing GPU memory usage based on ZeRO-1.                                                                                                             | Medium               | Slower than ZeRO-1  |
+| **ZeRO-3**     | Shards optimizer states, gradients, and model parameters, achieving the lowest GPU memory usage, suitable for extremely large models. Requires parameter broadcasting (All-Gather/All-Reduce) during forward/backward passes, significantly increasing communication overhead. | Low                  | Significantly slower than ZeRO-2, depends on model size and network bandwidth |
 
-- **ZeRO-0/1/2**: Communication is primarily **gradient synchronization** using All-Reduce operations, resulting in relatively low communication volume.  
-- **ZeRO-3**: Requires **All-Gather/All-Reduce** operations for model parameters, significantly increasing communication volume. Network bandwidth becomes a critical bottleneck, and parameter broadcasting during forward/backward passes further exacerbates communication load.  
+### Offload Strategies
+
+| **Offload Type**               | **Description**                                                                                                                                                                                        | **GPU Memory Usage**       | **Training Speed**                                                                                                      |
+|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| **ZeRO-1 + CPU Offload**        | Extends ZeRO-1 by offloading optimizer states to CPU memory, further reducing GPU memory usage but necessitating CPU-GPU data transfer, relying on PCIe bandwidth, and occupying CPU memory.              | Medium-low                 | Slower than ZeRO-1, affected by CPU performance and PCIe bandwidth                                                     |
+| **ZeRO-2 + CPU Offload**        | Extends ZeRO-2 by offloading optimizer states to CPU memory, further reducing GPU memory usage for larger models but increasing CPU-GPU data transfer overhead.                                         | Lower                      | Slower than ZeRO-2, affected by CPU performance and PCIe bandwidth                                                     |
+| **ZeRO-3 + CPU Offload**        | Extends ZeRO-3 by offloading optimizer states and model parameters to CPU, achieving minimal GPU memory usage but with extremely high CPU-GPU communication volume and CPU bandwidth significantly lower than GPU-GPU communication. | Extremely Low             | Very Slow                                                                                                               |
+| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, offloads optimizer states, gradients, and parameters to NVMe, breaking CPU memory limits and suitable for ultra-large-scale models; performance highly depends on NVMe parallel read/write speeds. | Extremely Low<br>Requires NVMe support | Slower than ZeRO-3 but generally faster than ZeRO-3 + CPU Offload, can achieve better throughput if NVMe bandwidth is sufficient |
+
+---
+
+## Communication Volume and Performance Impact
+
+- **ZeRO-0/1/2**:  
+  Communication is primarily **gradient synchronization** using All-Reduce operations, resulting in relatively low communication volume.
+
+- **ZeRO-3**:  
+  Requires **All-Gather/All-Reduce** operations for model parameters, significantly increasing communication volume. Network bandwidth becomes a critical bottleneck, and parameter broadcasting during forward/backward passes further exacerbates communication load.
+
 - **CPU Offload** (ZeRO-1/2/3 + CPU):  
   - Offloads optimizer states or parameters to CPU, reducing GPU memory usage.  
-  - Communication volume mainly arises from **CPU <-> GPU** data transfers, which have much lower bandwidth compared to GPU-GPU communication, easily causing performance bottlenecks, especially in **ZeRO-3** scenarios.  
+  - Communication volume mainly arises from **CPU <-> GPU** data transfers, which have much lower bandwidth compared to GPU-GPU communication, easily causing performance bottlenecks, especially in **ZeRO-3** scenarios.
+
 - **NVMe Offload** (ZeRO-Infinity):  
   - Further offloads to NVMe based on **ZeRO-3**, overcoming CPU memory limitations to support ultra-large-scale models.  
   - Performance heavily relies on **NVMe I/O bandwidth** and parallelism. If NVMe speed is sufficiently high, it typically outperforms CPU Offload; however, performance may suffer in scenarios with weak I/O performance or high latency.
@@ -106,9 +158,11 @@ Training large language models requires robust computational resources and effic
 
 - **Hardware Constraints**:  
   - **PCIe Bandwidth**, **Network Bandwidth**, **NVMe I/O**, etc., significantly impact Offload performance. Optimal strategies should be selected based on the hardware environment.
+
 - **Additional Notes**:  
   - **CPU Offload** utilizes CPU memory and transfers data via PCIe; **NVMe Offload** saves states on NVMe devices.  
   - NVMe Offload generally outperforms CPU Offload when **NVMe I/O performance is adequate**, but care must be taken to avoid performance bottlenecks caused by insufficient I/O performance.
+
 - **Reference to Official Documentation**:  
   - It is recommended to consult the [DeepSpeed official documentation](https://www.deepspeed.ai/) for the latest and most accurate configuration parameters and performance tuning advice.
 
@@ -120,17 +174,18 @@ Data quality directly determines model performance. Data preparation includes da
 
 ### Pre-Training Data
 
-**Data Sources**
+#### Data Sources
 
 - **Public Datasets**: Such as [the-stack-v2](https://huggingface.co/datasets/bigcode/the-stack-v2), Common Crawl, etc.  
 - **Enterprise Proprietary Data**: Internal documents, code repositories, business logs, etc.  
 - **Web Crawlers**: Collect domain-relevant web content using crawling technologies.
 
-**Data Scale**  
+#### Data Scale
+
 - It is recommended to use at least hundreds of millions to billions of tokens to ensure the model can thoroughly learn domain knowledge.  
 - When data volume is insufficient, model performance may be limited. Data augmentation methods are suggested to supplement the data.
 
-**Data Processing**
+#### Data Processing
 
 1. **Data Preprocessing**  
    - **Uniform Formatting**: Process large volumes of unlabeled corpora from multiple data sources to ensure consistent formatting. It is recommended to use efficient storage formats like Parquet to improve data reading and processing efficiency.
@@ -158,15 +213,17 @@ Data quality directly determines model performance. Data preparation includes da
 
 ### Supervised Fine-Tuning Data
 
-**Data Format**: Adopt Alpaca or Vicuna styles, such as single-turn and multi-turn dialogues structured as [instruction, input, output].  
+#### Data Format
+
+Adopt Alpaca or Vicuna styles, such as single-turn and multi-turn dialogues structured as [instruction, input, output].  
 - **Scale**: From thousands to hundreds of thousands, depending on project requirements and computational resources.  
 - **Quality**: Ensure high-quality and diverse data to prevent the model from learning errors or biases.
 
-**Data Construction**
+#### Data Construction
 
 During the data construction process, we first collect daily business data and collaboratively build foundational questions with business experts. Subsequently, we use large language models for data augmentation to enhance data diversity and robustness. The specific data augmentation strategies are as follows:
 
-**Data Augmentation Strategies**
+#### Data Augmentation Strategies
 
 - **Diverse Expressions**  
   Rewrite existing data using large language models through synonym replacement and syntactic transformations to increase data diversity.
@@ -183,7 +240,7 @@ During the data construction process, we first collect daily business data and c
 - **Data Generation Pipeline**  
   Build an automated data generation pipeline that integrates data generation, filtering, formatting, and validation to improve overall efficiency.
 
-**Key Points**
+#### Key Points
 
 - **Task Type Annotation**: Clearly annotate each data entry with its task type to facilitate subsequent fine-grained analysis and tuning.  
 - **Multi-Turn Dialogues and Topic Switching**: Construct data that captures contextual coherence and topic transitions in multi-turn dialogues to ensure the model learns the ability to handle topic switching and maintain contextual relevance.  
@@ -192,19 +249,19 @@ During the data construction process, we first collect daily business data and c
 
 ### Preference Data
 
-**Data Format**
+#### Data Format
 
 - **Triple Structure**: [prompt, chosen answer, rejected answer]  
 - **Annotation Details**:
   - **Multi-Model Sampling**: Generate answers using multiple models at different training stages or with different data ratios to increase data diversity.  
   - **Editing and Optimization**: Annotators can make slight modifications to the chosen answers to ensure answer quality.
 
-**Sampling Strategies**
+#### Sampling Strategies
 
 - **Multi-Model Sampling**: Deploy multiple versions of the model to generate diverse answers for the same prompt.  
 - **Comparative Annotation**: Use manual or automated systems to compare generated answers and select superior answer pairs.
 
-**Key Points**
+#### Key Points
 
 - **Data Diversity and Coverage**: Ensure preference data covers various scenarios and tasks to prevent the model from underperforming in specific contexts.  
 - **High-Quality Annotation**: The quality of preference data directly affects the model's alignment, requiring accurate and consistent annotations.
@@ -217,11 +274,48 @@ A complete training process for a domain-specific large language model typically
 
 ### Comparison of Three Methods
 
-| Training Method       | Main Objective                                                                   | Data Requirements                                                        | Typical Application Scenarios                                                | Advantages                                                                                                                                  | Challenges/Limitations                                                                                                                                                                             |
-|-----------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Continued Pre-Training (CPT) | Continue pre-training on large-scale unsupervised corpora to inject new domain knowledge                   | Large amounts of unlabeled text (at least hundreds of millions to billions of tokens) | Supplementing domain knowledge, such as specialized texts in law, medicine, finance, etc.             | - Better domain coverage, comprehensively enhancing the model's understanding and generation capabilities in specific domains.<br>- No need for additional manual annotation. | - Requires a large volume of high-quality domain data.<br>- High training costs, requiring massive computational power and time.<br>- May introduce domain biases, necessitating careful handling of data quality and distribution. |
-| Supervised Fine-Tuning (SFT) | Fine-tune on supervised labeled data to strengthen specific tasks and instruction execution capabilities   | Customized labeled data (instruction/dialog pairs), ranging from thousands to hundreds of thousands    | Various specific tasks, such as code generation, Q&A, text rewriting, complex instruction execution, etc. | - Quickly acquires task execution capabilities.<br>- Significantly improves accuracy in specific scenarios.                                  | - High data annotation costs.<br>- Requires careful selection of labeled data to avoid overfitting.<br>- Fine-tuning may weaken the model's generality.                                                                             |
-| Direct Preference Optimization (DPO) | Optimize model outputs to align with human preferences using preference data (chosen vs. rejected)   | Preference data: [prompt, chosen, rejected]<br>(relatively smaller scale)        | Aligning with human feedback, such as response style, compliance, safety, etc.                         | - No need to train a separate Reward Model.<br>- Requires less data and computational resources to achieve similar or better results compared to PPO. | - Requires reliable preference annotations.<br>- Continues to need more preference data for complex and diverse scenarios.<br>- Easily constrained by the distribution of preference data.                                              |
+#### Training Method Overview
+
+| **Training Method**       | **Main Objective**                                                                   | **Data Requirements**                                                        | **Typical Application Scenarios**                                                |
+|---------------------------|---------------------------------------------------------------------------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| **Continued Pre-Training (CPT)** | Continue pre-training on large-scale unsupervised corpora to inject new domain knowledge | Large amounts of unlabeled text (at least hundreds of millions to billions of tokens) | Supplementing domain knowledge, such as specialized texts in law, medicine, finance, etc. |
+| **Supervised Fine-Tuning (SFT)**   | Fine-tune on supervised labeled data to strengthen specific tasks and instruction execution capabilities | Customized labeled data (instruction/dialog pairs), ranging from thousands to hundreds of thousands | Various specific tasks, such as code generation, Q&A, text rewriting, complex instruction execution, etc. |
+| **Direct Preference Optimization (DPO)** | Optimize model outputs to align with human preferences using preference data (chosen vs. rejected) | Preference data: [prompt, chosen, rejected]<br>(relatively smaller scale) | Aligning with human feedback, such as response style, compliance, safety, etc. |
+
+#### Advantages and Challenges
+
+##### Continued Pre-Training (CPT)
+
+**Advantages**:
+- Better domain coverage, comprehensively enhancing the model's understanding and generation capabilities in specific domains.
+- No need for additional manual annotation.
+
+**Challenges/Limitations**:
+- Requires a large volume of high-quality domain data.
+- High training costs, necessitating massive computational power and time.
+- May introduce domain biases, necessitating careful handling of data quality and distribution.
+
+##### Supervised Fine-Tuning (SFT)
+
+**Advantages**:
+- Quickly acquires task execution capabilities.
+- Significantly improves accuracy in specific scenarios.
+
+**Challenges/Limitations**:
+- High data annotation costs.
+- Requires careful selection of labeled data to avoid overfitting.
+- Fine-tuning may weaken the model's generality.
+
+##### Direct Preference Optimization (DPO)
+
+**Advantages**:
+- No need to train a separate Reward Model.
+- Requires less data and computational resources to achieve similar or better results compared to PPO.
+
+**Challenges/Limitations**:
+- Requires reliable preference annotations.
+- Continues to need more preference data for complex and diverse scenarios.
+- Easily constrained by the distribution of preference data.
 
 ---
 
@@ -258,10 +352,11 @@ When performing **CPT, SFT, and DPO**, there are numerous general training tips 
 
 ### Continued Pre-Training (CPT)
 
-**Objective**  
+#### Objective
+
 Inject new domain knowledge into the base model by continuing pre-training on a large volume of domain-specific unsupervised data, enhancing the model's understanding and generation capabilities in the specific domain.
 
-**Training Tips**
+#### Training Tips
 
 1. **Streaming Data Loading**  
    - Implement streaming data loading to dynamically read data during training, preventing memory overflows and training interruptions.
@@ -272,10 +367,11 @@ Inject new domain knowledge into the base model by continuing pre-training on a 
 
 ### Supervised Fine-Tuning (SFT)
 
-**Objective**  
+#### Objective
+
 Enhance the model's practicality and accuracy by training it on high-quality labeled data to perform specific tasks such as code generation, code repair, and complex instruction execution.
 
-**Training Tips**
+#### Training Tips
 
 1. **Number of Epochs**  
    - Typically, 1 to 4 epochs are sufficient to observe significant effects when data volume is adequate.  
@@ -287,10 +383,11 @@ Enhance the model's practicality and accuracy by training it on high-quality lab
 
 ### Direct Preference Optimization (DPO)
 
-**Objective**  
+#### Objective
+
 Optimize model outputs to better align with human expectations and needs, including response style, safety, and readability, by leveraging user feedback and preference data.
 
-**Characteristics of DPO**
+#### Characteristics of DPO
 
 - **Direct Optimization**  
   Does not require training a separate Reward Model. Instead, directly performs contrastive learning on (chosen, rejected) data pairs.
@@ -301,7 +398,7 @@ Optimize model outputs to better align with human expectations and needs, includ
 - **Dynamic Adaptation**  
   The model can immediately adapt whenever new data is available without the need to retrain a Reward Model.
 
-**Training Tips**
+#### Training Tips
 
 1. **Collecting Preference Data**  
    - Deploy multiple models at different training stages or with different data ratios to generate diverse responses.  

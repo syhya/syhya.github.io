@@ -87,23 +87,17 @@ In deep learning scenarios, the CPU handles data preprocessing, pipeline schedul
 - **Intel**: 13th/14th Generation i9 (e.g., 13900K) offers 20 primary PCIe lanes, enough for dual GPUs at x8 + x8.  
 - **AMD**: The Ryzen 7000/9000 series (e.g., 7950X) provides 28 (24 usable) PCIe lanes and also supports dual GPUs at x8 + x8, with enough bandwidth for multiple M.2 SSDs.
 
----
-
 #### MSI MPG X670E CARBON Motherboard
 
 - **Expandability**: Supports PCIe 5.0 and DDR5 memory, offering ample future-proofing.  
 - **Stability**: High-quality power delivery, ensuring stable operation for both CPU and multiple GPUs.  
 - **Rich I/O**: Supports multiple M.2 SSDs and USB4 for various usage scenarios.
 
----
-
 #### AMD Ryzen 9 7900X Highlights
 
 - **Cores & Threads**: 12 cores, 24 threads, excellent for data preprocessing and multitasking in deep learning workloads.  
 - **PCIe Bandwidth**: Provides 28 (24 usable) PCIe 5.0 lanes to support dual GPUs at x8 + x8 while also powering high-speed M.2 SSDs.  
 - **Power Efficiency**: Built on the Zen 4 architecture, delivering outstanding performance-to-power ratio for high-performance computing tasks.
-
----
 
 #### Key Motherboard Considerations
 
@@ -115,8 +109,6 @@ In deep learning scenarios, the CPU handles data preprocessing, pipeline schedul
    - With two GPUs installed, you still need enough M.2 slots and external ports for additional storage or peripherals.
 
 After evaluating expandability, performance, and cost-effectiveness, I chose the **AMD Ryzen 9 7900X paired with the MSI MPG X670E CARBON**. A GPU riser cable resolved the slot conflicts caused by the thickness of dual RTX 4090s.
-
----
 
 #### BIOS Setup Recommendations
 

@@ -42,9 +42,13 @@ In September 2023, to continue my exploration and research on Large Language Mod
 - **Training Performance**: By using [DeepSpeed](https://github.com/microsoft/DeepSpeed) with distributed and offload techniques (ZeRO-3 + CPU offload), I can finetune around 34B parameter models (e.g., CodeLlama 34B).  
 - **Cost-Effectiveness**: For personal or small-team experiments and small-to-medium scale model training, this configuration is quite practical. However, full-scale training of very large models (hundreds of billions of parameters) still requires more professional GPUs (e.g., multi-GPU A100 or H100 clusters).
 
-Below is an illustration of VRAM requirements for various model sizes and training approaches (referenced from [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory#hardware-requirement)):
+Below is an illustration of VRAM requirements for various model sizes and training approaches :
 
-![Hardware Requirements Illustration](hardware_requirement.png)
+{{< figure 
+    src="hardware_requirement.png" 
+    caption="Fig. 1. Hardware Requirement. (Image source: [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory#hardware-requirement))" 
+    align="center" 
+>}}
 
 ---
 
@@ -151,8 +155,12 @@ For prolonged high-load training (such as distributed training of large models),
 
 Because the RTX 4090 is massive, and two of them stacked requires ample internal space and airflow, a full-tower chassis is recommended for better cable routing and thermal design. I went with the Phanteks 620PC, which offers ample space and built-in cable management.
 
-Below is a sample photo of the completed build:  
-![Actual Rig Photo](computer.jpeg)
+Below is a picture of the built computer:  
+{{< figure 
+    src="computer.jpeg" 
+    caption="Fig. 2. Computer" 
+    align="center" 
+>}}
 
 ---
 
@@ -162,9 +170,17 @@ Below is a sample photo of the completed build:
 
 1. **OS Installation**: Ubuntu or another Linux distribution.  
 2. **NVIDIA Driver Installation**: Make sure `nvidia-smi` detects both 4090 GPUs correctly:  
-   ![nvidia-smi output example](nvidia_smi.png)  
+{{< figure 
+    src="nvidia_smi.png" 
+    caption="Fig. 3. nvidia-smi Output" 
+    align="center" 
+>}}
 3. **CUDA Toolkit**: Verify via `nvcc -V`:  
-   ![nvcc -V output example](nvcc.png)  
+{{< figure 
+   src="nvcc.png" 
+   caption="Fig. 4. nvcc -V Output" 
+   align="center" 
+>}}
 4. **cuDNN**: Ensure your deep learning frameworks can leverage GPU-accelerated kernels for convolution, RNN, etc.  
 5. **Framework Testing**: Use [PyTorch](https://pytorch.org/), [TensorFlow](https://www.tensorflow.org/), or [JAX](https://github.com/google/jax) to confirm basic inference and training functionality.  
 6. **Docker Containerization**:  

@@ -40,9 +40,12 @@ draft: false
 - **训练性能**：在使用 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 的分布式和 offload 技术（ZeRO-3 + CPU offload）后，可对 34B 左右的模型（如 CodeLlama 34B）进行微调  
 - **性价比**：对于个人或小团队的日常实验和中小规模模型训练而言，该配置较为实用；但若进行超大规模模型的全参数训练，仍需更多专业卡（如多卡 A100 或 H100 集群）  
 
-下图展示了不同大小模型、不同训练方法对显存的需求（参考 [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory#hardware-requirement)）：  
-
-![硬件需求示意图](hardware_requirement.png)
+下图展示了不同大小模型、不同训练方法对显存的需求：
+{{< figure 
+    src="hardware_requirement.png" 
+    caption="Fig. 1. Hardware Requirement. (Image source: [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory#hardware-requirement))" 
+    align="center" 
+>}}
 
 ---
 
@@ -148,10 +151,14 @@ draft: false
 
 ### 机箱
 
-RTX 4090 体型巨大，且双卡堆叠时需要充足的内部空间和散热风道。全塔机箱能提供更好的走线空间和气流组织。我选用了 PHANTEKS 追风者 620PC，除了体型大、空间充裕外，也自带良好的线缆管理通道。  
+RTX 4090 体型巨大，且双卡堆叠时需要充足的内部空间和散热风道。全塔机箱能提供更好的走线空间和气流组织。我选用了 PHANTEKS 追风者 620PC，除了体型大、空间充裕外，也自带良好的线缆管理通道。
 
-装机完成后的示意图如下：  
-![装机实物图](computer.jpeg)
+装机完成后的图片如下：  
+{{< figure 
+    src="computer.jpeg" 
+    caption="Fig. 2. Computer" 
+    align="center" 
+>}}
 
 ---
 
@@ -161,9 +168,17 @@ RTX 4090 体型巨大，且双卡堆叠时需要充足的内部空间和散热�
 
 1. **安装 OS**：使用 Ubuntu 或其他 Linux 系统即可。  
 2. **安装 NVIDIA 驱动**：确保 `nvidia-smi` 能正确识别两张 4090:  
-   ![nvidia-smi output example](nvidia_smi.png)  
+{{< figure 
+    src="nvidia_smi.png" 
+    caption="Fig. 3. nvidia-smi Output" 
+    align="center" 
+>}}
 3. **安装 CUDA 工具链**：通过 `nvcc -V` 确认版本信息:  
-   ![nvcc -V output example](nvcc.png)  
+{{< figure 
+   src="nvcc.png" 
+   caption="Fig. 4. nvcc -V Output" 
+   align="center" 
+>}}
 4. **安装 cuDNN**：确保深度学习框架可以调用 GPU 加速卷积和 RNN 等操作  
 5. **测试框架**：使用 [PyTorch](https://pytorch.org/)、[TensorFlow](https://www.tensorflow.org/) 或 [JAX](https://github.com/google/jax) 简单测试模型推理/训练是否正常  
 6. **Docker 容器化**：  

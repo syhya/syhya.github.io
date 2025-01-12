@@ -22,14 +22,83 @@ minify:
 disableKinds:
   - RSS
 
-
-googleAnalytics: UA-123-45
+googleAnalytics: G-SZ2660B91F
 
 outputs:
   home:
     - HTML
     - RSS
     - JSON # necessary for search
+
+# math settings
+math: true
+markup:
+      goldmark:
+        duplicateResourceFiles: false
+        extensions:
+          cjk:
+            eastAsianLineBreaks: false
+            eastAsianLineBreaksStyle: simple
+            enable: false
+            escapedSpace: false
+          definitionList: true
+          extras:
+            delete:
+              enable: false
+            insert:
+              enable: false
+            mark:
+              enable: false
+            subscript:
+              enable: false
+            superscript:
+              enable: false
+          footnote: true
+          linkify: true
+          linkifyProtocol: https
+          passthrough:
+            delimiters:
+              block:
+              - - \[
+                - \]
+              - - $$
+                - $$
+              inline:
+              - - \(
+                - \)
+            enable: true
+          strikethrough: true
+          table: true
+          taskList: true
+          typographer:
+            apostrophe: '&rsquo;'
+            disable: false
+            ellipsis: '&hellip;'
+            emDash: '&mdash;'
+            enDash: '&ndash;'
+            leftAngleQuote: '&laquo;'
+            leftDoubleQuote: '&ldquo;'
+            leftSingleQuote: '&lsquo;'
+            rightAngleQuote: '&raquo;'
+            rightDoubleQuote: '&rdquo;'
+            rightSingleQuote: '&rsquo;'
+        parser:
+          attribute:
+            block: false
+            title: true
+          autoHeadingID: true
+          autoHeadingIDType: github
+          wrapStandAloneImageWithinParagraph: true
+        renderHooks:
+          image:
+            enableDefault: false
+          link:
+            enableDefault: false
+        renderer:
+          hardWraps: false
+          unsafe: false
+          xhtml: false
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Multilingual Configuration
@@ -47,7 +116,6 @@ languages:
     # ──────────────────────────────────────────────────────────────────────────
     params:
       env: production
-
       title: "Yue Shui Blog"
       description: "ExampleSite description"
       keywords: [Blog, Portfolio, PaperMod]
@@ -161,12 +229,12 @@ languages:
     # ──────────────────────────────────────────────────────────────────────────
     # Code Highlighting
     # ──────────────────────────────────────────────────────────────────────────
-    pygmentsUseClasses: true
-    markup:
-      highlight:
-        noClasses: false
-        style: "monokai"
-        # lineNos: true   # Uncomment to enable line numbers
+    # pygmentsUseClasses: true
+    # markup:
+    #   highlight:
+    #     noClasses: false
+    #     style: "monokai"
+    #     # lineNos: true   # Uncomment to enable line numbers
 
   zh:
     languageName: "简体中文"
@@ -174,6 +242,9 @@ languages:
     contentDir: "content/zh"
     languageCode: "zh-cn"
     title: "Yue Shui 博客"
+
+    # This will make .Summary and .WordCount behave correctly for CJK languages.
+    hasCJKLanguage: true
 
     # ──────────────────────────────────────────────────────────────────────────
     # PaperMod Parameters
@@ -194,8 +265,8 @@ languages:
       defaultTheme: auto
       disableThemeToggle: false
 
-      ShowReadingTime: false
-      ShowWordCount: false
+      ShowReadingTime: true
+      ShowWordCount: true
       ShowShareButtons: true
       ShowPostNavLinks: true
       ShowBreadCrumbs: true
@@ -295,12 +366,13 @@ languages:
     # ──────────────────────────────────────────────────────────────────────────
     # Code Highlighting
     # ──────────────────────────────────────────────────────────────────────────
-    pygmentsUseClasses: true
-    markup:
-      highlight:
-        noClasses: false
-        style: "monokai"
-        # lineNos: true   # Uncomment to enable line numbers
+    # pygmentsUseClasses: true
+    # markup:
+    #   highlight:
+    #     noClasses: false
+    #     style: "monokai"
+    #     # lineNos: true   # Uncomment to enable line numbers
+    
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Global Configuration (if any additional global settings are needed)

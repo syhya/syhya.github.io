@@ -264,12 +264,12 @@ From personal experience, dual 4090 GPUs provide sufficient performance within a
 ## Copyright & Citation
 
 > **Disclaimer**: The configurations, prices, and recommendations in this article are for technical discussion and research purposes only. Actual purchases and deployments should be carefully evaluated based on individual budgets and requirements. The author assumes no liability for any direct or indirect consequences resulting from following or adapting the information provided herein.
->
+
 > **Citation**: When reposting or referencing this content, please credit the original author and source.
 
 **Cited as:**
 
-Yue Shui. (Dec 2024). Building a Home Deep Learning Rig with Dual RTX 4090 GPUs.
+> Yue Shui. (Dec 2024). Building a Home Deep Learning Rig with Dual RTX 4090 GPUs.
 https://syhya.github.io/posts/2024-12-21-build-gpu-server
 
 Or

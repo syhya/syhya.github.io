@@ -555,7 +555,7 @@ type: "posts"
   
 **Cited as:**
 
-Yue Shui. (Jan 2025). 构建特定领域的大语言模型.  
+> Yue Shui. (Jan 2025). 构建特定领域的大语言模型.  
 https://syhya.github.io/posts/2025-01-05-domain-llm-training
 
 Or

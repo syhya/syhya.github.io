@@ -1481,7 +1481,7 @@ commison：手续费
 
 **Cited as:**
 
-Yue Shui. (Apr 2021). 基于深度学习的股票价格预测和量化策略研究.  
+> Yue Shui. (Apr 2021). 基于深度学习的股票价格预测和量化策略研究.  
 https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/
 
 Or

@@ -549,7 +549,7 @@ Ultimately, through a systematic process and technical measures, it is possible 
   
 **Cited as:**
 
-Yue Shui. (Jan 2025). Building Domain-Specific LLMs.  
+> Yue Shui. (Jan 2025). Building Domain-Specific LLMs.  
 [https://syhya.github.io/posts/2025-01-05-build-domain-llm](https://syhya.github.io/posts/2025-01-05-build-domain-llm)
 
 Or

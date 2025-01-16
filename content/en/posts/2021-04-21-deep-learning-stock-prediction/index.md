@@ -1268,11 +1268,11 @@ Although this paper compared the performance of LSTM, GRU, and BiLSTM models in 
 
 ## Citation
 
-> **Citation**: If you wish to share or reference this content, please credit the original author and source.
+> **Citation**: To reproduce or cite the content of this article, please acknowledge the original author and source.
 
 **Cited as:**
 
-Yue Shui. (Apr 2021). Research on Stock Price Prediction and Quantitative Strategies Based on Deep Learning.  
+> Yue Shui. (Apr 2021). Research on Stock Price Prediction and Quantitative Strategies Based on Deep Learning.  
 https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/
 
 Or

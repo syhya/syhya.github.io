@@ -2,7 +2,7 @@
 title: "Transformer注意力机制：MHA、MQA与GQA的对比"
 date: 2025-01-16T12:00:00+08:00
 author: "Yue Shui"
-tags: ["深度学习", "AI", "Transformer", "注意力机制", "MHA", "MQA", "GQA", "KV Cache"]
+tags: ["深度学习", "AI", "Transformer", "注意力机制", "MHA", "MQA", "GQA", "KV Cache", "NLP", "LLM"]
 categories: ["技术博客"]
 ShowReadingTime: true
 toc: true
@@ -999,7 +999,7 @@ $$
 **Cited as:**
 
 > Yue Shui. (Jan 2025). Transformer注意力机制：MHA、MQA与GQA的对比.  
-https://syhya.github.io/posts/2025-01-16-gqa-attention/
+https://syhya.github.io/posts/2025-01-16-group-query-attention/
 
 Or
 
@@ -1010,5 +1010,5 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Jan",
-  url     = "https://syhya.github.io/posts/2025-01-16-gqa-attention/"
+  url     = "https://syhya.github.io/posts/2025-01-16-group-query-attention/"
 }

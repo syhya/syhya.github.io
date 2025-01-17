@@ -2,7 +2,7 @@
 title: "Attention Mechanisms in Transformers: Comparing MHA, MQA, and GQA"
 date: 2025-01-16T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "Transformer", "Attention Mechanism", "MHA", "MQA", "GQA", "KV Cache"]
+tags: ["Deep Learning", "AI", "Transformer", "Attention Mechanism", "MHA", "MQA", "GQA", "KV Cache", "NLP", "LLM"]
 categories: ["Technical Blog"]
 ShowReadingTime: true
 toc: true
@@ -1000,7 +1000,7 @@ In addition to optimizing the attention mechanism, researchers have proposed var
 **Cited as:**
     
 > Yue Shui. (Jan 2025). Attention Mechanisms in Transformers: Comparing MHA, MQA, and GQA.  
-https://syhya.github.io/posts/2025-01-16-gqa-attention/
+https://syhya.github.io/posts/2025-01-16-group-query-attention/
     
 Or
     
@@ -1011,5 +1011,5 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Jan",
-  url     = "https://syhya.github.io/posts/2025-01-16-gqa-attention/"
+  url     = "https://syhya.github.io/posts/2025-01-16-group-query-attention/"
 }

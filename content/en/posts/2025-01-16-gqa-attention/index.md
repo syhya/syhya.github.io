@@ -555,7 +555,7 @@ When analyzing different attention mechanisms (MHA, MQA, GQA), our main focus is
 Assume that each position in the sequence produces its own representations of query \(\mathbf{Q}\), key \(\mathbf{K}\), and value \(\mathbf{V}\). After splitting by batch size and number of heads, their shapes can be written as:
 
 \[
-\mathbf{Q}, \mathbf{K}, \mathbf{V} \;\in\; \mathbb{R}^{B \times H \times S \times d_{\text{head}}}.
+\mathbf{Q}, \mathbf{K}, \mathbf{V} \;\in\; \mathbb{R}^{B \times H \times S \times d_{\text{head}}}
 \]
 
 
@@ -566,7 +566,7 @@ Assume that each position in the sequence produces its own representations of qu
 For two matrices \(\mathbf{A}\) of shape \(m \times n\) and \(\mathbf{B}\) of shape \(n \times p\), the complexity of computing the product \(\mathbf{A}\mathbf{B}\) is typically expressed as:
 
 \[
-\mathcal{O}(m \times n \times p).
+\mathcal{O}(m \times n \times p)
 \]
 
 In attention-related computations, this formula is frequently used to analyze \(\mathbf{Q}\mathbf{K}^\top\) and the multiplication of attention scores by \(\mathbf{V}\).
@@ -576,23 +576,23 @@ In attention-related computations, this formula is frequently used to analyze \(
 1. **Dot Product (\(\mathbf{Q}\mathbf{K}^\top\))**  
    - Shape of \(\mathbf{Q}\): \(B \times H \times S \times d_{\text{head}}\)  
    - Shape of \(\mathbf{K}\): \(B \times H \times S \times d_{\text{head}}\)  
-   - Consequently, the result of \(\mathbf{Q}\mathbf{K}^\top\) has shape \(B \times H \times S \times S\).  
+   - Consequently, the result of \(\mathbf{Q}\mathbf{K}^\top\) has shape \(B \times H \times S \times S\) 
    - The calculation can be viewed as \(S \times S\) dot products for each head in each batch. Each dot product involves \(d_{\text{head}}\) multiply-add operations.  
    - Hence, its time complexity is:
 
      \[
      \mathcal{O}\bigl(B \times H \times S \times S \times d_{\text{head}}\bigr)
      \;=\;
-     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr).
+     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
      \]
 
 2. **Softmax Operation**  
-   - Applied element-wise to the attention score matrix of shape \(B \times H \times S \times S\).  
+   - Applied element-wise to the attention score matrix of shape \(B \times H \times S \times S\)  
    - Softmax entails computing exponentials and performing normalization on each element. The complexity is approximately:
 
      \[
      \mathcal{O}(\text{number of elements})
-     = \mathcal{O}\bigl(B \times H \times S^2\bigr).
+     = \mathcal{O}\bigl(B \times H \times S^2\bigr)
      \]
      
    - Compared with the matrix multiplication above, this step’s dependency on \(d_{\text{head}}\) is negligible and is thus often considered a smaller overhead.
@@ -600,18 +600,18 @@ In attention-related computations, this formula is frequently used to analyze \(
 3. **Weighted Averaging (Multiplying Attention Scores with \(\mathbf{V}\))**  
    - Shape of \(\mathbf{V}\): \(B \times H \times S \times d_{\text{head}}\)  
    - Shape of the attention score matrix: \(B \times H \times S \times S\)  
-   - Multiplying each position’s attention scores by the corresponding \(\mathbf{V}\) vector yields an output of shape \(B \times H \times S \times d_{\text{head}}\).  
+   - Multiplying each position’s attention scores by the corresponding \(\mathbf{V}\) vector yields an output of shape \(B \times H \times S \times d_{\text{head}}\)  
    - Its time complexity is analogous to that of \(\mathbf{Q}\mathbf{K}^\top\):
 
      \[
-     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr).
+     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
      \]
 
 Combining these three steps, the dominant costs come from the two matrix multiplications, each of complexity \(\mathcal{O}(B \times H \times S^2 \times d_{\text{head}})\). Therefore, for a **single full forward** pass, the total complexity can be denoted as:
 
 \[
 \mathcal{O}(B \times H \times S^2 \times d_{\text{head}})
-= \mathcal{O}(B \times S^2 \times d).
+= \mathcal{O}(B \times S^2 \times d)
 \]
 
 Here, we use \(d_{\text{head}} = \frac{d}{H}\).
@@ -635,7 +635,7 @@ As depicted in Figure 4, **incremental decoding** (especially in autoregressive 
    - The KV Cache stores all previous \(\mathbf{K}, \mathbf{V}\) vectors, with shape:
 
      \[
-     B \times H \times S_{\text{past}} \times d_{\text{head}}.
+     B \times H \times S_{\text{past}} \times d_{\text{head}}
      \]
      
      Here, \(S_{\text{past}}\) is the length of the already-generated sequence.
@@ -643,13 +643,13 @@ As depicted in Figure 4, **incremental decoding** (especially in autoregressive 
 
      \[
      \mathbf{Q}\mathbf{K}^\top : \; \mathcal{O}\bigl(B \times H \times 1 \times S_{\text{past}} \times d_{\text{head}}\bigr)
-     = \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr).
+     = \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
      \]
      
    - Similarly, multiplying these scores by \(\mathbf{V}\) has the same order:
 
      \[
-     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr).
+     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
      \]
 
 3. **Update the KV Cache**  
@@ -664,7 +664,7 @@ in computation, instead of the \(S \times S\) scale for each forward pass. If on
 
 \[
 \sum_{k=1}^{S} \mathcal{O}\bigl(B \times H \times k \times d_{\text{head}}\bigr)
-= \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr),
+= \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
 \]
 which is the same order as the one-shot computation. The difference is that incremental decoding computes one token at a time, thus requiring lower temporary memory usage per step and avoiding a full \(S \times S\) attention score matrix at once.
 
@@ -678,13 +678,13 @@ Regardless of whether we use MHA, MQA, or GQA, in a **full forward pass** (or th
 
 \[
 \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
-= \mathcal{O}\bigl(B \times S^2 \times d\bigr).
+= \mathcal{O}\bigl(B \times S^2 \times d\bigr)
 \]
 
 On the other hand, in **incremental inference** with KV Cache, the per-token complexity decreases to
 
 \[
-\mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr),
+\mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
 \]
 but one must maintain and update the KV Cache over multiple decoding steps.
 
@@ -704,7 +704,7 @@ Space complexity encompasses both **model parameters (weights)** and **intermedi
    \underbrace{d \times d}_{\text{K projection}} 
    + 
    \underbrace{d \times d}_{\text{V projection}}
-   = 3d^2.
+   = 3d^2
    \]
    These parameters may be split among heads, but the total remains \(\mathcal{O}(d^2)\), independent of the number of heads \(H\).
 
@@ -713,7 +713,7 @@ Space complexity encompasses both **model parameters (weights)** and **intermedi
    Therefore, combining these yields:
 
    \[
-   3d^2 + d^2 = 4d^2,
+   3d^2 + d^2 = 4d^2
    \]
    which remains \(\mathcal{O}(d^2)\).
 
@@ -726,7 +726,7 @@ During **training** or a **full forward** pass, the following key tensors often 
    Shape: \(B \times H \times S \times S\). Regardless of MHA, MQA, or GQA, each head (or group) computes \(\mathbf{Q}\mathbf{K}^\top\) for the attention scores, yielding:
 
    \[
-   \mathcal{O}\bigl(B \times H \times S^2\bigr).
+   \mathcal{O}\bigl(B \times H \times S^2\bigr)
    \]
 
 2. **Weighted Output**  
@@ -734,7 +734,7 @@ During **training** or a **full forward** pass, the following key tensors often 
 
    \[
    \mathcal{O}\bigl(B \times H \times S \times d_{\text{head}}\bigr)
-   = \mathcal{O}\bigl(B \times S \times d\bigr).
+   = \mathcal{O}\bigl(B \times S \times d\bigr)
    \]
 
 3. **Storage of \(\mathbf{Q}, \mathbf{K}, \mathbf{V}\) for Backprop**  
@@ -767,7 +767,7 @@ In **inference** with incremental decoding, a **KV Cache** is typically used to 
   Each new token only requires a score matrix of shape:
 
   \[
-  B \times H \times 1 \times S_{\text{past}},
+  B \times H \times 1 \times S_{\text{past}}
   \]
   
   which is much smaller than the \(B \times H \times S \times S\) matrix used during training.
@@ -781,7 +781,7 @@ Therefore, in **incremental decoding**, large temporary activations—such as th
   The main activations (attention scores + weighted outputs + explicit storage of Q,K,V) add up to:
 
   \[
-  \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr).
+  \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr)
   \]
 
   For large \(S\), the \(\mathcal{O}(B \times H \times S^2)\) term tends to dominate.
@@ -803,13 +803,13 @@ Therefore, in **incremental decoding**, large temporary activations—such as th
 
      \[
      \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
-     = \mathcal{O}\bigl(B \times S^2 \times d\bigr).
+     = \mathcal{O}\bigl(B \times S^2 \times d\bigr)
      \]
 
    - In **incremental inference** (KV Cache), each new token only requires
 
      \[
-     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr),
+     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
      \]
      
      but the KV Cache must be updated and maintained throughout the decoding sequence.
@@ -819,7 +819,7 @@ Therefore, in **incremental decoding**, large temporary activations—such as th
    - **Intermediate Activations** (Training / Full Forward): Dominated by the attention score matrix and weighted outputs:
 
      \[
-     \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr).
+     \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr)
      \]
 
    - **Incremental Decoding (KV Cache)**: Saves on the \(\mathcal{O}(S^2)\) score matrix cost but requires
@@ -843,6 +843,8 @@ The table below summarizes the main differences among MHA, MQA, and GQA attentio
 | **Performance**           | Best                                    | Slightly lower than MHA                | Close to MHA, significantly better than MQA     |
 | **Uptraining Requirement** | None                                    | High, requires more stability and tuning | Lower, GQA models stabilize after minimal uptraining |
 | **Applicable Scenarios** | Applications with high performance requirements but insensitive to inference speed | Scenarios requiring extremely fast inference with lower model performance demands | Applications needing a balance between inference speed and model performance |
+
+In summary, from a **theoretical** standpoint, all three attention mechanisms (MHA, MQA, GQA) share **\(\mathcal{O}(B \times S^2 \times d)\)** complexity in a full pass and **\(\mathcal{O}(B \times S_{\text{past}} \times d)\)** per-step complexity in incremental decoding.
 
 ## Experimental Results
 

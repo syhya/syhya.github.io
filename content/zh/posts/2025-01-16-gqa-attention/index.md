@@ -554,7 +554,7 @@ if __name__ == "__main__":
 假设每个位置都会生成查询 \(\mathbf{Q}\)、键 \(\mathbf{K}\) 和值 \(\mathbf{V}\) 的表征，且各矩阵按批量和头数拆分之后的形状如同下式所示：
 
 \[
-\mathbf{Q}, \mathbf{K}, \mathbf{V} \;\in\; \mathbb{R}^{B \times H \times S \times d_{\text{head}}}.
+\mathbf{Q}, \mathbf{K}, \mathbf{V} \;\in\; \mathbb{R}^{B \times H \times S \times d_{\text{head}}}
 \]
 
 
@@ -562,128 +562,133 @@ if __name__ == "__main__":
 
 #### 矩阵乘法的通用时间复杂度
 
-对于形状为 \(m \times n\) 的矩阵 \(\mathbf{A}\) 与形状为 \(n \times p\) 的矩阵 \(\mathbf{B}\) 进行乘法 \(\mathbf{A}\mathbf{B}\)，其时间复杂度一般表示为：
+对于形状为 $m \times n$ 的矩阵 $\mathbf{A}$ 与形状为 $n \times p$ 的矩阵 $\mathbf{B}$ 进行乘法 $\mathbf{A}\mathbf{B}$，其时间复杂度一般表示为：
 
-\[
-\mathcal{O}(m \times n \times p).
-\]
+$$
+\mathcal{O}(m \times n \times p)
+$$
 
-在注意力机制的计算中，这一基本结论常用于分析 \(\mathbf{Q}\mathbf{K}^\top\) 以及注意力分数与 \(\mathbf{V}\) 的乘法等。
+在注意力机制的计算中，这一基本结论常用于分析 $\mathbf{Q}\mathbf{K}^\top$ 以及注意力分数与 $\mathbf{V}$ 的乘法等。
 
 #### 自注意力计算的主要步骤及复杂度
 
-1. **点积计算（\(\mathbf{Q}\mathbf{K}^\top\)）**  
-   - \(\mathbf{Q}\) 形状：\(B \times H \times S \times d_{\text{head}}\)  
-   - \(\mathbf{K}\) 形状：\(B \times H \times S \times d_{\text{head}}\)  
-   - 因此 \(\mathbf{Q}\mathbf{K}^\top\) 的结果形状为 \(B \times H \times S \times S\)。  
-   - 具体的计算量可以视为：对每个批次、每个头，以及序列内所有位置对 \((S \times S)\) 的点积，其中每个点积涉及 \(d_{\text{head}}\) 维度的乘加运算。  
+1. **点积计算 ($\mathbf{Q}\mathbf{K}^\top$)**  
+   - $\mathbf{Q}$ 形状：$B \times H \times S \times d_{\text{head}}$  
+   - $\mathbf{K}$ 形状：$B \times H \times S \times d_{\text{head}}$  
+   - 因此 $\mathbf{Q}\mathbf{K}^\top$ 的结果形状为 $B \times H \times S \times S$。  
+   - 具体的计算量可以视为：对每个批次、每个头，以及序列内所有位置对 $(S \times S)$ 的点积，其中每个点积涉及 $d_{\text{head}}$ 维度的乘加运算。  
    - 故其时间复杂度为：
      
-     \[
+     $$
      \mathcal{O}\bigl(B \times H \times S \times S \times d_{\text{head}}\bigr)
      \;=\;
-     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr).
-     \]
+     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
+     $$
 
 2. **softmax 操作**  
-   - 在得到的注意力分数矩阵 \(B \times H \times S \times S\) 上进行逐元素的 softmax 运算。  
+   - 在得到的注意力分数矩阵 $B \times H \times S \times S$ 上进行逐元素的 softmax 运算。  
    - softmax 对矩阵的每个元素执行指数与归一化操作，其复杂度一般为：
 
-     \[
+     $$
      \mathcal{O}(\text{元素数})
-     = \mathcal{O}\bigl(B \times H \times S^2\bigr).
-     \]
+     = \mathcal{O}\bigl(B \times H \times S^2\bigr)
+     $$
      
-   - 相对于上一步的矩阵乘法，其依赖维度 \(d_{\text{head}}\) 的项可以忽略。因此常将其视为比矩阵乘法更小的开销。
+   - 相对于上一步的矩阵乘法，其依赖维度 $d_{\text{head}}$ 的项可以忽略。因此常将其视为比矩阵乘法更小的开销。
 
-3. **加权平均（注意力分数与 \(\mathbf{V}\) 的乘法）**  
-   - \(\mathbf{V}\) 形状：\(B \times H \times S \times d_{\text{head}}\)  
-   - 注意力分数矩阵形状：\(B \times H \times S \times S\)  
-   - 将每个位置的注意力分数与对应的 \(\mathbf{V}\) 向量乘加之后，输出仍是 \(B \times H \times S \times d_{\text{head}}\)。  
-   - 其时间复杂度与 \(\mathbf{Q}\mathbf{K}^\top\) 的分析类似：
+3. **加权平均（注意力分数与 $\mathbf{V}$ 的乘法）**  
+   - $\mathbf{V}$ 形状：$B \times H \times S \times d_{\text{head}}$  
+   - 注意力分数矩阵形状：$B \times H \times S \times S$  
+   - 将每个位置的注意力分数与对应的 $\mathbf{V}$ 向量乘加之后，输出仍是 $B \times H \times S \times d_{\text{head}}$。  
+   - 其时间复杂度与 $\mathbf{Q}\mathbf{K}^\top$ 的分析类似：
      
-     \[
-     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr).
-     \]
+     $$
+     \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
+     $$
 
-将上述三步综合，最主要的开销来自两次矩阵乘法，各为 \(\mathcal{O}(B \times H \times S^2 \times d_{\text{head}})\)。因此在一次**完整前向**计算时，量级可写为：
+将上述三步综合，最主要的开销来自两次矩阵乘法，各为 $\mathcal{O}(B \times H \times S^2 \times d_{\text{head}})$。因此在一次**完整前向**计算时，量级可写为：
 
-\[
+$$
 \mathcal{O}(B \times H \times S^2 \times d_{\text{head}})
 = \mathcal{O}(B \times S^2 \times d).
-\]
+$$
 
-
-（这里用到了 \(d_{\text{head}} = \frac{d}{H}\)。）
+（这里用到了 $d_{\text{head}} = \frac{d}{H}$）
 
 #### 增量解码/推理场景（KV Cache）下的时间复杂度
 
 {{< figure 
     src="kv_cache.png" 
-    caption="Fig. 4. KV cache exapmle. (Image source: [Efficient NLP YouTube Channel](https://www.youtube.com/watch?v=80bIUggRJf4))"
+    caption="Fig. 4. KV cache example. (Image source: [Efficient NLP YouTube Channel](https://www.youtube.com/watch?v=80bIUggRJf4))"
     align="center"
     width="90%"
 >}}
 
-参考图4在推理场景（尤其自回归生成）中，通常会使用 **KV Cache** 来缓存先前时刻的 \(\mathbf{K}, \mathbf{V}\)，从而避免重复计算。此时，每生成一个新 token（即处理一个新的时间步）只需：
+参考图4在推理场景（尤其自回归生成）中，通常会使用 **KV Cache** 来缓存先前时刻的 $\mathbf{K}$, $\mathbf{V}$，从而避免重复计算。此时，每生成一个新 token（即处理一个新的时间步）只需：
 
-1. **对新 token 计算 \(\mathbf{Q}\)（及对应的 \(\mathbf{K}, \mathbf{V}\)）**  
-   - 若只保留了投影权重，则新产生的 \(\mathbf{Q}\) 和当前时刻的 \(\mathbf{K}, \mathbf{V}\) 仅涉及 \(\mathcal{O}(d^2)\) 参数乘法，但这是**对单个 token**而言，相对开销不大。
+1. **对新 token 计算 $\mathbf{Q}$（及对应的 $\mathbf{K}$, $\mathbf{V}$）**  
+   - 若只保留了投影权重，则新产生的 $\mathbf{Q}$ 和当前时刻的 $\mathbf{K}$, $\mathbf{V}$ 仅涉及 $\mathcal{O}(d^2)$ 参数乘法，但这是**对单个 token**而言，相对开销不大。
 
 2. **与已有 KV Cache 做注意力**  
-   - KV Cache 中存储了所有先前时刻的 \(\mathbf{K}, \mathbf{V}\)，形状约为：
+   - KV Cache 中存储了所有先前时刻的 $\mathbf{K}$, $\mathbf{V}$，形状约为：
      
-     \[
-     B \times H \times S_{\text{past}} \times d_{\text{head}}.
-     \]
+     $$
+     B \times H \times S_{\text{past}} \times d_{\text{head}}
+     $$
      
-     此时 \(S_{\text{past}}\) 表示已经生成的序列长度。
-   - 新的 \(\mathbf{Q}\) 形状是 \(B \times H \times 1 \times d_{\text{head}}\)，故新 token 的注意力分数计算为：
+     此时 $S_{\text{past}}$ 表示已经生成的序列长度。
+   - 新的 $\mathbf{Q}$ 形状是 $B \times H \times 1 \times d_{\text{head}}$，故新 token 的注意力分数计算为：
      
-    \[
+    $$
     \mathbf{Q}\mathbf{K}^\top 
     : \; \mathcal{O}\bigl(B \times H \times 1 \times S_{\text{past}} \times d_{\text{head}}\bigr) 
-    = \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr).
-    \]
+    = \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
+    $$
 
-   - 同理，对 \(\mathbf{V}\) 的加权得到新 token 的输出，也有相同量级：
+   - 同理，对 $\mathbf{V}$ 的加权得到新 token 的输出，也有相同量级：
      
-     \[
-     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr).
-     \]
+     $$
+     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
+     $$
 
 3. **更新 KV Cache**  
-   - 将新产生的 \(\mathbf{K}, \mathbf{V}\) 追加到 KV Cache 中，以备下一个时间步使用。此操作在时间复杂度上只是简单的 concat/append，主要在空间上会不断增长。
+   - 将新产生的 $\mathbf{K}$, $\mathbf{V}$ 追加到 KV Cache 中，以备下一个时间步使用。此操作在时间复杂度上只是简单的 concat/append，主要在空间上会不断增长。
 
 因此，在增量解码时，每个新 token 的计算量约为：
-\[
-\mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr),
-\]
-而不是一次性地进行 \(S \times S\) 规模的注意力计算。若要生成长度为 \(S\) 的序列，总体时间在理想情况下也可归纳为
-\[
+
+$$
+\mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
+$$
+
+而不是一次性地进行 $S \times S$ 规模的注意力计算。若要生成长度为 $S$ 的序列，总体时间在理想情况下也可归纳为
+
+$$
 \sum_{k=1}^{S} \mathcal{O}\bigl(B \times H \times k \times d_{\text{head}}\bigr)
-= \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr),
-\]
-与一次性计算的复杂度同阶，只是**一次性计算**与**逐步计算**的差异。每步只处理 1 个 token 的注意力时，峰值的临时计算量更小，也无需存储完整的 \(S \times S\) 注意力分数矩阵。
+= \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
+$$
+
+与一次性计算的复杂度同阶，只是**一次性计算**与**逐步计算**的差异。每步只处理 1 个 token 的注意力时，峰值的临时计算量更小，也无需存储完整的 $S \times S$ 注意力分数矩阵。
 
 #### 时间复杂度总结
 
-- **MHA（多头注意力）**：头数多，但每个头分别计算 \(\mathbf{K}, \mathbf{V}\)。  
-- **MQA（混合头注意力）**：多个头共享 \(\mathbf{K}, \mathbf{V}\)。  
-- **GQA（分组注意力）**：将 \(H\) 个头分成 \(G\) 个组，每组共享一组 \(\mathbf{K}, \mathbf{V}\)。
+- **MHA（多头注意力）**：头数多，但每个头分别计算 $\mathbf{K}$, $\mathbf{V}$。  
+- **MQA（多查询注意力）**：多个头共享 $\mathbf{K}$, $\mathbf{V}$。  
+- **GQA（分组注意力）**：将 $H$ 个头分成 $G$ 个组，每组共享一组 $\mathbf{K}$, $\mathbf{V}$。
 
-不论 MHA / MQA / GQA，在**完整前向（或训练时的前向部分）**下，它们的主要矩阵乘法复杂度均为：
-\[
+不论 MHA / MQA / GQA，在 **完整前向** 下，它们的主要矩阵乘法复杂度均为：
+
+$$
 \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
-= \mathcal{O}\bigl(B \times S^2 \times d\bigr).
-\]
+= \mathcal{O}\bigl(B \times S^2 \times d\bigr)
+$$
 
 而在**增量推理场景**（KV Cache）下，单步计算复杂度降低为
-\[
-\mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr),
-\]
-但需要在多步解码过程中维护并更新 KV Cache。
 
+$$
+\mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
+$$
+
+但需要在多步解码过程中维护并更新 KV Cache。
 
 ### 空间复杂度分析
 
@@ -692,58 +697,58 @@ if __name__ == "__main__":
 #### 模型参数规模
 
 1. **线性投影层的参数**  
-   对输入向量（维度 \(d\)）投影到 \(\mathbf{Q}, \mathbf{K}, \mathbf{V}\) 的维度：
+   对输入向量（维度 $d$）投影到 $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$ 的维度：
 
-   \[
+   $$
    \underbrace{d \times d}_{\mathbf{Q}\text{的投影}} 
    \;+\;
    \underbrace{d \times d}_{\mathbf{K}\text{的投影}} 
    \;+\;
    \underbrace{d \times d}_{\mathbf{V}\text{的投影}}
-   = 3d^2.
-   \]
-   一般而言，这些参数会再根据头数 \(H\) 切分成多头的形式，但总和并不因为头数增加而改变。故其量级为 \(\mathcal{O}(d^2)\)。
+   = 3d^2
+   $$
+   一般而言，这些参数会再根据头数 $H$ 切分成多头的形式，但总和并不因为头数增加而改变。故其量级为 $\mathcal{O}(d^2)$。
 
 2. **输出合并层的参数**  
-   将多头输出拼接后再投影回维度 \(d\) 时，通常还会有一个 \(d \times d\) 的线性层。这也同样是 \(\mathcal{O}(d^2)\)。  
+   将多头输出拼接后再投影回维度 $d$ 时，通常还会有一个 $d \times d$ 的线性层。这也同样是 $\mathcal{O}(d^2)$。  
    因此，若单独把二者相加，有
 
-   \[
-   3d^2 + d^2 = 4d^2,
-   \]
-   仍然可记作 \(\mathcal{O}(d^2)\)。
+   $$
+   3d^2 + d^2 = 4d^2
+   $$
+   仍然可记作 $\mathcal{O}(d^2)$。
 
 #### 前向计算的中间激活值
 
 在进行**训练**或**完整前向**时，需要缓存如下主要张量：
 
 1. **注意力分数矩阵**  
-   形状为 \(B \times H \times S \times S\)。无论使用 MHA、MQA 还是 GQA，每个头（或组）都需要计算与 \(\mathbf{Q}\mathbf{K}^\top\) 相关的注意力分数，其规模量级为：
+   形状为 $B \times H \times S \times S$。无论使用 MHA、MQA 还是 GQA，每个头（或组）都需要计算与 $\mathbf{Q}\mathbf{K}^\top$ 相关的注意力分数，其规模量级为：
 
-   \[
-   \mathcal{O}\bigl(B \times H \times S^2\bigr).
-   \]
+   $$
+   \mathcal{O}\bigl(B \times H \times S^2\bigr)
+   $$
 
 2. **加权后的输出**  
-   形状为 \(B \times H \times S \times d_{\text{head}}\)，对应每个位置在前向计算中得到的注意力上下文向量。其量级为：
+   形状为 $B \times H \times S \times d_{\text{head}}$，对应每个位置在前向计算中得到的注意力上下文向量。其量级为：
 
-   \[
+   $$
    \mathcal{O}\bigl(B \times H \times S \times d_{\text{head}}\bigr)
-   = \mathcal{O}\bigl(B \times S \times d\bigr).
-   \]
+   = \mathcal{O}\bigl(B \times S \times d\bigr)
+   $$
 
-3. **不同注意力机制下的 \(\mathbf{Q}, \mathbf{K}, \mathbf{V}\) 存储**  
-   一般在**反向传播**时，需要缓存 \(\mathbf{Q}, \mathbf{K}, \mathbf{V}\) 的前向输出（或中间梯度）。若要显式存储，其形状及规模通常如下：
+3. **不同注意力机制下的 $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$ 存储**  
+   一般在**反向传播**时，需要缓存 $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$ 的前向输出（或中间梯度）。若要显式存储，其形状及规模通常如下：
 
    - **MHA（多头注意力）**  
-     - \(\mathbf{Q}\): \(B \times H \times S \times d_{\text{head}}\)  
-     - \(\mathbf{K}, \mathbf{V}\): \(B \times H \times S \times d_{\text{head}}\)
+     - $\mathbf{Q}$: $B \times H \times S \times d_{\text{head}}$  
+     - $\mathbf{K}$, $\mathbf{V}$: $B \times H \times S \times d_{\text{head}}$
    - **MQA（多查询注意力）**  
-     - \(\mathbf{Q}\): \(B \times H \times S \times d_{\text{head}}\)  
-     - \(\mathbf{K}, \mathbf{V}\)（共享）: \(B \times S \times d\)
+     - $\mathbf{Q}$: $B \times H \times S \times d_{\text{head}}$  
+     - $\mathbf{K}$, $\mathbf{V}$（共享）: $B \times S \times d$
    - **GQA（分组注意力）**  
-     - \(\mathbf{Q}\): \(B \times H \times S \times d_{\text{head}}\)  
-     - \(\mathbf{K}, \mathbf{V}\)（分组共享）: \(B \times G \times S \times d_{\text{head}}\)，其中 \(G \times d_{\text{head}} = d\)。
+     - $\mathbf{Q}$: $B \times H \times S \times d_{\text{head}}$  
+     - $\mathbf{K}$, $\mathbf{V}$（分组共享）: $B \times G \times S \times d_{\text{head}}$, 其中 $G \times d_{\text{head}} = d$
 
 #### 增量解码（KV Cache）下的空间消耗
 
@@ -751,82 +756,82 @@ if __name__ == "__main__":
 
 - **KV Cache 维度**（以 MHA 为例）：
 
-  \[
+  $$
   \mathbf{K}, \mathbf{V} : B \times H \times S_{\text{past}} \times d_{\text{head}}
-  \]
+  $$
 
-  随着生成序列长度 \(S_{\text{past}}\) 的增长，KV Cache 会**线性**增大。
+  随着生成序列长度 $S_{\text{past}}$ 的增长，KV Cache 会**线性**增大。
 
 - **单步注意力分数矩阵**：
 
   由于每次只对新 token 进行注意力计算，分数矩阵的形状约为
 
-  \[
-  B \times H \times 1 \times S_{\text{past}},
-  \]
+  $$
+  B \times H \times 1 \times S_{\text{past}}
+  $$
 
-  显著小于训练时的 \(B \times H \times S \times S\)。
+  显著小于训练时的 $B \times H \times S \times S$。
 
-因此，**增量解码时**，大部分临时激活开销（如完整的 \(S \times S\) 矩阵）不再需要，但需要为 KV Cache 额外分配一份 \(\mathcal{O}(B \times H \times S_{\text{past}} \times d_{\text{head}})\) 的显存，并随着序列长度增长而累积。
+因此，**增量解码时**，大部分临时激活开销（如完整的 $S \times S$ 矩阵）不再需要，但需要为 KV Cache 额外分配一份 $\mathcal{O}(B \times H \times S_{\text{past}} \times d_{\text{head}})$ 的显存，并随着序列长度增长而累积。
 
 #### 综合空间复杂度
 
 - **训练/完整前向**  
-  主要激活值（注意力分数矩阵 + 输出 + Q,K,V 显式缓存）可合并表示为
+  主要激活值（注意力分数矩阵 + 输出 + Q, K, V 显式缓存）可合并表示为
 
-  \[
-  \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr).
-  \]
+  $$
+  \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr)
+  $$
 
-  当 \(S\) 较大时，\(B \times H \times S^2\) 常是主要瓶颈。
+  当 $S$ 较大时，$B \times H \times S^2$ 常是主要瓶颈。
 
 - **推理/增量解码（KV Cache）**  
-  无需完整的 \(S^2\) 注意力分数矩阵，但需要一份
+  无需完整的 $S^2$ 注意力分数矩阵，但需要一份
 
-  \[
+  $$
   \mathbf{K},\mathbf{V}\text{ Cache}:
   \;\mathcal{O}(B \times H \times S_{\text{past}} \times d_{\text{head}})
-  \]
+  $$
 
-  会随着解码步数 \(S_{\text{past}}\) 增长而线性增加。  
-  单次注意力分数仅为 \(B \times H \times 1 \times S_{\text{past}}\) 的临时存储，量级显著小于训练场景。
+  会随着解码步数 $S_{\text{past}}$ 增长而线性增加。  
+  单次注意力分数仅为 $B \times H \times 1 \times S_{\text{past}}$ 的临时存储，量级显著小于训练场景。
 
 ### 结论与对比
 
 1. **时间复杂度**  
    - 对于**自注意力机制**，无论是 **MHA**、**MQA** 还是 **GQA**，在**完整前向**场景下（训练时亦会包含该前向过程），主要的矩阵运算都保持相同量级：  
      
-     \[
+     $$
      \mathcal{O}\bigl(B \times H \times S^2 \times d_{\text{head}}\bigr)
-     = \mathcal{O}\bigl(B \times S^2 \times d\bigr).
-     \]
+     = \mathcal{O}\bigl(B \times S^2 \times d\bigr)
+     $$
 
    - 在 **增量推理（KV Cache）** 场景下，每个新 token 只需
 
-     \[
-     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr),
-     \]
+     $$
+     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
+     $$
 
      的计算，但需要维护并更新 KV Cache。
 
 2. **空间复杂度**  
-   - **模型参数**：三者都在 \(\mathcal{O}(d^2)\) 量级。  
+   - **模型参数**：三者都在 $\mathcal{O}(d^2)$ 量级。  
    - **中间激活值**（训练/完整前向）：主要由注意力分数矩阵和输出决定，量级为
 
-     \[
-     \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr).
-     \]
+     $$
+     \mathcal{O}\bigl(B \times H \times S^2 + B \times S \times d\bigr)
+     $$
 
-   - **增量解码（KV Cache）**：节省了 \(S^2\) 大小的临时分数矩阵，但需要一份随着 \(S_{\text{past}}\) 增长的 K、V 缓存
+   - **增量解码（KV Cache）**：节省了 $S^2$ 大小的临时分数矩阵，但需要一份随着 $S_{\text{past}}$ 增长的 K, V 缓存
 
-     \[
-     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr).
-     \]
+     $$
+     \mathcal{O}\bigl(B \times H \times S_{\text{past}} \times d_{\text{head}}\bigr)
+     $$
 
 3. **MQA / GQA 的优势**  
-   - 虽然从大 \(S\) 场景的理论时间复杂度看，MQA、GQA 与 MHA 并无数量级的差别，但它们在**键、值共享**（或分组共享）带来的**实际带宽、缓存访存效率**方面，往往能在工程实现中取得更好的**显存和速度性能**。
+   - 虽然从大 $S$ 场景的理论时间复杂度看，MQA、GQA 与 MHA 并无数量级的差别，但它们在**键、值共享**（或分组共享）带来的**实际带宽、缓存访存效率**方面，往往能在工程实现中取得更好的**显存和速度性能**。
 
-下表总结了MHA、MQA和GQA三种注意力机制的主要差异：
+下表总结了 MHA、MQA 和 GQA 三种注意力机制的主要差异：
 
 | 特性                | 多头注意力 (MHA)                     | 多查询注意力 (MQA)                     | 分组查询注意力 (GQA)                        |
 |:-------------------:|:------------------------------------:|:--------------------------------------:|:--------------------------------------------:|
@@ -835,8 +840,9 @@ if __name__ == "__main__":
 | **显存带宽需求**    | 最高，$H$倍的K/V加载              | 最低，仅1个K/V头                        | 介于MHA和MQA之间，$G$倍的K/V加载           |
 | **模型容量**        | 最高                                 | 最低                                   | 中等，取决于分组数$G$                      |
 | **性能表现**        | 最佳                                 | 略低于MHA                              | 接近MHA，显著优于MQA                           |
-| **向上训练需求** | 无需                                 | 高，需要更多的稳定性和调整              | 较低，GQA模型在少量数据进行向上训练后即可稳定运行      |
+| **向上训练需求**    | 无需                                 | 高，需要更多的稳定性和调整              | 较低，GQA模型在少量数据进行向上训练后即可稳定运行      |
 | **适用场景**        | 高性能需求但推理速度不敏感的应用      | 推理速度要求极高，且对模型性能要求较低的场景 | 需要在推理速度和模型性能之间取得平衡的应用          |
+
 
 ## 实验结果
 

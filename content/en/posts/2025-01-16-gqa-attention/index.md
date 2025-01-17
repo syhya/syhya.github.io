@@ -16,7 +16,7 @@ math: true
 
 The Transformer ([Vaswani et al., 2017](https://arxiv.org/abs/1706.03762)) is a model based on the encoder-decoder architecture. This model has demonstrated outstanding performance in the field of natural language processing (NLP), leading to a series of optimized models based on it, such as BERT ([Devlin et al., 2018](https://arxiv.org/abs/1810.04805)) which uses only the encoder, GPT ([Radford et al., 2018](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)) series which uses only the decoder, and subsequent large language models (LLMs) like LLaMA ([Touvron et al., 2023](https://arxiv.org/abs/2302.13971)) and GPT-4 ([OpenAI et al., 2024](https://arxiv.org/abs/2303.08774)), most of which adopt a decoder-only architecture.
 
-## Symbols
+## Notations
 
 | Symbol                                                       | Meaning                                                                                                     |
 |--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
@@ -189,6 +189,362 @@ Figure 3 intuitively illustrates the relationship between the three attention me
   - **Model Behavior**: Each head uses completely independent \(\mathbf{K}\) and \(\mathbf{V}\), maintaining the high model capacity and performance of MHA.
 
 By adjusting the number of groups \(G\), GQA allows flexible switching between MHA and MQA, achieving a balance between maintaining high model performance and improving inference speed.
+
+### Implementation Code Snippet
+
+Below is a simple PyTorch implementation of  **MHA** 、**MQA**和 **GQA**. For GQA, two approaches are demonstrated: broadcasting and repeating.
+
+Additionally, note that in the actual implementation of LLaMA3, GQA incorporates KV Cache for optimization. To keep the example concise, this part is omitted in the code below. For more comprehensive details, you can refer to the official source code in [model.py](https://github.com/meta-llama/llama3/blob/main/llama/model.py).
+
+{{< collapse summary="MHA Code Snippet" openByDefault=false >}}[multi_head_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/multi_head_attention.py)
+```python
+import math
+import torch
+import torch.nn as nn
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, hidden_dim, nums_head, dropout_rate=0.1):
+        super().__init__()
+        self.hidden_dim = hidden_dim
+        self.nums_head = nums_head
+
+        # (nums_head * head_dim = hidden_dim)
+        assert hidden_dim % nums_head == 0
+        self.head_dim = hidden_dim // nums_head
+
+        self.dropout = nn.Dropout(dropout_rate)
+
+        # Define linear projection layers
+        self.q_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.k_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.v_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.output_proj = nn.Linear(hidden_dim, hidden_dim)
+
+    def forward(self, x, attention_mask=None):
+        # x has shape: (batch_size, seq_len, hidden_dim)
+        batch_size, seq_len, _ = x.size()
+
+        # Q, K, V each has shape: (batch_size, seq_len, hidden_dim)
+        Q = self.q_proj(x)
+        K = self.k_proj(x)
+        V = self.v_proj(x)
+
+        # Reshaping from (batch_size, seq_len, hidden_dim) to (batch_size, seq_len, nums_head, head_dim)
+        # Then transpose to (batch_size, nums_head, seq_len, head_dim)
+        # q_state = Q.view(batch_size, seq_len, self.head_num, self.head_dim).permute(0, 2, 1, 3)  # [Another approach to do it]
+        q = Q.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
+        k = K.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
+        v = V.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
+
+        # Matrix multiplication: (batch_size, nums_head, seq_len, head_dim) * (batch_size, nums_head, head_dim, seq_len)
+        # Resulting shape: (batch_size, nums_head, seq_len, seq_len)
+        # Note that the scaling factor uses head_dim, not hidden_dim.
+        attention_val = torch.matmul(q, k.transpose(-1, -2)) / math.sqrt(self.head_dim)
+
+        print(f"attention_val shape is {attention_val.size()}")
+        print(f"attention_mask shape is {attention_mask.size()}")
+        if attention_mask is not None:
+            # If attention_mask is provided, it should have shape (batch_size, nums_head, seq_len, seq_len).
+            assert attention_val.size() == attention_mask.size()
+            attention_val = torch.masked_fill(attention_val, attention_mask == 0, float("-inf"))
+
+        # Apply softmax along the last dimension to get attention weights.
+        attention_weight = torch.softmax(attention_val, dim=-1)
+        
+        # Dropout on attention weights
+        attention_weight = self.dropout(attention_weight)
+        
+        # Multiply attention weights with V:
+        # (batch_size, nums_head, seq_len, seq_len) * (batch_size, nums_head, seq_len, head_dim)
+        # -> (batch_size, nums_head, seq_len, head_dim)
+        output_tmp = attention_weight @ v
+
+        # Transpose back: (batch_size, nums_head, seq_len, head_dim)
+        # -> (batch_size, seq_len, nums_head, head_dim)
+        # -> (batch_size, seq_len, hidden_dim)
+        #
+        # Note: The transpose operation changes the dimension ordering but does not change the memory layout,
+        # resulting in a non-contiguous tensor. The contiguous() method makes the tensor contiguous in memory,
+        # allowing subsequent view or reshape operations without error.
+        output_tmp = output_tmp.transpose(1, 2).contiguous().view(batch_size, seq_len, self.hidden_dim)
+        # output = output_mid.permute(0, 2, 1, 3).reshpae(batch_size, seq_len, self.hidden_dim)  # # [Another approach to do it]
+
+        output = self.output_proj(output_tmp)
+        return output
+
+
+if __name__ == "__main__":
+    x = torch.randn(2, 3, 4)
+    batch_size, seq_len, hidden_dim = x.size()
+    nums_head = 2
+
+    # attention_mask has shape: (batch_size, nums_head, seq_len, seq_len).
+    # Here we use a lower-triangular mask to simulate causal masking.
+    attention_mask = torch.tril(torch.ones(batch_size, nums_head, seq_len, seq_len))
+    print(attention_mask)
+
+    multi_head_attention = MultiHeadAttention(hidden_dim=hidden_dim, nums_head=nums_head)
+    
+    x_forward = multi_head_attention.forward(x, attention_mask=attention_mask)
+    print(x_forward)
+    print(x_forward.size())
+```
+{{< /collapse >}}
+
+{{< collapse summary="MQA Code Snippet" openByDefault=false >}}[multi_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/multi_query_attention.py)
+```python
+import torch
+import torch.nn as nn
+import math
+
+
+class MultiQueryAttention(nn.Module):
+    def __init__(self, hidden_dim, nums_head, dropout=0.1):
+        super().__init__()
+        self.hidden_dim = hidden_dim
+        self.nums_head = nums_head
+        assert hidden_dim % nums_head == 0
+        self.head_dim = hidden_dim // nums_head
+
+        self.dropout = nn.Dropout(p=dropout)
+
+        self.q_proj = nn.Linear(hidden_dim, hidden_dim)        
+        # For kv, project: hidden_dim -> head_dim
+        self.k_proj = nn.Linear(hidden_dim, self.head_dim * 1)
+        self.v_proj = nn.Linear(hidden_dim, self.head_dim * 1)
+        self.output_proj = nn.Linear(hidden_dim, hidden_dim)
+
+    def forward(self, x, attention_mask=None):
+        batch_size, seq_len, _ = x.size()
+
+        Q, K, V = self.q_proj(x), self.k_proj(x), self.v_proj(x)
+        q = Q.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
+
+        # Broadcast k and v to match q's dimensions for attention computation
+        # k -> (batch_size, 1, seq_len, head_dim)
+        # v -> (batch_size, 1, seq_len, head_dim)
+        k = K.unsqueeze(1)
+        v = V.unsqueeze(1)
+
+        # (batch_size, head_num, seq_len, head_dim) * (batch_size, 1, head_dim, seq_len)
+        # -> (batch_size, head_num, seq_len, seq_len)
+        attention_val = (q @ k.transpose(-1, -2)) / math.sqrt(self.head_dim)
+        print(f"attention_val  shape is {attention_val.size()}")
+
+        if  attention_mask is not None:
+            attention_val = torch.masked_fill(attention_val, attention_mask == 0, float("-inf"))
+          
+        attention_weight = torch.softmax(attention_val, dim=-1)
+        print(f"attention_weight is {attention_weight}")
+        attention_weight = self.dropout(attention_weight)
+
+        # (batch_size, head_num, seq_len, seq_len) * (batch_size, 1, seq_len, head_dim)
+        # -> (batch_size, head_num, seq_len, head_dim)
+        output_tmp = attention_weight @ v
+
+        # -> (batch_size, seq_len, head_num, head_dim)
+        # -> (batch_size, seq_len, hidden_dim)
+        output_tmp = output_tmp.transpose(1, 2).contiguous().view(batch_size, seq_len, self.hidden_dim)
+        output = self.output_proj(output_tmp)
+        return output
+
+
+if __name__ == "__main__":
+    x = torch.randn(2, 3, 4)
+    batch_size, seq_len, hidden_dim = x.size()
+    nums_head = 2
+    attention_mask = torch.tril(torch.ones(batch_size, nums_head, seq_len, seq_len))
+    print(attention_mask)
+
+    multi_query_attention = MultiQueryAttention(hidden_dim=hidden_dim, nums_head=nums_head, dropout=0.2)
+    
+    x_forward = multi_query_attention.forward(x, attention_mask=attention_mask)
+    print(x_forward)
+    print(x_forward.size())
+```
+{{< /collapse >}}
+
+
+{{< collapse summary="GQA Code Snippet" openByDefault=false >}}[group_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/group_query_attention.py)
+```import math
+import torch
+import torch.nn as nn
+
+
+class GQABroadcast(nn.Module):
+    """
+    Group Query Attention (GQA) implementation:
+    By configuring `nums_kv_head` (G, the number of groups), this module supports:
+      - When nums_kv_head == nums_head: Multi-Head Attention (MHA)
+      - When nums_kv_head == 1: Multi-Query Attention (MQA)
+      - When 1 < nums_kv_head < nums_head: Generic Grouped Query Attention (GQA)
+    """
+    def __init__(self, hidden_dim, nums_head, nums_kv_head, dropout_rate=0.1):
+        super().__init__()
+        self.hidden_dim = hidden_dim
+        self.nums_head = nums_head  # Total number of Q heads (H)
+        self.nums_kv_head = nums_kv_head # Number of K, V heads (G, groups)
+        assert hidden_dim % nums_head == 0
+        assert nums_head % nums_kv_head == 0
+
+        self.head_dim = hidden_dim // nums_head
+        # Number of Q heads per group
+        self.q_heads_per_group = nums_head // nums_kv_head
+        self.dropout = nn.Dropout(dropout_rate)
+
+        self.q_proj = nn.Linear(hidden_dim, hidden_dim)
+        # Projection output dimensions for K, V = nums_kv_head * head_dim
+        self.k_proj = nn.Linear(hidden_dim, nums_kv_head * self.head_dim)
+        self.v_proj = nn.Linear(hidden_dim, nums_kv_head * self.head_dim)
+        self.output_proj = nn.Linear(hidden_dim, hidden_dim)
+
+    def forward(self, x, attention_mask= None):
+        batch_size, seq_len, _ = x.size()
+        Q = self.q_proj(x)  # (batch_size, seq_len, hidden_dim)
+        K = self.k_proj(x)  # (batch_size, seq_len, nums_kv_head * head_dim)
+        V = self.v_proj(x)  # (batch_size, seq_len, nums_kv_head * head_dim)
+
+        # Q: (batch_size, seq_len, hidden_dim)
+        # -> (batch_size, seq_len, nums_head, head_dim)
+        # -> (batch_size, nums_head, seq_len, head_dim)
+        # -> (batch_size, nums_kv_head, q_heads_per_group, seq_len, head_dim)
+        q = Q.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2).contiguous()
+        q = q.view(batch_size, self.nums_kv_head, self.q_heads_per_group, seq_len, self.head_dim)
+
+        # K, V: (batch_size, seq_len, nums_kv_head * head_dim)
+        #  -> (batch_size, seq_len, nums_kv_head, head_dim)
+        # -> (batch_size, nums_kv_head, seq_len, head_dim
+        # -> (batch_size, nums_kv_head, 1, seq_len, head_dim)
+        k = K.view(batch_size, seq_len, self.nums_kv_head, self.head_dim).transpose(1, 2).unsqueeze(2)
+        v = V.view(batch_size, seq_len, self.nums_kv_head, self.head_dim).transpose(1, 2).unsqueeze(2)
+
+        # q: (batch_size, nums_kv_head, q_heads_per_group, seq_len, head_dim) * (batch_size, nums_kv_head, 1, head_dim, seq_len)
+        # -> (batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len)
+        attention_val = q @ k.transpose(-1, -2) / math.sqrt(self.head_dim)
+
+        # mask
+        if attention_mask is not None:
+            attention_val = torch.masked_fill(attention_val, attention_mask == 0, float("-inf"))
+
+        # softmax
+        attention_weight = torch.softmax(attention_val, dim=-1)
+
+        # dropout
+        attention_weight = self.dropout(attention_weight)
+
+        # (batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len) * (batch_size, nums_kv_head, 1, seq_len, head_dim)
+        # -> (batch_size, nums_kv_head, q_heads_per_group, seq_len, head_dim)
+        output_tmp = attention_weight @ v
+
+        # (batch_size, nums_kv_head, q_heads_per_group, seq_len, head_dim)
+        # -> (batch_size, nums_head, seq_len, head_dim)
+        output_tmp = output_tmp.view(batch_size, self.nums_head, seq_len, self.head_dim)
+
+        # (batch_size, nums_head, seq_len, head_dim)
+        # -> (batch_size, seq_len, nums_head, head_dim) -> (batch_size, seq_len, hidden_dim)
+        output_concat = output_tmp.transpose(1, 2).contiguous().view(batch_size, seq_len, self.hidden_dim)
+        output = self.output_proj(output_concat)
+        return output
+
+
+class GQARepeat(nn.Module):
+    """
+    Group Query Attention (GQA) implementation:
+    By configuring `nums_kv_head` (G, the number of groups), this module supports:
+      - When nums_kv_head == nums_head: Multi-Head Attention (MHA)
+      - When nums_kv_head == 1: Multi-Query Attention (MQA)
+      - When 1 < nums_kv_head < nums_head: Generic Grouped Query Attention (GQA)
+    """
+    def __init__(self, hidden_dim, nums_head, nums_kv_head, dropout_rate=0.1):
+        super().__init__()
+        self.hidden_dim = hidden_dim
+        self.nums_head = nums_head
+        self.nums_kv_head = nums_kv_head
+        assert hidden_dim % nums_head == 0
+        assert nums_head % nums_kv_head == 0
+        self.head_dim = hidden_dim // nums_head
+        self.q_head_per_group = nums_head // nums_kv_head
+
+        self.q_proj = nn.Linear(hidden_dim, nums_head * self.head_dim)
+        self.k_proj = nn.Linear(hidden_dim, nums_kv_head * self.head_dim)
+        self.v_proj = nn.Linear(hidden_dim, nums_kv_head * self.head_dim)
+        self.output_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.dropout = nn.Dropout(dropout_rate)
+
+    def forward(self, x, attention_mask=None):
+        batch_size, seq_len, _ = x.size()
+        # (batch_size, seq_len, hidden_dim)
+        Q = self.q_proj(x)
+        # (batch_size, seq_len, nums_kv_head * self.head_dim)
+        K = self.k_proj(x)
+        V = self.v_proj(x)
+
+        # -> (batch_size, seq_len, nums_head, head_dim)
+        # -> (batch_size, nums_head, seq_len, head_dim)
+        q = Q.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
+
+        # -> (batch_size, seq_len, nums_kv_head, head_dim)
+        # -> (batch_size, nums_kv_head, seq_len, head_dim)
+        k = K.view(batch_size, seq_len, self.nums_kv_head, self.head_dim).transpose(1, 2)
+        v = V.view(batch_size, seq_len, self.nums_kv_head, self.head_dim).transpose(1, 2)
+
+        # (batch_size, nums_head, seq_len, head_dim)
+        k_repeat = k.repeat_interleave(self.q_head_per_group, dim=1)
+        v_repeat = v.repeat_interleave(self.q_head_per_group, dim=1)
+
+        # (batch_size, nums_head, seq_len, seq_len)
+        attention_val = q @ k_repeat.transpose(-1, -2) / math.sqrt(self.head_dim)
+
+        # mask
+        if attention_mask is not None:
+            attention_val = torch.masked_fill(attention_val, attention_mask == 0, float('-inf'))
+        
+        # softmax
+        attention_weight = torch.softmax(attention_val, dim=-1)
+
+        # dropout
+        attention_weight = self.dropout(attention_weight)
+
+        # (batch_size, nums_head, seq_len, head_dim)
+        output_tmp = attention_weight @ v_repeat
+
+        # (batch_size, seq_len, hidden_dim)
+        output_concat = output_tmp.transpose(1, 2).contiguous().view(batch_size, seq_len, self.hidden_dim)
+
+        output = self.output_proj(output_concat)
+        return output
+
+
+if __name__ == "__main__":
+    x = torch.randn(2, 3, 16)
+    batch_size, seq_len, hidden_dim = x.size()
+    nums_head = 8
+    head_dim = hidden_dim // nums_head
+    nums_kv_head = 4
+    q_heads_per_group = nums_head // nums_kv_head
+    
+    # v1: Boardcast
+    # attention_mask_v1 has shape: (batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len)
+    attention_mask_v1 = torch.tril(torch.ones(batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len))
+    gqa_boradcast = GQABroadcast(hidden_dim=hidden_dim, nums_head=nums_head,
+                                                nums_kv_head=nums_kv_head, dropout_rate=0.1)
+    x_forward_v1 = gqa_boradcast.forward(x, attention_mask=attention_mask_v1)
+
+    # print(x_forward_v1)
+    print(x_forward_v1.size())
+
+    # v2: Repeat
+    # attention_mask_v2 has shape: (batch_size, nums_head, seq_len, seq_len)
+    attention_mask_v2 = torch.tril(torch.ones(batch_size, nums_head, seq_len, seq_len))
+    gqa_repeat = GQARepeat(hidden_dim=hidden_dim, nums_head=nums_head,
+                                                nums_kv_head=nums_kv_head, dropout_rate=0.1)
+    x_forward_v2 = gqa_repeat.forward(x, attention_mask=attention_mask_v2)
+
+    # print(x_forward_v2)
+    print(x_forward_v2.size())
+```
+{{< /collapse >}}
+
 
 ## Time and Space Complexity Analysis
 
@@ -490,11 +846,11 @@ The table below summarizes the main differences among MHA, MQA, and GQA attentio
 
 ## Experimental Results
 
-### Local Testing
+### Performance Testing
 
-This experiment was conducted on an environment equipped with dual NVIDIA RTX 4090 GPUs using data parallelism (DP), evenly splitting the batch size across both GPUs. The experiment only tested the performance of the forward pass, including average latency time (Time_mean, unit: ms) and peak memory usage (Peak_Mem_mean, unit: MB), to evaluate the resource requirements and efficiency of different attention mechanisms (MHA, MQA, and GQA) during the inference phase.
-
-The tests were based on Llama3 8B hyperparameters.
+This experiment was conducted on an environment equipped with dual NVIDIA RTX 4090 GPUs using data parallelism (DP), evenly splitting the batch size across both GPUs. The experiment only tested the performance of the forward pass, including average latency time (Time_mean, unit: ms) and peak memory usage (Peak_Mem_mean, unit: MB), to evaluate the resource requirements and efficiency of different attention mechanisms (MHA, MQA, and GQA) during the inference phase. 
+You can get the source code in [benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/bechmark_attention.py).
+- The tests were based on Llama3 8B hyperparameters.
 
 {{< figure 
     src="llama3_key_hyperparameters.png" 

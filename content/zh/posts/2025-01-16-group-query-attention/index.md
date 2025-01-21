@@ -195,7 +195,7 @@ y_i = \frac{\exp(z_i)}{\sum_{j=1}^{n} \exp(z_j)}
 
 下面是使用 PyTorch 简单实现的 **MHA** 、**MQA**和 **GQA** 的代码, 其中 GQA采用了广播（Boardcast）和复制（Repeat）两种方法。此外 需要注意的是，在实际的 LLaMA3 源代码中，GQA 的实现还引入了 KV Cache。为简化示例，以下代码并未包含该部分。如果感兴趣，可以参考源代码 [model.py](https://github.com/meta-llama/llama3/blob/main/llama/model.py) 获取更完整的代码细节。
 
-{{< collapse summary="MHA 代码片段" openByDefault=false >}}[multi_head_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/multi_head_attention.py)
+{{< collapse summary="MHA 代码片段" openByDefault=false >}}[multi_head_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/multi_head_attention.py)
 ```python
 import math
 import torch
@@ -290,7 +290,7 @@ if __name__ == "__main__":
 ```
 {{< /collapse >}}
 
-{{< collapse summary="MQA 代码片段" openByDefault=false >}}[multi_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/multi_query_attention.py)
+{{< collapse summary="MQA 代码片段" openByDefault=false >}}[multi_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/multi_query_attention.py)
 ```python
 import torch
 import torch.nn as nn
@@ -364,7 +364,7 @@ if __name__ == "__main__":
 {{< /collapse >}}
 
 
-{{< collapse summary="GQA 代码片段" openByDefault=false >}}[group_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/group_query_attention.py)
+{{< collapse summary="GQA 代码片段" openByDefault=false >}}[group_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/group_query_attention.py)
 ```import math
 import torch
 import torch.nn as nn
@@ -850,7 +850,7 @@ $$
 ### 性能测试
 
 本实验在一台配备双 NVIDIA RTX 4090 GPU 的环境下进行，采用数据并行（Data Parallel, DP）方式，将批量大小（batch size）均匀拆分到两张 GPU 上。实验仅测试了前向传播的性能表现，包括平均延迟时间（Time_mean，单位：ms）和峰值显存占用（Peak_Mem_mean，单位：MB），以评估不同注意力机制（MHA、MQA 和 GQA）在推理阶段的资源需求和效率。
-- 实验代码请参考[benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/bechmark_attention.py)。
+- 实验代码请参考[benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/bechmark_attention.py)。
 
 测试基于 Llama3 8B 参数超参数设置
 {{< figure 

@@ -196,7 +196,7 @@ Below is a simple PyTorch implementation of  **MHA** 、**MQA**和 **GQA**. For 
 
 Additionally, note that in the actual implementation of LLaMA3, GQA incorporates KV Cache for optimization. To keep the example concise, this part is omitted in the code below. For more comprehensive details, you can refer to the official source code in [model.py](https://github.com/meta-llama/llama3/blob/main/llama/model.py).
 
-{{< collapse summary="MHA Code Snippet" openByDefault=false >}}[multi_head_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/multi_head_attention.py)
+{{< collapse summary="MHA Code Snippet" openByDefault=false >}}[multi_head_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/multi_head_attention.py)
 ```python
 import math
 import torch
@@ -291,7 +291,7 @@ if __name__ == "__main__":
 ```
 {{< /collapse >}}
 
-{{< collapse summary="MQA Code Snippet" openByDefault=false >}}[multi_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/multi_query_attention.py)
+{{< collapse summary="MQA Code Snippet" openByDefault=false >}}[multi_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/multi_query_attention.py)
 ```python
 import torch
 import torch.nn as nn
@@ -365,7 +365,7 @@ if __name__ == "__main__":
 {{< /collapse >}}
 
 
-{{< collapse summary="GQA Code Snippet" openByDefault=false >}}[group_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/group_query_attention.py)
+{{< collapse summary="GQA Code Snippet" openByDefault=false >}}[group_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/group_query_attention.py)
 ```import math
 import torch
 import torch.nn as nn
@@ -851,7 +851,7 @@ In summary, from a **theoretical** standpoint, all three attention mechanisms (M
 ### Performance Testing
 
 This experiment was conducted on an environment equipped with dual NVIDIA RTX 4090 GPUs using data parallelism (DP), evenly splitting the batch size across both GPUs. The experiment only tested the performance of the forward pass, including average latency time (Time_mean, unit: ms) and peak memory usage (Peak_Mem_mean, unit: MB), to evaluate the resource requirements and efficiency of different attention mechanisms (MHA, MQA, and GQA) during the inference phase. 
-You can get the source code in [benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-gqa-attention/bechmark_attention.py).
+You can get the source code in [benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/bechmark_attention.py).
 - The tests were based on Llama3 8B hyperparameters.
 
 {{< figure 

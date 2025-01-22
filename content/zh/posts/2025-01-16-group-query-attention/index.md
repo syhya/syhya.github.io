@@ -365,7 +365,8 @@ if __name__ == "__main__":
 
 
 {{< collapse summary="GQA 代码片段" openByDefault=false >}}[group_query_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/group_query_attention.py)
-```import math
+```python 
+import math
 import torch
 import torch.nn as nn
 

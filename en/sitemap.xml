@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://syhya.github.io/tags/ai/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -13,6 +13,243 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/ai/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/categories/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/deep-learning/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/deep-learning/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/deep-learning/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/deepseek-r1/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/deepseek-r1/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/deepseek-r1/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/grpo/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/grpo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/grpo/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/llm/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/llm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/llm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/model-distillation/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/model-distillation/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/model-distillation/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/nlp/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/nlp/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/nlp/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/o1/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/o1/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/o1/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/2025-01-27-deepseek-r1/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2025-01-27-deepseek-r1/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2025-01-27-deepseek-r1/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/ppo/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/ppo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/ppo/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/reasoning-model/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/reasoning-model/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/reasoning-model/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/reinforcement-learning/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/reinforcement-learning/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/reinforcement-learning/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/reject-sampling/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/reject-sampling/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/reject-sampling/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/rft/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/rft/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/rft/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/sft/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/sft/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/sft/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/technical-blog/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/</loc>
+    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/attention-mechanism/</loc>
@@ -29,32 +266,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/posts/2025-01-16-group-query-attention/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/categories/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/deep-learning/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/deep-learning/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/deep-learning/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/gqa/</loc>
@@ -83,19 +294,6 @@
                 href="https://syhya.github.io/tags/kv-cache/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/llm/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/llm/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/llm/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/mha/</loc>
     <lastmod>2025-01-16T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -122,48 +320,6 @@
                 href="https://syhya.github.io/tags/mqa/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/nlp/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/nlp/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/nlp/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/posts/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/tags/transformer/</loc>
     <lastmod>2025-01-16T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -175,19 +331,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/transformer/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/</loc>
-    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/"
                 />
   </url><url>
     <loc>https://syhya.github.io/posts/2025-01-05-domain-llm-training/</loc>
@@ -436,19 +579,6 @@
                 href="https://syhya.github.io/tags/quantitative-investment/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/</loc>
-    <lastmod>2021-04-21T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/2021-04-21-deep-learning-stock-prediction/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/rnn/</loc>
     <lastmod>2021-04-21T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -473,6 +603,19 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/stock-prediction/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/</loc>
+    <lastmod>2021-04-21T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2021-04-21-deep-learning-stock-prediction/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/time-series/</loc>

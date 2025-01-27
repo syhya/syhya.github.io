@@ -30,75 +30,80 @@ outputs:
     - RSS
     - JSON # necessary for search
 
-# math settings
-math: true
-markup:
-      goldmark:
-        duplicateResourceFiles: false
-        extensions:
-          cjk:
-            eastAsianLineBreaks: false
-            eastAsianLineBreaksStyle: simple
-            enable: false
-            escapedSpace: false
-          definitionList: true
-          extras:
-            delete:
-              enable: false
-            insert:
-              enable: false
-            mark:
-              enable: false
-            subscript:
-              enable: false
-            superscript:
-              enable: false
-          footnote: true
-          linkify: true
-          linkifyProtocol: https
-          passthrough:
-            delimiters:
-              block:
-              - - \[
-                - \]
-              - - $$
-                - $$
-              inline:
-              - - \(
-                - \)
-            enable: true
-          strikethrough: true
-          table: true
-          taskList: true
-          typographer:
-            apostrophe: '&rsquo;'
-            disable: false
-            ellipsis: '&hellip;'
-            emDash: '&mdash;'
-            enDash: '&ndash;'
-            leftAngleQuote: '&laquo;'
-            leftDoubleQuote: '&ldquo;'
-            leftSingleQuote: '&lsquo;'
-            rightAngleQuote: '&raquo;'
-            rightDoubleQuote: '&rdquo;'
-            rightSingleQuote: '&rsquo;'
-        parser:
-          attribute:
-            block: false
-            title: true
-          autoHeadingID: true
-          autoHeadingIDType: github
-          wrapStandAloneImageWithinParagraph: true
-        renderHooks:
-          image:
-            enableDefault: false
-          link:
-            enableDefault: false
-        renderer:
-          hardWraps: false
-          unsafe: false
-          xhtml: false
+# config.yaml
 
+
+# math setting
+markup:
+  tableOfContents:
+    endLevel: 4
+    ordered: false
+    startLevel: 2
+  goldmark:
+    duplicateResourceFiles: false
+    extensions:
+      cjk:
+        eastAsianLineBreaks: false
+        eastAsianLineBreaksStyle: simple
+        enable: false
+        escapedSpace: false
+      definitionList: true
+      extras:
+        delete:
+          enable: false
+        insert:
+          enable: false
+        mark:
+          enable: false
+        subscript:
+          enable: false
+        superscript:
+          enable: false
+      footnote: true
+      linkify: true
+      linkifyProtocol: https
+      passthrough:
+        delimiters:
+          block:
+            - - \[
+              - \]
+            - - $$
+              - $$
+          inline:
+            - - \(
+              - \)
+        enable: true
+      strikethrough: true
+      table: true
+      taskList: true
+      typographer:
+        apostrophe: '&rsquo;'
+        disable: false
+        ellipsis: '&hellip;'
+        emDash: '&mdash;'
+        enDash: '&ndash;'
+        leftAngleQuote: '&laquo;'
+        leftDoubleQuote: '&ldquo;'
+        leftSingleQuote: '&lsquo;'
+        rightAngleQuote: '&raquo;'
+        rightDoubleQuote: '&rdquo;'
+        rightSingleQuote: '&rsquo;'
+    parser:
+      attribute:
+        block: false
+        title: true
+      autoHeadingID: true
+      autoHeadingIDType: github
+      wrapStandAloneImageWithinParagraph: true
+    renderHooks:
+      image:
+        enableDefault: false
+      link:
+        enableDefault: false
+    renderer:
+      hardWraps: false
+      unsafe: false
+      xhtml: false
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Multilingual Configuration
@@ -115,6 +120,7 @@ languages:
     # PaperMod Parameters
     # ──────────────────────────────────────────────────────────────────────────
     params:
+      math: true
       env: production
       title: "Yue Shui Blog"
       description: "ExampleSite description"
@@ -250,8 +256,8 @@ languages:
     # PaperMod Parameters
     # ──────────────────────────────────────────────────────────────────────────
     params:
+      math: true
       env: production
-
       title: "Yue Shui 博客"
       description: "示例网站描述"
       keywords: [博客, 作品集, PaperMod]

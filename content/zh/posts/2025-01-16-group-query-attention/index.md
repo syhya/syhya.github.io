@@ -142,7 +142,7 @@ y_i = \frac{\exp(z_i)}{\sum_{j=1}^{n} \exp(z_j)}
 
 ### 多查询注意力（MQA）
 
-多查询注意力（MQA） ([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) 通过让所有查询头（Query Heads）共享同一组键（Key）\(\mathbf{K}\) 和值（Value）\(\mathbf{V}\)，从而显著减少了显存带宽的需求。具体地，如果我们将传统多头注意力（MHA）中的所有 \(\mathbf{K}_h\) 和 \(\mathbf{V}_h\) 做如下平均：
+多查询注意力（MQA）([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) 通过让所有查询头（Query Heads）共享同一组键（Key）\(\mathbf{K}\) 和值（Value）\(\mathbf{V}\)，从而显著减少了显存带宽的需求。具体地，如果我们将传统多头注意力（MHA）中的所有 \(\mathbf{K}_h\) 和 \(\mathbf{V}_h\) 做如下平均：
 
 \[
 \mathbf{K}^* = \frac{1}{H} \sum_{h=1}^{H} \mathbf{K}_h,

@@ -771,7 +771,8 @@ The experimental results are shown in Figure 6:
     width="90%"
 >}}
 
-The experimental results show that this **direct SFT distillation method can significantly improve the reasoning ability of small models**. Especially the distilled Llama-3.3-70B-Instruct model outperforms the o1 model on multiple benchmarks, achieving such significant results through SFT distillation alone. Here, the blogger is somewhat skeptical that the model has overfitted on these benchmarks or there is a risk of data leakage, and further testing on more benchmarks is needed in the future.
+
+The experimental results indicate that this **direct SFT distillation method can substantially enhance the inference capabilities of smaller models**. Notably, on various benchmark tests excluding CodeForces, the distilled Llama-3.3-70B-Instruct model outperforms OpenAI-o1-mini. Achieving such remarkable improvements solely through SFT distillation from a larger base model demonstrates the strong potential of this approach for future research and applications.
 
 ## Discussion
 

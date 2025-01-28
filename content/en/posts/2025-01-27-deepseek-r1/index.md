@@ -12,7 +12,7 @@ draft: false
 math: true
 ---
 
-DeepSeek AI recently released **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948)), whose reasoning performance on multiple benchmarks approaches the level of OpenAI's o1 ([OpenAI, 2024](https://openai.com/o1/)), marking a significant step for the open-source community in successfully replicating o1. Relevant code for R1 can be found in the huggingface's attempt to open-source replication project [open-r1](https://github.com/huggingface/open-r1). While previous research has often relied on massive amounts of supervised data to enhance the performance of large language models, the success of DeepSeek-R1 and its earlier experiment, DeepSeek-R1-Zero, powerfully demonstrates the potential of purely large-scale reinforcement learning in improving the reasoning capabilities of Large Language Models (LLMs). This success reinforces the profound insight proposed by Richard Sutton in "The Bitter Lesson":
+DeepSeek AI recently released **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948)), whose reasoning performance on multiple benchmarks approaches the level of OpenAI's o1 ([OpenAI, 2024](https://openai.com/o1/)), marking a significant step for the open-source community in successfully replicating o1. Relevant code for R1 can be found in the huggingface's attempt to open-source replication project [open-r1](https://github.com/huggingface/open-r1). While previous research has often relied on massive amounts of supervised data to enhance the performance of Large Language Models (LLMs), the success of DeepSeek-R1 and its earlier experiment, DeepSeek-R1-Zero, powerfully demonstrates the potential of purely large-scale reinforcement learning in improving the reasoning capabilities of LLMs. This success reinforces the profound insight proposed by Richard Sutton in "The Bitter Lesson":
 
 > One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
 
@@ -49,7 +49,7 @@ The following table lists the mathematical symbols used in this article to facil
 
 ## Training Process Overview
 
-The training of the DeepSeek-R1 series models is a multi-stage process aimed at building large language models with superior reasoning and general language capabilities. The entire training process starts from the **DeepSeek-V3** ([DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437)) model and iteratively optimizes it to obtain different versions of the DeepSeek-R1 model.
+The training of the DeepSeek-R1 series models is a multi-stage process aimed at building LLMs with superior reasoning and general language capabilities. The entire training process starts from the **DeepSeek-V3** ([DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437)) model and iteratively optimizes it to obtain different versions of the DeepSeek-R1 model.
 
 {{< figure
     src="deepseek_r1_pipeline.jpg"
@@ -125,11 +125,11 @@ In the actual optimization process, we usually define the PPO loss function \( \
 \mathcal{L}_{PPO}(\theta) = -\,\mathcal{J}_{PPO}(\theta).
 \]
 
-The PPO algorithm, due to its characteristics of being **simple and effective, and relatively stable**, has become one of the benchmark algorithms in the field of reinforcement learning and has achieved success in various tasks, including reinforcement learning fine-tuning of large language models. PPO is generally considered more stable than earlier methods such as TRPO, but its specific application in large models still requires careful hyperparameter tuning. In large-scale language model scenarios, if the value network and policy network are completely separated and of comparable size, it will inevitably bring more computational and memory overhead. To solve these problems, the DeepSeek team proposed Group Relative Policy Optimization (GRPO) algorithm.
+The PPO algorithm, due to its characteristics of being **simple and effective, and relatively stable**, has become one of the benchmark algorithms in the field of reinforcement learning and has achieved success in various tasks, including reinforcement learning fine-tuning of LLMs. PPO is generally considered more stable than earlier methods such as TRPO, but its specific application in large models still requires careful hyperparameter tuning. In large-scale language model scenarios, if the value network and policy network are completely separated and of comparable size, it will inevitably bring more computational and memory overhead. To solve these problems, the DeepSeek team proposed Group Relative Policy Optimization (GRPO) algorithm.
 
 ### GRPO
 
-**Group Relative Policy Optimization (GRPO)** ([Shao, et al., 2024](https://arxiv.org/abs/2402.03300)) is an efficient and stable reinforcement learning algorithm specifically designed by the DeepSeek team for training large-scale language models like DeepSeek-R1-Zero. GRPO's core innovation lies in abandoning the dependence on an independent value network (critic model) in the traditional Actor-Critic framework, reducing computational costs and improving training stability. Broadly speaking, GRPO can be regarded as an **Actor-Only** reinforcement learning method.
+**Group Relative Policy Optimization (GRPO)** ([Shao, et al., 2024](https://arxiv.org/abs/2402.03300)) is an efficient and stable reinforcement learning algorithm specifically designed by the DeepSeek team for training LLMs like DeepSeek-R1-Zero. GRPO's core innovation lies in abandoning the dependence on an independent value network (critic model) in the traditional Actor-Critic framework, reducing computational costs and improving training stability. Broadly speaking, GRPO can be regarded as an **Actor-Only** reinforcement learning method.
 
 GRPO is inspired by the idea of **relative evaluation**. In many practical scenarios, we are often better at judging the relative quality among a group of things than giving absolute value evaluations. For example, when evaluating a group of student assignments, teachers may find it easier to compare the merits of different assignments than to give each assignment an absolute score. GRPO introduces this idea of relative evaluation into reinforcement learning, using **in-group relative scoring** to build a baseline, completely replacing the dependence on value networks.
 
@@ -240,7 +240,7 @@ To intuitively understand the differences between the three estimators, the foll
 
 To evaluate the performance of the three KL divergence estimators, we conducted numerical experiments, and the results are shown in the table below. In the experiment, the distribution \( q = \mathcal{N}(0, 1) \) was fixed, and the mean \( \mu \) of the distribution \( p = \mathcal{N}(\mu, 1) \) was changed to control the true KL divergence \( \mathbb{D}_{KL}(p \| q) \). Monte Carlo estimation was performed using 500 million samples, and the experiment was repeated to obtain stable results.
 
-Experimental code can be found at [unbiased_kl_divergence.py](https://syhya.github.io/posts/2025-01-25-deepseek-r1/unbiased_kl_divergence.py)
+Experimental code can be found at [unbiased_kl_divergence.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-27-deepseek-r1/unbiased_kl_divergence.py)
 
 | True KL Divergence | Estimator | Average Estimated Value | Standard Deviation | Relative Bias (%) |
 |:------------------:|:---------:|:-----------------------:|:------------------:|:-----------------:|
@@ -296,7 +296,7 @@ To more clearly understand the similarities and differences between PPO and GRPO
 | **Credit Assignment**     | Relies on value network for temporal difference learning to handle credit assignment issues | Relies on final rewards and in-group relative evaluation, can also be assisted by intermediate rewards |
 | **Variance Issue**        | Value network estimation may introduce variance                       | In-group relative advantage estimation may have variance under small group sizes, which can be mitigated by increasing group size, etc. |
 
-As can be seen from the table, PPO is a general and powerful reinforcement learning algorithm, but its mechanism of training a value network brings additional computational burden and potential instability in large-scale language model scenarios. **GRPO cleverly avoids the need for a value network by introducing in-group relative scoring, significantly reducing computational costs and improving training stability while ensuring performance**. This makes GRPO an ideal choice for training LLMs like **DeepSeek-R1-Zero** when training resources are limited.
+As can be seen from the table, PPO is a general and powerful reinforcement learning algorithm, but its mechanism of training a value network brings additional computational burden and potential instability in LLMs scenarios. **GRPO cleverly avoids the need for a value network by introducing in-group relative scoring, significantly reducing computational costs and improving training stability while ensuring performance**. This makes GRPO an ideal choice for training LLMs like **DeepSeek-R1-Zero** when training resources are limited.
 
 ### Code Generation Evaluation Metrics
 
@@ -783,7 +783,7 @@ DeepSeek-R1, based on a multi-stage training framework, explores a simplified pa
 
 **Eliminating Independent Value Networks: Simplifying RL Architecture**
 - Traditional reinforcement learning (such as PPO) usually requires independent policy networks and value networks. DeepSeek-R1 and other studies have found that strengthened policy networks or simplified value evaluation methods (such as GRPO's in-group relative scoring) can replace independent value networks.
-- This simplifies the RL training architecture, reduces resource requirements, and improves efficiency. It shows that the policy network of large-scale language models already has strong value evaluation capabilities, and no additional value network is needed.
+- This simplifies the RL training architecture, reduces resource requirements, and improves efficiency. It shows that the policy network of LLMs already has strong value evaluation capabilities, and no additional value network is needed.
 
 **Focusing on Outcome Rewards: Minimizing Reward Signals**
 - DeepSeek-R1 adopts a simpler ORM reward strategy, mainly focusing on the accuracy reward of the final result, weakening the reward for intermediate reasoning steps. This strategy is inspired by AlphaZero ([Silver et al., 2017](https://arxiv.org/abs/1712.01815)), which only focuses on winning or losing.

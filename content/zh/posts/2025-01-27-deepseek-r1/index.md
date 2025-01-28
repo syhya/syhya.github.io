@@ -12,7 +12,7 @@ draft: false
 math: true
 ---
 
-DeepSeek AI 近期发布 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))，其推理性能在多个      benchmark 上已接近 OpenAI o1 ([OpenAI, 2024](https://openai.com/o1/))的水平，是开源社区成功复现 o1 的重要一步。R1 相关代码可以参考huggingface 尝试开源复现 [open-r1](https://github.com/huggingface/open-r1) 项目。以往的研究多依赖于海量的监督数据来提升大语言模型性能，但 DeepSeek-R1 及其早期实验 DeepSeek-R1-Zero 的成功，有力证明了纯粹大规模强化学习在提升大语言模型（Large Language Model, LLM）推理能力方面的潜力。其印证了 Richard Sutton 在 “The Bitter Lesson” 中提出的深刻见解:
+DeepSeek AI 近期发布 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))，其推理性能在多个      benchmark 上已接近 OpenAI o1 ([OpenAI, 2024](https://openai.com/o1/))的水平，是开源社区成功复现 o1 的重要一步。R1 相关代码可以参考huggingface 尝试开源复现 [open-r1](https://github.com/huggingface/open-r1) 项目。以往的研究多依赖于海量的监督数据来提升大语言模型（Large Language Model, LLM）性能，但 DeepSeek-R1 及其早期实验 DeepSeek-R1-Zero 的成功，有力证明了纯粹大规模强化学习在提升 LLM 推理能力方面的潜力。其印证了 Richard Sutton 在 “The Bitter Lesson” 中提出的深刻见解:
 
 > One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
 
@@ -126,11 +126,11 @@ PPO 的目标是改进策略模型 (Actor)，使其能够生成更高质量的�
 \mathcal{L}_{PPO}(\theta) = -\,\mathcal{J}_{PPO}(\theta).
 \]
 
-PPO 算法因其 **简单有效、相对稳定** 的特点，成为强化学习领域的基准算法之一，并在各种任务中取得了成功，包括大型语言模型的强化学习微调。PPO 通常被认为比早期的 TRPO 等方法更稳定，但在大模型上的具体应用仍需要细致的超参数调优。在大规模语言模型场景下，如果价值网络与策略网络完全分离且规模相当，势必会带来更多的计算与内存开销。为解决这些问题，DeepSeek 团队提出了组相对策略优化 (GRPO)算法。
+PPO 算法因其 **简单有效、相对稳定** 的特点，成为强化学习领域的基准算法之一，并在各种任务中取得了成功，包括大型语言模型的强化学习微调。PPO 通常被认为比早期的 TRPO 等方法更稳定，但在大模型上的具体应用仍需要细致的超参数调优。在大语言模型场景下，如果价值网络与策略网络完全分离且规模相当，势必会带来更多的计算与内存开销。为解决这些问题，DeepSeek 团队提出了组相对策略优化 (GRPO)算法。
 
 ### GRPO
 
-**组相对策略优化 (Group Relative Policy Optimization, GRPO)** ([Shao, et al., 2024](https://arxiv.org/abs/2402.03300)) 是 DeepSeek 团队为训练 DeepSeek-R1-Zero 这样的大规模语言模型而专门设计的一种高效稳定的强化学习算法。GRPO 的核心创新在于摒弃了传统Actor-Critic 框架中对独立价值网络 (critic model) 的依赖，降低了计算成本，并提高了训练的稳定性。 从广义上讲，GRPO 可以被视为一种 **Actor-Only** 的强化学习方法。
+**组相对策略优化 (Group Relative Policy Optimization, GRPO)** ([Shao, et al., 2024](https://arxiv.org/abs/2402.03300)) 是 DeepSeek 团队为训练 DeepSeek-R1-Zero 这样的大语言模型而专门设计的一种高效稳定的强化学习算法。GRPO 的核心创新在于摒弃了传统Actor-Critic 框架中对独立价值网络 (critic model) 的依赖，降低了计算成本，并提高了训练的稳定性。 从广义上讲，GRPO 可以被视为一种 **Actor-Only** 的强化学习方法。
 
 GRPO 的灵感来源于 **相对评估** 的思想。在许多实际场景中，我们往往更容易判断一组事物之间的相对好坏，而不是给出绝对的价值评估。例如，在评价一组学生的作业时，老师可能更容易比较不同作业之间的优劣，而不是给每份作业打一个绝对分数。GRPO 将这种相对评估的思想引入强化学习，通过 **组内相对评分**来构建基准 (baseline)，完全替代了对价值网络的依赖。
 
@@ -243,7 +243,7 @@ $$
 
 为了评估三种 KL 散度估计器的性能，我们进行了数值实验，结果如下表所示。实验中，固定分布 \( q = \mathcal{N}(0, 1) \)，通过改变分布 \( p = \mathcal{N}(\mu, 1) \) 的均值 \(\mu\) 来控制真实的 KL 散度 \(\mathbb{D}_{KL}(p \| q)\)。使用5亿个样本进行 Monte Carlo 估计，并重复实验以获得稳定结果。
 
-实验代码可以参考 [unbiased_kl_divergence.py](https://syhya.github.io/posts/2025-01-25-deepseek-r1/unbiased_kl_divergence.py)
+实验代码可以参考 [unbiased_kl_divergence.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-27-deepseek-r1/unbiased_kl_divergence.py)
 
 | 真实 KL 散度 | 估计器 | 平均估计值 | 标准差  | 相对偏差 (%) |
 |:------------:|:------:|:----------:|:-------:|:------------:|
@@ -296,11 +296,11 @@ Schulman 无偏估计器 \( \hat{D}_{KL}^{(k3)}(o) = r(o) - \log r(o) - 1 \) 为
 | **计算开销**         | 较高，需要训练价值网络                                | 较低，无需训练价值网络                                |
 | **训练稳定性**       | 相对较好，但价值网络训练可能引入不稳定性               | 更好，避免了价值网络训练带来的不稳定性               |
 | **算法复杂度**       | 相对复杂，需要维护和更新策略网络和价值网络           | 相对简单，只需维护和更新策略网络                     |
-| **适用场景**         | 广泛适用于各种强化学习任务，包括中小规模语言模型微调 | 特别适用于大规模语言模型的强化学习微调，注重效率和稳定性 |
+| **适用场景**         | 广泛适用于各种强化学习任务，包括中小规模语言模型微调 | 特别适用于大语言模型的强化学习微调，注重效率和稳定性 |
 | **信用分配**         | 依赖价值网络进行时间差分学习，处理信用分配问题       | 依赖最终奖励和组内相对评估，也可辅助中间奖励         |
 | **方差问题**         | 价值网络估计可能引入方差                             | 组内相对优势估计在小组规模下可能存在方差，可通过增大组规模等缓解 |
 
-从表中可以看出，PPO 是一种通用且强大的强化学习算法，但其训练价值网络的机制在大规模语言模型场景下带来了额外的计算负担和潜在的不稳定性。**GRPO 通过引入组相对评分，巧妙地规避了对价值网络的需求，在保证性能的同时，显著降低了计算成本，并提升了训练稳定性**。这使得 GRPO 成为在训练资源不多的情况下训练 **DeepSeek-R1-Zero** 这样 LLM 的理想选择。
+从表中可以看出，PPO 是一种通用且强大的强化学习算法，但其训练价值网络的机制在大语言模型场景下带来了额外的计算负担和潜在的不稳定性。**GRPO 通过引入组相对评分，巧妙地规避了对价值网络的需求，在保证性能的同时，显著降低了计算成本，并提升了训练稳定性**。这使得 GRPO 成为在训练资源不多的情况下训练 **DeepSeek-R1-Zero** 这样 LLM 的理想选择。
 
 ### 代码生成评估指标
 
@@ -796,7 +796,7 @@ DeepSeek-R1 在多阶段训练框架基础上，探索了 Reasoning Model 训练
 
 **消除独立价值网络：简化 RL 架构**
 - 传统强化学习 (如 PPO) 通常需要独立的策略网络和价值网络。DeepSeek-R1 等研究发现，强化的策略网络或简化的价值评估方法 (如 GRPO 的组相对评分) 可替代独立价值网络。
-- 这简化了 RL 训练架构，降低了资源需求，提高了效率。表明大规模语言模型的策略网络已具备强大的价值评估能力，无需额外价值网络。
+- 这简化了 RL 训练架构，降低了资源需求，提高了效率。表明大语言模型的策略网络已具备强大的价值评估能力，无需额外价值网络。
 
 **聚焦最终结果奖励：最小化奖励信号**
 - DeepSeek-R1 采用更加简单的 ORM 奖励策略，主要关注最终结果的准确性奖励，弱化中间推理步骤奖励。这种策略受 AlphaZero ([Silver et al., 2017](https://arxiv.org/abs/1712.01815)) 启发，后者仅关注胜负。

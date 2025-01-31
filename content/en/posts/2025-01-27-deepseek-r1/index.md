@@ -800,39 +800,39 @@ The success of DeepSeek-R1 demonstrates the great potential of RL in improving t
 
 ## References
 
-[1] [OpenAI O1](https://openai.com/o1/) [Website]. OpenAI, 2024.  *(OpenAI O1 official introduction page)*
+[1] [OpenAI o1](https://openai.com/o1/). OpenAI, 2024. (OpenAI O1 official introduction page)
 
-[2] Jaech A, et al. [Openai o1 system card](https://arxiv.org/abs/2412.16720) [J]. *arXiv preprint arXiv:2412.16720*, 2024.
+[2] Jaech, Aaron, et al. ["OpenAI o1 system card."](https://arxiv.org/abs/2412.16720) arXiv preprint arXiv:2412.16720 (2024).
 
-[3] [Open-r1](https://github.com/huggingface/open-r1) [Website]. GitHub, 2024. *(Open-r1 open source project GitHub repository)*
+[3] [Open-r1](https://github.com/huggingface/open-r1). GitHub, 2024. (Open-r1 open source project GitHub repository)
 
-[4] Sutton R. [The bitter lesson](http://incompleteideas.net/IncIdeas/BitterLesson.html) [J]. *Incomplete Ideas (blog)*, 2019, 13(1): 38.
+[4] Sutton, Richard. ["The bitter lesson."](http://incompleteideas.net/IncIdeas/BitterLesson.html) Incomplete Ideas (blog) 13.1 (2019): 38.
 
-[5] Liu A, et al. [Deepseek-v3 technical report](https://arxiv.org/abs/2412.19437) [J]. *arXiv preprint arXiv:2412.19437*, 2024.
+[5] Liu A, et al. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
 
-[6] Schulman J, et al. [Proximal policy optimization algorithms](https://arxiv.org/abs/1707.06347) [J]. *arXiv preprint arXiv:1707.06347*, 2017.
+[6] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
 
-[7] Ouyang L, et al. Training language models to follow instructions with human feedback [J]. *Advances in Neural Information Processing Systems*, 2022, 35: 27730-27744. [https://arxiv.org/abs/2203.02155](https://arxiv.org/abs/2203.02155)
+[7] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
 
-[8] Shao Z, et al. [Deepseekmath: Pushing the limits of mathematical reasoning in open language models](https://arxiv.org/abs/2402.03300) [J]. *arXiv preprint arXiv:2402.03300*, 2024.
+[8] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
 [9] J. Schulman. [Approximating kl divergence]("http://joschu.net/blog/kl-approx.html"), 2020.
 
-[10] Gao L, Schulman J, Hilton J. [Scaling laws for reward model overoptimization](https://proceedings.mlr.press/v202/gao23b.html) [C]// *International Conference on Machine Learning*. PMLR, 2023.
+[10] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
 
-[11] Chen M, et al. [Evaluating large language models trained on code](https://arxiv.org/abs/2107.03374) [J]. *arXiv preprint arXiv:2107.03374*, 2021.
+[11] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
 
-[12] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/) [Website]. OpenAI, 2024. *(OpenAI blog post about LLM reasoning ability)*
+[12] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024. (OpenAI blog post about LLM reasoning ability)
 
-[13] [AMC](https://maa.org/student-programs/amc/) [Website]. Mathematical Association of America (MAA), 2024. *(American Mathematics Competitions AMC official website)*
+[13] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024. (American Mathematics Competitions AMC official website)
 
-[14] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file) [Website]. GitHub, 2024. *(Open-O1 open source project GitHub repository)*
+[14] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). GitHub, 2024. (Open-O1 open source project GitHub repository)
 
-[15] Zeng Z, et al. [Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective](https://arxiv.org/abs/2412.14135) [J]. *arXiv preprint arXiv:2412.14135*, 2024.
+[15] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
 
-[16] Hinton G. [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531) [J]. *arXiv preprint arXiv:1503.02531*, 2015.
+[16] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
 
-[17] Silver D, et al. [Mastering chess and shogi by self-play with a general reinforcement learning algorithm](https://arxiv.org/abs/1712.01815) [J]. *arXiv preprint arXiv:1712.01815*, 2017.
+[17] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
 
 ## Citation
 

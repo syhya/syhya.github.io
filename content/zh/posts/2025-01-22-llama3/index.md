@@ -141,7 +141,7 @@ type: "posts"
 
 {{< figure 
     src="llama3_architecture.png" 
-    caption="Fig. 3. The architecute of Llama 2 and 3. (Image source: [Umar Jamil](https://github.com/hkproj/pytorch-llama/blob/main/Slides.pdf))"
+    caption="Fig. 4. The architecute of Llama 2 and 3. (Image source: [Umar Jamil](https://github.com/hkproj/pytorch-llama/blob/main/Slides.pdf))"
     align="center" 
     width="80%"
 >}}
@@ -191,80 +191,9 @@ type: "posts"
 
 LLaMA3作为系列最新版本，集成了LLaMA1和LLaMA2的核心技术，并在此基础上进行了多项创新和优化。以下是LLaMA3所采用的所有关键技术的详细解析，包括数学公式和相关说明。
 
-### 常见的归一化方法
+### RMS Normalization
 
-在深度学习中，归一化技术在加速训练、提升模型性能和稳定性方面起着至关重要的作用。下面将详细介绍三种常见的归一化方法：Batch Normalization（BatchNorm）、Layer Normalization（LayerNorm）和RMS Normalization（RMSNorm），并对它们的数学公式及相关优势和缺点进行解析。
-
-#### Batch Normalization
-
-Batch Normalization ([Ioffe, et al., 2015](https://arxiv.org/abs/1502.03167)）旨在通过标准化每一批次的数据，使其均值为0，方差为1，从而缓解内部协变量偏移（Internal Covariate Shift）的问题。其数学表达式如下：
-
-$$
-\text{BatchNorm}(x_i) = \gamma \cdot \frac{x_i - \mu_{\text{B}}}{\sqrt{\sigma_{\text{B}}^2 + \epsilon}} + \beta
-$$
-
-其中：
-- \( x_i \) 为输入向量中的第 \( i \) 个样本。
-- \( \mu_{\text{B}} \) 为当前批次的均值：
-  $$
-  \mu_{\text{B}} = \frac{1}{m} \sum_{i=1}^{m} x_i
-  $$
-  其中 \( m \) 为批次大小。
-- \( \sigma_{\text{B}}^2 \) 为当前批次的方差：
-  $$
-  \sigma_{\text{B}}^2 = \frac{1}{m} \sum_{i=1}^{m} (x_i - \mu_{\text{B}})^2
-  $$
-- \( \epsilon \) 为一个极小的常数，用于防止分母为零。
-- \( \gamma \) 和 \( \beta \) 为可学习的缩放和平移参数。
-
-**优势：**
-- **加速训练**：通过标准化加速模型的收敛速度。
-- **正则化效果**：在一定程度上减少了过拟合，降低了对Dropout等正则化技术的依赖。
-- **减轻梯度消失问题**：有助于缓解梯度消失，提高深层网络的训练效果。
-
-**缺点：**
-- **对小批次不友好**：在批次大小较小时，均值和方差的估计可能不稳定，影响归一化效果。
-- **依赖批次大小**：需要较大的批次才能获得良好的统计量估计，限制了在某些应用场景中的使用。
-- **在某些网络结构中应用复杂**：如循环神经网络（RNN），需要特殊处理以适应时间步的依赖性。
-
----
-
-#### Layer Normalization
-
-Layer Normalization ([Ba, et al., 2016](https://arxiv.org/abs/1607.06450)）通过在特征维度上进行归一化，使得每个样本的特征具有相同的均值和方差。其数学表达式如下：
-
-$$
-\text{LayerNorm}(x) = \gamma \cdot \frac{x - \mu_{\text{L}}}{\sqrt{\sigma_{\text{L}}^2 + \epsilon}} + \beta
-$$
-
-其中：
-- \( x \) 为输入向量。
-- \( \mu_{\text{L}} \) 为特征维度的均值：
-  $$
-  \mu_{\text{L}} = \frac{1}{d} \sum_{i=1}^{d} x_i
-  $$
-  其中 \( d \) 为特征维度的大小。
-- \( \sigma_{\text{L}}^2 \) 为特征维度的方差：
-  $$
-  \sigma_{\text{L}}^2 = \frac{1}{d} \sum_{i=1}^{d} (x_i - \mu_{\text{L}})^2
-  $$
-- \( \epsilon \) 为一个极小的常数，用于防止分母为零。
-- \( \gamma \) 和 \( \beta \) 为可学习的缩放和平移参数。
-
-**优势：**
-- **对批次大小不敏感**：适用于小批次或动态批次大小的场景，尤其在序列模型中表现优异。
-- **适用于多种网络结构**：在循环神经网络（RNN）和Transformer等模型中表现良好。
-- **简化实现**：无需依赖批次统计量，简化了在分布式训练中的实现。
-
-**缺点：**
-- **计算量较大**：相比BatchNorm，计算均值和方差的开销稍高。
-- **可能不如BatchNorm提升训练速度**：在某些情况下，LayerNorm的效果可能不如BatchNorm显著。
-
----
-
-#### RMS Normalization
-
-RMS Normalization ([Zhang, et al., 2019](https://arxiv.org/abs/1910.07467)）是一种简化的归一化方法，通过仅计算输入向量的均方根（RMS）进行归一化，从而减少计算开销。其数学表达式如下：
+在深度学习中，归一化技术在加速训练、提升模型性能和稳定性方面起着至关重要的作用。RMS Normalization ([Zhang, et al., 2019](https://arxiv.org/abs/1910.07467)) 是一种简化的归一化方法，通过仅计算输入向量的均方根（RMS）进行归一化，从而减少计算开销。其数学表达式如下：
 
 $$
 \text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma
@@ -277,50 +206,32 @@ $$
 - \( \gamma \) 为可学习的缩放参数。
 
 **优势：**
-- **计算效率高**：相比LayerNorm需要计算均值和方差，RMSNorm仅需计算均方根，减少了计算开销。
+- **计算效率高**：相比 LayerNorm 需要计算均值和方差，RMSNorm 仅需计算均方根，减少了计算开销。
 - **训练稳定性**：通过归一化输入，提升了模型的训练稳定性，使其在更大的学习率下仍能稳定训练。
 - **资源优化**：减少计算开销有助于在资源受限的环境中部署模型，提高训练和推理的效率。
 
 **缺点：**
 - **信息损失**：仅使用均方根进行归一化，可能丢失部分信息，如均值信息。
-- **适用性有限**：在某些任务中，可能不如BatchNorm或LayerNorm表现优异。
+- **适用性有限**：在某些任务中，可能不如 BatchNorm 或 LayerNorm 表现优异。
 
----
 
-#### 归一化方法对比
+LLaMA3 选择 **RMSNorm** 作为其归一化方法，主要基于以下考虑：
 
-以下表格对比了BatchNorm、LayerNorm和RMSNorm三种归一化方法的主要特性：
-
-| 特性                     | BatchNorm (BN)                                               | LayerNorm (LN)                                              | RMSNorm (RMS)                                |
-|--------------------------|--------------------------------------------------------------|-------------------------------------------------------------|----------------------------------------------|
-| **计算的统计量**         | 批量的均值和方差                                            | 每个样本的均值和方差                                        | 每个样本的均方根 (RMS)                       |
-| **操作维度**             | 对批量数据的所有样本进行归一化                              | 对每个样本的所有特征进行归一化                              | 对每个样本的所有特征进行归一化              |
-| **适用场景**             | 适用于大批量数据，卷积神经网络 (CNN)                        | 适用于小批量或序列数据，RNN 或 Transformer                   | 适用于需要高效计算的任务，如 RNN 或 Transformer|
-| **是否依赖批量大小**     | 强依赖批量大小                                              | 不依赖批量大小，适用于小批量或单样本任务                    | 不依赖批量大小，适用于小批量或单样本任务    |
-| **可学习的参数**         | 缩放参数 \( \gamma \) 和平移参数 \( \beta \)                | 缩放参数 \( \gamma \) 和平移参数 \( \beta \)                | 缩放参数 \( \gamma \)                         |
-| **公式**                 | \( \text{BatchNorm}(x_i) = \gamma \cdot \frac{x_i - \mu_{\text{B}}}{\sqrt{\sigma_{\text{B}}^2 + \epsilon}} + \beta \) | \( \text{LayerNorm}(x) = \gamma \cdot \frac{x - \mu_{\text{L}}}{\sqrt{\sigma_{\text{L}}^2 + \epsilon}} + \beta \) | \( \text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma \) |
-| **计算复杂度**           | 需要计算批量的均值和方差                                    | 需要计算每个样本的均值和方差                                | 只需计算每个样本的均方根，计算较为高效        |
-| **使用示例**             | CNN, Vision Transformers                                     | RNN, Transformer, NLP                                        | Transformer, NLP, 高效序列任务                |
-
-通过上述对比，可以看出三种归一化方法各有优劣。**BatchNorm**在大批量数据和卷积神经网络中表现优异，但对小批量敏感；**LayerNorm**适用于各种批量大小，特别是在RNN和Transformer中效果显著；**RMSNorm**则在需要高效计算的场景下提供了一种轻量级的替代方案，同时保持了良好的训练稳定性。
-
-LLaMA3选择**RMSNorm**作为其归一化方法，主要基于以下考虑：
-
-- **计算效率**：RMSNorm相比LayerNorm和BatchNorm计算量更低，适合大规模模型的高效训练。
-- **训练稳定性**：RMSNorm在保持训练稳定性的同时，能够适应更大的学习率，促进模型的快速收敛。
+- **计算效率**：RMSNorm 相比 LayerNorm、BatchNorm 和WeightNorm 计算量更低，仅计算输入向量的均方根，适合 LLM 的高效训练。
+- **训练稳定性**：RMSNorm 在保持训练稳定性的同时，能够适应更大的学习率，促进模型的快速收敛。
 - **资源优化**：减少计算开销有助于在资源受限的环境中部署模型，提高训练和推理的效率。
-- **简化实现**：RMSNorm的实现相对简单，便于在复杂模型中集成和优化。
+- **简化实现**：RMSNorm 的实现相对简单，便于在复杂模型中集成和优化。
 
-通过集成和优化RMSNorm，LLaMA3在多种任务中展现出卓越的性能和高效的计算表现。
+通过集成和优化 RMSNorm，LLaMA3 在多种任务中展现出卓越的性能和高效的计算表现。
 
 
-#### FFN_SwiGLU
+### FFN_SwiGLU
 
-Swish-Gated Linear Unit ([Shazeer, 2020](https://arxiv.org/abs/2002.05202v1)) 是 LLaMA 中用于增强前馈网络（Feed-Forward Network, FFN）非线性表达能力的关键技术。SwiGLU 结合了 Swish 激活函数和门控机制，显著提升了模型的表现力和性能。此外，与 PaLM ([Chowdhery, 2022](https://arxiv.org/abs/2204.02311)) 中使用的 4d 隐藏维度不同，LLaMA 采用了 $\frac{2}{3}d$ 的隐藏维度，从而在保持参数量和计算量不变的情况下，实现了更高的参数效率。
+Swish-Gated Linear Unit ([Shazeer, 2020](https://arxiv.org/abs/2002.05202v1)) 是 LLaMA 中用于增强前馈网络（Feed-Forward Network, FFN）非线性表达能力的关键技术。SwiGLU 结合了 Swish 激活函数和门控机制，显著提升了模型的表现力和性能。此外，与 PaLM ([Chowdhery, 2022](https://arxiv.org/abs/2204.02311)) 中使用的$4 d$隐藏维度不同，LLaMA 采用了 $\frac{2}{3}d$ 的隐藏维度，从而在保持参数量和计算量不变的情况下，实现了更高的参数效率。
 
 数学表达式：
 $$
-\text{FFN}_{\text{SwiGLU}}(x) = \left(\text{Swish}(x W_1) \otimes x W_2\right) W_3
+\operatorname{FFN}_{\mathrm{SwiGLU}}\left(x, W_1, W_3, W_2\right)=\left(\operatorname{Swish}\left(x W_1\right) \otimes x W_3\right) W_2
 $$
 其中：
 - \( \text{Swish}(x) = x \cdot \sigma(x) \)（Swish 激活函数）。
@@ -356,31 +267,77 @@ $$
 - **计算效率高**：无需额外的计算，位置编码与词向量的结合在计算上是高效的，适用于大规模模型。
 - **适应不同长度的序列**：RoPE可以灵活处理不同长度的输入序列，不受固定位置编码的限制。
 
-#### Grouped Query Attention (GQA)
 
-**Grouped Query Attention (GQA)** 是LLaMA3中用于优化自注意力计算的关键技术，通过将多个查询头分组，共享一组键值头，显著减少了内存占用和计算复杂度。
 
-数学表达式：
+### Grouped Query Attention (GQA)
+
+Grouped Query Attention (GQA) ([Ainslie, 2023](https://arxiv.org/pdf/2305.13245)) 是 LLaMA3 中用于优化自注意力计算的关键技术。在大规模语言模型的推理过程中，每个注意力头（head）拥有独立的键（Key）和值（Value）参数会导致巨大的内存消耗。**Grouped Query Attention (GQA)** 旨在通过将多个查询（Query）头分组，并让每组共享一组键值头，从而在模型性能与推理效率之间取得更优的平衡。GQA 是 **Multi-Head Attention (MHA)** 和 **Multi-Query Attention (MQA)** 之间的一种折中方案：
+
+- **MHA**：每个注意力头都有独立的 \(\mathbf{K}\) 和 \(\mathbf{V}\)。
+- **MQA**：所有注意力头共享一组 \(\mathbf{K}\) 和 \(\mathbf{V}\)。
+- **GQA**：将 \(H\) 个查询头划分为 \(G\) 组，每组共享一组 \(\mathbf{K}\) 和 \(\mathbf{V}\)（其中 \(1 < G < H\)）。
+
+#### 1. 投影 (Projections)
+
+给定输入序列 \(\mathbf{X} \in \mathbb{R}^{B \times S \times d}\)，首先通过线性变换投影得到查询、键和值矩阵：
+
 $$
-\text{memory\_kv-cache} = 4nhb(s + o)
+\mathbf{Q} = \mathbf{X} W_Q, \quad
+\mathbf{K} = \mathbf{X} W_K, \quad
+\mathbf{V} = \mathbf{X} W_V,
 $$
-其中：
-- \( nh \) 为头数。
-- \( b \) 为批量大小。
-- \( s \) 为序列长度。
-- \( o \) 为输出长度。
 
-**机制**：
-1. **查询头分组**：将多个查询头划分为若干组，每组共享一组键值头。
-2. **共享键值头**：每组查询头使用相同的键值头进行注意力计算，减少了键值缓存的内存占用。
-3. **优化计算**：通过分组减少了重复计算，提高了推理效率，同时保持了与Multi-Head Attention (MHA)相近的模型性能。
+其中，\(W_Q, W_K, W_V \in \mathbb{R}^{d \times d}\) 为可学习的投影矩阵。
 
-**优势**：
-- **内存优化**：显著减少了自注意力计算中的键值缓存内存占用。
-- **计算效率**：优化了注意力计算流程，提升了推理速度，尤其在处理大规模模型时表现出色。
-- **性能保持**：在减少内存和计算开销的同时，保持了与MHA相近的模型性能，确保生成质量不受影响。
+#### 2. 头与分组 (Heads and Grouping)
 
-#### 高效Tokenizer
+- **头的切分**：将 \(\mathbf{Q}\)、\(\mathbf{K}\) 和 \(\mathbf{V}\) 分割成 \(H\) 个头，每个头的向量维度为 \(d_{\text{head}} = \frac{d}{H}\)。
+
+$$
+\mathbf{Q} = [\mathbf{Q}_1; \mathbf{Q}_2; \dots; \mathbf{Q}_H], \quad
+\mathbf{K} = [\mathbf{K}_1; \mathbf{K}_2; \dots; \mathbf{K}_H], \quad
+\mathbf{V} = [\mathbf{V}_1; \mathbf{V}_2; \dots; \mathbf{V}_H]
+$$
+
+- **分组**：将这 \(H\) 个查询头进一步划分为 \(G\) 组（\(1 < G < H\)）。对于第 \(g\) 组，包含 \(\frac{H}{G}\) 个查询头，并共享一组键值头 \(\mathbf{K}^g\) 和 \(\mathbf{V}^g\)。
+
+$$
+\mathcal{G} = \left\{ \mathcal{G}_1, \mathcal{G}_2, \dots, \mathcal{G}_G \right\}, \quad |\mathcal{G}_g| = \frac{H}{G} \quad \forall g \in \{1, 2, \dots, G\}
+$$
+
+下图展示了 GQA 与传统 MHA 和 MQA 的对比，可见在 GQA 中，**每组查询头公用一组键值头**。
+
+{{< figure 
+    src="attention_comparison.png" 
+    caption="Fig. 5. Overview of Grouped Query Attention (GQA). (Image source: [Ainslie et al., 2023](https://arxiv.org/abs/2305.13245))"
+    align="center"
+    width="100%"
+>}}
+
+#### 3. 组内注意力 (Intra-Group Attention)
+
+对于第 \(g\) 组，令该组的查询向量为 \(\{\mathbf{Q}_i\}_{i \in \mathcal{G}_g}\)，共享的键值向量为 \(\mathbf{K}^g\) 和 \(\mathbf{V}^g\)。组内注意力的计算公式为：
+
+$$
+\text{Attention}_g(\mathbf{Q}_i, \mathbf{K}^g, \mathbf{V}^g) = \text{softmax}\left( \frac{\mathbf{Q}_i (\mathbf{K}^g)^\top}{\sqrt{d_{\text{head}}}} \right) \mathbf{V}^g
+$$
+
+其中，\(\sqrt{d_{\text{head}}}\) 为缩放因子，用于稳定梯度和数值计算。
+
+#### 4. 拼接输出 (Concatenate & Output)
+
+将所有组的注意力结果在通道维度上拼接，得到矩阵 \(\mathbf{O}\)，然后通过线性变换矩阵 \(W_O \in \mathbb{R}^{d \times d}\) 得到最终输出：
+
+$$
+\mathbf{O} = \text{Concat}\left( \text{Attention}_1, \text{Attention}_2, \dots, \text{Attention}_G \right) W_O
+$$
+
+其中，\(\text{Concat}\) 表示在通道维度上的拼接操作。
+
+> 更多关于注意力机制在 **MHA**、**MQA** 和 **GQA** 之间的详细对比及代码示例，可参考我之前的技术博客：[Attention Mechanisms in Transformers: Comparing MHA, MQA, and GQA](https://syhya.github.io/posts/2025-01-16-group-query-attention/#grouped-query-attention-gqa)。
+
+
+#### BPE
 
 **tiktoken** tokenizer是LLaMA3采用的新一代分词器，相较于LLaMA2使用的SentencePiece BPE，tiktoken在以下方面有所改进：
 

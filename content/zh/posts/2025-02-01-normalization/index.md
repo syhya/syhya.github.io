@@ -216,7 +216,7 @@ $$
 - **适用性有限**：在某些任务中，可能不如 BatchNorm 或 LayerNorm 表现优异。
 
 ### 代码示例
-可以参考[normalization.py]("https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-02-01-normalization/normalization.py")
+可以参考[normalization.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-02-01-normalization/normalization.py)
 
 ### 归一化方法对比
 

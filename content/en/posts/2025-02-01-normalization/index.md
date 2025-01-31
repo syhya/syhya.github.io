@@ -213,7 +213,7 @@ Where:
 - **Limited Applicability**: In some tasks, it may not perform as well as BatchNorm or LayerNorm.
 
 ### Code Example
-You can refer to [normalization.py]("https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-02-01-normalization/normalization.py")
+You can refer to [normalization.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-02-01-normalization/normalization.py)
 
 ### Comparison of Normalization Methods
 

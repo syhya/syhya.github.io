@@ -2,6 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://syhya.github.io/posts/</loc>
+    <lastmod>2025-02-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/</loc>
+    <lastmod>2025-02-27T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/tags/ai/</loc>
     <lastmod>2025-01-27T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -132,19 +158,6 @@
                 href="https://syhya.github.io/posts/2025-01-27-deepseek-r1/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/posts/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/ppo/</loc>
     <lastmod>2025-01-27T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -238,19 +251,6 @@
   </url><url>
     <loc>https://syhya.github.io/categories/technical-blog/</loc>
     <lastmod>2025-01-27T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/"
-                />
   </url><url>
     <loc>https://syhya.github.io/tags/attention-mechanism/</loc>
     <lastmod>2025-01-16T12:00:00+08:00</lastmod>

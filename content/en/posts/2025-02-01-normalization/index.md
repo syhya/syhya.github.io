@@ -2,9 +2,9 @@
 title: Normalization in Deep Learning
 date: 2025-02-01T12:00:00+08:00
 author: "Yue Shui"
-tags: ["AI", "NLP", "Deep Learning", "Normalization", "Residual Connection", "ResNet", "BatchNorm", "LayerNorm", "WeightNorm", "RMSNorm", "Pre-Norm", "Post-Norm", "LLM"]
+tags: ["AI", "NLP", "Deep Learning", "Normalization", "Residual Connection", "ResNet", "Batch Normalization", "Layer Normalization", "Weight Normalization", "RMS Normalization", "Pre-Norm", "Post-Norm", "LLM"]
 categories: ["Technical Blog"]
-readingTime: 30
+readingTime: 20
 toc: true
 ShowToc: true
 TocOpen: false

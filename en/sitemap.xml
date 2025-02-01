@@ -29,7 +29,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/ai/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -41,8 +41,21 @@
                 href="https://syhya.github.io/tags/ai/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/tags/batch-normalization/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/batch-normalization/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/batch-normalization/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -55,7 +68,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/deep-learning/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -65,6 +78,165 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/deep-learning/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/layer-normalization/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/layer-normalization/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/layer-normalization/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/llm/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/llm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/llm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/nlp/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/nlp/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/nlp/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/normalization/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/normalization/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/normalization/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/2025-02-01-normalization/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2025-02-01-normalization/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2025-02-01-normalization/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/post-norm/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/post-norm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/post-norm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/pre-norm/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/pre-norm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/pre-norm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/residual-connection/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/residual-connection/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/residual-connection/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/resnet/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/resnet/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/resnet/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/rms-normalization/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/rms-normalization/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/rms-normalization/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/technical-blog/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/weight-normalization/</loc>
+    <lastmod>2025-02-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/weight-normalization/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/weight-normalization/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/deepseek-r1/</loc>
@@ -93,19 +265,6 @@
                 href="https://syhya.github.io/tags/grpo/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/llm/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/llm/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/llm/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/model-distillation/</loc>
     <lastmod>2025-01-27T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -117,19 +276,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/model-distillation/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/nlp/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/nlp/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/nlp/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/o1/</loc>
@@ -235,22 +381,6 @@
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/sft/"
                 />
-  </url><url>
-    <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2025-01-27T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/attention-mechanism/</loc>
     <lastmod>2025-01-16T12:00:00+08:00</lastmod>

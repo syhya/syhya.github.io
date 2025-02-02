@@ -27,17 +27,17 @@ In deep learning, the design of network architectures significantly impacts mode
     width="70%"
 >}}
 
-In a standard residual connection, the input \( x_l \) undergoes a series of transformation functions \( \text{F}(\cdot) \) and is then added to the original input \( x_l \) to form the output \( x_{l+1} \):
+In a standard residual connection, the input $x_l$ undergoes a series of transformation functions $ \text{F}(\cdot) $ and is then added to the original input $x_l$ to form the output $x_{l+1}$:
 
-\[
+$$
 x_{l+1} = x_l + \text{F}(x_l)
-\]
+$$
 
 Where:
 
-*   \( x_l \) is the input to the \( l \)-th layer.
-*   \( \text{F}(x_l) \) represents the residual function composed of a series of non-linear transformations (e.g., convolutional layers, fully connected layers, activation functions, etc.).
-*   \( x_{l+1} \) is the output of the \( (l+1) \)-th layer.
+*   $x_l$ is the input to the $l$-th layer.
+*   $\text{F}(x_l)$ represents the residual function composed of a series of non-linear transformations (e.g., convolutional layers, fully connected layers, activation functions, etc.).
+*   $x_{l+1}$ is the output of the $(l+1)$-th layer.
 
 The structure using residual connections has several advantages:
 
@@ -63,26 +63,26 @@ From the figure above, we can intuitively see that the main difference between P
 
 - **Post-Norm**: In traditional Transformer architectures, the normalization layer (such as LayerNorm) is typically placed after the residual connection.
 
-  \[
+  $$
   \text{Post-Norm}: \quad x_{l+1} = \text{Norm}(x_l + \text{F}(x_l))
-  \]
+  $$
 
 - **Pre-Norm**: Places the normalization layer before the residual connection.
 
-  \[
+  $$
   \text{Pre-Norm}: \quad x_{l+1} = x_l + \text{F}(\text{Norm}(x_l))
-  \]
+  $$
 
 ### Comparative Analysis
 
-| Feature               | Post-Norm                                        | Pre-Norm                                         |
-|--------------------|--------------------------------------------------|--------------------------------------------------|
-| **Normalization Position**     | After residual connection                             | Before residual connection                             |
-| **Gradient Flow**       | May lead to vanishing or exploding gradients, especially in deep models | More stable gradients, helps in training deep models |
-| **Training Stability**     | Difficult to train deep models, requires complex optimization techniques | Easier to train deep models, reduces reliance on learning rate scheduling |
-| **Information Transfer**       | Retains characteristics of the original input, aiding information transfer | May cause compression or loss of input feature information |
-| **Model Performance**       | Performs better in shallow models or when strong regularization is needed | Performs better in deep models, improves training stability and convergence speed |
-| **Implementation Complexity**     | Relatively straightforward to implement, but training may require more tuning | Simple to implement, training process is more stable |
+| Feature                         | Post-Norm                                                                | Pre-Norm                                                           |
+|---------------------------------|--------------------------------------------------------------------------|--------------------------------------------------------------------|
+| **Normalization Position**      | After residual connection                                                | Before residual connection                                         |
+| **Gradient Flow**               | May lead to vanishing or exploding gradients, especially in deep models  | More stable gradients, helps in training deep models               |
+| **Training Stability**          | Difficult to train deep models, requires complex optimization techniques | Easier to train deep models, reduces reliance on learning rate scheduling |
+| **Information Transfer**        | Retains characteristics of the original input, aiding information transfer | May cause compression or loss of input feature information         |
+| **Model Performance**           | Performs better in shallow models or when strong regularization is needed  | Performs better in deep models, improves training stability and convergence speed |
+| **Implementation Complexity**   | Relatively straightforward to implement, but training may require more tuning | Simple to implement, training process is more stable              |
 
 The differences between Pre-Norm and Post-Norm in model training can be understood from the perspective of gradient backpropagation:
 
@@ -105,18 +105,18 @@ $$
 $$
 
 Where:
-- \( x_i \) is the \( i \)-th sample in the input vector.
-- \( \mu_{\text{B}} \) is the mean of the current batch:
+- $x_i$ is the $i$-th sample in the input vector.
+- $\mu_{\text{B}}$ is the mean of the current batch:
   $$
   \mu_{\text{B}} = \frac{1}{m} \sum_{i=1}^{m} x_i
   $$
-  where \( m \) is the batch size.
-- \( \sigma_{\text{B}}^2 \) is the variance of the current batch:
+  where $m$ is the batch size.
+- $\sigma_{\text{B}}^2$ is the variance of the current batch:
   $$
-  \sigma_{\text{B}}^2 = \frac{1}{m} \sum_{i=1}^{m} (x_i - \mu_{\text{B}})^2
+  \sigma_{\text{B}}^2 = \frac{1}{m} \sum_{i=1}^{m} \left(x_i - \mu_{\text{B}}\right)^2
   $$
-- \( \epsilon \) is a very small constant used to prevent division by zero.
-- \( \gamma \) and \( \beta \) are learnable scaling and shifting parameters.
+- $\epsilon$ is a very small constant used to prevent division by zero.
+- $\gamma$ and $\beta$ are learnable scaling and shifting parameters.
 
 **Advantages:**
 - **Accelerated Training**: Accelerates the convergence speed of the model through standardization.
@@ -137,18 +137,18 @@ $$
 $$
 
 Where:
-- \( x \) is the input vector.
-- \( \mu_{\text{L}} \) is the mean across the feature dimension:
+- $x$ is the input vector.
+- $\mu_{\text{L}}$ is the mean across the feature dimension:
   $$
   \mu_{\text{L}} = \frac{1}{d} \sum_{i=1}^{d} x_i
   $$
-  where \( d \) is the size of the feature dimension.
-- \( \sigma_{\text{L}}^2 \) is the variance across the feature dimension:
+  where $d$ is the size of the feature dimension.
+- $\sigma_{\text{L}}^2$ is the variance across the feature dimension:
   $$
-  \sigma_{\text{L}}^2 = \frac{1}{d} \sum_{i=1}^{d} (x_i - \mu_{\text{L}})^2
+  \sigma_{\text{L}}^2 = \frac{1}{d} \sum_{i=1}^{d} \left(x_i - \mu_{\text{L}}\right)^2
   $$
-- \( \epsilon \) is a very small constant used to prevent division by zero.
-- \( \gamma \) and \( \beta \) are learnable scaling and shifting parameters.
+- $\epsilon$ is a very small constant used to prevent division by zero.
+- $\gamma$ and $\beta$ are learnable scaling and shifting parameters.
 
 **Advantages:**
 - **Batch Size Independent**: Suitable for scenarios with small batch sizes or dynamic batch sizes, especially performing excellently in sequence models.
@@ -172,12 +172,12 @@ $$
 $$
 
 Where:
-- \( w \) is the reparameterized weight vector.
-- \( g \) is a learnable scalar scaling parameter.
-- \( v \) is a learnable direction vector (with the same dimension as the original \( w \)).
-- \( \lVert v \rVert \) represents the Euclidean norm of \( v \).
-- \( x \) is the input vector.
-- \( b \) is the bias term.
+- $w$ is the reparameterized weight vector.
+- $g$ is a learnable scalar scaling parameter.
+- $v$ is a learnable direction vector (with the same dimension as the original $w$).
+- $\lVert v \rVert$ represents the Euclidean norm of $v$.
+- $x$ is the input vector.
+- $b$ is the bias term.
 
 **Advantages:**
 - **Simplified Optimization Objective**: Separately controlling the norm and direction of weights helps accelerate convergence.
@@ -197,10 +197,10 @@ $$
 $$
 
 Where:
-- \( x \) is the input vector.
-- \( d \) is the size of the feature dimension.
-- \( \epsilon \) is a very small constant used to prevent division by zero.
-- \( \gamma \) is a learnable scaling parameter.
+- $x$ is the input vector.
+- $d$ is the size of the feature dimension.
+- $\epsilon$ is a very small constant used to prevent division by zero.
+- $\gamma$ is a learnable scaling parameter.
 
 **Advantages:**
 - **High Computational Efficiency**: Compared to LayerNorm, which requires calculating both mean and variance, RMSNorm only needs to calculate the root mean square, reducing computational overhead.
@@ -221,29 +221,29 @@ The following two tables compare the main characteristics of BatchNorm, LayerNor
 
 #### BatchNorm vs. LayerNorm
 
-| Feature                 | BatchNorm (BN)                                              | LayerNorm (LN)                                         |
-|----------------------|-------------------------------------------------------------|--------------------------------------------------------|
-| **Calculated Statistics**     | Batch mean and variance                                           | Per-sample mean and variance                                  |
-| **Operation Dimension**         | Normalizes across all samples in a batch                             | Normalizes across all features for each sample                        |
-| **Applicable Scenarios**         | Suitable for large batch data, Convolutional Neural Networks (CNNs)                       | Suitable for small batch or sequential data, RNNs or Transformers            |
-| **Batch Size Dependency** | Strongly dependent on batch size                                             | Independent of batch size, suitable for small batch or single-sample tasks              |
-| **Learnable Parameters**     | Scaling parameter \( \gamma \) and shifting parameter \( \beta \)               | Scaling parameter \( \gamma \) and shifting parameter \( \beta \)          |
-| **Formula**             | \( \text{BatchNorm}(x_i) = \gamma \cdot \frac{x_i - \mu_{\text{B}}}{\sqrt{\sigma_{\text{B}}^2 + \epsilon}} + \beta \) | \( \text{LayerNorm}(x) = \gamma \cdot \frac{x - \mu_{\text{L}}}{\sqrt{\sigma_{\text{L}}^2 + \epsilon}} + \beta \) |
-| **Computational Complexity**       | Requires calculating batch mean and variance                                   | Requires calculating per-sample mean and variance                          |
-| **Example Usage**         | CNN, Vision Transformers                                   | RNN, Transformer, NLP                                |
+| Feature                         | BatchNorm (BN)                                                                 | LayerNorm (LN)                                                              |
+|---------------------------------|--------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| **Calculated Statistics**       | Batch mean and variance                                                        | Per-sample mean and variance                                                |
+| **Operation Dimension**         | Normalizes across all samples in a batch                                       | Normalizes across all features for each sample                              |
+| **Applicable Scenarios**        | Suitable for large batch data, Convolutional Neural Networks (CNNs)              | Suitable for small batch or sequential data, RNNs or Transformers             |
+| **Batch Size Dependency**       | Strongly dependent on batch size                                               | Independent of batch size, suitable for small batch or single-sample tasks    |
+| **Learnable Parameters**        | Scaling parameter $ \gamma $ and shifting parameter $ \beta $                    | Scaling parameter $ \gamma $ and shifting parameter $ \beta $                 |
+| **Formula**                     | $ \text{BatchNorm}(x_i) = \gamma \cdot \frac{x_i - \mu_{\text{B}}}{\sqrt{\sigma_{\text{B}}^2 + \epsilon}} + \beta $ | $ \text{LayerNorm}(x) = \gamma \cdot \frac{x - \mu_{\text{L}}}{\sqrt{\sigma_{\text{L}}^2 + \epsilon}} + \beta $ |
+| **Computational Complexity**    | Requires calculating batch mean and variance                                   | Requires calculating per-sample mean and variance                           |
+| **Example Usage**               | CNN, Vision Transformers                                                       | RNN, Transformer, NLP                                                       |
 
 #### WeightNorm vs. RMSNorm
 
-| Feature                 | WeightNorm (WN)                                           | RMSNorm (RMS)                                      |
-|----------------------|-----------------------------------------------------------|----------------------------------------------------|
-| **Calculated Statistics**     | Decomposes weight vector into norm and direction                                  | Root Mean Square (RMS) of each sample                            |
-| **Operation Dimension**         | Reparameterizes along the dimension of the weight vector                         | Normalizes across all features for each sample                    |
-| **Applicable Scenarios**         | Suitable for scenarios requiring more flexible weight control or accelerated convergence               | Suitable for tasks requiring efficient computation, such as RNNs or Transformers   |
-| **Batch Size Dependency** | Independent of batch size, unrelated to the dimension of input data                     | Independent of batch size, suitable for small batch or single-sample tasks          |
-| **Learnable Parameters**     | Scalar scaling \( g \) and direction vector \( v \)                      | Scaling parameter \( \gamma \)                             |
-| **Formula**             | \( \text{WeightNorm}(x) = w^T x + b \) | \( \text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma \) |
-| **Computational Complexity**       | Reparameterization and update of parameters, slightly higher overhead, but requires modifying network layer implementation      | Only needs to calculate the root mean square of each sample, computationally efficient            |
-| **Example Usage**         | Fully connected layers, convolutional layers, etc., in deep networks, improving training stability and convergence speed    | Transformer, NLP, efficient sequence tasks                    |
+| Feature                         | WeightNorm (WN)                                                               | RMSNorm (RMS)                                                              |
+|---------------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| **Calculated Statistics**       | Decomposes weight vector into norm and direction                              | Root Mean Square (RMS) of each sample                                      |
+| **Operation Dimension**         | Reparameterizes along the dimension of the weight vector                      | Normalizes across all features for each sample                             |
+| **Applicable Scenarios**        | Suitable for scenarios requiring more flexible weight control or accelerated convergence | Suitable for tasks requiring efficient computation, such as RNNs or Transformers |
+| **Batch Size Dependency**       | Independent of batch size, unrelated to the dimension of input data           | Independent of batch size, suitable for small batch or single-sample tasks  |
+| **Learnable Parameters**        | Scalar scaling $g$ and direction vector $v$                                   | Scaling parameter $ \gamma $                                                |
+| **Formula**                     | $ \text{WeightNorm}(x) = w^T x + b $                                             | $ \text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma $ |
+| **Computational Complexity**    | Reparameterization and update of parameters, slightly higher overhead, but requires modifying network layer implementation | Only needs to calculate the root mean square of each sample, computationally efficient |
+| **Example Usage**               | Fully connected layers, convolutional layers, etc., in deep networks, improving training stability and convergence speed | Transformer, NLP, efficient sequence tasks                                  |
 
 Through the above comparison, it can be seen that the four normalization methods have their own advantages and disadvantages:
 
@@ -271,7 +271,7 @@ In recent years, with the rise of large-scale language models (LLMs) such as GPT
 
 2. **More Stable Training**
    - **Adaptable to Larger Learning Rates**: While maintaining stability, it can use larger learning rates, accelerating model convergence.
-   - **Maintains Expressive Power**: By simplifying the normalization process with an appropriate scaling parameter \( \gamma \), it still maintains model performance.
+   - **Maintains Expressive Power**: By simplifying the normalization process with an appropriate scaling parameter $ \gamma $, it still maintains model performance.
 
 3. **Resource Saving**
    - **Reduced Hardware Requirements**: Less computational overhead not only improves speed but also reduces the occupation of hardware resources, suitable for deployment in resource-constrained environments.
@@ -313,8 +313,8 @@ As model scales continue to expand, choosing appropriate normalization methods a
 
 **Cited as:**
 
-> Yue Shui. (Feb 2025). Normalization in Deep Learning.
-https://syhya.github.io/posts/2025-02-01-normalization
+> Yue Shui. (Feb 2025). Normalization in Deep Learning.  
+> https://syhya.github.io/posts/2025-02-01-normalization
 
 Or
 

@@ -42,7 +42,7 @@ This blog post introduces a streamlined alternative to RLHF called DPO. Like RLH
 
 ### RLHF
 
-OpenAI primarily leverages Reinforcement Learning from Human Feedback (RLHF) ([Christiano et al., 2017](https://arxiv.org/abs/1706.03741)) to train InstructGPT ([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155)), which forms the basis for LLMs (such as ChatGPT, Llama, etc.). The entire training process generally comprises the following three main steps:
+OpenAI primarily leverages **Reinforcement Learning from Human Feedback (RLHF)** ([Christiano et al., 2017](https://arxiv.org/abs/1706.03741)) to train InstructGPT ([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155)), which forms the basis for LLMs (such as ChatGPT, Llama, etc.). The entire training process generally comprises the following three main steps:
 
 {{< figure
     src="InstructGPT.png"
@@ -73,6 +73,9 @@ While RLHF leverages human preference data to enhance model alignment, it comes 
 - **Training Instability and Hyperparameter Sensitivity**: PPO involves numerous hyperparameters (e.g., learning rate, sampling batch size), making tuning complex and the training process prone to instability.  
 - **Alignment Tax Effect**: While improving model alignment, the performance on other tasks may suffer.
 
+
+### Introduction to DPO
+
 {{< figure
     src="rlhf_dpo.png"
     caption="Fig. 2. DPO optimizes for human preferences while avoiding reinforcement learning. (Image source: [Rafailov et al., 2023](https://arxiv.org/abs/2305.18290))"
@@ -80,9 +83,7 @@ While RLHF leverages human preference data to enhance model alignment, it comes 
     width="100%"
 >}}
 
-### Introduction to DPO
-
-Direct Preference Optimization (DPO) ([Rafailov et al., 2023](https://arxiv.org/abs/2305.18290)) algorithm was developed to address the above issues of RLHF. Its core idea is to convert the RLHF objective into a contrastive learning task akin to supervised fine-tuning, thereby achieving the following:
+**Direct Preference Optimization (DPO)** ([Rafailov et al., 2023](https://arxiv.org/abs/2305.18290)) algorithm was developed to address the above issues of RLHF. Its core idea is to convert the RLHF objective into a contrastive learning task akin to supervised fine-tuning, thereby achieving the following:
 
 - **Eliminating Reward Model Training**: Directly optimize the Actor model \(\pi_\theta\) using human preference data, without training a separate \(r_\phi\).  
 - **Removing Reinforcement Learning Sampling**: Replace PPO with a contrastive loss function, reducing sampling and computational overhead.  

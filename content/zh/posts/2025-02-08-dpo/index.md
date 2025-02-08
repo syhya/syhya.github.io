@@ -42,7 +42,7 @@ type: "posts"
 
 ### RLHF
 
-OpenAI 主要利用人类反馈强化学习（Reinforcement Learning from Human Feedback, RLHF）([Christiano et al., 2017](https://arxiv.org/abs/1706.03741))来训练 InstructGPT ([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155))，而其构成了大语言模型（如 ChatGPT, Llama 等）的基础。整个训练过程通常包括以下三个主要步骤：
+OpenAI 主要利用**人类反馈强化学习(Reinforcement Learning from Human Feedback, RLHF)**([Christiano et al., 2017](https://arxiv.org/abs/1706.03741)) 来训练 InstructGPT([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155))，而其构成了大语言模型（如 ChatGPT, Llama 等）的基础。整个训练过程通常包括以下三个主要步骤：
 
 {{< figure
     src="InstructGPT.png"
@@ -73,6 +73,9 @@ OpenAI 主要利用人类反馈强化学习（Reinforcement Learning from Human 
 - **训练不稳定与超参数敏感**：PPO 涉及众多超参数（如学习率、采样量等），调参复杂且训练过程易受不稳定因素影响。  
 - **对齐税效应**：在提高模型对齐性的同时，可能会降低模型在其他任务上的表现。
 
+
+### DPO 简介
+
 {{< figure
     src="rlhf_dpo.png"
     caption="Fig. 2. DPO optimizes for human preferences while avoiding reinforcement learning.（Image source: [Rafailov et al., 2023](https://arxiv.org/abs/2305.18290)）"
@@ -80,10 +83,7 @@ OpenAI 主要利用人类反馈强化学习（Reinforcement Learning from Human 
     width="100%"
 >}}
 
-
-### DPO 简介
-
-直接偏好优化（Direct Preference Optimization, DPO）（[Rafailov et al., 2023](https://arxiv.org/abs/2305.18290)）为了解决 RLHF 的上述问题，其核心思路是将 RLHF 的目标转化为类似于监督微调的对比学习任务，从而实现：
+**直接偏好优化(Direct Preference Optimization, DPO)** ([Rafailov et al., 2023](https://arxiv.org/abs/2305.18290))为了解决 RLHF 的上述问题，其核心思路是将 RLHF 的目标转化为类似于监督微调的对比学习任务，从而实现：
 
 - **省略奖励模型训练**：直接利用人类偏好数据优化 Actor 模型 \(\pi_\theta\)，无须单独训练 \(r_\phi\)。  
 - **消除强化学习采样**：采用对比损失函数替代 PPO，降低采样和计算资源消耗。

@@ -460,6 +460,25 @@
                 href="https://syhya.github.io/zh/tags/sft/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/zh/tags/llama/</loc>
+    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/posts/2025-01-22-llama3/</loc>
+    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/pre-training/</loc>
+    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/pre-training/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/pre-training/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/zh/tags/gqa/</loc>
     <lastmod>2025-01-16T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -557,18 +576,27 @@
                 href="https://syhya.github.io/zh/tags/deepspeed/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/zh/tags/pre-training/</loc>
-    <lastmod>2025-01-05T12:00:00+08:00</lastmod>
+    <loc>https://syhya.github.io/zh/tags/llms/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="https://syhya.github.io/tags/pre-training/"
+                href="https://syhya.github.io/tags/llms/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/pre-training/"
+                href="https://syhya.github.io/zh/tags/llms/"
                 />
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/moe/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/zero/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/posts/2025-01-05-domain-llm-training/</loc>
     <lastmod>2025-01-05T12:00:00+08:00</lastmod>
@@ -583,8 +611,32 @@
                 href="https://syhya.github.io/zh/posts/2025-01-05-domain-llm-training/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://syhya.github.io/zh/tags/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2025-01-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E6%A8%A1%E5%9E%8B%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/posts/train-llm-gpus/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E5%BC%82%E6%9E%84%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2025-02-05T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/tags/ai%E7%A1%AC%E4%BB%B6/</loc>
     <lastmod>2024-12-21T12:00:00+08:00</lastmod>

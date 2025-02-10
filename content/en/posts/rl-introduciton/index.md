@@ -1,6 +1,6 @@
 ---
-title: "Deep Reinforcement Learning"
-date: 2025-02-27T12:00:00+08:00
+title: "Deep Reinforcement Learning (Ongoing Updates)"
+date: 2025-01-31T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "Reinforcement Learning"]
 categories: ["Technical Blog"]
@@ -8,9 +8,12 @@ ShowReadingTime: true
 toc: true
 ShowToc: true
 TocOpen: false
-draft: true
+draft: false
+type: "posts"
 math: true
 ---
+
+> **Note**: This article **is currently being updated**. The content is in **draft version** and may change. Please check back for the latest version.
 
 ## Notations
 

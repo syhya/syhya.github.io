@@ -1,6 +1,6 @@
 ---
-title: Llama系列
-date: 2025-01-05T12:00:00+08:00
+title: Llama系列（长期更新中）
+date: 2025-01-22T12:00:00+08:00
 author: "Yue Shui"
 tags: ["AI", "NLP", "LLM", "Pre-training", "Post-training", "Llama"]
 categories: ["技术博客"]
@@ -8,9 +8,12 @@ readingTime: 25
 toc: true
 ShowToc: true
 TocOpen: false
-draft: True
+draft: false
 type: "posts"
+math: true
 ---
+
+> **注意**: 本文**正在更新中**，内容只是**草稿版本**，并不完善，后续会有变动。请随时关注最新版本。
 
 ## 引言
 
@@ -447,7 +450,6 @@ $$
 
 1. [Hendrycks and Gimpel, 2016](https://arxiv.org/pdf/1606.08415.pdf)
 2. [GLU Variants Improve Transformer](https://arxiv.org/pdf/2002.05202.pdf)
-3. [LLaMA: Open and Efficient Foundation Language Models](https://openreview.net/pdf?id=SygkZ3MTJE)
+3. [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971)
 4. [LLaMA2: Open Foundation and Fine-Tuned Chat Models](https://arxiv.org/pdf/2307.09288)
-5. [Open-LLM-Components](https://github.com/jeff52415/open-llm-components/tree/main)
-6. [Building LLaMA 3 From Scratch](https://github.com/meta-llama/llama/blob/main/llama/model.py)
+5. [meta-llama repo](https://github.com/meta-llama/llama/blob/main/llama/model.py)

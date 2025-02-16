@@ -205,7 +205,7 @@ OpenAI Deep Research 和 Google Gemini Deep Research 都融合了多种人工智
 **Cited as:**
 
 > Yue Shui & OpenAI Deep Research. (Feb 2025). OpenAI Deep Research 案例分享 - 深度研究技术综合研究报告".
-https://syhya.github.io/posts/zh/2025-02-15-deep-research-tech-report
+https://syhya.github.io/zh/posts/2025-02-15-deep-research-tech-report/
 
 Or
 
@@ -216,5 +216,5 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Feb",
-  url     = "https://syhya.github.io/posts/zh/2025-02-15-deep-research-tech-report"
+  url     = "https://syhya.github.io/zh/posts/2025-02-15-deep-research-tech-report"
 }

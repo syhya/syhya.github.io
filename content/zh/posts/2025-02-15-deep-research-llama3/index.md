@@ -595,7 +595,7 @@ class MHA(nn.Module):
 **Cited as:**
 
 > OpenAI Deep Research. (Feb 2025). OpenAI Deep Research 案例分享 - LLaMA 系列技术演进详解.
-https://syhya.github.io/posts/zh/2025-02-15-deep-research-llama3
+https://syhya.github.io/zh/posts/2025-02-15-deep-research-llama3
 
 Or
 
@@ -606,5 +606,5 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Feb",
-  url     = "https://syhya.github.io/posts/zh/2025-02-15-deep-research-llama3"
+  url     = "https://syhya.github.io/zh/posts/2025-02-15-deep-research-llama3"
 }

@@ -12,7 +12,7 @@ draft: false
 math: true
 ---
 
-DeepSeek AI 近期发布 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))，其推理性能在多个      benchmark 上已接近 OpenAI o1 ([OpenAI, 2024](https://openai.com/o1/))的水平，是开源社区成功复现 o1 的重要一步。R1 相关代码可以参考huggingface 尝试开源复现 [open-r1](https://github.com/huggingface/open-r1) 项目。以往的研究多依赖于海量的监督数据来提升大语言模型（Large Language Model, LLM）性能，但 DeepSeek-R1 及其早期实验 DeepSeek-R1-Zero 的成功，有力证明了纯粹大规模强化学习在提升 LLM 推理能力方面的潜力。其印证了 Richard Sutton 在 “The Bitter Lesson” 中提出的深刻见解:
+DeepSeek AI 近期发布 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))，其推理性能在多个 benchmark 上已接近 OpenAI o1 ([OpenAI, 2024](https://openai.com/o1/))的水平，是开源社区成功复现 o1 的重要一步。R1 相关代码可以参考huggingface 尝试开源复现 [open-r1](https://github.com/huggingface/open-r1) 项目。以往的研究多依赖于海量的监督数据来提升大语言模型（Large Language Model, LLM）性能，但 DeepSeek-R1 及其早期实验 DeepSeek-R1-Zero 的成功，有力证明了纯粹大规模强化学习在提升 LLM 推理能力方面的潜力。其印证了 Richard Sutton 在 “The Bitter Lesson” 中提出的深刻见解:
 
 > One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
 

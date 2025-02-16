@@ -16,7 +16,7 @@ OpenAI Deep Research ([OpenAI, 2025](https://openai.com/index/introducing-deep-r
 
 此外，另一个 OpenAI 近期发布的 agent 产品是 Operator ([OpenAI, 2025](https://openai.com/index/introducing-operator/))，这是一个类似 WebVoyager ([He, et al, 2024](https://arxiv.org/abs/2401.13919)) 的工具，能够让 agent 在浏览器上进行交互操作，并且操作过程中如果有错误，可以人为进行修正。
 
-> **注意**：下面内容是由 OpenAI Deep Research 生成的一些研究案例 😊，模型会有一定幻觉和格式上的错误，仅供参考。
+> **注意**：下面内容是由 OpenAI Deep Research 生成的研究案例 😊，模型会有一定幻觉和格式上的错误，仅供参考。
 
 > **原文链接**: [深度研究技术综合研究报告](https://chatgpt.com/share/67b142cb-030c-8011-b0c8-8a1071dd8094)
 
@@ -210,7 +210,7 @@ https://syhya.github.io/zh/posts/2025-02-15-deep-research-tech-report/
 Or
 
 ```bibtex
-@article{syhya2025deepseekr1,
+@article{syhya2025deepresearch,
   title   = "OpenAI Deep Research 案例分享 - 深度研究技术综合研究报告"",
   author  = "Yue Shui & OpenAI Deep Research",
   journal = "syhya.github.io",

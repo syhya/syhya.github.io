@@ -179,7 +179,7 @@ languages:
 
       homeInfoParams:
         Title: "\U0001F44B Welcome to Yue's blog"
-        Content: "Hi, this is Yue Shui, an LLM Algorithm Engineer at PwC. My work focuses on researching and applying LLMs in areas like finance, audit, and code generation. This blog serves as a space to document and share insights from my work and learning journey. If you spot any grammar mistakes, blame ChatGPT \U0001F609—let me know! My interests include pre-training, fine tuning, RAG and multi-agent systems. Feel free to connect!"
+        Content: "Hi, this is Yue Shui, an LLM Algorithm Engineer at PwC. My work focuses on researching and applying LLMs in areas like finance, audit, and code generation. This blog serves as a space to document and share insights from my work and learning journey. The grammar mistakes in the posts might give you a hint about ChatGPT's involvement 😉—let me know if you spot any! My interests include model training, RAG and Agent. Recently, I've been learning how to utilize RL to train reasoning models. Feel free to connect!"
 
       socialIcons:
         - name: linkedin
@@ -315,7 +315,7 @@ languages:
 
       homeInfoParams:
         Title: "\U0001F44B 欢迎访问我的博客"
-        Content: "你好，我是Yue Shui，目前在PwC担任LLM算法工程师。我的工作包括研究和应用大型语言模型到金融、审计和代码生成等领域。这个博客是我用来记录和分享工作与学习过程中见解。如果发现语法错误，说明目前ChatGPT语言能力还有所欠缺，请责备他 \U0001F609——记得告诉我！我的兴趣包括预训练、微调、RAG以及多智能体系统。欢迎交流！"
+        Content: "你好，我是Yue Shui，目前在PwC担任LLM算法工程师。我的工作包括研究和应用大型语言模型到金融、审计和代码生成等领域。这个博客是我用来记录和分享工作与学习过程中见解。文章中的语法错误或许能透露出ChatGPT的参与程度😉-——记得告诉我！我的兴趣包括模型训练、RAG 以及 Agent。最近，我在学习利用强化学习训练推理模型。欢迎交流！"
 
       socialIcons:
         - name: linkedin

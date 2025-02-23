@@ -14,7 +14,7 @@ math: true
 
 DeepSeek AI recently released **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948)), whose reasoning performance on multiple benchmarks approaches the level of OpenAI's o1 ([OpenAI, 2024](https://openai.com/o1/)), marking a significant step for the open-source community in successfully replicating o1. Relevant code for R1 can be found in the huggingface's attempt to open-source replication project [open-r1](https://github.com/huggingface/open-r1). While previous research has often relied on massive amounts of supervised data to enhance the performance of Large Language Models (LLMs), the success of DeepSeek-R1 and its earlier experiment, DeepSeek-R1-Zero, powerfully demonstrates the potential of purely large-scale reinforcement learning in improving the reasoning capabilities of LLMs. This success reinforces the profound insight proposed by Richard Sutton in "The Bitter Lesson":
 
-> One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
+> One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are **search** and **learning**. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
 
 ## Notations
 

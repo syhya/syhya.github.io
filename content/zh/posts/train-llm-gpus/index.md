@@ -87,8 +87,6 @@ math: true
 下面我们将对这几种并行方式进行详细说明。
 
 
-
-
 ### 数据并行 (Data Parallelism)  
   
 {{< figure
@@ -143,7 +141,7 @@ math: true
 8. **迭代循环 (Iteration Loop)**    
    重复步骤 4 - 7，直至模型达到收敛或达到预设的训练轮数（epochs）。  
   
-## 批量同步并行 (BSP) 与异步并行 (ASP)  
+#### 批量同步并行 (BSP) 与异步并行 (ASP)  
   
 在上面的第 6 步“梯度同步”中，如何以及何时进行“同步”是影响数据并行性能和收敛行为的重要因素之一。一般分为以下两大类：  
 
@@ -160,7 +158,7 @@ math: true
 2. 参数服务器一旦收到梯度，立即更新全局模型参数；    
 3. 其他节点在需要最新参数时，会 **pull** 下来继续下一步计算。  
   
-### BSP vs. ASP：优缺点对比  
+#### BSP vs. ASP：优缺点对比  
   
 下表总结了在数据并行环境下，同步并行与异步并行的主要差异：  
   
@@ -176,7 +174,7 @@ math: true
   
 > **建议**：在实际项目中，先从简单的同步并行 (BSP) 入手，利用 PyTorch DDP 或类似工具进行多 GPU 训练。若网络环境异构、节点繁多或任务对吞吐率要求极高，可再尝试异步并行 (ASP) 或参数服务器方案，并配合梯度累积 (Gradient Accumulation) 来平衡带宽与更新频率。  
   
-## 梯度累积 (Gradient Accumulation)  
+#### 梯度累积 (Gradient Accumulation)  
   
 当批量大小较大或通信成为主要瓶颈时，可以采用**梯度累积**来减少同步频率。其核心思路是：    
 - 连续计算多个小批量（mini-batch）的局部梯度，并将它们累加到本地的累积缓冲区中；    
@@ -196,9 +194,9 @@ $$
   
 由于梯度同步不再是每个 mini-batch 都进行，而是每累计 $K$ 个 mini-batch 执行一次，通信开销可显著降低。但参数更新频率降低也可能导致训练收敛速度放缓，需在吞吐量与收敛性能之间做权衡。  
   
-## 分布式数据并行 (DDP - Distributed Data Parallel)  
+#### 分布式数据并行 (DDP - Distributed Data Parallel)  
   
-分布式数据并行 (DDP - Distributed Data Parallel)   是 PyTorch v1.5([Li et al. 2021](https://arxiv.org/pdf/2006.15704))在 BSP 思想下的高度优化实现，为单机多 GPU 乃至多机多 GPU 的数据并行提供便利。其主要优化包括：  
+分布式数据并行 (DDP - Distributed Data Parallel) 是 PyTorch v1.5 ([Li et al. 2021](https://arxiv.org/pdf/2006.15704))在 BSP 思想下的高度优化实现，为单机多 GPU 乃至多机多 GPU 的数据并行提供便利。其主要优化包括：  
   
 1. **梯度 Bucketing（梯度桶化）**：将模型参数分为多个「桶」(bucket)；反向传播时一旦某个桶内所有梯度都已计算完，就立即启动一次针对**该桶的 All-Reduce**，而不是等到所有梯度都算完后再一次性同步。    
 2. **通信与计算重叠**：DDP 通过异步通信和非阻塞操作，尽可能地将梯度同步（通信）与前向传播、反向传播（计算）重叠，从而减少了通信开销。这种重叠策略提升了整体的并行效率。  
@@ -213,7 +211,7 @@ $$
 >}}
 
   
-## Ring All-Reduce  
+#### Ring All-Reduce  
   
 在多 GPU（尤其是单机多 GPU）环境下，若有高速互联（如 NVLink、PCIe 交换机等），可使用 **Ring All-Reduce** 来显著降低通信开销。其思路是：  
   
@@ -223,9 +221,9 @@ $$
   
 理想情况下，Ring All-Reduce 的通信代价与节点数量近似无关（可以视为 $\mathcal{O}(1)$），非常适合多 GPU 环境下的梯度同步，是 Horovod、NCCL 等库中广泛使用的核心通信模式。  
   
-## 参数服务器 (Parameter Server, PS)  
+#### 参数服务器 (Parameter Server, PS)  
   
-当集群规模扩展至多机多 GPU 时，若简单地采用单点聚合（例如一台中心服务器）往往难以支撑海量数据的并行训练。参数服务器 (Parameter Server, PS)([Li, et al., 2014](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf))是为可扩展分布式训练而设计的一种典型架构：  
+当集群规模扩展至多机多 GPU 时，若简单地采用单点聚合（例如一台中心服务器）往往难以支撑海量数据的并行训练。参数服务器(Parameter Server, PS) ([Li, et al., 2014](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf))是为可扩展分布式训练而设计的一种典型架构：  
   
 1. **参数分片**：将模型参数按键值对 (key-value) 的形式进行拆分，不同 PS 节点只管理特定分片的参数；    
 2. **push-pull** 语义：计算节点在本地得到梯度后，**push** 到相应的 PS；PS 更新完该分片参数后，计算节点可在需要时 **pull** 下最新版本进行下一步计算。    
@@ -238,36 +236,50 @@ $$
 
 模型并行 (Model Parallelism) 是一种将模型本身分割到多个计算设备 (GPU) 上进行训练的并行方式。当模型参数规模超过单个 GPU 的内存容量时，模型并行成为必要的选择。模型并行主要分为两种类型：流水线并行 (Pipeline Parallelism) 和张量并行 (Tensor Parallelism)。
 
-#### 流水线并行 (Pipeline Parallelism)
+**朴素模型并行与气泡问题**
 
-流水线并行 (Pipeline Parallelism) 将模型按层划分为多个阶段 (stage)，每个阶段分配到一个 GPU 上。数据像流水线一样在不同 GPU 之间传递，前一个 GPU 的输出作为后一个 GPU 的输入。流水线并行旨在提高模型并行训练的效率，减少 GPU 空闲时间。
+{{< figure
+    src="naive_mp.png"
+    caption="Fig. 4. A naive model parallelism setup where the model is vertically split into 4 partitions. Data is processed by one worker at a time due to sequential dependency, leading to large “bubbles” of idle time. (Image source: [Huang et al. 2019](https://arxiv.org/abs/1811.06965))"
+    align="center"
+    width="100%"
+>}}
 
-**朴素流水线并行与气泡问题**
+朴素的模型并行实现，即将模型简单地按层划分，并顺序地在不同 GPU 上执行，会遇到严重的 "气泡" (bubble) 问题。由于层之间的依赖关系，当一个 GPU 在处理某个数据样本的某个阶段时，其他 GPU 可能处于空闲状态，等待前一个 GPU 的输出或者后一个 GPU 的输入。这种 GPU 空闲时间被称为 "气泡"，严重降低了流水线并行的效率。
 
-朴素的流水线并行实现，即将模型简单地按层划分，并顺序地在不同 GPU 上执行，会遇到严重的 "气泡" (bubble) 问题。由于层之间的依赖关系，当一个 GPU 在处理某个数据样本的某个阶段时，其他 GPU 可能处于空闲状态，等待前一个 GPU 的输出或者后一个 GPU 的输入。这种 GPU 空闲时间被称为 "气泡"，严重降低了流水线并行的效率。
+其中，$F_i$ 表示 Stage i 的前向传播，$B_i$  表示 Stage i 的反向传播。可以看到，在朴素流水线并行中，大部分时间只有一个 GPU 在工作，其他 GPU 处于空闲状态，效率低下。
 
 **气泡问题产生的原因:**
 
 * **层间依赖:**  神经网络的层之间存在顺序依赖关系，后一层的计算必须依赖于前一层的输出。
-* **顺序执行:**  朴素流水线并行按照层顺序依次执行，导致 GPU 之间无法充分并行工作。
+* **顺序执行:**  朴素模型并行按照层顺序依次执行，导致 GPU 之间无法充分并行工作。
 
-**示意图 (朴素流水线并行):**
 
-```
-GPU 1 (Stage 1) | F1 -> B1 -> U1 |       |       |
-GPU 2 (Stage 2) |       | F2 -> B2 -> U2 |       |
-GPU 3 (Stage 3) |       |       | F3 -> B3 -> U3 |
-         -----------------------------------
-         Time
-```
 
-其中，F_i 表示 Stage i 的前向传播，B_i 表示 Stage i 的反向传播，U_i 表示 Stage i 的参数更新。可以看到，在朴素流水线并行中，大部分时间只有一个 GPU 在工作，其他 GPU 处于空闲状态，效率低下。
+### 流水线并行 (Pipeline Parallelism)
 
-**GPipe：同步梯度聚合**
+{{< figure
+    src="pipeline_parallelism.png"
+    caption="Fig. 5. Pipeline Parallelism. (Image source: [Clolossal-AI Documentation](https://colossalai.org/zh-Hans/docs/concepts/paradigms_of_parallelism/))"
+    align="center"
+    width="60%"
+>}}
 
-GPipe 是 Google 提出的一个高效的流水线并行训练系统，旨在解决朴素流水线并行的气泡问题。GPipe 的核心思想是将 mini-batch 划分为多个 micro-batch，并采用同步梯度聚合的方式来缓解气泡问题，提高流水线效率。
 
-**GPipe 调度策略:**
+流水线并行 (Pipeline Parallelism) 将模型按层划分为多个阶段 (stage)，每个阶段分配到一个 GPU 上。数据像流水线一样在不同 GPU 之间传递，前一个 GPU 的输出作为后一个 GPU 的输入。流水线并行旨在提高模型并行训练的效率，减少 GPU 空闲时间。
+
+#### GPipe：同步梯度聚合
+
+GPipe([Huang et al. 2019](https://arxiv.org/abs/1811.06965)) 是 Google 提出的一个高效的流水线并行训练系统，旨在解决朴素流水线并行的气泡问题。GPipe 的核心思想是将 **mini-batch** 划分为多个 **micro-batch**，并采用同步梯度聚合的方式来缓解气泡问题，提高流水线效率。
+
+{{< figure
+    src="gpipe.png"
+    caption="Fig. 6. Illustration of pipeline parallelism in GPipe with 4 microbatches and 4 partitions. GPipe aggregates and updates gradients across devices synchronously at the end of every batch. (Image source: [Huang et al. 2019](https://arxiv.org/abs/1811.06965))"
+    align="center"
+    width="100%"
+>}}
+
+#### GPipe 调度策略
 
 1. **Micro-batch 划分:**  将一个 mini-batch 划分为 $m$ 个 micro-batch。划分后的每个 micro-batch 的大小为原 mini-batch 的 $1/m$。
 2. **流水线阶段划分:**  将模型按层划分为 $d$ 个阶段，每个阶段分配到一个 GPU 上。
@@ -277,20 +289,7 @@ GPipe 是 Google 提出的一个高效的流水线并行训练系统，旨在解
 4. **同步梯度聚合 (Synchronous Gradient Aggregation):**  在所有 micro-batch 的反向传播都完成后，将所有 micro-batch 的梯度进行聚合 (例如求平均)，得到全局平均梯度。
 5. **参数更新 (Parameter Update):**  每个 GPU 使用全局平均梯度更新本地模型参数。
 
-**GPipe 调度示意图:**
-
-```
-GPU 1 (Stage 1) | F1_1 -> F1_2 -> F1_3 -> F1_4 -> B1_4 -> B1_3 -> B1_2 -> B1_1 -> U1 |
-GPU 2 (Stage 2) |       | F2_1 -> F2_2 -> F2_3 -> F2_4 -> B2_4 -> B2_3 -> B2_2 -> B2_1 -> U2 |
-GPU 3 (Stage 3) |       |       | F3_1 -> F3_2 -> F3_3 -> F3_4 -> B3_4 -> B3_3 -> B3_2 -> B3_1 -> U3 |
-GPU 4 (Stage 4) |       |       |       | F4_1 -> F4_2 -> F4_3 -> F4_4 -> B4_4 -> B4_3 -> B4_2 -> B4_1 -> U4 |
-         ---------------------------------------------------------------------------------------
-         Time
-```
-
-其中，F_i_j 表示 Stage i 处理第 j 个 micro-batch 的前向传播，B_i_j 表示 Stage i 处理第 j 个 micro-batch 的反向传播，U_i 表示 Stage i 的参数更新。
-
-**GPipe 气泡比例公式:**
+#### GPipe 气泡比例公式
 
 假设每个 micro-batch 的前向和反向传播时间均为 1 单位，流水线深度为 $d$，micro-batch 数量为 $m$，则 GPipe 的气泡比例为：
 
@@ -312,11 +311,19 @@ $$
 * **内存占用增加:**  为了支持流水线执行，GPipe 需要存储每个 micro-batch 的中间激活值，内存占用相比数据并行有所增加。
 * **延迟参数更新:**  GPipe 在所有 micro-batch 的反向传播完成后才进行参数更新，可能导致参数更新的延迟，影响模型收敛速度。
 
-**PipeDream：1F1B 调度与权重暂存**
+#### PipeDream：1F1B 调度与权重暂存
 
-PipeDream 是另一种高效的流水线并行训练系统，它采用了 1F1B (1-Forward-1-Backward) 调度策略，并引入了权重暂存 (Weight Stashing) 技术，进一步减少气泡，提高流水线效率，并解决 1F1B 调度可能导致的权重版本不一致问题。
 
-**1F1B 调度策略:**
+{{< figure
+    src="pipe_dream.png"
+    caption="Fig. 7. Illustration of `1F1B` microbatch scheduling in PipeDream. (Image source: [Harlap et al. 2018](https://arxiv.org/abs/1806.03377))"
+    align="center"
+    width="100%"
+>}}
+
+PipeDream ([Harlap et al. 2018](https://arxiv.org/abs/1806.03377))是另一种高效的流水线并行训练系统，它采用了 1F1B (1-Forward-1-Backward) 调度策略，并引入了权重暂存 (Weight Stashing) 技术，进一步减少气泡，提高流水线效率，并解决 1F1B 调度可能导致的权重版本不一致问题。
+
+#### 1F1B 调度策略
 
 PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU (Stage) 交替执行前向传播和反向传播，尽可能地并行工作，减少 GPU 空闲时间。具体流程如下：
 
@@ -331,18 +338,8 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU (Stage) 交替执
     * 依此类推。
     其他 GPU (Stage 2, Stage 3, ...) 也采用类似的 1F1B 调度策略，但处理的 micro-batch 和阶段不同，形成流水线效果。
 
-**PipeDream 1F1B 调度示意图:**
 
-```
-GPU 1 (Stage 1) | F1_1 -> B1_1 -> F1_2 -> B1_2 -> F1_3 -> B1_3 -> F1_4 -> B1_4 -> U1 |
-GPU 2 (Stage 2) |       | F2_1 -> B2_1 -> F2_2 -> B2_2 -> F2_3 -> B2_3 -> F2_4 -> B2_4 -> U2 |
-GPU 3 (Stage 3) |       |       | F3_1 -> B3_1 -> F3_2 -> B3_2 -> F3_3 -> B3_3 -> F3_4 -> B3_4 -> U3 |
-GPU 4 (Stage 4) |       |       |       | F4_1 -> B4_1 -> F4_2 -> B4_2 -> F4_3 -> B4_3 -> F4_4 -> B4_4 -> U4 |
-         ---------------------------------------------------------------------------------------
-         Time
-```
-
-**权重暂存 (Weight Stashing):**
+#### 权重暂存 (Weight Stashing)
 
 由于 1F1B 调度中，前向传播和反向传播可能使用不同版本的模型权重，会导致权重版本不一致问题，影响训练的正确性和收敛性。PipeDream 引入了权重暂存技术来解决这个问题。权重暂存的核心思想是，每个 GPU 维护多个版本的模型权重，并确保前向传播和反向传播使用同一版本的权重。
 

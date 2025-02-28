@@ -48,7 +48,7 @@ math: true
   借助分布式训练的高并行度，原本需要数周甚至更久才能完成的训练任务，有机会在数天或更短时间内完成。更快的模型迭代能让研究人员在更短时间内验证新架构、新超参数与新训练策略，从而加速创新与研发。
 
 * **支持更大规模的模型探索**  
-  分布式训练为探索规模更大、结构更复杂的神经网络架构提供了可能。像万亿参数级别的 Mixture-of-Experts (MoE) 模型、Switch Transformer 等，都是基于成熟的分布式训练技术才能成功训练并投入应用。
+  分布式训练为探索规模更大、结构更复杂的神经网络架构提供了可能。万亿参数级别的 Switch Transformer 是基于成熟的分布式训练技术才能成功训练并投入应用。
 
 * **提高训练系统的鲁棒性和可扩展性**  
   分布式训练系统具有良好的容错能力：当某个 GPU 节点出现故障时，可切换到其他节点继续工作，减少训练中断的风险。同时，集群规模也可根据需求灵活扩容或缩容，以适应不同规模的模型和训练任务。
@@ -425,7 +425,7 @@ $$
 
 #### PTD-P
 
-PTD-P (Pipeline, Tensor, and Data Parallelism) 是一个结合了流水线并行、张量并行和数据并行的多维并行策略。PTD-P 旨在充分利用各种并行技术的优势，提高超大型模型训练的效率和可扩展性。
+PTD-P (Pipeline, Tensor, and Data Parallelism) ([Narayanan et al. 2021](https://arxiv.org/abs/2104.04473))是一个结合了流水线并行、张量并行和数据并行的多维并行策略。PTD-P 旨在充分利用各种并行技术的优势，提高超大型模型训练的效率和可扩展性。
 
 **PTD-P 的特点:**
 
@@ -437,7 +437,7 @@ PTD-P (Pipeline, Tensor, and Data Parallelism) 是一个结合了流水线并行
 
 {{< figure
     src="PTD-P.png"
-    caption="Fig. 11. (Top) Default 1F1B pipeline schedule as in PipeDream-flush. (Bottom) Interleaved 1F1B pipeline schedule. First model chunks are in dark colors and second chunks are in light colors (Image source: [Shoeybi et al. 2019](https://arxiv.org/abs/1909.08053))"
+    caption="Fig. 11. (Top) Default 1F1B pipeline schedule as in PipeDream-flush. (Bottom) Interleaved 1F1B pipeline schedule. First model chunks are in dark colors and second chunks are in light colors (Image source: [Narayanan et al. 2021](https://arxiv.org/abs/2104.04473))"
     align="center"
     width="100%"
 >}}  
@@ -458,73 +458,91 @@ PTD-P (Pipeline, Tensor, and Data Parallelism) 是一个结合了流水线并行
 
 ### 混合专家模型
 
-混合专家模型 (Mixture-of-Experts, MoE) ([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538)) 是一种稀疏激活模型，它包含多个 "专家" (expert) 网络，并使用一个门控网络 (gating network) 来决定每个输入样本应该由哪些专家处理。MoE 可以在不显著增加计算成本的情况下，大幅增加模型参数量，从而提升模型容量和性能。
+混合专家模型 (Mixture-of-Experts, MoE) ([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538)) 是一种稀疏激活模型，它通过结合多个独立的“专家”网络和一个门控网络（Gating Network），在不显著增加计算成本的前提下，大幅提升了模型的参数量和性能。MoE 的核心思想是“稀疏激活”（Sparse Activation），即对于每个输入样本，仅激活部分专家网络，而不是整个模型。这种方法既提高了计算效率，又增强了模型的表达能力，使其在 LLMs 中表现出色。
 
-**MoE 层的基本原理与门控机制**
+MoE 设计灵感来源于[集成学习(Ensemble learning）](https://en.wikipedia.org/wiki/Ensemble_learning), 一种将复杂任务分解为多个子任务并由不同模型协作完成的技术。在 MoE 中，这些“子任务”由多个独立的专家网络处理，而门控网络则负责根据输入样本的特征动态选择最适合的专家。这种分工合作的机制类似于人类社会中的专家团队：不同领域的专家针对特定问题提供专业意见，最终综合得出结果。
 
-MoE 层的核心思想来源于[集成学习（Ensemble learning）](https://en.wikipedia.org/wiki/Ensemble_learning)。它将一个复杂的任务分解为多个子任务，每个子任务由一个专门的 "专家" 网络负责处理。对于每个输入样本，门控网络会根据输入特征选择激活一部分专家网络，而不是激活整个模型。这样可以实现模型的稀疏激活，降低计算成本，同时增加模型参数量。
 
-**MoE 层结构:**
+{{< figure
+    src="moe.png"
+    caption="Fig. 12. Illustration of a mixture-of-experts (MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))"
+    align="center"
+    width="100%"
+>}}  
 
-一个典型的 MoE 层包含以下组件：
 
-* **专家网络 (Experts):**  一组独立的神经网络 $\{E_1, E_2, ..., E_n\}$，每个专家网络 $E_i$ 可以是任意类型的神经网络，例如前馈神经网络 (FFN), CNN, RNN 等。专家网络的数量 $n$ 可以很大，例如几十个、几百个甚至几千个。
+#### MoE 核心组件
+
+一个典型的 MoE 包含以下组件：
+
+* **专家网络 (Experts):**  一组独立的神经网络 $\{E_1, E_2, ..., E_n\}$，每个专家网络 $E_i$ 可以是任意类型的神经网络，例如 FFN, CNN, RNN 等。专家网络的数量 $n$ 可以很大，例如几十个、几百个甚至几千个。
 * **门控网络 (Gating Network):**  一个可训练的神经网络 $G$，用于根据输入样本 $x$ 学习一个概率分布，决定激活哪些专家。门控网络的输入是输入样本 $x$，输出是一个 $n$ 维的概率向量 $p = G(x) = [p_1, p_2, ..., p_n]$，其中 $p_i$ 表示激活专家 $E_i$ 的概率。
 * **专家输出聚合 (Expert Output Aggregation):**  根据门控网络的输出概率分布，将激活的专家网络的输出进行加权求和，得到 MoE 层的最终输出 $y$。
 
-**门控机制详解 (Noisy Top-k Gating):**
+#### Noisy Top-k Gating
 
-一种常用的门控机制是 Noisy Top-k Gating，其计算过程如下：
+为了实现稀疏激活并确保专家使用均衡，MoE 通常采用 **Noisy Top-k Gating** 作为门控机制。这种方法通过引入噪声和 Top-k 选择，既保证了计算效率，又避免了专家负载不均的问题。以下是其详细工作流程：
 
-1. **门控分数计算:**  对于输入样本 $x$，门控网络计算每个专家的门控分数 $H^{(i)}(x)$：
-
-   $$
-   H^{(i)}(x) = (xW_g)^{(i)} + \epsilon \cdot \text{softplus}((xW_{\text{noise}})^{(i)}), \quad \epsilon \sim \mathcal{N}(0, \mathbf{1})
-   $$
-
-   其中，$W_g \in \mathbb{R}^{d \times n}$ 和 $W_{\text{noise}} \in \mathbb{R}^{d \times n}$ 是可训练的权重矩阵，$d$ 是输入特征维度，$n$ 是专家数量，$\epsilon \sim \mathcal{N}(0, \mathbf{1})$ 是高斯噪声，$\text{softplus}(x) = \log(1 + e^x)$ 是 softplus 函数。添加噪声的目的是为了提高负载均衡，避免门控网络总是选择相同的专家。
-
-2. **Top-k 选择:**  选择门控分数 $H(x) = [H^{(1)}(x), H^{(2)}(x), ..., H^{(n)}(x)]$ 中值最大的前 $k$ 个专家。$\text{topk}(v, k)$ 函数将向量 $v$ 中值最大的前 $k$ 个元素保留，并将其他元素设置为 $-\infty$。
-
-   $$
-   \text{topk}^{(i)}(v, k) = \begin{cases} v^{(i)} & \text{if } v^{(i)} \text{ is in the top } k \text{ elements of } v \\ -\infty & \text{otherwise} \end{cases}
-   $$
-
-3. **Softmax 归一化:**  对 top-k 个专家的门控分数进行 softmax 归一化，得到门控概率分布 $G(x) = [G^{(1)}(x), G^{(2)}(x), ..., G^{(n)}(x)]$：
-
-   $$
-   G(x) = \text{softmax}(\text{topk}(H(x), k))
-   $$
-
-   门控概率分布 $G(x)$ 是一个稀疏向量，只有 top-k 个专家的概率值非零，其他专家的概率值为 0。
-
-4. **专家输出聚合:**  将激活的 top-k 个专家网络的输出进行加权求和，得到 MoE 层的最终输出 $y$：
-
-   $$
-   y = \sum_{i=1}^{n} G^{(i)}(x) E_i(x)
-   $$
-
-**辅助损失 (Auxiliary Loss) (MoE):**
-
-为了避免门控网络总是偏向于少数几个专家，导致专家负载不均衡，MoE 通常会引入一个辅助损失函数，鼓励所有专家被均衡地使用。一种常用的辅助损失是专家使用率的变异系数平方：
-
+##### 1. 门控分数计算
+对于输入样本 \(x\)，门控网络首先计算每个专家的门控分数 \(H^{(i)}(x)\)。这一分数包含两部分：线性变换和噪声项，公式如下：
 $$
-\mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left(\sum_{x \in X} G(x)\right)^2
+H^{(i)}(x) = (x W_g)^{(i)} + \epsilon \cdot \text{softplus}\left( (x W_{\text{noise}})^{(i)} \right), \quad \epsilon \sim \mathcal{N}(0, 1)
+$$
+- **参数说明**：
+  - \(W_g \in \mathbb{R}^{d \times n}\)：门控网络的可训练权重矩阵，\(d\) 是输入特征维度，\(n\) 是专家数量。
+  - \(W_{\text{noise}} \in \mathbb{R}^{d \times n}\)：用于生成噪声的权重矩阵。
+  - \(\epsilon \sim \mathcal{N}(0, 1)\)：标准高斯噪声，增加门控随机性。
+  - \(\text{softplus}(x) = \log(1 + e^x)\)：平滑激活函数，确保噪声非负。
+
+噪声的引入避免了门控网络总是选择固定的专家，增强了模型的鲁棒性和多样性。
+
+##### 2. Top-k 选择
+计算出门控分数向量 \(H(x) = [H^{(1)}(x), H^{(2)}(x), \dots, H^{(n)}(x)]\) 后，门控网络选择其中值最大的前 \(k\) 个专家（通常 \(k \ll n\)）。这一步骤通过 \(\text{topk}(v, k)\) 函数实现：
+$$
+\text{topk}^{(i)}(v, k) = 
+\begin{cases} 
+v^{(i)} & \text{if } v^{(i)} \text{ is in the top } k \text{ elements of } v \\
+-\infty & \text{otherwise}
+\end{cases}
 $$
 
-其中，CV 是变异系数 (Coefficient of Variation)，用于衡量专家使用率的离散程度。$\sum_{x \in X} G(x)$ 表示在 mini-batch $X$ 中，每个专家的被激活次数之和。辅助损失 $\mathcal{L}_{\text{aux}}$ 旨在最小化专家使用率的变异系数，使得所有专家的使用率尽可能接近，实现负载均衡。$w_{\text{aux}}$ 是辅助损失的权重，需要根据具体任务进行调整。
+将非 Top-k 专家的分数设为 \(-\infty\)，确保后续 softmax 操作中这些专家的概率为 0，实现稀疏性。
 
-**GShard：分片 MoE Transformer**
+##### 3. Softmax 归一化
+对 Top-k 专家的门控分数进行 softmax 归一化，得到稀疏的概率分布 \(G(x)\)：
+$$
+G(x) = \text{softmax}\left( \text{topk}(H(x), k) \right)
+$$
+只有 Top-k 个专家的概率非零，其余为 0。例如，若 \(n=100, k=2\)，则 98 个专家的概率为 0。
 
-GShard 是 Google 提出的一个用于训练大规模 MoE Transformer 模型的系统。GShard 的核心思想是将 MoE Transformer 模型中的 MoE 层分片到多个 TPU 设备上，而 Transformer 模型的其他层 (例如自注意力层、LayerNorm 层) 则在所有设备上复制。这样可以充分利用 TPU 集群的并行计算能力和内存资源，训练参数量巨大的 MoE Transformer 模型。
+##### 4. 专家输出聚合
+将 Top-k 个专家的输出按概率加权求和，得到 MoE 层的输出：
+$$
+y = \sum_{i=1}^{n} G^{(i)}(x) E_i(x)
+$$
 
-**GShard 的 MoE Transformer 结构:**
+由于只有 \(k\) 个专家被激活，计算量远低于激活所有 \(n\) 个专家。
 
-GShard 的 MoE Transformer 模型将 Transformer 模型中的每隔一个前馈网络 (FFN) 层替换为 MoE 层。MoE 层包含多个专家网络，门控网络决定每个输入 token 路由到哪些专家网络进行处理。
 
-**GShard 的分片策略:**
+#### 辅助损失
 
-GShard 主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层 (例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
+为了避免门控网络过度偏向少数专家，MoE 引入了辅助损失（Auxiliary Loss）([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数（Coefficient of Variation, CV）](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
+
+$$
+\mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
+$$
+
+- **参数说明**：
+  - \(X\)：一个 mini-batch 的输入样本。
+  - \(\sum_{x \in X} G(x)\)：统计每个专家在 mini-batch 中的激活次数。
+  - \(\text{CV}\)：标准差与均值的比值，衡量专家使用分布的均匀性。
+  - \(w_{\text{aux}}\)：辅助损失的权重，需手动调整。
+- **作用**：通过最小化 \(\mathcal{L}_{\text{aux}}\)，模型优化专家选择的均衡性，避免某些专家被过度使用而其他专家闲置。
+
+
+#### GShard
+
+GShard([Lepikhin et al., 2020](https://arxiv.org/abs/2006.16668))主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层 (例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
 
 **GShard 的改进门控机制:**
 
@@ -535,13 +553,45 @@ GShard 在 Noisy Top-k Gating 的基础上，进行了一些改进，以提高�
 * **辅助损失:**  GShard 也使用了辅助损失函数来平衡专家负载。与原始 MoE 模型的辅助损失不同，GShard 的辅助损失旨在最小化每个专家网络路由到的数据比例的均方误差，更加直接地衡量专家负载均衡程度。
 * **随机路由 (Random Routing):**  为了增加路由的随机性，GShard 在选择 top-k 个专家网络时，引入了随机路由机制。除了选择最佳的 top-k 个专家网络外，GShard 还会以一定的概率随机选择次优的专家网络，增加专家网络的多样性，提高模型的泛化能力。
 
-**Switch Transformer：万亿参数模型与稀疏性**
+下面是 GShard 的核心算法流程。
 
-Switch Transformer 是 Google 提出的一个参数量达到万亿级别的 MoE 模型。Switch Transformer 的核心创新是将 Transformer 模型中的密集前馈网络 (FFN) 层替换为稀疏的 Switch FFN 层。与 GShard 的 Top-2 Gating 不同，Switch Transformer 每个输入 token 只路由到一个专家网络，具有更高的稀疏性，进一步降低了计算成本，使得训练万亿参数模型成为可能。
+{{< figure
+    src="gshard.png"
+    caption="Fig. 13. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al., 2020](https://arxiv.org/abs/2006.16668))"
+    align="center"
+    width="100%"
+>}}  
 
-**Switch FFN 层:**
 
-Switch Transformer 将 Transformer 模型中的密集 FFN 层替换为稀疏的 Switch FFN 层。Switch FFN 层使用一个门控网络 (Switch Router)，为每个输入 token 选择一个最佳专家网络。
+#### Switch Transformer
+
+Switch Transformer([Fedus et al. 2021](https://arxiv.org/pdf/2101.03961)) 是 Google 提出的一个参数量达到**万亿**级别的 MoE 模型。其核心创新是将 Transformer 模型中的密集前馈网络 (FFN) 层替换为稀疏的 Switch FFN 层。与 GShard 的 Top-2 Gating 不同，Switch Transformer 每个输入 token 只路由到一个专家网络，具有更高的稀疏性，进一步降低了计算成本，使得训练万亿参数模型成为可能。鼓励 token 路由在 \(N\) 个专家之间更加均衡。Switch Transformer 的辅助损失基于实际路由比例与预测路由概率的乘积累加，具体公式如下：
+
+$$
+\text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
+$$
+
+- **参数说明**：
+  - \(N\)：专家的总数。
+  - \(f_i\)：路由到第 \(i\) 个专家的 token 比例，定义为：
+    $$
+    f_i = \frac{1}{T} \sum_{x \in B} 1\{\text{argmax } p(x) = i\}
+    $$
+  - \(P_i\)：gating 网络预测的第 \(i\) 个专家的路由概率，定义为：
+    $$
+    P_i = \frac{1}{T} \sum_{x \in B} p_i(x)
+    $$
+  - \(T\)：批次 \(B\) 中的 token 总数。
+  - \(\alpha\)：辅助损失的权重超参数，通常设为 \(10^{-2}\)。
+
+通过最小化 \(\text{loss}\)，模型使实际路由比例 \(f_i\) 与预测概率 \(P_i\) 趋于一致，从而间接促进专家间的负载平衡，避免部分专家闲置。
+
+{{< figure
+    src="switch_transformer.png"
+    caption="Fig. 14. Switch transformer. The sparse switch FFN layer is in the blue boxes. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
+    align="center"
+    width="100%"
+>}}  
 
 **Switch Router 机制:**
 
@@ -551,52 +601,95 @@ Switch Transformer 将 Transformer 模型中的密集 FFN 层替换为稀疏的 
 
 **Switch Transformer 的训练稳定性优化:**
 
-为了提高 Switch Transformer 的训练稳定性，Switch Transformer 论文中提出了一些优化策略：
+为提升 Switch Transformer 的训练稳定性，论文提出了如下优化策略：
 
-* **选择性精度 (Selective Precision):**  Switch Transformer 发现，在路由函数内部使用 FP32 精度可以提高训练稳定性，同时避免 FP32 张量的通信开销。Switch Router 的计算过程使用 FP32 精度，计算结果再转换为 FP16 精度。
-* **更小的初始化 (Smaller Initialization):**  Switch Transformer 建议使用更小的权重初始化尺度，例如将 Transformer 初始化尺度参数 $s$ 从 1 降低到 0.1。更小的初始化尺度可以减缓训练初期梯度爆炸的风险，提高训练稳定性。
-* **更高的专家 Dropout (Higher Expert Dropout):**  Switch Transformer 发现，在专家 FFN 层中使用更高的 dropout 率 (例如 0.4)，而非专家层使用较低的 dropout 率 (例如 0.1)，可以有效防止过拟合，提高模型的泛化能力。
+- **选择性精度（Selective Precision）**  
+  在路由函数内部采用 FP32 精度既能提高训练稳定性，又能避免因 FP32 张量通信而产生的额外开销。具体来说，Switch Router 的计算过程全程使用 FP32，最终结果再转换为 FP16 以兼顾效率与精度。
 
-**专家选择路由 (Expert Choice Routing, EC)**
+- **更小初始化（Smaller Initialization）**  
+  建议将 Transformer 的权重初始化尺度参数 \( s \) 从 1 调整至 0.1。较小的初始化尺度有助于缓解训练初期的梯度爆炸风险，从而提升整体训练稳定性。具体实现为：从均值为 0、标准差为 \(\sqrt{s/n}\)（其中 \( n \) 为输入单元数，从一个截断正态分布中采样。
 
-专家选择路由 (Expert Choice Routing, EC) 是一种与 token 选择路由 (GShard top-2, Switch Transformer top-1) 相反的路由策略。在 token 选择路由中，每个 token 选择 top-k 个专家网络进行路由。在专家选择路由中，每个专家网络选择 top-k 个 token 进行处理。EC 旨在解决 token 选择路由可能导致的负载不均衡和 token 浪费问题。
+- **更高专家 Dropout（Higher Expert Dropout）**  
+  在专家 FFN 层中采用较高的 dropout 率（例如 0.4），而在非专家层则保持较低的 dropout 率（例如 0.1），这种设置能有效防止过拟合，进而增强模型的泛化能力。下图实验结果显示，在 GLUE、CNNDM、SQuAD 和 SuperGLUE 等任务上，当专家层 dropout 率设为 0.4 时，模型表现最佳。
 
-**EC 的优势:**
 
-* **完美负载均衡:**  EC 保证每个专家网络都处理固定数量的 token (top-k 个)，避免专家网络过载和 token 浪费，实现完美负载均衡。
-* **更高的训练效率:**  实验表明，EC 可以将训练收敛速度提高 2 倍，相比 token 选择路由具有更高的训练效率。
+{{< figure
+    src="switch_transformer_fine_tuning_result.png"
+    caption="Fig. 15. Fine-tuning regularization results. A sweep of dropout rates while fine-tuning Switch Transformer models pre-trained on 34B tokens of the C4 data set (higher numbers are better).(Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
+    align="center"
+    width="100%"
+>}}  
 
-**EC 的计算过程:**
 
-1. **计算 token-to-expert 亲和度分数:**  对于输入矩阵 $X \in \mathbb{R}^{n \times d}$，计算 token-to-expert 亲和度分数矩阵 $S \in \mathbb{R}^{n \times e}$：
+Switch Transformers 论文中使用下图直观的展示了使用不同的并行技术如何分割模型权重和数据:
 
-   $$
-   S = \text{softmax}(X \cdot W_g), \quad \text{where } W_g \in \mathbb{R}^{d \times e}
-   $$
+{{< figure
+    src="switch_transformer_parallelism.png"
+    caption="Fig. 16. An illustration of various parallelism strategies on how (Top) model weights and (Bottom) data are split over multiple GPU cores. In the top row, each color denotes a unique weight matrix. In the bottom row, different colors indicate different sets of tokens.(Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
+    align="center"
+    width="100%"
+>}}  
 
-   其中，$W_g$ 是门控权重矩阵，$e$ 是专家网络数量。
 
-2. **专家选择 token:**  每个专家网络选择 top-k 个 token 进行处理。通过 $\text{top-k}(S^T, k)$ 函数，得到门控矩阵 $G \in \mathbb{R}^{e \times k}$ 和 token 索引矩阵 $I \in \mathbb{R}^{e \times k}$。$G[i, j]$ 表示专家网络 $i$ 选择的第 $j$ 个 token 的路由权重，$I[i, j]$ 表示专家网络 $i$ 选择的第 $j$ 个 token 的索引。
+#### 专家选择
 
-   $$
-   G, I = \text{top-k}(S^T, k)
-   $$
+专家选择（Expert Choice, EC）([Zhou et al. 2022](https://arxiv.org/abs/2202.09368)) 是一种与 token 选择路由（如 GShard 的 top-2 或 Switch Transformer 的 top-1）相反的路由策略。在 token 选择路由中，每个 token 从所有专家中选择 top-$k$ 个进行路由；而在专家选择路由中，每个专家从所有 token 中挑选 top-$k$ 个进行处理。这种方法旨在解决 token 选择路由中的负载不均和 token 浪费问题，同时显著提高训练效率。下面是具体的计算过程：
 
-3. **One-hot 编码:**  将 token 索引矩阵 $I$ 转换为 one-hot 矩阵 $P \in \mathbb{R}^{e \times k \times n}$。
+1. **计算 token-to-expert 亲和度分数**  
 
-   $$
-   P = \text{one-hot}(I)
-   $$
+   对于输入矩阵 $X \in \mathbb{R}^{n \times d}$，计算 token-to-expert 亲和度分数矩阵 $S \in \mathbb{R}^{n \times e}$ 的过程为：
 
-4. **Gated FFN 层输入:**  专家网络 $i$ 的 gated FFN 层的输入为 $(P \cdot X) \in \mathbb{R}^{e \times k \times d}$。
+   \[
+   S = \text{softmax}(X \cdot W_g), \quad \text{where } W_g \in \mathbb{R}^{d \times e}.
+   \]
+   这里，$W_g$ 为门控权重矩阵，$e$ 为专家数量。
 
-**EC 的正则化:**
+2. **专家选择 token**  
 
-EC 可以通过正则化限制每个 token 最多被路由到的专家网络数量，以控制模型的稀疏性。
+   每个专家从所有 token 中选择 top-$k$ 个进行处理。通过对 $S^T$ 进行 top-$k$ 选择：
 
-**EC 的局限性:**
+   \[
+   G, I = \text{top-}k(S^T, k),
+   \]
+   得到：
+   - **门控矩阵 $G \in \mathbb{R}^{e \times k}$：** 记录专家选择的 token 对应的路由权重，其中 $G[i, j]$ 表示专家 $i$ 选择的第 $j$ 个 token 的权重；
+   - **token 索引矩阵 $I \in \mathbb{R}^{e \times k}$：** 表示每个专家选择的 token 在输入中的索引。
 
-EC 的一个主要局限性是，它不适用于小 batch size 的场景，也不适用于自回归文本生成任务，因为它需要知道未来的 token 才能进行 top-k 选择
+3. **One-hot 编码**  
+
+   将 token 索引矩阵 $I$ 转换为 one-hot 编码矩阵 $P \in \mathbb{R}^{e \times k \times n}$，用于后续计算:
+
+  $$
+  P=\operatorname{one}-\operatorname{hot}(I)
+  $$
+
+4. **构造 Gated FFN 层输入**  
+
+   对于每个专家 $i$，其 gated FFN 层的输入为：
+   \[
+   (P \cdot X) \in \mathbb{R}^{e \times k \times d}.
+   \]
+
+EC 通过正则化限制每个 token 被路由到的专家数量，从而控制模型的稀疏性。一个常见的正则化目标如下：
+
+\[
+\begin{aligned}
+& \max_{A} \langle S^{\top}, A \rangle + \lambda H(A) \\
+& \text{s.t. } \forall i: \sum_{j'} A[i, j'] = k, \quad \forall j: \sum_{i'} A[i', j] \leq b, \quad \forall i,j: 0 \leq A[i, j] \leq 1,
+\end{aligned}
+\]
+
+考虑的优化问题中定义了一个矩阵 \(A\)，其第 \(i\) 行第 \(j\) 列的元素表示第 \(i\) 个专家是否选择了第 \(j\) 个 token（取值 0 或 1）。由于该优化问题求解较为复杂，论文中采用 [Dykstra 算法](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)（通过多次迭代获得近似解）来解决。
+
+参数 \(b\) 通常由批量中 token 总数 \(n\) 与容量因子决定，其中容量因子表示每个 token 平均使用的专家数量。大多数实验采用较高的容量因子，实验结果表明，即使在容量降低的情况下，EC（Expert Choice）整体表现仍优于传统的 top-1 token 选择路由，尽管 capped expert choice 略微降低了微调性能。
+
+EC 的优势主要体现在以下两方面：
+- **完美负载均衡：** 每个专家固定处理 \(k\) 个 token，从而避免了部分专家过载而其他专家闲置的问题，实现了理想的负载均衡。
+- **更高训练效率：** 实验表明，EC 能将训练收敛速度提升约 2 倍，相较于传统 token 选择路由具有更高的效率。
+
+但 EC 也存在以下局限性：
+- **批量大小要求：** 由于 EC 对 batch size 有较高要求，因此不适用于较小 batch size 的场景。
+- **自回归生成限制：** 在自回归文本生成任务中，由于无法预知未来 token，EC 的 top-\(k\) 选择无法实现，因此不适用于此类任务。
 
 
 ### 序列并行 (Sequence Parallelism)

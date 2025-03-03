@@ -1,5 +1,5 @@
 ---
-title: "Parallel and Memory Optimization Techniques for Training Large Models"
+title: "Parallelism and Memory Optimization Techniques for Training Large Models"
 date: 2025-03-01T12:00:00+08:00
 lastmod: 2025-03-01T12:00:00+08:00
 author: Yue Shui
@@ -54,7 +54,7 @@ Faced with the above challenges, distributed training technology has become a ke
 * **Improving the Robustness and Scalability of Training Systems**
   Distributed systems have excellent fault tolerance. When a GPU node fails, other nodes can quickly take over the task, ensuring that the training process is not interrupted. At the same time, the cluster size can be flexibly expanded or reduced according to specific needs, meeting the training requirements of different scale models.
 
-## Parallel Training
+## Parallelism Training
 
 The following figure intuitively shows the differences between various parallel training strategies. Different colors represent different model layers (e.g., three layers), and dashed lines distinguish different GPUs. From left to right are data parallelism, model parallelism (including pipeline parallelism and tensor parallelism), and expert parallelism (MoE).
 
@@ -133,18 +133,18 @@ The following shows the **data parallelism** workflow:
 8. **Iterative Loop**
    Repeat steps 4-7 until the model converges or reaches the preset number of training epochs.
 
-### Bulk Synchronous Parallel vs. Asynchronous Parallel
+### Bulk Synchronous Parallelism vs. Asynchronous Parallelism
 
 In step 6 "Gradient Synchronization" above, how and when to perform "synchronization" is one of the important factors affecting the performance and convergence behavior of data parallelism. It is generally divided into the following two categories:
 
-**Bulk Synchronous Parallel (BSP)** is the most common and easiest to understand synchronization mode in data parallelism. Its characteristics can be summarized as "globally synchronizing gradients and updating parameters once after each mini-batch iteration". The specific process is:
+**Bulk Synchronous Parallelism (BSP)** is the most common and easiest to understand synchronization mode in data parallelism. Its characteristics can be summarized as "globally synchronizing gradients and updating parameters once after each mini-batch iteration". The specific process is:
 
 1. **Local Computation**: Each GPU performs forward and backward propagation based on its data subset $D_i$ to obtain the local gradient $g_i$.
 2. **Global Communication**: All GPUs synchronize (e.g., through All-Reduce) to calculate $\bar{g}$.
 3. **Parameter Update**: Each node uses $\bar{g}$ to update its local parameter replica $\theta$.
 4. **Wait and Next Iteration**: All nodes complete the above operations before entering the next iteration.
 
-**Asynchronous Parallel (ASP)** aims to get rid of the global synchronization point of BSP and allow each node to perform calculations and parameter updates independently. Its typical implementation is the **asynchronous push-pull** process under the "Parameter Server (PS)" architecture:
+**Asynchronous Parallelism (ASP)** aims to get rid of the global synchronization point of BSP and allow each node to perform calculations and parameter updates independently. Its typical implementation is the **asynchronous push-pull** process under the "Parameter Server (PS)" architecture:
 
 1. Each node calculates the gradient $g_i$ locally, and then **pushes** it to the parameter server;
 2. Once the parameter server receives the gradient, it immediately updates the global model parameters;
@@ -154,7 +154,7 @@ In step 6 "Gradient Synchronization" above, how and when to perform "synchroniza
 
 The following table summarizes the main differences between synchronous and asynchronous parallelism in a data parallel environment:
 
-| **Comparison Dimension** | **Synchronous Parallel (BSP)**                                      | **Asynchronous Parallel (ASP)**                                          |
+| **Comparison Dimension** | **Synchronous Parallelism (BSP)**                                      | **Asynchronous Parallelism (ASP)**                                          |
 |:-----------------------|:-----------------------------------------------------------------------|:----------------------------------------------------------------------------|
 | **Parameter Update Timing** | Global synchronization once per mini-batch or after a certain number of iterations | Each node updates parameters independently, without needing to keep the same timestep as others |
 | **Convergence Stability** | **High**. The gradients used are the latest, the convergence path is controllable and easy to analyze | **Lower**. Stale gradients exist, convergence rate and stability may be affected |
@@ -186,9 +186,9 @@ $$
 
 Since gradient synchronization is no longer performed for each mini-batch, but once every $K$ accumulated mini-batches, the communication overhead can be significantly reduced. However, the reduced parameter update frequency may also slow down the training convergence speed, and a trade-off between throughput and convergence performance is needed.
 
-### Distributed Data Parallel
+### Distributed Data Parallelism
 
-**Distributed Data Parallel (DDP)** is a highly optimized implementation of BSP in PyTorch v1.5 ([Li et al. 2020](https://arxiv.org/pdf/2006.15704)), which facilitates data parallelism for single-machine multi-GPU and even multi-machine multi-GPU. Its main optimizations include:
+**Distributed Data Parallelism (DDP)** is a highly optimized implementation of BSP in PyTorch v1.5 ([Li et al. 2020](https://arxiv.org/pdf/2006.15704)), which facilitates data parallelism for single-machine multi-GPU and even multi-machine multi-GPU. Its main optimizations include:
 
 1. **Gradient Bucketing**: Divide model parameters into multiple "buckets"; when backpropagation is performed, once all gradients in a bucket are calculated, an **All-Reduce for that bucket** is immediately initiated, instead of waiting for all gradients to be calculated before synchronizing at once.
 2. **Communication and Computation Overlap**: DDP uses asynchronous communication and non-blocking operations to overlap gradient synchronization (communication) with forward propagation and backward propagation (computation) as much as possible, thereby reducing communication overhead. This overlap strategy improves overall parallel efficiency.
@@ -366,7 +366,7 @@ Megatron-LM ([Shoeybi et al. 2019](https://arxiv.org/abs/1909.08053)) is a syste
 
 The MLP layer of Transformer usually contains two linear layers. The calculation of the first linear layer can be expressed as $Y = \text{GeLU}(XA)$, where $X$ is the input matrix, $A$ is the weight matrix, and GeLU is the activation function. Megatron-LM splits the weight matrix $A$ along the column dimension into $P$ shards $[A_1, A_2, ..., A_P]$, where $P$ is the number of GPUs. Each GPU $i$ is responsible for storing and computing the weight shard $A_i$.
 
-**Tensor Parallel Computation Process of MLP Layer:**
+**Tensor Parallelism Computation Process of MLP Layer:**
 
 $$
 \begin{aligned}
@@ -394,9 +394,9 @@ PTD-P (Pipeline, Tensor, and Data Parallelism) ([Narayanan et al. 2021](https://
 
 **Features of PTD-P:**
 
-* **Multi-dimensional Parallel Combination:** PTD-P uses pipeline parallelism, tensor parallelism, and data parallelism simultaneously, which can parallelize the training process from multiple dimensions.
+* **Multi-dimensional Parallelism Combination:** PTD-P uses pipeline parallelism, tensor parallelism, and data parallelism simultaneously, which can parallelize the training process from multiple dimensions.
 * **Interleaved 1F1B Scheduling:** PTD-P adopts the interleaved 1F1B scheduling strategy. Unlike traditional pipeline parallelism, it divides the model into multiple discontinuous layer blocks (model chunks) and assigns multiple layer blocks to each GPU. This scheduling strategy can further reduce bubbles and improve pipeline efficiency.
-* **Flexible Parallel Configuration:** PTD-P allows users to flexibly configure the combination of various parallel technologies according to the model structure and hardware resources. For example, tensor parallelism and data parallelism can be used alone, or pipeline parallelism, tensor parallelism, and data parallelism can be used simultaneously.
+* **Flexible Parallelism Configuration:** PTD-P allows users to flexibly configure the combination of various parallel technologies according to the model structure and hardware resources. For example, tensor parallelism and data parallelism can be used alone, or pipeline parallelism, tensor parallelism, and data parallelism can be used simultaneously.
 
 Traditional pipeline parallelism usually divides the model into continuous layer blocks, and each GPU is responsible for a continuous layer block. PTD-P's interleaved 1F1B scheduling divides the model into multiple discontinuous layer blocks. For example, GPU 1 is responsible for layers 1, 2, 9, 10, GPU 2 is responsible for layers 3, 4, 11, 12, and so on. Each GPU is responsible for multiple discontinuous layer blocks, which can more effectively utilize GPU resources and reduce bubble overhead.
 
@@ -682,7 +682,7 @@ The computational complexity and memory overhead of self-attention are proportio
    Divide the input sequence into several chunks, each chunk is saved and computed by different GPUs; therefore, each card only needs to store the activation of its corresponding sequence chunk, avoiding single-card memory explosion.
 2. **Ring Communication + Self-Attention**
    Propose Ring Self-Attention (RSA) mechanism: each GPU first calculates local attention, and then sequentially transmits (ring structure) Key/Value chunks to adjacent GPUs. After multiple iterations, it is guaranteed that each GPU can obtain global sequence information.
-3. **Combination with Other Parallel Methods**
+3. **Combination with Other Parallelism Methods**
    Not restricted by hyperparameters such as the number of attention heads and layers, it can be combined with data parallelism, tensor parallelism, pipeline parallelism and other technologies to jointly break through the sequence length limit of large-scale models.
 
 {{< figure
@@ -1114,7 +1114,7 @@ This method can be regarded as a further extension of LoRA: LoRA improves effici
 
 ## Summary
 
-Parallel techniques and memory optimization strategies need to be weighed and selected according to the specific model structure, dataset size, hardware resources, and training goals. Usually, it is necessary to combine multiple technologies to effectively train large-scale models and achieve the best performance and efficiency.
+Parallelism techniques and memory optimization strategies need to be weighed and selected according to the specific model structure, dataset size, hardware resources, and training goals. Usually, it is necessary to combine multiple technologies to effectively train large-scale models and achieve the best performance and efficiency.
 
 ## References
 
@@ -1184,14 +1184,14 @@ Parallel techniques and memory optimization strategies need to be weighed and se
 
 **Cited as:**
 
-> Yue Shui.(Mar 2025). Parallel and Memory Optimization Techniques for Training Large Models.
+> Yue Shui.(Mar 2025). Parallelism and Memory Optimization Techniques for Training Large Models.
 https://syhya.github.io/posts/2025-03-01-train-llm
 
 Or
 
 ```bibtex
 @article{syhya2025train-llm,
-  title   = "Parallel and Memory Optimization Techniques for Training Large Models",
+  title   = "Parallelism and Memory Optimization Techniques for Training Large Models",
   author  = "Yue Shui",
   journal = "syhya.github.io",
   year    = "2025",

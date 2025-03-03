@@ -15,6 +15,19 @@
                 href="https://syhya.github.io/tags/ai/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/tags/ai-infrastructure/</loc>
+    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/ai-infrastructure/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/ai-infrastructure/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/categories/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -43,6 +56,15 @@
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/deep-learning/"
                 />
+  </url><url>
+    <loc>https://syhya.github.io/tags/distributed-training/</loc>
+    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/heterogeneous-systems/</loc>
+    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/hybrid-parallelism/</loc>
+    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/llms/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
@@ -102,9 +124,6 @@
                 href="https://syhya.github.io/posts/2025-03-01-train-llm/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/parallel-training/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/tags/pipeline-parallelism/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
   </url><url>
@@ -120,6 +139,22 @@
                 hreflang="en-us"
                 href="https://syhya.github.io/posts/"
                 />
+  </url><url>
+    <loc>https://syhya.github.io/tags/pre-training/</loc>
+    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/pre-training/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/pre-training/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/sequence-parallelism/</loc>
+    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
@@ -658,19 +693,6 @@
   </url><url>
     <loc>https://syhya.github.io/tags/domain-models/</loc>
     <lastmod>2025-01-05T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/tags/pre-training/</loc>
-    <lastmod>2025-01-05T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/pre-training/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/pre-training/"
-                />
   </url><url>
     <loc>https://syhya.github.io/tags/ai-hardware/</loc>
     <lastmod>2024-12-21T12:00:00+08:00</lastmod>

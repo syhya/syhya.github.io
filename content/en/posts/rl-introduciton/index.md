@@ -54,7 +54,7 @@ math: true
 
 ![alt text](image.png)
 
-Reinforcement Learning (RL) is a branch of machine learning that trains an **agent** to take a series of **actions** (\(a_t\)) in an **environment**, transitioning through different **states** (\(s_t\)) to achieve a long-term3 goal. 
+Reinforcement Learning (RL) is a branch of machine learning that trains an **agent** to take a series of **actions** (\(a_t\)) in an **environment**, transitioning through different **states** (\(s_t\)) to achieve a long-terms goal. 
 
 Unlike supervised learning, which relies on human-labeled data, RL depends on the interaction between the agent and the environment. After each action, the agent receives a **reward** (\(r_t\)) as feedback. The objective of the agent is to learn a **policy** $\pi(s)$, which is a strategy for selecting actions, in order to **maximize the total reward** (\(\sum_{t=0}^{T} r_t\)).
 

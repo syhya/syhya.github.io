@@ -89,12 +89,6 @@
     <loc>https://syhya.github.io/zh/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2025-03-09T10:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://syhya.github.io/zh/tags/rag/</loc>
-    <lastmod>2025-03-03T10:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/zh/posts/2025-03-07-rag/</loc>
-    <lastmod>2025-03-03T10:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/zh/tags/ai-infrastructure/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -314,6 +308,12 @@
                 hreflang="zh-cn"
                 href="https://syhya.github.io/zh/posts/2025-02-08-dpo/"
                 />
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/rag/</loc>
+    <lastmod>2025-02-03T10:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/zh/posts/2025-03-07-rag/</loc>
+    <lastmod>2025-02-03T10:00:00+00:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/tags/batch-normalization/</loc>
     <lastmod>2025-02-01T12:00:00+08:00</lastmod>

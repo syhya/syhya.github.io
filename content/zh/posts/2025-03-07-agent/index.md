@@ -162,7 +162,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 - 评分(Score)：衡量候选方案的质量。
 - 剪枝(Prune)：保留排名 top $k$ 的最佳候选方案。
 
-如果没有找到解决方案（或者候选方案的质量不够高），则返回到扩展步骤。
+如果没有找到解决方案（或者候选方案的质量不够高），则回撤到扩展步骤。
 
 {{< figure
     src="tot.png"
@@ -208,7 +208,7 @@ Observation：...
 
 ### Reflexion
 
-Reflexion（[Shinn et al. 2023](https://arxiv.org/abs/2303.11366)）让 LLM 能够通过自我反馈与动态记忆不断迭代、优化决策。
+**Reflexion**([Shinn et al. 2023](https://arxiv.org/abs/2303.11366))让 LLM 能够通过自我反馈与动态记忆不断迭代、优化决策。
 
 这种方法本质上借鉴了强化学习的思想，在传统的 Actor-Critic 模型中，Actor 根据当前状态 $s_t$ 选择动作 $a_t$，而 Critic 则会给出估值（例如价值函数 $V(s_t)$ 或动作价值函数 $Q(s_t,a_t)$），并反馈给 Actor 进行策略优化。对应地，在 Reflexion 的三大组件中：
 
@@ -337,10 +337,23 @@ Self-Ask（Press et al. 2022）则通过不断提示模型提出后续问题来�
 
 
 我们大致可以做以下类比映射：
+- 感觉记忆对应于学习输入原始数据（如文本、图像或其他模态）的嵌入表征（embedding representations）。
+- 短期记忆对应于上下文内学习（in-context learning），其容量短暂且有限，受限于 LLM 有限的上下文窗口长度`max_tokens`, 当对话历史超过上限时，较早的信息会被截断，从而造成上下文丢失。
+- 长期记忆对应于外部的向量存储（vector store），智能体可以通过 RAG 的方式在查询时快速访问和检索。
 
-- 感觉记忆对应于学习输入原始数据（如文本、图像或其他模态）的嵌入表征（embedding representations）；
-- 短期记忆对应于上下文内学习（in-context learning），其容量短暂且有限，受限于Transformer模型有限的上下文窗口长度；
-- 长期记忆对应于外部的向量存储（vector store），智能体可以在查询时快速访问和检索。
+
+### 长期记忆相关研究
+
+**LongMem(Language Models Augmented with Long-Term Memory)**([Wang, et al. 2023](https://arxiv.org/abs/2306.07174))使 LLM 能够记忆长历史信息。其采用一种解耦的网络结构，将原始 LLM 参数冻结为记忆编码器(memory encoder)固定下来，同时使用自适应残差网络(Adaptive Residual Side-Network，SideNet)作为记忆检索器进行记忆检查和读取。
+
+{{< figure
+    src="LongMem.png"
+    caption="Fig. xx. Overview of the memory caching and retrieval flow of LongMem. (Image source: [Wang, et al. 2023](https://arxiv.org/abs/2306.07174))"
+    align="center"
+    width="100%"
+>}}
+ 
+其主要由三部分构成：**Frozen LLM**、**Residual SideNet** 和 **Cached Memory Bank**。其工作流程是，先将长文本序列拆分成固定长度的片段，每个片段在冻结的 LLM 中逐层编码后，在第 $m$ 层提取注意力的 $K, V \in \mathbb{R}^{H \times M \times d}$ 向量对并缓存到 **Cached Memory Bank**。面对新的输入序列时，模型根据当前输入的 query-key 检索长期记忆库，从中获取与输入最相关的前 $k$ 个 key-value（即 *top-$k$* 检索结果），并将其融合到后续的语言生成过程中；与此同时，记忆库会移除最旧的内容以保证最新上下文信息的可用性。**Residual SideNet** 则在推理阶段对冻结 LLM 的隐藏层输出与检索得到的历史 key-value 进行融合，完成对超长文本的有效建模和上下文利用。通过这种解耦设计，LongMem 无需扩大自身的原生上下文窗口就能灵活调度海量历史信息，兼顾了速度与长期记忆能力。
 
 
 ## 最大内积搜索 (Maximum Inner Product Search, MIPS)

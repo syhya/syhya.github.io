@@ -1,6 +1,6 @@
 ---
 title: "RAG 技术综述（长期更新中）"
-date: "2025-03-03T10:00:00+00:00"
+date: "2025-02-03T10:00:00+00:00"
 author: "Yue Shui"
 tags: ["LLM", "AI", "RAG"]
 categories: ["技术博客"]

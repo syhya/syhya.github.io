@@ -1064,10 +1064,10 @@ $$
 $$
 
 where:
-- $ \mathbf{A} \in \mathbb{R}^{r \times d} $ is the dimensionality reduction matrix;
-- $ \mathbf{B} \in \mathbb{R}^{k \times r} $ is the dimensionality increase matrix;
-- $ r \ll \min(d,k) $ is the low-rank dimension, generally taking values of 1, 2, 4, or 8;
-- $ \alpha $ is an adjustable scaling factor.
+- $A \in \mathbb{R}^{r \times d}$ (down-projection matrix): maps the input from dimension $d$ down to a lower dimension $r$.
+- $B \in \mathbb{R}^{k \times r}$ (up-projection matrix): maps the reduced-dimensional features back from dimension $r$ to the original dimension $k$.
+- $r \ll \min(d, k)$ (low-rank dimension): typically chosen between $4$ and $16$ to minimize additional parameters while maintaining model expressivity.
+- $\alpha$ (scaling factor): amplifies the low-rank update parameter $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$, **compensating for the smaller numerical magnitude introduced by low-rank decomposition**, ensuring effective transmission of task-specific information during forward propagation, even when the number of additional parameters is very small. Typically, set $\alpha = 2 \times r$ (e.g., for $r = 8$, choose $\alpha = 16$).
 
 During fine-tuning, **the original weight $ \mathbf{W} $ is frozen and unchanged**, and only $ \mathbf{A} $ and $ \mathbf{B} $ are updated. Since $ r $ is much smaller than $ d $ or $ k $, the number of parameters that need to be trained is greatly reduced.
 

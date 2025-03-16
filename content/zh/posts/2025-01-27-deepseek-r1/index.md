@@ -828,7 +828,7 @@ DeepSeek-R1 的成功展示了 RL 提升 LLM 推理能力的巨大潜力。DeepS
 
 [8] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
-[9] J. Schulman. [Approximating kl divergence]("http://joschu.net/blog/kl-approx.html"), 2020.
+[9] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
 
 [10] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
 

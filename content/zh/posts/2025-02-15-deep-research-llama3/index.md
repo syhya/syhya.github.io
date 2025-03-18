@@ -12,6 +12,8 @@ draft: false
 math: true
 ---
 
+> **注意**：下面内容是由 OpenAI Deep Research 生成的研究案例 😊，模型会有一定幻觉和格式上的错误，仅供参考。
+
 > **原文链接**: [LLaMA 系列技术演进详解](https://chatgpt.com/share/67b15090-a5b8-8011-83c9-01cd6d962617)
 
 好的，我将撰写一篇详细的技术博客，全面介绍 LLaMA 系列的发展进展，包括从 LLaMA 1 到最新 LLaMA 3 的对比，以及其在模型架构、训练方法、推理性能等方面的演进。我会加入数学公式来解析关键技术点，如 RMS Normalization、FFN_SwiGLU、RoPE、GQA 和 BPE，并提供代码示例帮助理解。此外，我还会整理 LLaMA 最新模型与其他大模型（如 DeepSeek R1、O1/O3 等）的对比数据。

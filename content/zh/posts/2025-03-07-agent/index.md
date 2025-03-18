@@ -421,19 +421,51 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 通过集成这些工具，LLM 智能体可以执行复杂的任务，例如生成代码、访问实时信息、与数据库交互以及控制外部系统，从而极大地扩展其解决问题的能力。
 
 
+## LLM 智能体应用
 
-# LLM 智能体应用
+### WebVoyager
 
-LLM 智能体已成功应用于各个领域，展示了其多功能性和潜力：
+WebVoyager([He et al., 2024](https://arxiv.org/abs/2401.13919)) 是一种基于多模态大模型的自主网页交互智能体，能够控制鼠标和键盘进行网页浏览。WebVoyager 采用经典的 ReAct 循环。在每个交互步骤中，它查看带有类似 SoM(Set-of-Marks)([Yang, et al., 2023](https://arxiv.org/abs/2310.11441)) 方法标注的浏览器截图即通过在网页元素上放置数字标签提供交互提示，然后决定下一步行动。这种视觉标注与 ReAct 循环相结合，使得用户可以通过自然语言与网页进行交互。具体可以参考使用 LangGraph 框架的    [WebVoyager 代码](https://langchain-ai.github.io/langgraph/tutorials/web-navigation/web_voyager/)。
 
-- **科学发现 (Scientific Discovery):**
-    - *ChemCrow* 利用化学数据库和多种专家工具，自主规划和执行有机合成、药物发现和材料设计领域的实验。
-- **对话式和心理健康支持 (Conversational and Mental Health Support):**
-    - 正在探索将对话式智能体用于心理健康支持，帮助用户应对焦虑。然而，密切监控至关重要，以防止潜在的有害输出。
-- **人类行为模拟 (Simulation of Human Behavior):**
-    - *Generative Agents* 在虚拟环境中模拟人类互动，创建可信的人类行为模拟，并实现诸如信息传播和社交活动协调等涌现的社会行为。
-- **概念验证演示 (Proof-of-Concept Demos):**
-    - 诸如 AutoGPT 和 GPT-Engineer 之类的项目展示了将 LLM 用作通用问题解决和代码生成的自主智能体的潜力。虽然在可靠性和格式方面面临挑战，但它们是自主 AI 系统的鼓舞人心的例子。
+
+{{< figure
+    src="WebVoyager.png"
+    caption="Fig. xx. The overall workflow of WebVoyager. (Image source: [He et al., 2024](https://arxiv.org/abs/2401.13919))"
+    align="center"
+    width="100%"
+>}}
+
+### OpenAI Operator
+
+**Operator** ([OpenAI, 2025](https://openai.com/index/introducing-operator/)) 是一个 OpenAI 近期发布的 AI 智能体，旨在自主执行网络任务。Operator 能够像人类用户一样与网页互动，通过打字、点击和滚动等操作完成指定任务。Operator 的核心技术是计算机使用智能体（Computer-Using Agent, CUA）([OpenAI, 2025](https://openai.com/index/computer-using-agent/))。CUA 结合了 GPT-4o 的视觉能力和通过强化学习获得更强的推理能力，经过专门训练后能够与图形用户界面（GUI）进行交互，包括用户在屏幕上看到的按钮、菜单和文本框。
+
+{{< figure
+    src="cua_overview.png"
+    caption="Fig. xx. Overview of OpenAI CUA. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
+    align="center"
+    width="100%"
+>}}
+
+CUA 的运作方式遵循一个迭代循环，包含三个阶段：
+
+- **感知 (Perception):**  
+  CUA 通过捕获浏览器截图来“观察”网页内容。这种基于视觉的输入方式使其能够理解页面的布局和元素。
+
+- **推理 (Reasoning):**  
+  借助链式思考的推理过程，CUA 会评估下一步行动，其依据是当前和之前的截图以及已执行的操作。这种推理能力使其能够跟踪任务进度、回顾中间步骤，并根据需要进行调整。
+
+- **行动 (Action):**  
+  CUA 通过模拟鼠标和键盘操作（如点击、输入和滚动）与浏览器进行交互。这使其能够在无需特定 API 集成的情况下执行各种网络任务。
+
+CUA 和之前现有的 WebVoyager 不同之处在于这是一个专门经过强化学习训练的 Agent，而不是直接调用 GPT-4o 搭建的固定流程的 Workflow。虽然 CUA 目前仍处于早期阶段且存在一定局限，但它以下基准测试中取得了 SOTA 结果。
+
+{{< figure
+    src="cua_benchmark.png"
+    caption="Fig. xx. OpenAI CUA Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
+    align="center"
+    width="100%"
+>}}
+
 
 ## 挑战与局限性
 

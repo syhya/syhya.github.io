@@ -81,7 +81,7 @@ DeepSeek-R1 系列模型的训练是一个多阶段的过程，旨在构建具�
 ## DeepSeek-R1-Zero
 
 ### PPO
-**近端策略优化 (Proximal Policy Optimization, PPO)** ([Schulman et al., 2017](https://arxiv.org/abs/1707.06347)) 算法是一种广泛应用于强化学习的经典算法，在 InstructGPT([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155)) 论文中被证明是训练 LLM 强化学习微调阶段的有效且稳定的方法。
+**近端策略优化 (Proximal Policy Optimization, PPO)** ([Schulman et al. 2017](https://arxiv.org/abs/1707.06347)) 算法是一种广泛应用于强化学习的经典算法，在 InstructGPT([Ouyang et al. 2022](https://arxiv.org/abs/2203.02155)) 论文中被证明是训练 LLM 强化学习微调阶段的有效且稳定的方法。
 
 强化学习核心思想是让智能体 (Agent) 在与环境的交互中学习，通过试错来最大化累积奖励。在**LLM场景下**，模型本身就是智能体，“环境” 可以理解为用户提出的问题和期望的回答方式。策略 (Policy) \(\pi_\theta\) 代表了智能体的行为准则，即给定一个输入 (例如问题 \(q\))，策略会输出一个动作 (例如生成文本 \(o\))。策略 \(\pi_\theta\) 通常由一个神经网络模型参数化，训练的目标是找到最优的参数 \(\theta\)，使得策略能够生成高质量的输出。
 
@@ -130,7 +130,7 @@ PPO 算法因其 **简单有效、相对稳定** 的特点，成为强化学习�
 
 ### GRPO
 
-**组相对策略优化 (Group Relative Policy Optimization, GRPO)** ([Shao, et al., 2024](https://arxiv.org/abs/2402.03300)) 是 DeepSeek 团队为训练 DeepSeek-R1-Zero 这样的大语言模型而专门设计的一种高效稳定的强化学习算法。GRPO 的核心创新在于摒弃了传统Actor-Critic 框架中对独立价值网络 (critic model) 的依赖，降低了计算成本，并提高了训练的稳定性。 从广义上讲，GRPO 可以被视为一种 **Actor-Only** 的强化学习方法。
+**组相对策略优化 (Group Relative Policy Optimization, GRPO)** ([Shao, et al. 2024](https://arxiv.org/abs/2402.03300)) 是 DeepSeek 团队为训练 DeepSeek-R1-Zero 这样的大语言模型而专门设计的一种高效稳定的强化学习算法。GRPO 的核心创新在于摒弃了传统Actor-Critic 框架中对独立价值网络 (critic model) 的依赖，降低了计算成本，并提高了训练的稳定性。 从广义上讲，GRPO 可以被视为一种 **Actor-Only** 的强化学习方法。
 
 GRPO 的灵感来源于 **相对评估** 的思想。在许多实际场景中，我们往往更容易判断一组事物之间的相对好坏，而不是给出绝对的价值评估。例如，在评价一组学生的作业时，老师可能更容易比较不同作业之间的优劣，而不是给每份作业打一个绝对分数。GRPO 将这种相对评估的思想引入强化学习，通过 **组内相对评分**来构建基准 (baseline)，完全替代了对价值网络的依赖。
 
@@ -304,7 +304,7 @@ Schulman 无偏估计器 \( \hat{D}_{KL}^{(k3)}(o) = r(o) - \log r(o) - 1 \) 为
 
 ### 代码生成评估指标
 
-代码生成会采用更严谨的测试方法。通过编译器执行模型生成的代码，并使用预定义的测试用例进行多次单元测试，以判断代码的正确性。常用的评估指标包括 **pass@k**([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) 和 **cons@N**([OpenAI, 2024](https://openai.com/index/learning-to-reason-with-llms/))。
+代码生成会采用更严谨的测试方法。通过编译器执行模型生成的代码，并使用预定义的测试用例进行多次单元测试，以判断代码的正确性。常用的评估指标包括 **pass@k**([Chen et al. 2021](https://arxiv.org/abs/2107.03374)) 和 **cons@N**([OpenAI, 2024](https://openai.com/index/learning-to-reason-with-llms/))。
 
 `pass@k`: 衡量模型在生成 k 个代码样本时，至少有一个样本能够通过所有预定义测试用例的概率。
 
@@ -414,7 +414,7 @@ C_i = \begin{cases}
 #### ORM 与 PRM
 {{< figure
     src="orm_prm_comparison.png"
-    caption="Fig. 3. Outcome reward vs Process reward. (Image source: [Zeng et al., 2024](https://arxiv.org/abs/2412.14135))"
+    caption="Fig. 3. Outcome reward vs Process reward. (Image source: [Zeng et al. 2024](https://arxiv.org/abs/2412.14135))"
     align="center"
     width="100%"
 >}}
@@ -431,13 +431,10 @@ C_i = \begin{cases}
 | **训练复杂度**         | 较低，无需对生成过程进行额外的监督                  | 较高，需要在生成的每一步进行评分，增加了计算和数据需求 |
 | **可解释性**           | 高，评分基于最终结果                                | 较低，评分涉及生成过程的多个步骤，难以全面理解每一步的评分依据 |
 
-
-#### 采用 ORM
-
 为了训练 DeepSeek-R1-Zero，DeepSeek 团队选择了**ORM**，而非PRM。此选择基于以下考虑：
 
-- **避免奖励欺骗（Reward Hacking）**  
-  PRM在大规模 RL 训练中，容易被智能体利用，导致奖励欺骗（[Gao et al., 2022](https://arxiv.org/abs/2210.10760)）。模型可能采取“旁门左道”的策略以最大化奖励，而非提升推理能力。基于规则的奖励系统通过明确且可解释的规则，有效避免了奖励欺骗问题。
+- **避免奖励欺骗**  
+  PRM在大规模 RL 训练中，容易被智能体利用，导致奖励欺骗（Reward Hacking）（[Gao et al. 2022](https://arxiv.org/abs/2210.10760)）。模型可能采取“旁门左道”的策略以最大化奖励，而非提升推理能力。基于规则的奖励系统通过明确且可解释的规则，有效避免了奖励欺骗问题。
 
   > 基于规则的奖励系统在问题场景复杂或需要创造性回答时，可能难以覆盖所有类型的问题，规则设计可能存在漏洞被模型利用。
 
@@ -449,7 +446,7 @@ C_i = \begin{cases}
 
 DeepSeek-R1-Zero 的奖励系统采用双重奖励机制，通过预定义的规则进行自动化评估，确保评估过程的高效性和实时性。这套系统主要包含以下两种类型的奖励：
 
-**1. 准确性奖励 (Accuracy Reward)**
+**1. 准确性奖励**
 
 * **定义：**  衡量模型输出结果的正确性，是奖励系统中最关键的部分。
 * **实现方式：**  根据不同任务类型采用不同的验证方法：
@@ -457,7 +454,7 @@ DeepSeek-R1-Zero 的奖励系统采用双重奖励机制，通过预定义的规
     * **代码生成：** 通过编译器执行模型生成的代码，并使用预设的单元测试用例进行多次测试，判断代码的正确性。
 * **目的：**  引导模型生成准确、可靠的输出结果。
 
-**2. 格式奖励 (Format Reward)**
+**2. 格式奖励**
 
 * **定义：**  为了提升模型输出的可读性和结构性，方便后续分析和评估而引入的奖励机制。
 * **评估方式：**  在强化学习训练过程中，通过预定义的规则系统进行自动化评估。
@@ -491,9 +488,8 @@ r_{\text{format}}(o) =
 \end{cases}
 $$
 
-### 实验流程
 
-#### 训练模板
+### 训练模板
 
 为了引导基模型遵循指定的指令，DeepSeek 团队设计了一个简洁而有效的训练模板。该模板要求模型首先生成推理过程（放在 `<think>` 和 `</think>` 标签之间），然后再提供最终答案（放在 `<answer>` 和 `</answer>` 标签之间）。这种结构化的格式，不仅确保了输出的可读性，更使研究人员能够清晰地观察模型在 RL 训练过程中的推理过程，从而更准确地评估模型的学习进展。
 
@@ -505,7 +501,7 @@ $$
 - `<think>` 和 `</think>` (思维过程标签):  用于包裹模型的中间推理步骤，清晰展示模型的思考过程，便于理解模型的推理逻辑和进行错误分析。
 - `<answer>` 和 `</answer>` (最终答案标签): 用于包裹模型的最终答案，方便程序自动化提取答案部分，进行高效的评估和后续处理。
 
-#### 评估流程
+### 评估流程
 
 1. **准确性评估：**  评估模型输出 \(o\) 的答案是否正确，计算准确性奖励 \(r_{\text{accuracy}}(o)\)。
 2. **基本格式检查：**  检查输出 \(o\) 的基本格式是否符合预定义要求，例如是否包含必要的标签 `<think>` 和 `<answer>`，以及标签是否正确闭合和嵌套。
@@ -516,7 +512,7 @@ $$
 
 通过结合准确性奖励和格式奖励，DeepSeek-R1-Zero 的奖励系统不仅关注模型输出的正确性，更重视输出结果的结构化和可读性。这使得模型不仅能够给出正确的答案，还能展现其思考过程，使其更像一个具备推理能力的智能体，而不仅仅是一个简单的答案输出机器。
 
-#### 实验结果
+### 基准测试
 
 {{< figure
     src="deepseek_r1_zero_benchmark.png"
@@ -527,6 +523,8 @@ $$
 
 图4展示了不同模型在多项基准测试上的表现。在 [AIME 2024](https://maa.org/student-programs/amc/) 基准测试中，DeepSeek-R1-Zero 模型的 pass@1 分数达到了71.0%，此外 cons@64 分数为86.7%，与 OpenAI o1-0912 模型相当。
 
+### 自我反思
+
 {{< figure
     src="deepseek_r1_zero_response_time.png"
     caption="Fig. 5. The average response length of DeepSeek-R1-Zero on the training set during the RL process. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
@@ -534,7 +532,17 @@ $$
     width="90%"
 >}}
 
-图5显示了随着训练的深入，DeepSeek-R1-Zero 模型展现出自发 **自我进化** 的能力。模型根据问题的复杂程度，动态地分配“思考时间”，对于更复杂的问题，会自发生成更长的推理链，进行更深入的思考。这种“思考时间”自适应调整，并非人为设定，而是模型在 RL 训练过程中自发涌现的行为，充分体现了强化学习驱动下，模型推理能力的自主提升。
+图5展示了随着训练过程的深入，DeepSeek-R1-Zero 逐渐**涌现**出**自我进化**能力，模型不仅能够通过**自我反思**重新评估此前的推理步骤，还能**主动探索**替代的求解路径。此外模型能够根据问题的复杂程度，自适应地增加推理过程中生成的 token 数量，以实现更长、更深入的思考时间。总的来说这种动态且自发的行为显著增强了模型的推理能力，使其能够更加高效且准确地解决更复杂、更具挑战性的任务。
+
+{{< figure
+    src="aha_moment.png"
+    caption="Fig. 6. An interesting “aha moment” of an intermediate version of DeepSeek-R1-Zero. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
+    align="center"
+    width="90%"
+>}}
+
+图6展示了模型 DeepSeek-R1-Zero 出现了顿悟时刻（aha moment）在此阶段，本质上是模型在推理过程中，突然意识到之前的思考路径是错误的，并迅速调整了思考方向，最终得出了正确的答案。此现象同样表明模型在推理过程中具备了一定的**自我反思**能力。
+
 
 ## DeepSeek-R1
 
@@ -542,13 +550,13 @@ $$
 
 为了在 DeepSeek-R1-Zero 的基础上进一步提升模型性能，DeepSeek 团队采用了 **多阶段训练** 策略，并将 **冷启动数据** 融入到训练流程中。DeepSeek-R1 的训练流程主要包括以下四个阶段，体现了从初步策略初始化到全面能力提升的进阶之路：
 
-1. **冷启动 (Cold Start)**: 利用高质量的长思维链 (CoT) 数据，对 DeepSeek-V3-Base 基模型进行初步的监督微调，为后续强化学习奠定基础。
+1. **冷启动**: 利用高质量的**思维链 (Chain-of-Thought, CoT)** 数据，对 DeepSeek-V3-Base 基模型进行初步的监督微调，为后续强化学习奠定基础。
 
-2. **面向推理的强化学习 (Reasoning-Oriented RL)**: 在冷启动模型基础上，应用强化学习算法，专注于增强模型在推理密集型任务中的能力。
+2. **面向推理的强化学习**: 在冷启动模型基础上，应用强化学习算法，专注于增强模型在推理密集型任务中的能力。
 
-3. **拒绝采样与监督微调 (Rejection Sampling & SFT)**: 通过拒绝采样技术筛选高质量推理数据，并结合非推理数据进行监督微调，进一步提升模型推理能力和通用能力。
+3. **拒绝采样与监督微调**: 通过拒绝采样技术筛选高质量推理数据，并结合非推理数据进行监督微调，进一步提升模型推理能力和通用能力。
 
-4. **面向所有场景的强化学习 (All-Scenario RL)**: 综合考虑推理和非推理任务，进行第二阶段强化学习，使模型与人类偏好对齐，提升在更广泛场景下的表现。
+4. **面向所有场景的强化学习**: 综合考虑推理和非推理任务，进行第二阶段强化学习，使模型与人类偏好对齐，提升在更广泛场景下的表现。
 
 
 ### 冷启动
@@ -557,7 +565,7 @@ $$
 
 #### 训练目标
 
-冷启动阶段的目标明确而关键：利用高质量的思维链 (Chain-of-Thought, CoT) 数据，对 DeepSeek-V3-Base 基模型进行初步微调。这次微调旨在快速赋予模型以下核心能力：
+冷启动阶段的目标明确而关键：利用高质量的 CoT 数据，对 DeepSeek-V3-Base 基模型进行初步微调。这次微调旨在快速赋予模型以下核心能力：
 
 * **初步推理能力：**  引导模型学习模仿人类的推理过程，为更复杂的推理打下基础。
 * **良好文本生成质量：**  确保模型输出文本的流畅性和自然度，提升用户体验。
@@ -568,7 +576,7 @@ $$
 
 为了构建高质量的冷启动数据，DeepSeek 团队进行了多方探索，最终整合了以下高效方法：
 
-* **少量示例引导 (Few-shot Prompting)：**  利用少量高质量的示例，引导模型生成更长、更具深度和逻辑性的 CoT 数据。
+* **Few-shot Prompting：**  利用少量高质量的示例，引导模型生成更长、更具深度和逻辑性的 CoT 数据。
 * **模型生成 + 反思验证：**  直接 Prompt 模型生成答案，并加入反思和验证环节，确保答案的质量和推理的正确性。
 * **优化 R1-Zero 输出：**  收集 DeepSeek-R1-Zero 模型的输出，通过人工标注和优化，提升数据的可读性和整体质量。
 
@@ -578,18 +586,18 @@ $$
 
 相比于直接以 DeepSeek-R1-Zero 作为起点，冷启动数据带来了多项显著优势，为后续训练奠定了更优的基础：
 
-* **显著提升可读性 (Improved Readability)：**
+* **显著提升可读性：**
     * DeepSeek-R1-Zero 的输出存在可读性挑战，例如语言混合、缺乏结构化格式等。
     * 冷启动数据特别设计了**更易读的输出模式**，包括：
-        * **添加摘要 (Summary)：**  在回复末尾添加精炼的摘要，快速提炼核心结论。
+        * **添加摘要：**  在回复末尾添加精炼的摘要，快速提炼核心结论。
         * **过滤不良回复：**  去除不友好或低质量的回复，确保数据纯净度。
         * **结构化输出格式：**  采用 `| special_token | <reasoning_process> | special_token | <summary>` 格式，清晰呈现推理过程和总结。
 
-* **性能显著提升 (Enhanced Performance)：**
+* **性能显著提升：**
     * 通过精心设计融入人类先验知识的数据模式，DeepSeek 团队观察到模型性能相较 R1-Zero 有了显著提升。
     * 这进一步验证了迭代训练是提升推理模型性能的有效路径。
 
-* **更优的策略初始化 (Superior Policy Initialization)：**
+* **更优的策略初始化：**
    * **冷启动阶段的 SFT 核心在于策略初始化。**  策略初始化是构建 Reasoing LLM，例如 OpenAI o1 系列的关键步骤。通过学习高质量 CoT 数据，模型初步掌握人类推理模式，并具备生成结构化推理过程的能力，为后续强化学习训练奠定坚实基础，避免了从零开始探索的困境。
 
 ### 监督微调
@@ -646,8 +654,8 @@ SFT 损失函数的梯度用于指导模型参数更新，以降低损失值。 
 
 #### 数据来源与人类偏好
 
-* **数据来源 (Data Source)**：SFT 数据集主要由高质量的长链思维 (CoT) 示例构成，代表了期望模型学习的“标准答案”，用于指导损失函数最小化。 数据可能来自人工标注或更强大的模型生成。可参考 [Open-o1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file) 项目的 SFT 数据集 [OpenO1-SFT](https://huggingface.co/datasets/O1-OPEN/OpenO1-SFT)，包含长 CoT 回复。
-* **人类偏好 (Human Preference)**：在 SFT 阶段，人类选择可以被视为隐式的奖励函数。 高质量 CoT 数据体现了人类对模型推理和输出的期望，模型通过学习这些数据，最小化与人类期望输出的偏差，从而拟合人类偏好。
+* **数据来源**：SFT 数据集主要由高质量的长链思维 (CoT) 示例构成，代表了期望模型学习的“标准答案”，用于指导损失函数最小化。 数据可能来自人工标注或更强大的模型生成。可参考 [Open-o1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file) 项目的 SFT 数据集 [OpenO1-SFT](https://huggingface.co/datasets/O1-OPEN/OpenO1-SFT)，包含长 CoT 回复。
+* **人类偏好**：在 SFT 阶段，人类选择可以被视为隐式的奖励函数。 高质量 CoT 数据体现了人类对模型推理和输出的期望，模型通过学习这些数据，最小化与人类期望输出的偏差，从而拟合人类偏好。
 
 ### 面向推理的强化学习
 
@@ -761,13 +769,13 @@ RFT 通过最小化损失函数，引导模型专注于学习高质量答案的�
 
 ### 蒸馏
 
-为了将 DeepSeek-R1 的强大推理能力迁移到更高效的小型模型上，DeepSeek 团队采用了**蒸馏（Distillation）**（[Hinton et al., 2015](https://arxiv.org/abs/1503.02531)）技术。蒸馏过程主要包括以下步骤：
+为了将 DeepSeek-R1 的强大推理能力迁移到更高效的小型模型上，DeepSeek 团队采用了**蒸馏（Distillation）**（[Hinton et al. 2015](https://arxiv.org/abs/1503.02531)）技术。蒸馏过程主要包括以下步骤：
 
-1. **数据生成 (Data Generation)**: 利用训练好的 DeepSeek-R1 模型，生成约 **80 万条**高质量的推理数据。这些数据不仅包括推理密集型任务 (如数学题、编程题)，也涵盖了通用任务 (如问答、对话)，以保证蒸馏数据的多样性和覆盖面。
+1. **数据生成**: 利用训练好的 DeepSeek-R1 模型，生成约 **80 万条**高质量的推理数据。这些数据不仅包括推理密集型任务 (如数学题、编程题)，也涵盖了通用任务 (如问答、对话)，以保证蒸馏数据的多样性和覆盖面。
 
-2. **模型微调 (Model Fine-tuning)**: 将生成的 80 万条高质量推理数据，用于微调小型密集模型。蒸馏实验选择了 Qwen 和 Llama 系列模型作为 Student 模型，涵盖了从 1.5B 到 70B 参数的多种模型规模，以探索蒸馏技术在不同模型规模下的效果。选取的 Student 模型包括 Qwen2.5-Math-1.5B, Qwen2.5-Math-7B, Qwen2.5-14B, Qwen2.5-32B, Llama-3.1-8B, 和 **Llama-3.3-70B-Instruct**。
+2. **模型微调**: 将生成的 80 万条高质量推理数据，用于微调小型密集模型。蒸馏实验选择了 Qwen 和 Llama 系列模型作为 Student 模型，涵盖了从 1.5B 到 70B 参数的多种模型规模，以探索蒸馏技术在不同模型规模下的效果。选取的 Student 模型包括 Qwen2.5-Math-1.5B, Qwen2.5-Math-7B, Qwen2.5-14B, Qwen2.5-32B, Llama-3.1-8B, 和 **Llama-3.3-70B-Instruct**。
 
-3. **性能评估 (Performance Evaluation)**: 在多个推理相关的 benchmark 中，对蒸馏后的模型进行全面的性能评估。评估结果旨在验证蒸馏技术是否能够有效地将大型模型的推理能力迁移到小型模型，并考察蒸馏后的小型模型在推理能力上是否能够达到甚至超越大型模型的水平。
+3. **性能评估**: 在多个推理相关的 benchmark 中，对蒸馏后的模型进行全面的性能评估。评估结果旨在验证蒸馏技术是否能够有效地将大型模型的推理能力迁移到小型模型，并考察蒸馏后的小型模型在推理能力上是否能够达到甚至超越大型模型的水平。
 
 #### KL 散度蒸馏
 
@@ -775,11 +783,11 @@ RFT 通过最小化损失函数，引导模型专注于学习高质量答案的�
 
 #### 实验结果
 
-实验结果如图6所示：
+实验结果如图7所示：
 
 {{< figure
     src="deepseek_r1_distill_comparison.png"
-    caption="Fig. 6. Comparison of DeepSeek-R1 distilled models and other comparable models on reasoning-related benchmarks. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
+    caption="Fig. 7. Comparison of DeepSeek-R1 distilled models and other comparable models on reasoning-related benchmarks. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
     align="center"
     width="90%"
 >}}
@@ -799,7 +807,7 @@ DeepSeek-R1 在多阶段训练框架基础上，探索了 Reasoning Model 训练
 - 这简化了 RL 训练架构，降低了资源需求，提高了效率。表明大语言模型的策略网络已具备强大的价值评估能力，无需额外价值网络。
 
 **聚焦最终结果奖励：最小化奖励信号**
-- DeepSeek-R1 采用更加简单的 ORM 奖励策略，主要关注最终结果的准确性奖励，弱化中间推理步骤奖励。这种策略受 AlphaZero ([Silver et al., 2017](https://arxiv.org/abs/1712.01815)) 启发，后者仅关注胜负。
+- DeepSeek-R1 采用更加简单的 ORM 奖励策略，主要关注最终结果的准确性奖励，弱化中间推理步骤奖励。这种策略受 AlphaZero ([Silver et al. 2017](https://arxiv.org/abs/1712.01815)) 启发，后者仅关注胜负。
 - 对于 Reasoning Model，最终结果奖励可能比 PRM 更有效，能帮助模型更自然地学习“思维方式”，减少繁琐的逐步监督。
 
 **增加思考时间：模型自发涌现深度思考**
@@ -812,39 +820,41 @@ DeepSeek-R1 的成功展示了 RL 提升 LLM 推理能力的巨大潜力。DeepS
 
 ## 参考文献
 
-[1] [OpenAI o1](https://openai.com/o1/). OpenAI, 2024. (OpenAI O1 official introduction page)
+[1] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
 
-[2] Jaech, Aaron, et al. ["OpenAI o1 system card."](https://arxiv.org/abs/2412.16720) arXiv preprint arXiv:2412.16720 (2024).
+[2] OpenAI. ["Introducing OpenAI o1"](https://openai.com/o1/) OpenAI, 2024.
 
-[3] [Open-r1](https://github.com/huggingface/open-r1). GitHub, 2024. (Open-r1 open source project GitHub repository)
+[3] Jaech, Aaron, et al. ["OpenAI o1 system card."](https://arxiv.org/abs/2412.16720) arXiv preprint arXiv:2412.16720 (2024).
 
-[4] Sutton, Richard. ["The bitter lesson."](http://incompleteideas.net/IncIdeas/BitterLesson.html) Incomplete Ideas (blog) 13.1 (2019): 38.
+[4] [Open-r1](https://github.com/huggingface/open-r1). HuggingFace, 2024.
 
-[5] Liu A, et al. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
+[5] Sutton, Richard. ["The bitter lesson."](http://incompleteideas.net/IncIdeas/BitterLesson.html) Incomplete Ideas (blog) 13.1 (2019): 38.
 
-[6] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
+[6] Liu A, et al. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
 
-[7] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
+[7] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
 
-[8] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[8] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
 
-[9] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
+[9] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
-[10] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
+[10] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
 
-[11] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
+[11] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
 
-[12] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024. (OpenAI blog post about LLM reasoning ability)
+[12] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
 
-[13] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024. (American Mathematics Competitions AMC official website)
+[13] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024.
 
-[14] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). GitHub, 2024. (Open-O1 open source project GitHub repository)
+[14] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024.
 
-[15] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
+[15] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). Open-Source O1, 2024.
 
-[16] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
+[16] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
 
-[17] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
+[17] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
+
+[18] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
 
 
 ## 引用

@@ -213,7 +213,7 @@ Ideally, the communication cost of Ring All-Reduce is approximately independent 
 
 ### Parameter Server
 
-When the cluster scale expands to multi-machine multi-GPU, simple single-point aggregation (such as a central server) is often difficult to support parallel training of massive data. **Parameter Server (PS)** ([Li, et al., 2014](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf)) is a typical architecture designed for scalable distributed training:
+When the cluster scale expands to multi-machine multi-GPU, simple single-point aggregation (such as a central server) is often difficult to support parallel training of massive data. **Parameter Server (PS)** ([Li, et al. 2014](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf)) is a typical architecture designed for scalable distributed training:
 
 1. **Parameter Sharding**: Split model parameters in the form of key-value pairs. Different PS nodes only manage parameters of specific shards.
 2. **push-pull Semantics**: After the computing node obtains the gradient locally, it **pushes** it to the corresponding PS; after the PS updates the parameters of the shard, the computing node can **pull** down the latest version when needed for the next step of calculation.
@@ -409,13 +409,13 @@ Traditional pipeline parallelism usually divides the model into continuous layer
 
 ## Mixture-of-Experts Model
 
-**Mixture-of-Experts (MoE)** ([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538)) is a sparsely activated model that significantly increases the model's parameter size and performance without significantly increasing the computational cost by combining multiple independent "expert" networks and a gating network. The core idea of MoE is **Sparse Activation**, that is, for each input sample, only a part of the expert networks are activated, rather than the entire model. This method not only improves computational efficiency but also enhances the model's expressive ability, making it perform well in LLMs.
+**Mixture-of-Experts (MoE)** ([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)) is a sparsely activated model that significantly increases the model's parameter size and performance without significantly increasing the computational cost by combining multiple independent "expert" networks and a gating network. The core idea of MoE is **Sparse Activation**, that is, for each input sample, only a part of the expert networks are activated, rather than the entire model. This method not only improves computational efficiency but also enhances the model's expressive ability, making it perform well in LLMs.
 
 MoE's design inspiration comes from **Ensemble learning**, a technology that decomposes complex tasks into multiple subtasks and completes them collaboratively by different models. In MoE, these "subtasks" are processed by multiple independent expert networks, and the gating network is responsible for dynamically selecting the most suitable experts based on the characteristics of the input sample. This division of labor and cooperation mechanism is similar to an expert team in human society: experts in different fields provide professional opinions for specific problems, and finally, a comprehensive result is obtained.
 
 {{< figure
     src="moe.png"
-    caption="Fig. 12. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))"
+    caption="Fig. 12. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))"
     align="center"
     width="100%"
 >}}
@@ -484,7 +484,7 @@ Since only $k$ experts are activated, the amount of calculation is much lower th
 
 ### Auxiliary Loss
 
-To prevent the gating network from being overly biased towards a few experts, MoE introduces Auxiliary Loss ([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538)) to encourage all experts to be used evenly. A common method is based on the square of the [Coefficient of Variation (CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation) of expert usage rate:
+To prevent the gating network from being overly biased towards a few experts, MoE introduces Auxiliary Loss ([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)) to encourage all experts to be used evenly. A common method is based on the square of the [Coefficient of Variation (CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation) of expert usage rate:
 
 $$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
@@ -500,7 +500,7 @@ $$
 
 ### GShard
 
-GShard ([Lepikhin et al., 2020](https://arxiv.org/abs/2006.16668)) mainly shards the MoE layer, distributing the expert networks $\{E_1, E_2, ..., E_n\}$ in the MoE layer to multiple TPU devices. For example, if there are $P$ TPU devices, the expert networks can be divided into $P$ groups, and each group of expert networks is assigned to a TPU device. Other layers of the Transformer model (such as self-attention layer, LayerNorm layer) are replicated on all TPU devices.
+GShard ([Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668)) mainly shards the MoE layer, distributing the expert networks $\{E_1, E_2, ..., E_n\}$ in the MoE layer to multiple TPU devices. For example, if there are $P$ TPU devices, the expert networks can be divided into $P$ groups, and each group of expert networks is assigned to a TPU device. Other layers of the Transformer model (such as self-attention layer, LayerNorm layer) are replicated on all TPU devices.
 
 **Improved Gating Mechanism of GShard:**
 
@@ -522,7 +522,7 @@ Below is the core algorithm flow of GShard:
 
 {{< figure
     src="gshard.png"
-    caption="Fig. 13. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al., 2020](https://arxiv.org/abs/2006.16668))"
+    caption="Fig. 13. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))"
     align="center"
     width="100%"
 >}}
@@ -858,7 +858,7 @@ By reducing the amount of communication data in each data parallel group and inc
 
 ### 4D Parallelism
 
-To further expand the model scale, Llama3 ([Grattafiori et al., 2024](https://arxiv.org/abs/2407.21783)) adopted a 4D parallel strategy during training. It combines four parallel methods to shard the model in a more fine-grained manner, so that the model parameters, optimizer states, gradients, and activations on each GPU can be adapted to the capacity limit of high-bandwidth memory (HBM). These four parallel methods are:
+To further expand the model scale, Llama3 ([Grattafiori et al. 2024](https://arxiv.org/abs/2407.21783)) adopted a 4D parallel strategy during training. It combines four parallel methods to shard the model in a more fine-grained manner, so that the model parameters, optimizer states, gradients, and activations on each GPU can be adapted to the capacity limit of high-bandwidth memory (HBM). These four parallel methods are:
 
 - **Tensor Parallelism (TP):** Divide a single weight tensor into multiple blocks and distribute them across different devices;
 - **Pipeline Parallelism (PP):** Vertically divide the model into multiple stages, and each stage processes different micro-batches in parallel on different devices;
@@ -869,7 +869,7 @@ The following diagram shows an example of 4D parallelism implemented on 16 GPUs.
 
 {{< figure
     src="4d_parallelism.png"
-    caption="Fig. 26. Illustration of 4D parallelism. (Image source: [Grattafiori et al., 2024](https://arxiv.org/abs/2407.21783))"
+    caption="Fig. 26. Illustration of 4D parallelism. (Image source: [Grattafiori et al. 2024](https://arxiv.org/abs/2407.21783))"
     align="center"
     width="100%"
 >}}
@@ -1046,13 +1046,13 @@ SM3 (Sparse Momentum for Massive Models) ([Anil et al. 2019](https://arxiv.org/a
 
 ### LoRA
 
-LoRA (Low-Rank Adaptation) ([Hu et al., 2021](https://arxiv.org/abs/2106.09685)) proposes to introduce **low-rank adapters** next to pre-trained weights to achieve efficient fine-tuning by adding a small number of parameters without interfering with the original inference ability of the pre-trained model.
+LoRA (Low-Rank Adaptation) ([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) proposes to introduce **low-rank adapters** next to pre-trained weights to achieve efficient fine-tuning by adding a small number of parameters without interfering with the original inference ability of the pre-trained model.
 
 The following figure intuitively shows the principle and initialization strategy of LoRA:
 
 {{< figure
     src="lora.png"
-    caption="Fig. 31. An illustration of LoRA. (Image source: [Hu et al., 2021](https://arxiv.org/abs/2106.09685))"
+    caption="Fig. 31. An illustration of LoRA. (Image source: [Hu et al. 2021](https://arxiv.org/abs/2106.09685))"
     align="center"
     width="70%"
 >}}
@@ -1090,7 +1090,7 @@ Training with LoRA has the following advantages:
 
 ### QLoRA
 
-QLoRA ([Dettmers et al., 2023](https://arxiv.org/abs/2305.14314)) is a method for efficient fine-tuning of large-scale models based on LoRA combined with quantization ideas. Through the following three key improvements, it greatly reduces memory footprint while maintaining basically unchanged model accuracy:
+QLoRA ([Dettmers et al. 2023](https://arxiv.org/abs/2305.14314)) is a method for efficient fine-tuning of large-scale models based on LoRA combined with quantization ideas. Through the following three key improvements, it greatly reduces memory footprint while maintaining basically unchanged model accuracy:
 
 1. **4-bit Normal Float (NF4) Quantization**
    A block-based quantile quantization strategy is adopted to quantize the original model weights to 4 bits, thereby achieving significant storage compression with subtle loss of accuracy.
@@ -1105,7 +1105,7 @@ Different from traditional LoRA, which only reduces the number of parameters to 
 
 {{< figure
     src="qlora.png"
-    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the transformer model to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al., 2023](https://arxiv.org/abs/2305.14314))"
+    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the transformer model to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al. 2023](https://arxiv.org/abs/2305.14314))"
     align="center"
     width="100%"
 >}}

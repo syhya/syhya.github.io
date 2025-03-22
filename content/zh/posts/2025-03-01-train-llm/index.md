@@ -218,7 +218,7 @@ $$
   
 ### 参数服务器
   
-当集群规模扩展至多机多 GPU 时，若简单地采用单点聚合(例如一台中心服务器)往往难以支撑海量数据的并行训练。**参数服务器(Parameter Server, PS)**([Li, et al., 2014](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf))是为可扩展分布式训练而设计的一种典型架构：  
+当集群规模扩展至多机多 GPU 时，若简单地采用单点聚合(例如一台中心服务器)往往难以支撑海量数据的并行训练。**参数服务器(Parameter Server, PS)**([Li, et al. 2014](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf))是为可扩展分布式训练而设计的一种典型架构：  
   
 1. **参数分片**：将模型参数按键值对(key-value) 的形式进行拆分，不同 PS 节点只管理特定分片的参数；    
 2. **push-pull** 语义：计算节点在本地得到梯度后，**push** 到相应的 PS；PS 更新完该分片参数后，计算节点可在需要时 **pull** 下最新版本进行下一步计算。    
@@ -423,14 +423,14 @@ PTD-P(Pipeline, Tensor, and Data Parallelism)([Narayanan et al. 2021](https://ar
 
 ## 混合专家模型
 
-**混合专家模型(Mixture-of-Experts, MoE)**([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538)) 是一种稀疏激活模型，它通过结合多个独立的“专家”网络和一个门控网络(Gating Network)，在不显著增加计算成本的前提下，大幅提升了模型的参数量和性能。MoE 的核心思想是**稀疏激活(Sparse Activation)**，即对于每个输入样本，仅激活部分专家网络，而不是整个模型。这种方法既提高了计算效率，又增强了模型的表达能力，使其在 LLMs 中表现出色。
+**混合专家模型(Mixture-of-Experts, MoE)**([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)) 是一种稀疏激活模型，它通过结合多个独立的“专家”网络和一个门控网络(Gating Network)，在不显著增加计算成本的前提下，大幅提升了模型的参数量和性能。MoE 的核心思想是**稀疏激活(Sparse Activation)**，即对于每个输入样本，仅激活部分专家网络，而不是整个模型。这种方法既提高了计算效率，又增强了模型的表达能力，使其在 LLMs 中表现出色。
 
 MoE 设计灵感来源于[集成学习(Ensemble learning)](https://en.wikipedia.org/wiki/Ensemble_learning), 一种将复杂任务分解为多个子任务并由不同模型协作完成的技术。在 MoE 中，这些“子任务”由多个独立的专家网络处理，而门控网络则负责根据输入样本的特征动态选择最适合的专家。这种分工合作的机制类似于人类社会中的专家团队：不同领域的专家针对特定问题提供专业意见，最终综合得出结果。
 
 
 {{< figure
     src="moe.png"
-    caption="Fig. 12. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))"
+    caption="Fig. 12. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))"
     align="center"
     width="100%"
 >}}  
@@ -502,7 +502,7 @@ $$
 
 ### 辅助损失
 
-为了避免门控网络过度偏向少数专家，MoE 引入了辅助损失(Auxiliary Loss)([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
+为了避免门控网络过度偏向少数专家，MoE 引入了辅助损失(Auxiliary Loss)([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
 
 $$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
@@ -518,7 +518,7 @@ $$
 
 ### GShard
 
-GShard([Lepikhin et al., 2020](https://arxiv.org/abs/2006.16668))主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层(例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
+GShard([Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层(例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
 
 **GShard 的改进门控机制:**
 
@@ -540,7 +540,7 @@ GShard 在 Noisy Top-k Gating 的基础上，进行了一些改进，以提高�
 
 {{< figure
     src="gshard.png"
-    caption="Fig. 13. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al., 2020](https://arxiv.org/abs/2006.16668))"
+    caption="Fig. 13. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))"
     align="center"
     width="100%"
 >}}  
@@ -882,7 +882,7 @@ ZeRO 分为三个阶段，每个阶段在前一阶段基础上进一步减少内
 
 ### 4D 并行
 
-为了进一步扩展模型规模，Llama3([Grattafiori et al., 2024](https://arxiv.org/abs/2407.21783)) 训练的时候采用了 4D 并行策略，它结合了四种并行方法，将模型进行更细粒度的分片，使每个 GPU 上的模型参数、优化器状态、梯度和激活值均能适配高带宽内存(HBM)的容量限制。这四种并行方法分别是：
+为了进一步扩展模型规模，Llama3([Grattafiori et al. 2024](https://arxiv.org/abs/2407.21783)) 训练的时候采用了 4D 并行策略，它结合了四种并行方法，将模型进行更细粒度的分片，使每个 GPU 上的模型参数、优化器状态、梯度和激活值均能适配高带宽内存(HBM)的容量限制。这四种并行方法分别是：
 
 - **张量并行(Tensor Parallelism, TP)：** 将单个权重张量划分为多个块，分布在不同设备上；
 - **流水线并行(Pipeline Parallelism, PP)：** 将模型垂直划分为多个阶段，各阶段在不同设备上并行处理不同微批次；
@@ -893,7 +893,7 @@ ZeRO 分为三个阶段，每个阶段在前一阶段基础上进一步减少内
 
 {{< figure
     src="4d_parallelism.png"
-    caption="Fig. 26. Illustration of 4D parallelism. (Image source: [Grattafiori et al., 2024](https://arxiv.org/abs/2407.21783))"
+    caption="Fig. 26. Illustration of 4D parallelism. (Image source: [Grattafiori et al. 2024](https://arxiv.org/abs/2407.21783))"
     align="center"
     width="100%"
 >}}
@@ -1076,13 +1076,13 @@ SM3(Sparse Momentum for Massive Models)([Anil et al. 2019](https://arxiv.org/abs
 
 ### LoRA
 
-LoRA(Low-Rank Adaptation)([Hu et al., 2021](https://arxiv.org/abs/2106.09685)) 提出在预训练权重旁引入**低秩适配器**，通过添加少量参数来实现高效微调，且不干扰预训练模型原有的推理能力。
+LoRA(Low-Rank Adaptation)([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) 提出在预训练权重旁引入**低秩适配器**，通过添加少量参数来实现高效微调，且不干扰预训练模型原有的推理能力。
 
 下图直观展示了 LoRA 的原理和初始化策略：
 
 {{< figure
     src="lora.png"
-    caption="Fig. 31. An illustration of LoRA. (Image source: [Hu et al., 2021](https://arxiv.org/abs/2106.09685))"
+    caption="Fig. 31. An illustration of LoRA. (Image source: [Hu et al. 2021](https://arxiv.org/abs/2106.09685))"
     align="center"
     width="70%"
 >}}
@@ -1120,7 +1120,7 @@ $$
 
 ### QLoRA
 
-QLoRA([Dettmers et al., 2023](https://arxiv.org/abs/2305.14314)) 是在 LoRA 基础上结合量化思想对大规模模型进行高效微调的一种方法。它通过以下三个关键改进，大幅降低显存占用，同时保持模型精度基本不变：
+QLoRA([Dettmers et al. 2023](https://arxiv.org/abs/2305.14314)) 是在 LoRA 基础上结合量化思想对大规模模型进行高效微调的一种方法。它通过以下三个关键改进，大幅降低显存占用，同时保持模型精度基本不变：
 
 1. **4 位标准浮点数(NF4) 量化**  
    采用基于分块的分位量化策略，将原始模型权重量化为 4 位，从而在细微损失精度的情况下实现显著的存储压缩。
@@ -1135,7 +1135,7 @@ QLoRA([Dettmers et al., 2023](https://arxiv.org/abs/2305.14314)) 是在 LoRA 基
 
 {{< figure
     src="qlora.png"
-    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the transformer model to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al., 2023](https://arxiv.org/abs/2305.14314))"
+    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the transformer model to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al. 2023](https://arxiv.org/abs/2305.14314))"
     align="center"
     width="100%"
 >}}

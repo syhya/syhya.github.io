@@ -282,7 +282,7 @@ Reflexion 的核心循环与算法描述如下：
 
 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948)) 代表了开源社区在复现 OpenAI o1 ([OpenAI, 2024](https://openai.com/o1/)) 方面的重大突破，通过强化学习技术成功训练出具备深度反思能力的高级推理模型。
 
-> 关于 DeepSeek R1 的详细训练流程与技术实现，请参考我的专题博客：[OpenAI o1复现进展：DeepSeek-R1](https://syhya.github.io/zh/posts/2025-01-27-deepseek-r1/)。
+> 关于 DeepSeek R1 的详细训练流程与技术实现，请参考我之前的博客：[OpenAI o1复现进展：DeepSeek-R1](https://syhya.github.io/zh/posts/2025-01-27-deepseek-r1/)。
 
 DeepSeek-R1-Zero 在训练过程中的关键转变 — 随着训练的深入，模型逐渐**涌现**出卓越的**自我进化**能力。这种能力体现在三个核心方面：
 

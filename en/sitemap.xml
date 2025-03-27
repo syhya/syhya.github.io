@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://syhya.github.io/tags/agent/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/ai/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -29,7 +29,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -42,7 +42,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/cot/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -55,7 +55,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/deep-research/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -67,21 +67,21 @@
                 href="https://syhya.github.io/tags/deep-research/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/posts/2025-03-21-llm-agent/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <loc>https://syhya.github.io/posts/2025-03-27-llm-agent/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/2025-03-21-llm-agent/"
+                href="https://syhya.github.io/zh/posts/2025-03-27-llm-agent/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="https://syhya.github.io/posts/2025-03-21-llm-agent/"
+                href="https://syhya.github.io/posts/2025-03-27-llm-agent/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/llm/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -93,21 +93,27 @@
                 href="https://syhya.github.io/tags/llm/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/openai/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <loc>https://syhya.github.io/tags/memory/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/openai-operator/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/openai/"
+                href="https://syhya.github.io/zh/tags/openai-operator/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="https://syhya.github.io/tags/openai/"
+                href="https://syhya.github.io/tags/openai-operator/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/tags/planning/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -120,7 +126,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/react/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -133,7 +139,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/reflexion/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -146,7 +152,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/reinforcement-learning/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -159,7 +165,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -172,10 +178,13 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/tool-use/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/tot/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -188,7 +197,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/webvoyager/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -200,8 +209,11 @@
                 href="https://syhya.github.io/tags/webvoyager/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/tags/workflow/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://syhya.github.io/</loc>
-    <lastmod>2025-03-21T10:00:00+00:00</lastmod>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"

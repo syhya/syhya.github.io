@@ -1,5 +1,5 @@
 ---
-title: "o1 Replication Progress: DeepSeek-R1"
+title: "OpenAI o1 Replication Progress: DeepSeek-R1"
 date: 2025-01-27T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "Reinforcement Learning", "LLM", "Reasoning Model", "NLP", "Model Distillation", "DeepSeek-R1", "GRPO", "PPO", "SFT", "RFT", "o1", "Reject sampling"]
@@ -852,14 +852,14 @@ The success of DeepSeek-R1 demonstrates the great potential of RL in improving t
 
 **Cited as:**
 
-> Yue Shui. (Jan 2025). o1 Replication Progress: DeepSeek-R1.
+> Yue Shui. (Jan 2025). OpenAI o1 Replication Progress: DeepSeek-R1.
 https://syhya.github.io/posts/2025-01-27-deepseek-r1
 
 Or
 
 ```bibtex
 @article{syhya2025deepseekr1,
-  title   = "o1 Replication Progress: DeepSeek-R1",
+  title   = "OpenAI o1 Replication Progress: DeepSeek-R1",
   author  = "Yue Shui",
   journal = "syhya.github.io",
   year    = "2025",

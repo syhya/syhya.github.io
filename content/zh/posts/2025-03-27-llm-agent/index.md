@@ -1,26 +1,32 @@
 ---
-title: "大语言模型智能体（长期更新中）"
-date: "2025-03-21T10:00:00+00:00"
+title: "大语言模型智能体"
+date: "2025-03-27T10:00:00+00:00"
+lastmod: "2025-03-27T10:00:00+00:00"
 author: "Yue Shui"
-tags: ["LLM", "AI", "Agent", "Reinforcement Learning", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI", "CoT", "ToT"]
 categories: ["技术博客"]
+tags: ["大语言模型", "AI", "智能体", "强化学习", "计划", "记忆", "工具使用", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI Operator", "CoT", "ToT", "工作流"]
+readingTime: 30
 toc: true
+ShowToc: true
+TocOpen: false
 draft: false
+type: "posts"
+math: true
 ---
-
-> **注意**: 本文**正在更新中**，内容只是**草稿版本**，并不完善，后续会有变动。请随时关注最新版本。
 
 ## 智能体
 
-### 大语言模型智能体
+自 2022 年 10 月 OpenAI 发布 ChatGPT 以来，随着后续 [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) 和 [AgentGPT](https://github.com/reworkd/AgentGPT) 等项目的涌现，LLM 相关的智能体（Agent）逐渐成为近年来 AI 的研究热点和实际应用方向。本文将介绍智能体的基本概念、核心技术及其最新应用进展。
+
+### LLM Agent
 
 **大语言模型智能体(Large Language Model Agent, LLM agent)** 利用 LLM 作为系统大脑，并结合规划、记忆与外部工具等模块，实现了对复杂任务的自动化执行。
 
-- **用户请求 (User Request):** 用户通过 prompt 输入任务，与智能体互动。  
-- **智能体 (Agent):** 系统大脑，由一个或多个 LLMs 构成，负责整体协调和执行任务。  
-- **规划 (Planning):** 将复杂任务拆解为更小的子任务，并制定执行计划，同时通过反思不断优化结果。  
-- **记忆 (Memory):** 包含短期记忆(利用上下文学习即时捕捉任务信息)和长期记忆(采用外部向量存储保存和检索关键信息，确保长时任务的信息连续性)。  
-- **工具 (Tools):** 集成计算器、网页搜索、代码解释器等外部工具，用于调用外部数据、执行代码和获取最新信息。
+- **用户请求:** 用户通过提示词输入任务，与智能体互动。  
+- **智能体:** 系统大脑，由一个或多个 LLMs 构成，负责整体协调和执行任务。  
+- **规划:** 将复杂任务拆解为更小的子任务，并制定执行计划，同时通过反思不断优化结果。  
+- **记忆:** 包含短期记忆(利用上下文学习即时捕捉任务信息)和长期记忆(采用外部向量存储保存和检索关键信息，确保长时任务的信息连续性)。  
+- **工具:** 集成计算器、网页搜索、代码解释器等外部工具，用于调用外部数据、执行代码和获取最新信息。
 
 {{< figure
     src="llm_agent.png"
@@ -29,20 +35,20 @@ draft: false
     width="70%"
 >}}
 
-### 强化学习智能体
+### RL Agent
 
-**强化学习(Reinforcement Learning，RL)** 的目标是训练一个智能体(agent)在给定的环境 (environment) 中采取一系列动作(actions, \(a_t\))。在交互过程中，智能体从一个状态(state, \(s_t\))转移到下一个状态，并在每次执行动作后获得环境反馈的奖励(reward, \(r_t\))。这种交互生成了完整的轨迹(trajectory, \(\tau\))，通常表示为：
+**强化学习(Reinforcement Learning，RL)** 的目标是训练一个智能体(agent)在给定的环境 (environment) 中采取一系列动作(actions, $a_t$)。在交互过程中，智能体从一个状态(state, $s_t$)转移到下一个状态，并在每次执行动作后获得环境反馈的奖励(reward, $r_t$)。这种交互生成了完整的轨迹(trajectory, $\tau$)，通常表示为:
 
 $$
 \tau = \{(s_0, a_0, r_0), (s_1, a_1, r_1), \dots, (s_T, a_T, r_T)\}.
 $$
 
-智能体的目标是学习一个策略(policy, \(\pi\))，即在每个状态下选择动作的规则，以**最大化期望累积奖励**，通常表达为：  
+智能体的目标是学习一个策略(policy, $\pi$)，即在每个状态下选择动作的规则，以**最大化期望累积奖励**，通常表达为：  
 
 $$
 \max_{\pi} \, \mathbb{E}\left[\sum_{t=0}^{T} \gamma^t r_t\right],
 $$
-其中 \(\gamma \in [0,1]\) 为折扣因子，用于平衡短期与长期奖励。
+其中 $\gamma \in [0,1]$ 为折扣因子，用于平衡短期与长期奖励。
 
 {{< figure
     src="rl_agent.png"
@@ -53,11 +59,11 @@ $$
 
 在 **LLM** 场景中，可以将模型视为一个智能体，而“环境”可理解为用户输入及其对应的期望回答方式：
 
-- **状态(\(s_t\))**：可以是当前对话上下文或用户的问题。  
-- **动作(\(a_t\))**：模型输出的文本(回答、生成内容等)。  
-- **奖励(\(r_t\))**：来自用户或系统的反馈(如用户满意度、奖励模型自动评分等)。  
-- **轨迹(\(\tau\))**：从初始对话到结束的所有文本交互序列，可用于评估模型的整体表现。  
-- **策略(\(\pi\))**：LLM 在每个状态下(对话上下文)如何生成文本的规则，一般由模型的参数所决定。
+- **状态($s_t$)**：可以是当前对话上下文或用户的问题。  
+- **动作($a_t$)**：模型输出的文本(回答、生成内容等)。  
+- **奖励($r_t$)**：来自用户或系统的反馈(如用户满意度、奖励模型自动评分等)。  
+- **轨迹($\tau$)**：从初始对话到结束的所有文本交互序列，可用于评估模型的整体表现。  
+- **策略($\pi$)**：LLM 在每个状态下(对话上下文)如何生成文本的规则，一般由模型的参数所决定。
 
 
 对于 LLM，传统上先通过海量离线数据进行预训练，而在后训练强化学习环节中，则通过人类或者模型的反馈对模型进行训练，使其输出更符合人类偏好或任务需求的高质量文本。
@@ -78,7 +84,7 @@ $$
 - 同时，记录 LLM 智能体执行任务的数据与反馈，为 Reasoning LLM 提供丰富的训练数据，从而提升模型性能。
 
 
-## 规划：任务分解
+## 规划: 任务分解
 
 LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这些组件共同协作，使智能体能够自主执行复杂任务。
 
@@ -136,7 +142,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
     width="100%"
 >}}
 
-- 如果训练样本仅提供正确答案而无推理依据，可采用STaR（Self-Taught Reasoner）([Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))方法：
+- 如果训练样本仅提供正确答案而无推理依据，可采用**STaR(Self-Taught Reasoner)**([Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))方法：
 (1) 让LLM生成推理链，仅保留正确答案的推理。
 (2) 用生成的推理微调模型，反复迭代直至收敛。注意 `temperature` 高时易生成带正确答案但错误推理的结果。如无标准答案，可考虑将多数投票视作“正确答案”。
 
@@ -151,7 +157,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="linebreak.png"
-    caption="Fig. 9. Sensitivity analysis on step formatting. Complex prompts consistently lead to better performance with regard to different step formatting. (Image source: [Fu et al. 2023)](https://arxiv.org/abs/2210.00720))"
+    caption="Fig. 9. Sensitivity analysis on step formatting. Complex prompts consistently lead to better performance with regard to different step formatting. (Image source: [Fu et al. 2023](https://arxiv.org/abs/2210.00720))"
     align="center"
     width="100%"
 >}}
@@ -174,7 +180,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
     width="100%"
 >}}
 
-## 规划：自我反思
+## 规划: 自我反思
 
 **自我反思(Self-Reflexion)** 是使 Agent 通过改进过去的行动决策和纠正以往错误而实现迭代提升的关键因素。在试错不可避免的现实任务中，它起着至关重要的作用。
 
@@ -254,7 +260,7 @@ Reflexion 的核心循环与算法描述如下：
 
 - **自我反思**  
    - $M_{sr}$ 模块综合轨迹 $\tau_t$ 与奖励信号 $\{r_t\}$ 在语言层面生成自我修正或改进建议 $\mathrm{sr}_t$。  
-   - 反思文本 (Reflective text) 既可视为对错误的剖析，也可提供新的启发思路，并通过存储到长期记忆中。实践中，我们可以将反馈信息向量化后存入向量数据库。
+   - 反思文本既可视为对错误的剖析，也可提供新的启发思路，并通过存储到长期记忆中。实践中，我们可以将反馈信息向量化后存入向量数据库。
 
 - **更新并重复**  
    - 将最新的自我反思文本 $\mathrm{sr}_t$ 追加到长期记忆后，Actor 在下一轮迭代时即可从中采用 RAG 检索历史相关信息来调整策略。  
@@ -418,7 +424,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 ## 工具使用
 
-工具使用是 LLM Agent 重要组成部分, 通过赋予 LLM 调用外部工具的能力，其功能得到了显著扩展：不仅能够生成自然语言，还能获取实时信息、执行复杂计算以及与各类系统（如数据库、API 等）交互，从而有效突破预训练知识的局限，避免重复造轮子的低效过程。
+**工具使用** 是 LLM Agent 重要组成部分, 通过赋予 LLM 调用外部工具的能力，其功能得到了显著扩展：不仅能够生成自然语言，还能获取实时信息、执行复杂计算以及与各类系统（如数据库、API 等）交互，从而有效突破预训练知识的局限，避免重复造轮子的低效过程。
 
 传统 LLM 主要依赖预训练数据进行文本生成，但这也使得它们在数学运算、数据检索和实时信息更新等方面存在不足。通过工具调用，模型可以：
   
@@ -487,7 +493,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 ### WebVoyager
 
-**WebVoyager**([He et al. 2024](https://arxiv.org/abs/2401.13919)) 是一种基于多模态大模型的自主网页交互智能体，能够控制鼠标和键盘进行网页浏览。WebVoyager 采用经典的 ReAct 循环。在每个交互步骤中，它查看带有类似 SoM(Set-of-Marks)([Yang, et al. 2023](https://arxiv.org/abs/2310.11441)) 方法标注的浏览器截图即通过在网页元素上放置数字标签提供交互提示，然后决定下一步行动。这种视觉标注与 ReAct 循环相结合，使得用户可以通过自然语言与网页进行交互。具体可以参考使用 LangGraph 框架的[WebVoyager 代码](https://langchain-ai.github.io/langgraph/tutorials/web-navigation/web_voyager/)。
+**WebVoyager**([He et al. 2024](https://arxiv.org/abs/2401.13919)) 是一种基于多模态大模型的自主网页交互智能体，能够控制鼠标和键盘进行网页浏览。WebVoyager 采用经典的 ReAct 循环。在每个交互步骤中，它查看带有类似 **SoM(Set-of-Marks)**([Yang, et al. 2023](https://arxiv.org/abs/2310.11441)) 方法标注的浏览器截图即通过在网页元素上放置数字标签提供交互提示，然后决定下一步行动。这种视觉标注与 ReAct 循环相结合，使得用户可以通过自然语言与网页进行交互。具体可以参考使用 LangGraph 框架的[WebVoyager 代码](https://langchain-ai.github.io/langgraph/tutorials/web-navigation/web_voyager/)。
 
 
 {{< figure
@@ -499,7 +505,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 ### OpenAI Operator
 
-**Operator** ([OpenAI, 2025](https://openai.com/index/introducing-operator/)) 是一个 OpenAI 近期发布的 AI 智能体，旨在自主执行网络任务。Operator 能够像人类用户一样与网页互动，通过打字、点击和滚动等操作完成指定任务。Operator 的核心技术是计算机使用智能体（Computer-Using Agent, CUA）([OpenAI, 2025](https://openai.com/index/computer-using-agent/))。CUA 结合了 GPT-4o 的视觉能力和通过强化学习获得更强的推理能力，经过专门训练后能够与图形用户界面（GUI）进行交互，包括用户在屏幕上看到的按钮、菜单和文本框。
+**Operator** ([OpenAI, 2025](https://openai.com/index/introducing-operator/)) 是一个 OpenAI 近期发布的 AI 智能体，旨在自主执行网络任务。Operator 能够像人类用户一样与网页互动，通过打字、点击和滚动等操作完成指定任务。Operator 的核心技术是**计算机使用智能体(Computer-Using Agent, CUA)**([OpenAI, 2025](https://openai.com/index/computer-using-agent/))。CUA 结合了 GPT-4o 的视觉能力和通过强化学习获得更强的推理能力，经过专门训练后能够与图形用户界面（GUI）进行交互，包括用户在屏幕上看到的按钮、菜单和文本框。
 
 {{< figure
     src="cua_overview.png"
@@ -697,7 +703,7 @@ OpenAI Deep Research 训练过程采用了专为研究场景定制的**浏览器
 **Cited as:**
 
 > Yue Shui.(Mar 2025). 大语言模型智能体.
-https://syhya.github.io/zh/posts/2025-03-21-llm-agent
+https://syhya.github.io/zh/posts/2025-03-27-llm-agent
 
 Or
 
@@ -708,5 +714,5 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Mar",
-  url     = "https://syhya.github.io/zh/posts/2025-03-21-llm-agent"
+  url     = "https://syhya.github.io/zh/posts/2025-03-27-llm-agent"
 }

@@ -1,16 +1,21 @@
 ---
-title: "Large Language Model Agents (Ongoing Updates)"
-date: "2025-03-21T10:00:00+00:00"
+title: "Large Language Model Agents"
+date: "2025-03-27T10:00:00+00:00"
 author: "Yue Shui"
-tags: ["LLM", "AI", "Agent", "Reinforcement Learning", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI", "CoT", "ToT"]
 categories: ["Technical Blog"]
+tags: ["LLM", "AI", "Agent", "Reinforcement Learning", "Planning", "Memory", "Tool Use", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI Operator", "CoT", "ToT", "workflow"]
+readingTime: 30
 toc: true
+ShowToc: true
+TocOpen: false
 draft: false
+type: "posts"
+math: true
 ---
 
-> **Note**: This article is **under continuous update** and the content is only a **draft version**.  It is not complete and is subject to change. Please check back for the latest version.
-
 ## Agents
+
+Since OpenAI released ChatGPT in October 2022, and with the subsequent emergence of projects such as [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) and [AgentGPT](https://github.com/reworkd/AgentGPT), LLM-related agents have gradually become a research hotspot and a promising direction for practical applications in AI in recent years. This article will introduce the basic concepts of agents, their core technologies, and the latest advances in their applications.
 
 ### Large Language Model Agents
 
@@ -31,18 +36,18 @@ draft: false
 
 ### Reinforcement Learning Agents
 
-The goal of **Reinforcement Learning (RL)** is to train an agent to take a series of actions (actions, \(a_t\)) in a given environment. During the interaction, the agent transitions from one state (state, \(s_t\)) to the next, and receives a reward (reward, \(r_t\)) from the environment after each action. This interaction generates a complete trajectory (trajectory, \(\tau\)), usually represented as:
+The goal of **Reinforcement Learning (RL)** is to train an agent to take a series of actions (actions, $a_t$) in a given environment. During the interaction, the agent transitions from one state (state, $s_t$) to the next, and receives a reward (reward, $r_t$) from the environment after each action. This interaction generates a complete trajectory (trajectory, $\tau$), usually represented as:
 
 $$
 \tau = \{(s_0, a_0, r_0), (s_1, a_1, r_1), \dots, (s_T, a_T, r_T)\}.
 $$
 
-The agent's objective is to learn a policy (policy, \(\pi\)), which is a rule for selecting actions in each state, to **maximize the expected cumulative reward**, often expressed as:
+The agent's objective is to learn a policy (policy, $\pi$), which is a rule for selecting actions in each state, to **maximize the expected cumulative reward**, often expressed as:
 
 $$
 \max_{\pi} \, \mathbb{E}\left[\sum_{t=0}^{T} \gamma^t r_t\right],
 $$
-where \(\gamma \in [0,1]\) is the discount factor, used to balance short-term and long-term rewards.
+where $\gamma \in [0,1]$ is the discount factor, used to balance short-term and long-term rewards.
 
 {{< figure
     src="rl_agent.png"
@@ -53,11 +58,11 @@ where \(\gamma \in [0,1]\) is the discount factor, used to balance short-term an
 
 In the **LLM** context, the model can be viewed as an agent, and the "environment" can be understood as the user input and its corresponding expected response:
 
-- **State (\(s_t\))**: Can be the current dialogue context or the user's question.
-- **Action (\(a_t\))**: The text output by the model (answers, generated content, etc.).
-- **Reward (\(r_t\))**: Feedback from the user or system (such as user satisfaction, automatic scoring by a reward model, etc.).
-- **Trajectory (\(\tau\))**: The sequence of all text interactions from the initial dialogue to the end, which can be used to evaluate the overall performance of the model.
-- **Policy (\(\pi\))**: The rules that govern how the LLM generates text in each state (dialogue context), generally determined by the model's parameters.
+- **State ($s_t$)**: Can be the current dialogue context or the user's question.
+- **Action ($a_t$)**: The text output by the model (answers, generated content, etc.).
+- **Reward ($r_t$)**: Feedback from the user or system (such as user satisfaction, automatic scoring by a reward model, etc.).
+- **Trajectory ($\tau$)**: The sequence of all text interactions from the initial dialogue to the end, which can be used to evaluate the overall performance of the model.
+- **Policy ($\pi$)**: The rules that govern how the LLM generates text in each state (dialogue context), generally determined by the model's parameters.
 
 For LLMs, traditionally, pre-training is first performed on a massive amount of offline data.  In the subsequent reinforcement learning stage, the model is trained through human or model feedback to produce high-quality text that better aligns with human preferences or task requirements.
 
@@ -133,7 +138,7 @@ Here are some subsequent optimization efforts:
     width="100%"
 >}}
 
-- If the training samples only provide the correct answer without reasoning, the STaR (Self-Taught Reasoner) method ([Zelikman et al. 2022](https://arxiv.org/abs/2203.14465)) can be used:
+- If the training samples only provide the correct answer without reasoning, **STaR (Self-Taught Reasoner)**([Zelikman et al. 2022](https://arxiv.org/abs/2203.14465)) can be used:
 (1) Let the LLM generate reasoning chains, and only keep the reasoning with the correct answer.
 (2) Fine-tune the model with the generated reasoning, and iterate repeatedly until convergence. Note that when `temperature` is high, it is easy to generate results with the correct answer but incorrect reasoning. If there is no standard answer, consider using majority voting as the "correct answer".
 
@@ -485,7 +490,7 @@ The entire system uses a long-term memory module to record all observed events, 
 
 ### OpenAI Operator
 
-**Operator** ([OpenAI, 2025](https://openai.com/index/introducing-operator/)) is an AI agent recently released by OpenAI, designed to autonomously perform web tasks. Operator can interact with web pages like a human user, completing specified tasks through typing, clicking, and scrolling. The core technology of Operator is the Computer-Using Agent (CUA) ([OpenAI, 2025](https://openai.com/index/computer-using-agent/)). CUA combines the visual capabilities of GPT-4o with stronger reasoning capabilities obtained through reinforcement learning, and is specially trained to interact with graphical user interfaces (GUIs), including buttons, menus, and text boxes that users see on the screen.
+**Operator** ([OpenAI, 2025](https://openai.com/index/introducing-operator/)) is an AI agent recently released by OpenAI, designed to autonomously perform web tasks. Operator can interact with web pages like a human user, completing specified tasks through typing, clicking, and scrolling. The core technology of Operator is the **Computer-Using Agent (CUA)** ([OpenAI, 2025](https://openai.com/index/computer-using-agent/)). CUA combines the visual capabilities of GPT-4o with stronger reasoning capabilities obtained through reinforcement learning, and is specially trained to interact with graphical user interfaces (GUIs), including buttons, menus, and text boxes that users see on the screen.
 
 {{< figure
     src="cua_overview.png"
@@ -680,7 +685,7 @@ Agents show broad prospects, but to achieve reliable and widespread application,
 **Cited as:**
 
 > Yue Shui.(Mar 2025). Large Language Model Agents.
-https://syhya.github.io/posts/2025-03-21-llm-agent
+https://syhya.github.io/posts/2025-03-27-llm-agent
 
 Or
 
@@ -691,6 +696,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Mar",
-  url     = "https://syhya.github.io/posts/2025-03-21-llm-agent"  
+  url     = "https://syhya.github.io/posts/2025-03-27-llm-agent"  
 }
 ```

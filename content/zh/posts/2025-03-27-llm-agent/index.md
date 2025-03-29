@@ -103,7 +103,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="cot.png"
-    caption="Fig. 4. The comparison example of few-shot prompting and CoT prompting. (Image source: [Weng, 2023](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 4. The comparison example of few-shot prompting and CoT prompting. (Image source: [Wei et al. 2022](https://arxiv.org/abs/2201.11903))"
     align="center"
     width="100%"
 >}}
@@ -148,7 +148,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="STaR.png"
-    caption="Fig. 8. An overview of STaR and a STaR-generated rationale on CommonsenseQA (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
+    caption="Fig. 8. An overview of STaR and a STaR-generated rationale on CommonsenseQA. (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
     align="center"
     width="100%"
 >}}
@@ -175,7 +175,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="tot.png"
-    caption="Fig. 10. Schematic illustrating various approaches to problem solving with LLMs (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
+    caption="Fig. 10. Schematic illustrating various approaches to problem solving with LLMs. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
     align="center"
     width="100%"
 >}}
@@ -240,7 +240,7 @@ Observation：...
 
 {{< figure
     src="Reflexion.png"
-    caption="Fig. 13. (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 13. (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -270,7 +270,7 @@ Reflexion 的核心循环与算法描述如下：
 
 {{< figure
     src="reflextion_examples.png"
-    caption="Fig. 14. Reflexion works on decision-making 4.1, programming 4.3, and reasoning 4.2 tasks (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 14. Reflexion works on decision-making 4.1, programming 4.3, and reasoning 4.2 tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -279,7 +279,7 @@ Reflexion 的核心循环与算法描述如下：
 
 {{< figure
     src="reflextion_result.png"
-    caption="Fig. 15. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 15. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -451,11 +451,11 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 ### HuggingGPT
 
-**HuggingGPT** ([Shen, et al. 2023](https://arxiv.org/abs/2302.04761))是一种利用 ChatGPT 作为任务规划器的框架，通过读取模型描述从 [HuggingFace](https://huggingface.co/) 筛选可用的模型来完成用户任务，并根据执行结果进行总结。
+**HuggingGPT** ([Shen, et al. 2023](https://arxiv.org/abs/2303.17580))是一种利用 ChatGPT 作为任务规划器的框架，通过读取模型描述从 [HuggingFace](https://huggingface.co/) 筛选可用的模型来完成用户任务，并根据执行结果进行总结。
 
 {{< figure
     src="HuggingGPT.png"
-    caption="Fig. 23. Examples of inputs and outputs for all APIs used. (Image source: [Shen, et al. 2023](https://arxiv.org/abs/2302.04761))"
+    caption="Fig. 23. Illustration of how HuggingGPT works. (Image source: [Shen, et al. 2023](https://arxiv.org/abs/2303.17580))"
     align="center"
     width="100%"
 >}}
@@ -609,7 +609,7 @@ OpenAI Deep Research 训练过程采用了专为研究场景定制的**浏览器
 
 {{< figure
     src="human_last_exam.png"
-    caption="Fig. 31. Humanity's Last Exam Benchmark Results。(Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
+    caption="Fig. 31. Humanity's Last Exam Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
     align="center"
     width="80%"
 >}}

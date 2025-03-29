@@ -101,7 +101,7 @@ Planning is crucial for the successful execution of complex tasks. It can be app
 
 {{< figure
     src="cot.png"
-    caption="Fig. 4. The comparison example of few-shot prompting and CoT prompting. (Image source: [Weng, 2023](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 4. The comparison example of few-shot prompting and CoT prompting. (Image source: [Wei et al. 2022](https://arxiv.org/abs/2201.11903))"
     align="center"
     width="100%"
 >}}
@@ -144,7 +144,7 @@ Here are some subsequent optimization efforts:
 
 {{< figure
     src="STaR.png"
-    caption="Fig. 8. An overview of STaR and a STaR-generated rationale on CommonsenseQA (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
+    caption="Fig. 8. An overview of STaR and a STaR-generated rationale on CommonsenseQA. (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
     align="center"
     width="100%"
 >}}
@@ -170,7 +170,7 @@ If no solution is found (or the quality of the candidate solutions is not high e
 
 {{< figure
     src="tot.png"
-    caption="Fig. 10. Schematic illustrating various approaches to problem solving with LLMs (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
+    caption="Fig. 10. Schematic illustrating various approaches to problem solving with LLMs. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
     align="center"
     width="100%"
 >}}
@@ -234,7 +234,7 @@ This method essentially draws on the idea of reinforcement learning. In the trad
 
 {{< figure
     src="Reflexion.png"
-    caption="Fig. 13. (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 13. (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -264,7 +264,7 @@ The following shows examples of Reflexion's application in decision-making, prog
 
 {{< figure
     src="reflextion_examples.png"
-    caption="Fig. 14. Reflexion works on decision-making 4.1, programming 4.3, and reasoning 4.2 tasks (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 14. Reflexion works on decision-making 4.1, programming 4.3, and reasoning 4.2 tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -273,7 +273,7 @@ In an experiment on 100 HotPotQA questions, by comparing the CoT method and the 
 
 {{< figure
     src="reflextion_result.png"
-    caption="Fig. 15. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 15. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -439,11 +439,11 @@ Currently, various LLM applications based on tool calls have emerged in the indu
 
 ### HuggingGPT
 
-**HuggingGPT** ([Shen, et al. 2023](https://arxiv.org/abs/2302.04761)) is a framework that uses ChatGPT as a task planner. It selects available models from [HuggingFace](https://huggingface.co/) by reading model descriptions to complete user tasks, and summarizes based on the execution results.
+**HuggingGPT** ([Shen, et al. 2023](https://arxiv.org/abs/2303.17580)) is a framework that uses ChatGPT as a task planner. It selects available models from [HuggingFace](https://huggingface.co/) by reading model descriptions to complete user tasks, and summarizes based on the execution results.
 
 {{< figure
     src="HuggingGPT.png"
-    caption="Fig. 23. Examples of inputs and outputs for all APIs used. (Image source: [Shen, et al. 2023](https://arxiv.org/abs/2302.04761))"
+    caption="Fig. 23. Illustration of how HuggingGPT works. (Image source: [Shen, et al. 2023](https://arxiv.org/abs/2303.17580))"
     align="center"
     width="100%"
 >}}
@@ -593,7 +593,7 @@ In the benchmark test **Humanity's Last Exam** ([Phan, et al. 2025](https://arxi
 
 {{< figure
     src="human_last_exam.png"
-    caption="Fig. 31. Humanity's Last Exam Benchmark Results。(Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
+    caption="Fig. 31. Humanity's Last Exam Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
     align="center"
     width="80%"
 >}}

@@ -264,7 +264,7 @@ The following shows examples of Reflexion's application in decision-making, prog
 
 {{< figure
     src="reflextion_examples.png"
-    caption="Fig. 14. Reflexion works on decision-making 4.1, programming 4.3, and reasoning 4.2 tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 14. Reflexion works on decision-making, programming 4.3, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}

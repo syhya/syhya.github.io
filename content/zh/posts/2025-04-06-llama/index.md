@@ -33,7 +33,7 @@ Meta AI 推出的 LLaMA 系列开源模型已成为大语言模型社区的基�
 **架构设计：** LLaMA 1 采用了标准的 Transformer 解码器架构，并引入了以下关键改进以提升性能和训练效率：
 
 *   **Pre-normalization & RMSNorm：** 采用 **Pre-normalization** 结构（在每个子层输入前进行归一化），并使用 **RMSNorm (Root Mean Square Normalization)** 替代标准的 LayerNorm。RMSNorm 通过省略均值中心化步骤，仅依据向量元素的均方根进行缩放，从而降低了计算复杂度，同时有效维持了训练过程的稳定性。
-*   **SwiGLU 激活函数：** 将前馈网络（FFN）中的激活函数从 ReLU 替换为 **SwiGLU (Swish-Gated Linear Unit)**。SwiGLU 结合了 Swish 激活函数的平滑非线性和门控机制，增强了模型的表达能力。同时，LLaMA 调整了 FFN 的隐藏层维度（使用 \( \frac{2}{3} \times 4d \) 而非标准的 \(4d\)，其中 \(d\) 是模型维度），以在引入门控参数的同时，大致保持 FFN 层的总参数量和计算量不变。
+*   **SwiGLU 激活函数：** 将前馈网络（FFN）中的激活函数从 ReLU 替换为 **SwiGLU (Swish-Gated Linear Unit)**。SwiGLU 结合了 Swish 激活函数的平滑非线性和门控机制，增强了模型的表达能力。同时，LLaMA 调整了 FFN 的隐藏层维度（使用 $ \frac{2}{3} \times 4d $ 而非标准的 $4d$，其中 $d$ 是模型维度），以在引入门控参数的同时，大致保持 FFN 层的总参数量和计算量不变。
 *   **RoPE 旋转位置编码：** 采用 **Rotary Position Embeddings (RoPE)** 进行位置编码。RoPE 通过对 Query 和 Key 向量施加与位置相关的旋转操作，将相对位置信息有效融入自注意力计算中，增强了模型处理长序列和捕捉长距离依赖关系的能力。LLaMA 1 的最大上下文长度为 2048 tokens。
 *   **高效注意力实现：** 利用 Meta 开源的 [xformers](https://github.com/facebookresearch/xformers) 库实现了内存高效且计算优化的因果多头注意力机制 (causal multi-head attention)。
 
@@ -99,7 +99,7 @@ Meta AI 推出的 LLaMA 系列开源模型已成为大语言模型社区的基�
 
 **训练与数据：** Code Llama 以 LLaMA 2 的权重为起点，使用了 **5000 亿 tokens** 的代码及代码相关自然语言语料进行继续预训练（针对 7B/13B/34B 版本）或 **1 万亿 tokens**（针对 70B 版本）。训练数据主要来源于公开的代码仓库和数据集。关键的技术改进包括：
 
-*   **长上下文微调 (Long Context Fine-tuning, LCFT)：** Code Llama 在训练中特别关注长序列处理能力，将序列长度扩展到 **16k tokens** 进行训练。为了更好地处理长距离依赖，通过调整 RoPE 位置编码的基数 \(\theta\)（从 LLaMA 2 的 10,000 增加到 1,000,000），减缓了随着 token 距离增大注意力分数的衰减。这使得模型在推理时能够稳定地处理长达 **100k tokens** 的超长上下文。
+*   **长上下文微调 (Long Context Fine-tuning, LCFT)：** Code Llama 在训练中特别关注长序列处理能力，将序列长度扩展到 **16k tokens** 进行训练。为了更好地处理长距离依赖，通过调整 RoPE 位置编码的基数 $\theta$（从 LLaMA 2 的 10,000 增加到 1,000,000），减缓了随着 token 距离增大注意力分数的衰减。这使得模型在推理时能够稳定地处理长达 **100k tokens** 的超长上下文。
 
 {{< figure
     src="codellama_rope.png"
@@ -223,22 +223,22 @@ Llama Guard 3 Vision 采用了 ML Commons 定义的安全风险分类标准 ([Vi
     \end{aligned}
     $$
     其中：
-    *   \(x\) 是输入 prompt。
-    *   \(y^w\) 是偏好的 (winning/chosen) 回答，\(y^l\) 是不被偏好的 (losing/rejected) 回答。
-    *   \(\pi_\theta\) 是当前正在优化的模型策略（参数为 \(\theta\)）。
-    *   \(\pi_{\mathrm{ref}}\) 是参考模型策略（通常是 SFT 后的模型或上一轮迭代的模型）。
-    *   \(\beta\) 是控制偏好强度差异的超参数。
-    *   \(\sigma\) 是 Sigmoid 函数。
-    *   \(\alpha\) 是平衡 DPO 损失和 NLL 正则化损失的权重。
-    *   \(|y^w|\) 是 winning 回答的长度，用于归一化 NLL 损失。
-    该损失函数鼓励模型 \(\pi_\theta\) 相对于参考模型 \(\pi_{\mathrm{ref}}\) 更倾向于生成 \(y^w\) 而非 \(y^l\)，同时通过 NLL 正则项保持生成文本的流畅性和语言质量。
+    *   $x$ 是输入 prompt。
+    *   $y^w$ 是偏好的 (winning/chosen) 回答，$y^l$ 是不被偏好的 (losing/rejected) 回答。
+    *   $\pi_\theta$ 是当前正在优化的模型策略（参数为 $\theta$）。
+    *   $\pi_{\mathrm{ref}}$ 是参考模型策略（通常是 SFT 后的模型或上一轮迭代的模型）。
+    *   $\beta$ 是控制偏好强度差异的超参数。
+    *   $\sigma$ 是 Sigmoid 函数。
+    *   $\alpha$ 是平衡 DPO 损失和 NLL 正则化损失的权重。
+    *   $|y^w|$ 是 winning 回答的长度，用于归一化 NLL 损失。
+    该损失函数鼓励模型 $\pi_\theta$ 相对于参考模型 $\pi_{\mathrm{ref}}$ 更倾向于生成 $y^w$ 而非 $y^l$，同时通过 NLL 正则项保持生成文本的流畅性和语言质量。
 
 6.  **迭代循环 (Iterative Loop):** 上述的 SFT 和 DPO（或 RLHF 变体）过程会重复进行多轮（LLaMA 3 进行了五轮）。每一轮都会使用上一轮优化后的模型来生成新的数据，收集新的人类反馈，训练新的奖励模型，并进行下一轮的 SFT 和 DPO 优化。这种迭代的方式使得模型能够持续学习和改进。
 7.  **模型权重平均 (Model Weight Averaging):** 在某些阶段，可能会对使用不同数据子集或超参数训练得到的多个模型检查点进行权重平均，以获得更鲁棒、性能更均衡的最终模型。
 
 ### LLaMA 4
 
-**LLaMA 4** [Meta AI, 2025](https://ai.meta.com/blog/llama-4-multimodal-intelligence/)系列模型由 Meta AI 于 2025 年 4 月 5 日发布，标志着 LLaMA 生态系统迈入了原生多模态 AI 创新的新阶段。这一代模型首次引入了**混合专家（Mixture-of-Experts, MoE）架构**，并具备了前所未有的**超长上下文处理能力**，旨在提供更强大、更高效的开源基础模型。
+**LLaMA 4** ([Meta AI, 2025](https://ai.meta.com/blog/llama-4-multimodal-intelligence/))系列模型由 Meta AI 于 2025 年 4 月 5 日发布，标志着 LLaMA 生态系统迈入了原生多模态 AI 创新的新阶段。这一代模型首次引入了**混合专家（Mixture-of-Experts, MoE）架构**，并具备了前所未有的**超长上下文处理能力**，旨在提供更强大、更高效的开源基础模型。
 
 **模型概览：性能、规模与部署**
 
@@ -311,10 +311,10 @@ LLaMA 4 采用了新的三阶段后训练流程，旨在平衡指令遵循、智
 | **发布时间**        | 2023/02              | 2023/07              | 2023/08              | 2023/12+             | 2024/04+             | 2025/04+             |
 | **基础模型**        | -                    | -                    | LLaMA 2              | LLaMA 2 / LLaMA 3    | -                    | -                        |
 | **模型规模**        | 7B - 65B             | 7B, 13B, 70B         | 7B - 70B             | 7B / 8B (+Vision)    | 1B - 405B (+Vision)  | 109B, 400B, ~2T (MoE)|
-| **训练数据量**      | 1T - 1.4T tokens     | 2T+ tokens           | + 0.5T/1T Code       | ~40k 安全分类数据    | 15T+ tokens          | 30T+ tokens (多模态) |
-| **上下文长度**      | 2k tokens            | 4k tokens            | 16k (训) - 100k (推) | 4k / 8k+             | 8k / 128k tokens     | 256k (训) - 10M (推) |
+| **训练数据量**      | 1T - 1.4T tokens     | 2T+ tokens           | + 0.5T/1T Code       | ~40k 安全分类    | 15T+ tokens          | 30T+ tokens (多模态) |
+| **上下文长度**      | 2k tokens            | 4k tokens            | 100k | 4k / 8k+             | 8k / 128k tokens     | 10M |
 | **Tokenizer**      | SentencePiece (32k)  | SentencePiece (32k)  | SentencePiece (32k)  | 基于 LLaMA 2/3       | tiktoken (128k)      | tiktoken (256k)      |
-| **位置编码**        | RoPE                 | RoPE                 | RoPE (基数调整)      | RoPE                 | RoPE                 | iRoPE (部分层NoPE)   |
+| **位置编码**        | RoPE                 | RoPE                 | RoPE (基数调整)      | RoPE                 | RoPE                 | iRoPE   |
 | **注意力** | MHA       | MHA / GQA (34B, 70B) | MHA / GQA (>13B)     | 基于 LLaMA 2/3       | GQA   | GQA                  |
 | **归一化**          | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)        |
 | **激活函数**        | SwiGLU               | SwiGLU               | SwiGLU               | SwiGLU               | SwiGLU               | SwiGLU                   |
@@ -333,11 +333,11 @@ $$
 \text{RMSNorm}(x) = \frac{x}{\text{RMS}(x)} \cdot \gamma = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma
 $$
 其中：
-*   \( x \in \mathbb{R}^d \) 是输入向量。
-*   \( d \) 是向量维度。
-*   \( \text{RMS}(x) = \sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon} \) 计算输入的均方根。
-*   \( \epsilon \) 是一个很小的正数（如 \(10^{-6}\)），用于防止分母为零，增加数值稳定性。
-*   \( \gamma \in \mathbb{R}^d \) 是一个可学习的缩放参数向量（gain）。RMSNorm 通常省略了 LayerNorm 中的可学习偏移参数（bias）\( \beta \)。
+*   $ x \in \mathbb{R}^d $ 是输入向量。
+*   $ d $ 是向量维度。
+*   $ \text{RMS}(x) = \sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon} $ 计算输入的均方根。
+*   $ \epsilon $ 是一个很小的正数（如 $10^{-6}$），用于防止分母为零，增加数值稳定性。
+*   $ \gamma \in \mathbb{R}^d $ 是一个可学习的缩放参数向量（gain）。RMSNorm 通常省略了 LayerNorm 中的可学习偏移参数（bias）$ \beta $。
 
 **LLaMA 系列选择 RMSNorm 的主要原因：**
 
@@ -356,10 +356,10 @@ $$
 \operatorname{FFN}_{\mathrm{SwiGLU}}\left(x, W_1, W_3, W_2\right)=\left(\operatorname{Swish}\left(x W_1\right) \otimes x W_3\right) W_2
 $$
 其中：
-- \( \text{Swish}(x) = x \cdot \sigma(x) \)（Swish 激活函数）。
-- \( \sigma(x) = \frac{1}{1 + e^{-x}} \)（Sigmoid 函数）。
-- \( \otimes \) 表示逐元素相乘。
-- \( W_1, W_2, W_3 \) 为线性变换矩阵。
+- $ \text{Swish}(x) = x \cdot \sigma(x) $（Swish 激活函数）。
+- $ \sigma(x) = \frac{1}{1 + e^{-x}} $（Sigmoid 函数）。
+- $ \otimes $ 表示逐元素相乘。
+- $ W_1, W_2, W_3 $ 为线性变换矩阵。
 
 **优势**：
 - **增强非线性表达**：SwiGLU 通过结合 Swish 激活函数与门控机制，能够更有效地捕捉复杂的模式和关系，提升 FFN 层的表达能力。
@@ -378,9 +378,9 @@ $$
 
 GQA 是 MHA 和多查询注意力（Multi-Query Attention, MQA）之间的一种折中：
 
-*   **MHA：** 有 \(H\) 个查询头（Query heads），每个头都有自己独立的 \(H\) 组 K 和 V 投影。计算量和 KV Cache 大小与头数 \(H\) 成正比。
-*   **MQA：** 仍然有 \(H\) 个查询头，但所有头共享同一组 K 和 V 投影。这极大地减少了 KV Cache 大小（减少为 MHA 的 \(1/H\)），但可能导致模型质量下降。
-*   **GQA：** 将 \(H\) 个查询头分成 \(G\) 组（\(1 < G < H\)，且 \(H\) 是 \(G\) 的倍数），每组内的 \(H/G\) 个查询头共享同一组 K 和 V 投影。总共有 \(G\) 组 K 和 V 投影。
+*   **MHA：** 有 $H$ 个查询头（Query heads），每个头都有自己独立的 $H$ 组 K 和 V 投影。计算量和 KV Cache 大小与头数 $H$ 成正比。
+*   **MQA：** 仍然有 $H$ 个查询头，但所有头共享同一组 K 和 V 投影。这极大地减少了 KV Cache 大小（减少为 MHA 的 $1/H$），但可能导致模型质量下降。
+*   **GQA：** 将 $H$ 个查询头分成 $G$ 组（$1 < G < H$，且 $H$ 是 $G$ 的倍数），每组内的 $H/G$ 个查询头共享同一组 K 和 V 投影。总共有 $G$ 组 K 和 V 投影。
 
 
 {{< figure
@@ -392,18 +392,18 @@ GQA 是 MHA 和多查询注意力（Multi-Query Attention, MQA）之间的一种
 
 计算步骤如下：
 
-1.  **投影：** 输入 \(X\) 仍然投影得到 \(Q, K, V\)。\(Q\) 被划分为 \(H\) 个头 \(Q_1, \dots, Q_H\)。\(K\) 和 \(V\) 被划分为 \(G\) 组 \(K^1, \dots, K^G\) 和 \(V^1, \dots, V^G\)。
-2.  **分组注意力：** 对于第 \(g\) 组（\(g=1, \dots, G\)），该组对应的查询头（例如 \(Q_i\) 其中 \(i\) 属于第 \(g\) 组）与共享的 \(K^g\) 和 \(V^g\) 计算注意力：
+1.  **投影：** 输入 $X$ 仍然投影得到 $Q, K, V$。$Q$ 被划分为 $H$ 个头 $Q_1, \dots, Q_H$。$K$ 和 $V$ 被划分为 $G$ 组 $K^1, \dots, K^G$ 和 $V^1, \dots, V^G$。
+2.  **分组注意力：** 对于第 $g$ 组（$g=1, \dots, G$），该组对应的查询头（例如 $Q_i$ 其中 $i$ 属于第 $g$ 组）与共享的 $K^g$ 和 $V^g$ 计算注意力：
     $$
     \text{Attention}_i(Q_i, K^g, V^g) = \text{softmax}\left( \frac{Q_i (K^g)^\top}{\sqrt{d_k}} \right) V^g
     $$
-    其中 \(d_k\) 是每个 K 头（也是 Q 头）的维度。
-3.  **拼接与输出：** 所有头的输出 \( \text{Attention}_1, \dots, \text{Attention}_H \) 拼接起来，再通过一个输出投影矩阵 \(W_O\) 得到最终输出。
+    其中 $d_k$ 是每个 K 头（也是 Q 头）的维度。
+3.  **拼接与输出：** 所有头的输出 $ \text{Attention}_1, \dots, \text{Attention}_H $ 拼接起来，再通过一个输出投影矩阵 $W_O$ 得到最终输出。
 
 
 **优势：**
 
-*   **平衡性能与效率：** GQA 在大幅减少 KV Cache（是 MHA 的 \(G/H\)）的同时，通常能保持比 MQA 更接近 MHA 的模型质量。
+*   **平衡性能与效率：** GQA 在大幅减少 KV Cache（是 MHA 的 $G/H$）的同时，通常能保持比 MQA 更接近 MHA 的模型质量。
 *   **加速推理：** 减少内存带宽需求可以显著加速大模型的推理速度，尤其是在长序列生成场景下。
 
 > 更多关于注意力机制在 **MHA**、**MQA** 和 **GQA** 之间的详细对比及代码示例，可参考博客：[Attention Mechanisms in Transformers: Comparing MHA, MQA, and GQA](https://syhya.github.io/posts/2025-01-16-group-query-attention/#grouped-query-attention-gqa)。
@@ -419,27 +419,31 @@ GQA 是 MHA 和多查询注意力（Multi-Query Attention, MQA）之间的一种
     width="90%"
 >}}
 
-假设 \(q_m\) 和 \(k_n\) 分别是位置 \(m\) 的 Query 向量和位置 \(n\) 的 Key 向量。RoPE 将 \(d\) 维的向量 \(x\) （\(q\) 或 \(k\)）视为 \(d/2\) 个二维向量块 \([x^{(1)}, x^{(2)}, \dots, x^{(d/2)}]\)，其中 \(x^{(i)} = [x_{2i-1}, x_{2i}]\)。对于位置 \(m\)，RoPE 定义了一个旋转矩阵 \(R_m\)，它由 \(d/2\) 个二维旋转矩阵组成：
+假设 $q_m$ 和 $k_n$ 分别是位置 $m$ 的 Query 向量和位置 $n$ 的 Key 向量。RoPE 将 $d$ 维的向量 $x$ （$q$ 或 $k$）视为 $d/2$ 个二维向量块 $[x^{(1)}, x^{(2)}, \dots, x^{(d/2)}]$，其中 $x^{(i)} = [x_{2i-1}, x_{2i}]$。对于位置 $m$，RoPE 定义了一个旋转矩阵 $R_m$，它由 $d/2$ 个二维旋转矩阵组成：
 $$
 R_m = \text{diag}(R_{m,1}, R_{m,2}, \dots, R_{m,d/2})
 $$
+
 其中每个二维旋转矩阵为：
 $$
 R_{m,i} = \begin{pmatrix} \cos(m\theta_i) & -\sin(m\theta_i) \\ \sin(m\theta_i) & \cos(m\theta_i) \end{pmatrix}
 $$
-旋转频率 \( \theta_i = b^{-2(i-1)/d} \)，其中 \(b\) 是一个预设的基数（LLaMA 中通常为 10000）。
 
-应用 RoPE 后，新的 Query 和 Key 向量为 \(q'_m = R_m q_m\) 和 \(k'_n = R_n k_n\)。关键在于，它们之间的内积（点积，决定注意力分数）只依赖于相对位置 \(m-n\)：
+旋转频率 $ \theta_i = b^{-2(i-1)/d} $，其中 $b$ 是一个预设的基数（LLaMA 中通常为 10000）。
+
+应用 RoPE 后，新的 Query 和 Key 向量为 $q'_m = R_m q_m$ 和 $k'_n = R_n k_n$。关键在于，它们之间的内积（点积，决定注意力分数）只依赖于相对位置 $m-n$：
+
 $$
 (q'_m)^\top k'_n = (R_m q_m)^\top (R_n k_n) = q_m^\top R_m^\top R_n k_n = q_m^\top R_{n-m} k_n
 $$
-（利用了旋转矩阵的性质 \(R_m^\top R_n = R_{n-m}\)）。
+
+这里利用了旋转矩阵的性质 $R_m^\top R_n = R_{n-m}$。
 
 **优势：**
 
-*   **显式相对位置编码：** 内积结果直接依赖于相对距离 \(m-n\)，这对于捕捉序列中元素间的相对关系非常自然。
-*   **长距离衰减特性：** 随着相对距离 \(|m-n|\) 的增大，旋转导致的向量间夹角变化通常会使得内积值衰减，符合直觉（距离越远，关联越弱）。
-*   **良好的外推性：** 理论上，RoPE 可以较好地泛化到比训练时更长的序列长度，因为它不依赖于绝对位置的最大值。通过调整基数 \(b\)（如 Code Llama 和 LLaMA 4 的 iRoPE），可以进一步优化其在超长上下文下的表现。
+*   **显式相对位置编码：** 内积结果直接依赖于相对距离 $m-n$，这对于捕捉序列中元素间的相对关系非常自然。
+*   **长距离衰减特性：** 随着相对距离 $|m-n|$ 的增大，旋转导致的向量间夹角变化通常会使得内积值衰减，符合直觉（距离越远，关联越弱）。
+*   **良好的外推性：** 理论上，RoPE 可以较好地泛化到比训练时更长的序列长度，因为它不依赖于绝对位置的最大值。通过调整基数 $b$（如 Code Llama 和 LLaMA 4 的 iRoPE），可以进一步优化其在超长上下文下的表现。
 *   **无额外参数：** RoPE 是一种固定的、基于位置的变换，不引入额外的可学习参数。
 *   **兼容线性注意力：** 可以与各种线性注意力变体结合使用。
 
@@ -455,20 +459,20 @@ $$
 >}}
 
 
-假设一个 MoE 层有 \(N\) 个专家 \(E_1, E_2, \dots, E_N\)（例如，每个专家是一个独立的 FFN 网络）和一个门控网络 \(G\)。对于输入 token \(x\)，MoE 层的计算过程如下：
+假设一个 MoE 层有 $N$ 个专家 $E_1, E_2, \dots, E_N$（例如，每个专家是一个独立的 FFN 网络）和一个门控网络 $G$。对于输入 token $x$，MoE 层的计算过程如下：
 
-1.  **门控计算：** 门控网络 \(G\)（通常是一个简单的线性层加 Softmax）计算每个专家被选中的概率或权重：\(p = G(x) = \text{Softmax}(\text{Linear}(x))\)，其中 \(p \in \mathbb{R}^N\)。
-2.  **专家选择 (Top-K Routing)：** 根据门控输出 \(p\)，选择得分最高的 K 个专家。设选中的专家索引集合为 \(\mathcal{T} = \text{TopKIndices}(p)\)。
-3.  **专家计算：** 只有被选中的 K 个专家对输入 \(x\) 进行计算，得到输出 \(E_i(x)\) for \(i \in \mathcal{T}\)。
-4.  **输出组合：** 最终的输出 \(y\) 是被选中专家的输出根据其门控权重（通常是重新归一化后的权重）的加权和：
+1.  **门控计算：** 门控网络 $G$（通常是一个简单的线性层加 Softmax）计算每个专家被选中的概率或权重：$p = G(x) = \text{Softmax}(\text{Linear}(x))$，其中 $p \in \mathbb{R}^N$。
+2.  **专家选择 (Top-K Routing)：** 根据门控输出 $p$，选择得分最高的 K 个专家。设选中的专家索引集合为 $\mathcal{T} = \text{TopKIndices}(p)$。
+3.  **专家计算：** 只有被选中的 K 个专家对输入 $x$ 进行计算，得到输出 $E_i(x)$ for $i \in \mathcal{T}$。
+4.  **输出组合：** 最终的输出 $y$ 是被选中专家的输出根据其门控权重（通常是重新归一化后的权重）的加权和：
     $$
     y = \sum_{i \in \mathcal{T}} \frac{p_i}{\sum_{j \in \mathcal{T}} p_j} \cdot E_i(x)
     $$
-    或者在某些实现中，权重可能直接使用 \(p_i\)。
+    或者在某些实现中，权重可能直接使用 $p_i$。
 
 **优势：**
 
-*   **参数规模与计算解耦：** MoE 允许模型拥有巨大的总参数量（通过增加专家数量 \(N\)），但每次前向传播的计算量仅取决于激活的 K 个专家的计算量，远低于同等总参数量的密集（Dense）模型。这使得在有限的计算预算下可以训练出容量更大、可能性能更强的模型。
+*   **参数规模与计算解耦：** MoE 允许模型拥有巨大的总参数量（通过增加专家数量 $N$），但每次前向传播的计算量仅取决于激活的 K 个专家的计算量，远低于同等总参数量的密集（Dense）模型。这使得在有限的计算预算下可以训练出容量更大、可能性能更强的模型。
 *   **专家特化：** 理论上，不同的专家可以学习处理不同类型的数据、模式或任务的特定方面，实现知识的模块化存储和处理，从而提升模型的整体能力和泛化性。
 
 **挑战：**
@@ -532,7 +536,7 @@ $$
 
 **Cited as:**
 
-> Yue Shui. (Apr 2025). LLaMA 系列模型. https://syhya.github.io/posts/2025-04-06-llama
+> Yue Shui. (Apr 2025). LLaMA 系列模型. https://syhya.github.io/zh/posts/2025-04-06-llama
 
 Or
 
@@ -543,6 +547,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Apr",
-  url     = "https://syhya.github.io/posts/2025-04-06-llama"
+  url     = "https://syhya.github.io/zh/posts/2025-04-06-llama"
 }
 

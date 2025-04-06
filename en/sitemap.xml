@@ -2,21 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://syhya.github.io/tags/agent/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/agent/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/agent/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/ai/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -29,7 +16,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -39,6 +26,139 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/categories/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/llama/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/llama/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/llama/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/llm/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/llm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/llm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/nlp/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/nlp/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/nlp/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/post-training/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/post-training/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/post-training/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/pre-training/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/pre-training/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/pre-training/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/technical-blog/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/posts/2025-04-06-llama/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2025-04-06-llama/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2025-04-06-llama/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/</loc>
+    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/agent/</loc>
+    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/agent/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/agent/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/cot/</loc>
@@ -80,19 +200,6 @@
                 href="https://syhya.github.io/posts/2025-03-27-llm-agent/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/llm/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/llm/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/llm/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/memory/</loc>
     <lastmod>2025-03-27T10:00:00+00:00</lastmod>
   </url><url>
@@ -111,19 +218,6 @@
   </url><url>
     <loc>https://syhya.github.io/tags/planning/</loc>
     <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/posts/"
-                />
   </url><url>
     <loc>https://syhya.github.io/tags/react/</loc>
     <lastmod>2025-03-27T10:00:00+00:00</lastmod>
@@ -164,22 +258,6 @@
                 href="https://syhya.github.io/tags/reinforcement-learning/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/tags/tool-use/</loc>
     <lastmod>2025-03-27T10:00:00+00:00</lastmod>
   </url><url>
@@ -211,19 +289,6 @@
   </url><url>
     <loc>https://syhya.github.io/tags/workflow/</loc>
     <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/</loc>
-    <lastmod>2025-03-27T10:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/"
-                />
   </url><url>
     <loc>https://syhya.github.io/tags/ai-infrastructure/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
@@ -324,19 +389,6 @@
     <loc>https://syhya.github.io/tags/pipeline-parallelism/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://syhya.github.io/tags/pre-training/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/pre-training/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/pre-training/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/sequence-parallelism/</loc>
     <lastmod>2025-03-01T12:00:00+08:00</lastmod>
   </url><url>
@@ -409,32 +461,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/posts/2025-02-08-dpo/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/nlp/</loc>
-    <lastmod>2025-02-08T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/nlp/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/nlp/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/post-training/</loc>
-    <lastmod>2025-02-08T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/post-training/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/post-training/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/rlhf/</loc>

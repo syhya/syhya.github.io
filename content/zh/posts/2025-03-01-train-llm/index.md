@@ -1076,7 +1076,7 @@ SM3(Sparse Momentum for Massive Models)([Anil et al. 2019](https://arxiv.org/abs
 
 ### LoRA
 
-LoRA(Low-Rank Adaptation)([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) 提出在预训练权重旁引入**低秩适配器**，通过添加少量参数来实现高效微调，且不干扰预训练模型原有的推理能力。
+LoRA (Low-Rank Adaptation)([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) 提出在预训练权重旁引入 **低秩适配器** 的方法，通过添加少量参数实现高效微调，同时保持预训练模型原有的推理能力。
 
 下图直观展示了 LoRA 的原理和初始化策略：
 
@@ -1087,36 +1087,57 @@ LoRA(Low-Rank Adaptation)([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) �
     width="70%"
 >}}
 
-假设预训练权重矩阵为 $ \mathbf{W} \in \mathbb{R}^{d \times k} $。LoRA 在其中添加一个低秩更新项 $ \Delta \mathbf{W} = \mathbf{B}\mathbf{A} $，从而得到新的权重：
+在标准前向传播中，模型输出为
+
+$$
+h = W_0 x,
+$$
+
+而引入 LoRA 后，输出变为
+
+$$
+h = W_0 x + \Delta W x = W_0 x + B A x.
+$$
+
+其中：
+- **$A \in \mathbb{R}^{r \times k}$（降维矩阵）**：将输入从 $k$ 维映射到更低的 $r$ 维；  
+- **$B \in \mathbb{R}^{d \times r}$（升维矩阵）**：将降维后的特征从 $r$ 维映射回原来的 $d$ 维；  
+- **输入 $x$：** 维度为 $\mathbb{R}^{k}$；  
+- **原始权重 $W_0$：** 维度为 $\mathbb{R}^{d \times k}$，因而 $W_0 x \in \mathbb{R}^{d}$；  
+
+假设预训练权重矩阵为  
+$$
+\mathbf{W} \in \mathbb{R}^{d \times k},
+$$  
+LoRA 在其上添加低秩更新项，从而得到新的权重表示：
 
 $$
 \mathbf{W}' = \mathbf{W} + \alpha\, \mathbf{B}\mathbf{A},
 $$
 
 其中：  
-- $A \in \mathbb{R}^{r \times d}$ （降维矩阵），用来将输入从维度 $d$ 映射到一个更低的维度 $r$；
-- $B \in \mathbb{R}^{k \times r}$ （升维矩阵），再将降维后的特征从 $r$ 维映射回原来的 $k$ 维度；
-- $r \ll \min(d, k)$ （低秩维度），通常取 $4$ 到 $16$，以在保证模型表达能力的同时尽量减少额外参数量；
-- $\alpha$ 为缩放因子，用于放大低秩更新参数 $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$ ，**补偿由于低秩分解带来的数值幅度较小**的问题，从而确保即使新增参数量极少，也能在前向传播时有效传递新任务信息。通常可设置为 $\alpha = 2 \times r$（例如 $r = 8$ 时，取 $\alpha = 16$）。
+- **$A \in \mathbb{R}^{r \times k}$（降维矩阵）**：将输入从 $k$ 维映射到更低的 $r$ 维；  
+- **$B \in \mathbb{R}^{d \times r}$（升维矩阵）**：将降维后的特征从 $r$ 维映射回原来的 $d$ 维；  
+- **$r \ll \min(d, k)$（低秩维度）**：通常取值为 $4$ 到 $16$，在保证模型表达能力的同时尽量减少新增参数；  
+- **$\alpha$（缩放因子）**：用于放大低秩更新参数 $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$，补偿低秩分解带来的数值幅度较小的问题（通常设置为 $\alpha = 2 \times r$，例如当 $r = 8$ 时，$\alpha = 16$）。
 
-在微调过程中，**原始权重 $ \mathbf{W} $ 冻结不变**，只更新 $ \mathbf{A} $ 和 $ \mathbf{B} $。由于 $ r $ 远小于 $ d $ 或 $ k $，大大减少了需要训练的参数量。
+在微调过程中，**原始权重 $\mathbf{W}$ 被冻结**，只更新 $\mathbf{A}$ 和 $\mathbf{B}$，因而大大减少了训练和存储的参数量。
 
-为了确保微调初期引入的 $ \Delta \mathbf{W} = \mathbf{B}\mathbf{A} $ 对原模型的影响尽量小，需要让 $ \Delta \mathbf{W} \approx 0 $。常见做法如下：
+为了确保微调初期引入的更新项 $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$ 对原模型的影响尽量小，通常采用以下初始化策略：
 
-1. **降维矩阵 $ \mathbf{A} $ 的初始化**  
-   - **高斯初始化**  
-     令 $ \mathbf{A} \sim \mathcal{N}(0,\sigma^2) $(一般 $ \sigma $ 取较小值，如 0.02)。这样能保证初始更新量较小，不至于严重干扰模型输出。  
-   - **Kaiming(He)初始化**  
-     Kaiming 初始化是一种专为深层网络设计的权重初始化方法，其目标是保持前向信号和反向梯度在网络层之间的稳定性。对于 LoRA，只要确保尺度较小(或配合合适的缩放因子)，即可使初始 $ \Delta \mathbf{W} $ 较接近零。
+1. **降维矩阵 $\mathbf{A}$ 的初始化**  
+   - **高斯初始化**：令 $\mathbf{A} \sim \mathcal{N}(0,\sigma^2)$（一般 $\sigma$ 取较小值，如 0.02），保证初始更新量足够小，从而不至于严重干扰模型输出。  
+   - **Kaiming(He) 初始化**：Kaiming 初始化是一种专为深层网络设计的权重初始化方法，其目标是保持前向信号和反向梯度在网络层之间的稳定性。对于 LoRA，只要确保尺度较小(或配合合适的缩放因子)，即可使初始 $\Delta \mathbf{W}$ 接近零。
 
-2. **升维矩阵 $ \mathbf{B} $ 的初始化**  
-   - 通常将 $ \mathbf{B} $ 初始化为全零矩阵，这样在初始时就有 $ \mathbf{B}\mathbf{A} = 0 $，进一步保证对原模型的影响微乎其微。
+2. **升维矩阵 $\mathbf{B}$ 的初始化**  
+   - 通常将 $\mathbf{B}$ 初始化为全零矩阵，这样初始时即有 $\mathbf{B}\mathbf{A} = 0$，进一步降低对原模型影响。
 
-采用 LoRA 进行训练有以下优势： 
+采用 LoRA 进行训练具备以下优势：
 
 - **参数高效**：仅引入低秩适配器参数，减少了需要训练和存储的总参数量。  
-- **显存与计算效率**：冻结大部分预训练权重，微调过程只更新小规模参数，显著降低显存占用与算力开销。  
-- **无额外推理时延**：训练完成后，可将更新项 $ \Delta \mathbf{W} $ 合并回原始权重，不会增加推理阶段的计算量。  
+- **显存与计算效率**：冻结大部分预训练权重，微调过程中仅更新小规模参数，显著降低了显存占用与算力开销。  
+- **无额外推理时延**：训练完成后，可将更新项 $\Delta \mathbf{W}$ 合并回原始权重，从而在推理阶段不会增加额外计算量。  
+- **模块选择灵活性**：通过 `--lora_target` 或 `--lora-target` 参数，可以指定仅在特定线性模块上应用 LoRA 更新。支持的目标模块包括： ```q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj```, 这种设计允许用户根据具体任务需求，针对性地选择关键模块进行调优，从而进一步提高微调效率和适应性。
 
 ### QLoRA
 

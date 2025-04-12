@@ -1044,11 +1044,13 @@ SM3 (Sparse Momentum for Massive Models) ([Anil et al. 2019](https://arxiv.org/a
 - **State Sharing:** To a certain extent, allow different parameters to share state variables, further reducing memory consumption;
 - **Adaptive Learning Rate:** Dynamically adjust the learning rate according to the gradients of each parameter, improving the stability and convergence speed of model training.
 
+Okay, here is the English translation of the provided text about LoRA:
+
 ### LoRA
 
-LoRA (Low-Rank Adaptation) ([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) proposes to introduce **low-rank adapters** next to pre-trained weights to achieve efficient fine-tuning by adding a small number of parameters without interfering with the original inference ability of the pre-trained model.
+LoRA (Low-Rank Adaptation) ([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) proposes a method that introduces **low-rank adapters** alongside pre-trained weights. This enables efficient fine-tuning by adding only a small number of parameters, while preserving the original inference capabilities of the pre-trained model.
 
-The following figure intuitively shows the principle and initialization strategy of LoRA:
+The figure below intuitively illustrates the principle and initialization strategy of LoRA:
 
 {{< figure
     src="lora.png"
@@ -1057,36 +1059,57 @@ The following figure intuitively shows the principle and initialization strategy
     width="70%"
 >}}
 
-Assuming that the pre-trained weight matrix is $ \mathbf{W} \in \mathbb{R}^{d \times k} $. LoRA adds a low-rank update term $ \Delta \mathbf{W} = \mathbf{B}\mathbf{A} $ to it to obtain new weights:
+In the standard forward pass, the model output is
+
+$$
+h = W_0 x,
+$$
+
+With LoRA introduced, the output becomes
+
+$$
+h = W_0 x + \Delta W x = W_0 x + B A x.
+$$
+
+Where:
+- **$A \in \mathbb{R}^{r \times k}$ (Down-projection matrix)**: Maps the input from $k$ dimensions to a lower $r$ dimension;
+- **$B \in \mathbb{R}^{d \times r}$ (Up-projection matrix)**: Maps the reduced-dimension features from $r$ dimensions back to the original $d$ dimensions;
+- **Input $x$:** Has dimension $\mathbb{R}^{k}$;
+- **Original weight $W_0$:** Has dimension $\mathbb{R}^{d \times k}$, thus $W_0 x \in \mathbb{R}^{d}$;
+
+Assuming the pre-trained weight matrix is
+$$
+\mathbf{W} \in \mathbb{R}^{d \times k},
+$$
+LoRA adds a low-rank update term to it, resulting in the new weight representation:
 
 $$
 \mathbf{W}' = \mathbf{W} + \alpha\, \mathbf{B}\mathbf{A},
 $$
 
-where:
-- $A \in \mathbb{R}^{r \times d}$ (down-projection matrix): maps the input from dimension $d$ down to a lower dimension $r$.
-- $B \in \mathbb{R}^{k \times r}$ (up-projection matrix): maps the reduced-dimensional features back from dimension $r$ to the original dimension $k$.
-- $r \ll \min(d, k)$ (low-rank dimension): typically chosen between $4$ and $16$ to minimize additional parameters while maintaining model expressivity.
-- $\alpha$ (scaling factor): amplifies the low-rank update parameter $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$, **compensating for the smaller numerical magnitude introduced by low-rank decomposition**, ensuring effective transmission of task-specific information during forward propagation, even when the number of additional parameters is very small. Typically, set $\alpha = 2 \times r$ (e.g., for $r = 8$, choose $\alpha = 16$).
+Where:
+- **$\mathbf{A} \in \mathbb{R}^{r \times k}$ (Down-projection matrix)**: Maps the input from $k$ dimensions to a lower $r$ dimension;
+- **$\mathbf{B} \in \mathbb{R}^{d \times r}$ (Up-projection matrix)**: Maps the reduced-dimension features from $r$ dimensions back to the original $d$ dimensions;
+- **$r \ll \min(d, k)$ (Low rank dimension)**: Typically chosen from $4$ to $16$, balancing model expressiveness with minimizing added parameters;
+- **$\alpha$ (Scaling factor)**: Used to scale the low-rank update $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$, compensating for the potentially small numerical magnitude resulting from the low-rank decomposition (often set to $\alpha = 2 \times r$, e.g., $\alpha = 16$ when $r = 8$).
 
-During fine-tuning, **the original weight $ \mathbf{W} $ is frozen and unchanged**, and only $ \mathbf{A} $ and $ \mathbf{B} $ are updated. Since $ r $ is much smaller than $ d $ or $ k $, the number of parameters that need to be trained is greatly reduced.
+During the fine-tuning process, the **original weights $\mathbf{W}$ are frozen**, and only $\mathbf{A}$ and $\mathbf{B}$ are updated. This significantly reduces the number of trainable and storable parameters.
 
-To ensure that the impact of the introduced $ \Delta \mathbf{W} = \mathbf{B}\mathbf{A} $ on the original model is as small as possible in the early stage of fine-tuning, $ \Delta \mathbf{W} \approx 0 $ is required. Common practices are as follows:
+To ensure that the update term $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$ introduced at the beginning of fine-tuning has minimal impact on the original model, the following initialization strategies are commonly used:
 
-1. **Initialization of Dimensionality Reduction Matrix $ \mathbf{A} $**
-   - **Gaussian Initialization**
-     Let $ \mathbf{A} \sim \mathcal{N}(0,\sigma^2) $ (generally $ \sigma $ takes a smaller value, such as 0.02). This can ensure that the initial update amount is small and does not seriously interfere with the model output.
-   - **Kaiming (He) Initialization**
-     Kaiming initialization is a weight initialization method specially designed for deep networks. Its goal is to maintain the stability of forward signals and backward gradients between network layers. For LoRA, as long as it is ensured that the scale is small (or with a suitable scaling factor), the initial $ \Delta \mathbf{W} $ can be made closer to zero.
+1.  **Initialization of the down-projection matrix $\mathbf{A}$**
+    -   **Gaussian Initialization**: Set $\mathbf{A} \sim \mathcal{N}(0,\sigma^2)$ (typically with a small $\sigma$, e.g., 0.02) to ensure the initial update is small enough not to severely disrupt the model's output.
+    -   **Kaiming (He) Initialization**: Kaiming initialization is a weight initialization method designed specifically for deep networks, aiming to maintain stability of forward signals and backward gradients across layers. For LoRA, ensuring a small scale (or using an appropriate scaling factor $\alpha$) can make the initial $\Delta \mathbf{W}$ close to zero.
 
-2. **Initialization of Dimensionality Increase Matrix $ \mathbf{B} $**
-   - Usually, $ \mathbf{B} $ is initialized as a zero matrix, so that $ \mathbf{B}\mathbf{A} = 0 $ initially, further ensuring that the impact on the original model is minimal.
+2.  **Initialization of the up-projection matrix $\mathbf{B}$**
+    -   Typically, $\mathbf{B}$ is initialized as a zero matrix, so that initially $\mathbf{B}\mathbf{A} = 0$, further minimizing the impact on the original model.
 
-Training with LoRA has the following advantages:
+Training with LoRA offers the following advantages:
 
-- **Parameter Efficiency:** Only low-rank adapter parameters are introduced, reducing the total number of parameters that need to be trained and stored.
-- **Memory and Computational Efficiency:** Most pre-trained weights are frozen, and only small-scale parameters are updated during fine-tuning, significantly reducing memory footprint and computing power overhead.
-- **No Additional Inference Latency:** After training is completed, the update term $ \Delta \mathbf{W} $ can be merged back into the original weights, which will not increase the amount of calculation in the inference stage.
+-   **Parameter Efficiency**: Only introduces low-rank adapter parameters, reducing the total number of parameters that need to be trained and stored.
+-   **Memory and Computation Efficiency**: Freezes most pre-trained weights and updates only small-scale parameters during fine-tuning, significantly reducing memory footprint and computational overhead.
+-   **No Additional Inference Latency**: After training, the update term $\Delta \mathbf{W}$ can be merged back into the original weights ($\mathbf{W}' = \mathbf{W} + \alpha \mathbf{B}\mathbf{A}$), so no extra computation is added during the inference phase.
+-   **Module Selection Flexibility**: Using parameters like `--lora_target` or `--lora-target`, users can specify applying LoRA updates only to specific linear modules. Supported target modules include: ```q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj```. This design allows users to selectively fine-tune key modules based on specific task requirements, further enhancing fine-tuning efficiency and adaptability.
 
 ### QLoRA
 

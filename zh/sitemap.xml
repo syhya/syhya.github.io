@@ -43,21 +43,68 @@
   </url><url>
     <loc>https://syhya.github.io/zh/tags/deepseek-v2/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/deepseek-v2/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/deepseek-v2/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/posts/2025-04-18-deepseek-v2-v3/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2025-04-18-deepseek-v2-v3/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2025-04-18-deepseek-v2-v3/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/deepseek-v3/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/deepseek-v3/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/deepseek-v3/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/deepseekmoe/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/expert-choice/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/deepseekmoe/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/deepseekmoe/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/fp8-training/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/fp8-training/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/fp8-training/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/grpo/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
@@ -71,9 +118,6 @@
                 hreflang="zh-cn"
                 href="https://syhya.github.io/zh/tags/grpo/"
                 />
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/gshard/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/tags/kv-cache/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
@@ -101,11 +145,18 @@
                 href="https://syhya.github.io/zh/tags/llm/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/zh/tags/load-balancing/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/zh/tags/mla/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/mla/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/mla/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/moe/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
@@ -122,6 +173,16 @@
   </url><url>
     <loc>https://syhya.github.io/zh/tags/mtp/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/mtp/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/mtp/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/posts/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
@@ -138,6 +199,16 @@
   </url><url>
     <loc>https://syhya.github.io/zh/tags/rl/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/rl/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/rl/"
+                />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/sft/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
@@ -151,9 +222,6 @@
                 hreflang="zh-cn"
                 href="https://syhya.github.io/zh/tags/sft/"
                 />
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/switch-transformer/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/tags/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
@@ -828,11 +896,8 @@
                 href="https://syhya.github.io/zh/tags/rft/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/zh/tags/deepseek/</loc>
-    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/zh/tags/gqa/</loc>
-    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
+    <lastmod>2025-01-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -843,15 +908,6 @@
                 hreflang="zh-cn"
                 href="https://syhya.github.io/zh/tags/gqa/"
                 />
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/qwen/</loc>
-    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/rope/</loc>
-    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/zh/posts/2025-01-22-base_llm/</loc>
-    <lastmod>2025-01-22T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/tags/mha/</loc>
     <lastmod>2025-01-16T12:00:00+08:00</lastmod>

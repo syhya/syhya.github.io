@@ -2,7 +2,7 @@
 title: "DeepSeek-V2 vs V3"
 date: 2025-04-18T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "LLM", "MoE", "Transformer", "MLA", "DeepSeekMoE", "MTP", "FP8 Training", "GRPO", "SFT", "RL", "Load Balancing", "KV Cache", "DeepSeek-V2", "DeepSeek-V3", "GShard", "Switch Transformer", "Expert Choice"]
+tags: ["Deep Learning", "AI", "LLM", "DeepSeek-V2", "DeepSeek-V3", "MoE", "Transformer", "MLA", "DeepSeekMoE", "MTP", "FP8 Training", "GRPO", "SFT", "RL", "KV Cache"]
 categories: ["技术博客"]
 ShowReadingTime: true
 toc: true
@@ -12,24 +12,22 @@ draft: false
 math: true
 ---
 
-> **注意**: 本文**正在更新中**，内容只是**草稿版本**，并不完善，后续会有变动。请随时关注最新版本。
+DeepSeek AI 先后发布了 **DeepSeek-V2** ([DeepSeek-AI, 2024](https://arxiv.org/abs/2405.04434)) 和 **DeepSeek-V3** ([DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))，这两款强大的混合专家（Mixture-of-Experts, MoE）语言模型在保持顶尖性能的同时，显著优化了训练成本和推理效率。DeepSeek-V2 拥有 236B 总参数，每次激活 21B；而 DeepSeek-V3 则进一步扩展至 671B 总参数，每次激活 37B。两者均支持 128K 上下文长度。
 
-DeepSeek AI 先后发布了 **DeepSeek-V2** ([DeepSeek-AI, 2024a](https://arxiv.org/abs/2405.04434)) 和 **DeepSeek-V3** ([DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))，这两款强大的混合专家（Mixture-of-Experts, MoE）语言模型在保持顶尖性能的同时，显著优化了训练成本和推理效率。DeepSeek-V2 拥有 236B 总参数，每次激活 21B；而 DeepSeek-V3 则进一步扩展至 671B 总参数，每次激活 37B。两者均支持 128K 上下文长度。
-
-这两个模型的核心创新在于采用了 **多头隐注意力 (Multi-head Latent Attention, MLA)** 和 **DeepSeekMoE** 架构 ([Dai et al., 2024](https://arxiv.org/abs/2401.06066))。MLA 通过将键值（KV）缓存压缩到低维隐向量中，大幅降低了推理时的显存占用，提高了效率。DeepSeekMoE 则通过细粒度专家切分和共享专家隔离，实现了更强的专家特化能力和更经济的训练成本。DeepSeek-V3 在 V2 的基础上，进一步引入了**无辅助损失的负载均衡策略 (Auxiliary-Loss-Free Load Balancing)** ([Wang et al., 2024a](https://arxiv.org/abs/2408.15664)) 和**多令牌预测 (Multi-Token Prediction, MTP)** 训练目标 ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737) 启发)，进一步提升了模型性能和训练效率。
+这两个模型的核心创新在于采用了 **多头隐注意力 (Multi-head Latent Attention, MLA)** 和 **DeepSeekMoE** 架构 ([Dai et al., 2024](https://arxiv.org/abs/2401.06066))。MLA 通过将键值（KV）缓存压缩到低维隐向量中，大幅降低了推理时的显存占用，提高了效率。DeepSeekMoE 则通过细粒度专家切分和共享专家隔离，实现了更强的专家特化能力和更经济的训练成本。DeepSeek-V3 在 V2 的基础上，进一步引入了**无辅助损失的负载均衡策略 (Auxiliary-Loss-Free Load Balancing)** ([Wang et al., 2024](https://arxiv.org/abs/2408.15664)) 和**多 token 预测 (Multi-Token Prediction, MTP)** ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737))训练目标 ，进一步提升了模型性能和训练效率。
 
 DeepSeek-V2 在 8.1T tokens 上进行预训练，而 DeepSeek-V3 则在更大规模的 14.8T tokens 上训练。两者都经过了监督微调（Supervised Fine-Tuning, SFT）和强化学习（Reinforcement Learning, RL）阶段以充分释放潜力。评估结果显示，DeepSeek-V2 和 V3 在众多基准测试中均达到了开源模型的顶尖水平，DeepSeek-V3 更是成为了目前最强的开源基础模型之一，性能可与顶尖闭源模型媲美。
 
 {{< figure
     src="deepseek_v2_benchmark.png"
-    caption="Fig. 1. (a) MMLU accuracy vs. activated parameters, among different open-source models. (b) Training costs and inference efficiency of DeepSeek 67B (Dense) and DeepSeek-V2. (Image source: [DeepSeek-AI, 2024a](https://arxiv.org/abs/2405.04434))"
+    caption="Fig. 1. (a) MMLU accuracy vs. activated parameters, among different open-source models. (b) Training costs and inference efficiency of DeepSeek 67B (Dense) and DeepSeek-V2. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2405.04434))"
     align="center"
     width="100%"
 >}}
 
 {{< figure
     src="deepseek_v3_benchmark.png"
-    caption="Fig. 2. Benchmark performance of DeepSeek-V3 and its counterparts. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 2. Benchmark performance of DeepSeek-V3 and its counterparts. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -126,7 +124,7 @@ DeepSeek-V2 和 V3 均基于 Transformer 架构，但在注意力和前馈网络
 
 {{< figure
     src="deepseek_architecture.png"
-    caption="Fig. 3. Illustration of the architecture of DeepSeek-V2 and DeepSeek-V3. MLA ensures efficient inference by significantly reducing the KV cache for generation, and DeepSeekMoE enables training strong models at an economical cost through the sparse architecture. (Image source: [DeepSeek-AI, 2024a](https://arxiv.org/abs/2405.04434))"
+    caption="Fig. 3. Illustration of the architecture of DeepSeek-V2 and DeepSeek-V3. MLA ensures efficient inference by significantly reducing the KV cache for generation, and DeepSeekMoE enables training strong models at an economical cost through the sparse architecture. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2405.04434))"
     align="center"
     width="100%"
 >}}
@@ -136,6 +134,14 @@ DeepSeek-V2 和 V3 均基于 Transformer 架构，但在注意力和前馈网络
 传统的 Transformer 模型通常采用**多头注意力（Multi-Head Attention, MHA）**([Vaswani et al., 2017](https://arxiv.org/abs/1706.03762))，但在生成过程中，其庞大的 KV cache 成为限制推理效率的瓶颈。为了解决这个问题，研究者提出了**多查询注意力（Multi-Query Attention, MQA）**([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) 和**分组查询注意力（Grouped-Query Attention, GQA）**([Ainslie et al., 2023](https://arxiv.org/abs/2305.13245))。这些方法虽然减少了 KV 缓存，但往往以牺牲模型性能为代价。
 
 DeepSeek-V2 和 V3 采用了创新的 **多头隐注意力（Multi-head Latent Attention, MLA）** 机制。MLA 的核心思想是 **低秩键值联合压缩 (Low-Rank Key-Value Joint Compression)**。
+
+
+{{< figure
+    src="mla.png"
+    caption="Fig. 4. Simplified illustration of Multi-Head Attention (MHA), Grouped-Query Attention (GQA), Multi-Query Attention (MQA), and Multi-head Latent Attention (MLA). Through jointly compressing the keys and values into a latent vector, MLA significantly reduces the KV cache during inference. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2405.04434))"
+    align="center"
+    width="100%"
+>}}
 
 #### MHA 回顾
 
@@ -260,12 +266,6 @@ MLA 的一个关键优势在于推理效率的提升，这部分得益于矩阵�
 
 **总结:** 通过矩阵吸收，MLA 在推理时避免了从缓存的低维隐向量 \(\mathbf{c}_j^{KV}\) 重复计算高维的键 \(\mathbf{k}_{j,i}^C\) 和值 \(\mathbf{v}_{j,i}^C\)，显著提高了计算效率。实际缓存的只有 \(\mathbf{c}_t^{KV}\) 和 \(\mathbf{k}_t^R\)。
 
-{{< figure
-    src="mla.png"
-    caption="Fig. 4. Simplified illustration of Multi-Head Attention (MHA), Grouped-Query Attention (GQA), Multi-Query Attention (MQA), and Multi-head Latent Attention (MLA). Through jointly compressing the keys and values into a latent vector, MLA significantly reduces the KV cache during inference. (Image source: [DeepSeek-AI, 2024a](https://arxiv.org/abs/2405.04434))"
-    align="center"
-    width="100%"
->}}
 
 #### KV 缓存对比
 
@@ -282,7 +282,7 @@ MLA 的一个关键优势在于推理效率的提升，这部分得益于矩阵�
 
 {{< figure
     src="mla_vs_mha.png"
-    caption="Fig. 5. Comparison between MLA and MHA on hard benchmarks. DeepSeek-V2 shows better performance than MHA, but requires a significantly smaller amount of KV cache. (Image source: [DeepSeek-AI, 2024a](https://arxiv.org/abs/2405.04434))"
+    caption="Fig. 5. Comparison between MLA and MHA on hard benchmarks. DeepSeek-V2 shows better performance than MHA, but requires a significantly smaller amount of KV cache. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2405.04434))"
     align="center"
     width="100%"
 >}}
@@ -292,160 +292,264 @@ MLA 的一个关键优势在于推理效率的提升，这部分得益于矩阵�
 
 在深入 DeepSeekMoE 之前，先回顾一下混合专家模型（MoE）的基础知识。
 
-**混合专家模型(Mixture-of-Experts, MoE)**([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538)) 是一种稀疏激活模型，它通过结合多个独立的“专家”网络和一个门控网络，在不显著增加计算成本的前提下，大幅提升了模型的参数量和性能。MoE 的核心思想是**稀疏激活**，即对于每个输入样本，仅激活部分专家网络，而不是整个模型。这种方法既提高了计算效率，又增强了模型的表达能力，使其在 LLMs 中表现出色。
+**混合专家模型(Mixture-of-Experts, MoE)**([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)) 是一种稀疏激活模型，它通过结合多个独立的“专家”网络和一个门控网络(Gating Network)，在不显著增加计算成本的前提下，大幅提升了模型的参数量和性能。MoE 的核心思想是**稀疏激活(Sparse Activation)**，即对于每个输入样本，仅激活部分专家网络，而不是整个模型。这种方法既提高了计算效率，又增强了模型的表达能力，使其在 LLMs 中表现出色。
 
-MoE 设计灵感来源于集成学习，一种将复杂任务分解为多个子任务并由不同模型协作完成的技术。在 MoE 中，这些“子任务”由多个独立的专家网络处理，而门控网络则负责根据输入样本的特征动态选择最适合的专家。这种分工合作的机制类似于人类社会中的专家团队：不同领域的专家针对特定问题提供专业意见，最终综合得出结果。
+MoE 设计灵感来源于[集成学习(Ensemble learning)](https://en.wikipedia.org/wiki/Ensemble_learning), 一种将复杂任务分解为多个子任务并由不同模型协作完成的技术。在 MoE 中，这些“子任务”由多个独立的专家网络处理，而门控网络则负责根据输入样本的特征动态选择最适合的专家。这种分工合作的机制类似于人类社会中的专家团队：不同领域的专家针对特定问题提供专业意见，最终综合得出结果。
+
 
 {{< figure
     src="moe.png"
-    caption="Fig. 6. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of n experts are selected and activated by the gating network. (Image source: [Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))"
+    caption="Fig. 6. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))"
     align="center"
     width="100%"
->}}
+>}}  
 
-#### MoE 核心组件
+
+### MoE 核心组件
 
 一个典型的 MoE 包含以下组件：
 
-*   **专家网络:** 一组独立的神经网络 \(\{E_1, E_2, ..., E_n\}\)，每个专家网络 \(E_i\) 可以是任意类型的神经网络，例如 FFN, CNN, RNN 等。专家网络的数量 \(n\) 可以很大，例如几十个、几百个甚至几千个。
-*   **门控网络:** 一个可训练的神经网络 \(G\)，用于根据输入样本 \(x\) 学习一个概率分布，决定激活哪些专家。门控网络的输入是输入样本 \(x\)，输出是一个 \(n\) 维的概率向量 \(p = G(x) = [p_1, p_2, ..., p_n]\)，其中 \(p_i\) 表示激活专家 \(E_i\) 的概率（或权重）。
-*   **专家输出聚合:** 根据门控网络的输出概率分布（或权重），将激活的专家网络的输出进行加权求和，得到 MoE 层的最终输出 \(y\)。
+* **专家网络(Experts):**  一组独立的神经网络 $\{E_1, E_2, ..., E_n\}$，每个专家网络 $E_i$ 可以是任意类型的神经网络，例如 FFN, CNN, RNN 等。专家网络的数量 $n$ 可以很大，例如几十个、几百个甚至几千个。
+* **门控网络(Gating Network):**  一个可训练的神经网络 $G$，用于根据输入样本 $x$ 学习一个概率分布，决定激活哪些专家。门控网络的输入是输入样本 $x$，输出是一个 $n$ 维的概率向量 $p = G(x) = [p_1, p_2, ..., p_n]$，其中 $p_i$ 表示激活专家 $E_i$ 的概率。
+* **专家输出聚合(Expert Output Aggregation):**  根据门控网络的输出概率分布，将激活的专家网络的输出进行加权求和，得到 MoE 层的最终输出 $y$。
 
-#### Noisy Top-k Gating
+### Noisy Top-k Gating
 
 为了实现稀疏激活并确保专家使用均衡，MoE 通常采用 **Noisy Top-k Gating** 作为门控机制。这种方法通过引入噪声和 top-k 选择，既保证了计算效率，又避免了专家负载不均的问题。以下是其详细工作流程：
 
-1.  **门控分数计算:**
-    对于输入样本 \(x\)，门控网络首先计算每个专家的门控分数 \(H^{(i)}(x)\)。这一分数包含两部分：线性变换和噪声项，公式如下：
-    \[
-    H^{(i)}(x) = (x W_g)^{(i)} + \epsilon \cdot \text{softplus}\left((x W_{\text{noise}})^{(i)} \right), \quad \epsilon \sim \mathcal{N}(0, 1)
-    \]
-    *   **参数说明**：
-        *   \(W_g \in \mathbb{R}^{d \times n}\)：门控网络的可训练权重矩阵，\(d\) 是输入特征维度，\(n\) 是专家数量。
-        *   \(W_{\text{noise}} \in \mathbb{R}^{d \times n}\)：用于生成噪声的权重矩阵。
-        *   \(\epsilon \sim \mathcal{N}(0, 1)\)：标准高斯噪声，增加门控随机性。
-        *   \(\text{softplus}(x) = \log(1 + e^x)\)：平滑激活函数，确保噪声非负。
-    噪声的引入避免了门控网络总是选择固定的专家，增强了模型的鲁棒性和多样性。
 
-2.  **Top-k 选择:**
-    计算出门控分数向量 \(H(x) = [H^{(1)}(x), H^{(2)}(x), \dots, H^{(n)}(x)]\) 后，门控网络选择其中值最大的前 \(k\) 个专家(通常 \(k \ll n\))。这一步骤通过 \(\text{topk}(v, k)\) 函数实现：
-    \[
-    \text{topk}^{(i)}(v, k) =
-    \begin{cases}
-    v^{(i)} & \text{if } v^{(i)} \text{ is in the top } k \text{ elements of } v \\
-    -\infty & \text{otherwise}
-    \end{cases}
-    \]
-    将非 Top-k 专家的分数设为 \(-\infty\)，确保后续 softmax 操作中这些专家的概率为 0，实现稀疏性。
+1. **门控分数计算:**
 
-3.  **Softmax 归一化:**
-    对 Top-k 专家的门控分数进行 softmax 归一化，得到稀疏的概率分布 \(G(x)\)：
-    \[
-    G(x) = \text{softmax}\left( \text{topk}(H(x), k) \right)
-    \]
-    只有 Top-k 个专家的概率非零，其余为 0。例如，若 \(n=100, k=2\)，则 98 个专家的概率为 0。
+对于输入样本 $x$，门控网络首先计算每个专家的门控分数 $H^{(i)}(x)$。这一分数包含两部分：线性变换和噪声项，公式如下：
 
-4.  **加权求和:**
-    将 Top-k 个专家的输出按概率加权求和，得到 MoE 层的输出：
-    \[
-    y = \sum_{i=1}^{n} G^{(i)}(x) E_i(x)
-    \]
-    由于只有 \(k\) 个专家被激活，计算量远低于激活所有 \(n\) 个专家。
+$$
+H^{(i)}(x) =(x W_g)^{(i)} + \epsilon \cdot \text{softplus}\left((x W_{\text{noise}})^{(i)} \right), \quad \epsilon \sim \mathcal{N}(0, 1)
+$$
 
-#### 辅助损失
+- **参数说明**：
+  - $W_g \in \mathbb{R}^{d \times n}$：门控网络的可训练权重矩阵，$d$ 是输入特征维度，$n$ 是专家数量。
+  - $W_{\text{noise}} \in \mathbb{R}^{d \times n}$：用于生成噪声的权重矩阵。
+  - $\epsilon \sim \mathcal{N}(0, 1)$：标准高斯噪声，增加门控随机性。
+  - $\text{softplus}(x) = \log(1 + e^x)$：平滑激活函数，确保噪声非负。
 
-为了避免门控网络过度偏向少数专家，MoE 引入了**辅助损失**([Shazeer et al., 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的变异系数的平方：
-\[
+噪声的引入避免了门控网络总是选择固定的专家，增强了模型的鲁棒性和多样性。
+
+2. **Top-k 选择:**
+
+计算出门控分数向量 $H(x) = [H^{(1)}(x), H^{(2)}(x), \dots, H^{(n)}(x)]$ 后，门控网络选择其中值最大的前 $k$ 个专家(通常 $k \ll n$)。这一步骤通过 $\text{topk}(v, k)$ 函数实现：
+
+$$
+\text{topk}^{(i)}(v, k) = 
+\begin{cases} 
+v^{(i)} & \text{if } v^{(i)} \text{ is in the top } k \text{ elements of } v \\
+-\infty & \text{otherwise}
+\end{cases}
+$$
+
+将非 Top-k 专家的分数设为 $-\infty$，确保后续 softmax 操作中这些专家的概率为 0，实现稀疏性。
+
+3. **Softmax 归一化:**
+
+对 Top-k 专家的门控分数进行 softmax 归一化，得到稀疏的概率分布 $G(x)$：
+
+$$
+G(x) = \text{softmax}\left( \text{topk}(H(x), k) \right)
+$$
+
+只有 Top-k 个专家的概率非零，其余为 0。例如，若 $n=100, k=2$，则 98 个专家的概率为 0。
+
+4. **加权求和:**
+
+将 Top-k 个专家的输出按概率加权求和，得到 MoE 层的输出：
+
+$$
+y = \sum_{i=1}^{n} G^{(i)}(x) E_i(x)
+$$
+
+由于只有 $k$ 个专家被激活，计算量远低于激活所有 $n$ 个专家。
+
+
+### 辅助损失
+
+为了**避免门控网络过度偏向少数专家**，MoE 引入了**辅助损失(Auxiliary Loss)**([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
+
+$$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
-\]
-*   **参数说明**：
-    *   \(X\)：一个 mini-batch 的输入样本。
-    *   \(\sum_{x \in X} G(x)\)：统计每个专家在 mini-batch 中的激活次数（或权重总和）。
-    *   \(\text{CV}\)：标准差与均值的比值，衡量专家使用分布的均匀性。
-    *   \(w_{\text{aux}}\)：辅助损失的权重，需手动调整。
-*   **作用**：通过最小化 \(\mathcal{L}_{\text{aux}}\)，模型优化专家选择的均衡性，避免某些专家被过度使用而其他专家闲置。
+$$
 
-#### GShard
+- **参数说明**：  
+  - $X$：一个 mini-batch 的输入样本。  
+  - $\sum_{x \in X} G(x)$：统计每个专家在 mini-batch 中的激活次数。  
+  - $\text{CV}$：标准差与均值的比值，衡量专家使用分布的均匀性。  
+  - $w_{\text{aux}}$：辅助损失的权重，需手动调整。  
 
-**GShard**([Lepikhin et al., 2021](https://openreview.net/forum?id=qrwe7XHTmYb)) 主要对 MoE 层进行分片，将 MoE 层中的专家网络 \(\{E_1, E_2, ..., E_n\}\) 分散到多个 TPU 设备上。例如，如果有 \(P\) 个 TPU 设备，可以将专家网络划分为 \(P\) 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层(例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
+- **作用**：通过最小化 $\mathcal{L}_{\text{aux}}$，模型优化专家选择的均衡性，避免某些专家被过度使用而其他专家闲置。
 
-**GShard 的改进门控机制:** GShard 在 Noisy Top-k Gating 的基础上，进行了一些改进，以提高门控机制的性能和稳定性：
-*   **专家容量:** 为了避免专家过载，GShard 引入了专家容量限制。每个专家网络都有一个容量上限，表示它最多可以处理的 token 数量。如果一个 token 被路由到一个已经达到容量上限的专家网络，则该 token 会被标记为 "overflowed"，门控输出会被设置为零向量。
-*   **局部组分发:** 为了提高门控效率，GShard 将 token 分组，在组级别强制执行专家容量限制。
-*   **辅助损失:** GShard 的辅助损失旨在最小化每个专家网络路由到的数据比例的均方误差，更直接地衡量专家负载平衡程度。
-*   **随机路由:** GShard 在选择 top-k 个专家网络时，引入了随机路由机制，以一定的概率随机选择次优的专家网络，增加多样性。
+### GShard
 
-下面是 GShard 的核心算法流程伪代码:
+**GShard**([Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层(例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
+
+**GShard 的改进门控机制:**
+
+GShard 在 Noisy Top-k Gating 的基础上，进行了一些改进，以提高门控机制的性能和稳定性：
+
+- **专家容量(Expert Capacity):**  
+  为了避免专家过载，GShard 引入了专家容量限制。每个专家网络都有一个容量上限，表示它最多可以处理的 token 数量。如果一个 token 被路由到一个已经达到容量上限的专家网络，则该 token 会被标记为 "overflowed"，门控输出会被设置为零向量，表示该 token 不会被路由到任何专家网络。
+
+- **局部组分发(Local Group Dispatching):**  
+  为了提高门控效率，GShard 将 token 分组，在组级别强制执行专家容量限制。例如，将 mini-batch 中的 token 划分为多个局部组，每个局部组包含一定数量的 token。门控网络为每个局部组选择 top-k 个专家网络，并确保每个专家网络在一个局部组内处理的 token 数量不超过其容量上限。
+
+- **辅助损失(Auxiliary Loss):**  
+  GShard 也使用了辅助损失函数来平衡专家负载。与原始 MoE 模型的辅助损失不同，GShard 的辅助损失旨在最小化每个专家网络路由到的数据比例的均方误差，更加直接地衡量专家负载平衡程度。
+
+- **随机路由(Random Routing):**  
+  为了增加路由的随机性，GShard 在选择 top-k 个专家网络时，引入了随机路由机制。除了选择最佳的 top-k 个专家网络外，GShard 还会以一定的概率随机选择次优的专家网络，增加专家网络的多样性，提高模型的泛化能力。
+
+下面是 GShard 的核心算法流程:
 
 {{< figure
     src="gshard.png"
-    caption="Fig. 7. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al., 2021](https://openreview.net/forum?id=qrwe7XHTmYb))"
+    caption="Fig. 7. Pseudo code of the group-level top-2 gating mechanism with auxiliary loss in GShard. (Image source: [Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))"
     align="center"
     width="100%"
->}}
+>}}  
 
-#### Switch Transformer
+### Switch Transformer
 
-**Switch Transformer**([Fedus et al., 2021](https://arxiv.org/abs/2101.03961)) 是 Google 提出的一个参数量达到**万亿**级别的 MoE 模型。其核心创新是将 Transformer 模型中的密集前馈网络(FFN) 层替换为稀疏的 Switch FFN 层。与 GShard 的 Top-2 Gating 不同，Switch Transformer **每个输入 token 只路由到一个专家网络 (Top-1 Gating)**，具有更高的稀疏性，进一步降低了计算成本。
+**Switch Transformer**([Fedus et al. 2021](https://arxiv.org/pdf/2101.03961)) 是 Google 提出的一个参数量达到**万亿**级别的 MoE 模型。其核心创新是将 Transformer 模型中的密集前馈网络(FFN) 层替换为稀疏的 Switch FFN 层。与 GShard 的 Top-2 Gating 不同，Switch Transformer 每个输入 token 只路由到一个专家网络，具有更高的稀疏性，进一步降低了计算成本，使得训练万亿参数模型成为可能。鼓励 token 路由在 $N$ 个专家之间更加均衡。Switch Transformer 的辅助损失基于实际路由比例与预测路由概率的乘积累加，具体公式如下：
 
-Switch Transformer 的辅助损失基于实际路由比例与预测路由概率的乘积累加，鼓励 token 路由在 \(N\) 个专家之间更加均衡，具体公式如下：
-\[
-\mathcal{L}_{\text{aux}} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
-\]
-*   **参数说明**：
-    *   \(N\)：专家的总数。
-    *   \(f_i\)：路由到第 \(i\) 个专家的 token 比例，定义为：\(f_i = \frac{1}{T} \sum_{x \in B} \mathbb{1}\{\text{argmax } p(x) = i\}\)。
-    *   \(P_i\)：gating 网络预测的第 \(i\) 个专家的路由概率，定义为：\(P_i = \frac{1}{T} \sum_{x \in B} p_i(x)\)。
-    *   \(T\)：批次 \(B\) 中的 token 总数。
-    *   \(\alpha\)：辅助损失的权重超参数，通常设为 \(10^{-2}\)。
+$$
+\text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
+$$
+
+- **参数说明**：  
+  - $N$：专家的总数。  
+  - $f_i$：路由到第 $i$ 个专家的 token 比例，定义为：  
+
+    $$
+    f_i = \frac{1}{T} \sum_{x \in B} 1\{\text{argmax } p(x) = i\}
+    $$
+
+  - $P_i$：gating 网络预测的第 $i$ 个专家的路由概率，定义为：  
+
+    $$
+    P_i = \frac{1}{T} \sum_{x \in B} p_i(x)
+    $$
+
+  - $T$：批次 $B$ 中的 token 总数。  
+  - $\alpha$：辅助损失的权重超参数，通常设为 $10^{-2}$。  
+
+通过最小化 $\text{loss}$，模型使实际路由比例 $f_i$ 与预测概率 $P_i$ 趋于一致，从而间接促进专家间的负载平衡，避免部分专家闲置。
 
 {{< figure
     src="switch_transformer.png"
-    caption="Fig. 8. Switch transformer. The sparse switch FFN layer is in the blue boxes. (Image source: [Fedus et al., 2021](https://arxiv.org/abs/2101.03961))"
+    caption="Fig. 8. Switch transformer. The sparse switch FFN layer is in the blue boxes. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
     align="center"
     width="100%"
->}}
+>}}  
+
+**Switch Router 机制:**
+
+1. **路由预测:**  
+   对于输入 token $x$，Switch Router 预测每个专家网络的路由概率 $p_i = G^{(i)}(x)$，其中 $i = 1, 2, ..., n$，n 是专家网络数量。
+
+2. **专家选择:**  
+   选择路由概率最高的专家网络作为最佳专家网络。Switch Transformer 采用 Top-1 路由策略，即每个 token 只路由到路由概率最高的专家网络。
+
+3. **token 路由:**  
+   将输入 token $x$ 路由到选择的最佳专家网络进行处理。
 
 **Switch Transformer 的训练稳定性优化:**
-*   **选择性精度:** 路由函数内部使用 FP32 计算，结果转为 FP16。
-*   **更小初始化:** 权重初始化尺度参数从 1 调整至 0.1。
-*   **更高专家 Dropout:** 专家 FFN 层使用较高 dropout 率（如 0.4）。
+
+为提升 Switch Transformer 的训练稳定性，论文提出了如下优化策略：
+
+- **选择性精度(Selective Precision)**  
+  在路由函数内部采用 FP32 精度既能提高训练稳定性，又能避免因 FP32 张量通信而产生的额外开销。具体来说，Switch Router 的计算过程全程使用 FP32，最终结果再转换为 FP16 以兼顾效率与精度。
+
+- **更小初始化(Smaller Initialization)**  
+  建议将 Transformer 的权重初始化尺度参数 $s$ 从 1 调整至 0.1。较小的初始化尺度有助于缓解训练初期的梯度爆炸风险，从而提升整体训练稳定性。具体实现为：从均值为 0、标准差为 $\sqrt{s/n}$(其中 $n$ 为输入单元数) 的截断正态分布中采样。
+
+- **更高专家 Dropout(Higher Expert Dropout)**  
+  在专家 FFN 层中采用较高的 dropout 率(例如 0.4)，而在非专家层则保持较低的 dropout 率(例如 0.1)，这种设置能有效防止过拟合，进而增强模型的泛化能力。下图实验结果显示，在 GLUE、CNNDM、SQuAD 和 SuperGLUE 等任务上，当专家层 dropout 率设为 0.4 时，模型表现最佳。
+
 
 {{< figure
     src="switch_transformer_fine_tuning_result.png"
-    caption="Fig. 9. Fine-tuning regularization results for Switch Transformer. (Image source: [Fedus et al., 2021](https://arxiv.org/abs/2101.03961))"
+    caption="Fig. 9. Fine-tuning regularization results. A sweep of dropout rates while fine-tuning Switch Transformer models pre-trained on 34B tokens of the C4 data set(higher numbers are better). (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
     align="center"
     width="100%"
->}}
+>}}  
 
-下图直观展示了不同并行技术如何分割模型权重和数据:
+Switch Transformers 论文中使用下图直观的展示了使用不同的并行技术如何分割模型权重和数据:
 
 {{< figure
     src="switch_transformer_parallelism.png"
-    caption="Fig. 10. An illustration of various parallelism strategies on how model weights and data are split over multiple GPU cores. (Image source: [Fedus et al., 2021](https://arxiv.org/abs/2101.03961))"
+    caption="Fig. 10. An illustration of various parallelism strategies on how(Top) model weights and(Bottom) data are split over multiple GPU cores. In the top row, each color denotes a unique weight matrix. In the bottom row, different colors indicate different sets of tokens. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
     align="center"
     width="100%"
->}}
+>}}  
 
-#### 专家选择
+### 专家选择
 
-**专家选择(Expert Choice, EC)**([Zhou et al. 2022](https://arxiv.org/abs/2202.09368)) 是一种与 token 选择路由相反的策略。在 EC 中，**每个专家从所有 token 中挑选 top-k 个进行处理**。
+**专家选择(Expert Choice, EC)**([Zhou et al. 2022](https://arxiv.org/abs/2202.09368)) 是一种与 token 选择路由(如 GShard 的 top-2 或 Switch Transformer 的 top-1)相反的路由策略。在 token 选择路由中，每个 token 从所有专家中选择 top-k 个进行路由；而在专家选择路由中，每个专家从所有 token 中挑选 top-k 个进行处理。这种方法旨在解决 token 选择路由中的负载不均和 token 浪费问题，同时显著提高训练效率。下面是具体的计算过程：
 
-1.  **计算 token-to-expert 亲和度分数 \(S\):**
-    \[
-    S = \text{softmax}(X \cdot W_g) \in \mathbb{R}^{n \times e}
-    \]
-    其中 \(X\) 是输入 token 矩阵，\(W_g\) 是门控权重，\(n\) 是 token 数，\(e\) 是专家数。
+1. **计算 token-to-expert 亲和度分数**  
 
-2.  **专家选择 token:** 对亲和度矩阵的转置 \(S^T\) 进行 top-k 操作：
-    \[
-    G, I = \text{top-}k(S^T, k)
-    \]
-    得到门控权重矩阵 \(G \in \mathbb{R}^{e \times k}\) 和 token 索引矩阵 \(I \in \mathbb{R}^{e \times k}\)。
+   对于输入矩阵 $X \in \mathbb{R}^{n \times d}$，计算 token-to-expert 亲和度分数矩阵 $S \in \mathbb{R}^{n \times e}$ 的过程为：
 
-3.  **处理:** 每个专家 \(i\) 处理由 \(I[i, :]\) 索引的 \(k\) 个 token，并使用 \(G[i, :]\) 作为权重。
+   $$
+   S = \text{softmax}(X \cdot W_g), \quad \text{where } W_g \in \mathbb{R}^{d \times e}.
+   $$
+   这里，$W_g$ 为门控权重矩阵，$e$ 为专家数量。
 
-EC 通过正则化限制每个 token 被路由到的专家数量来控制稀疏性。其优势在于完美的负载均衡和更高的训练效率，但对 batch size 有要求且不适用于自回归生成。
+2. **专家选择 token**  
+
+   每个专家从所有 token 中选择 top-k 个进行处理。通过对 $S^T$ 进行 top-k 选择：
+
+   $$
+   G, I = \text{top-}k(S^T, k),
+   $$
+
+   得到：
+   - **门控矩阵 $G \in \mathbb{R}^{e \times k}$：** 记录专家选择的 token 对应的路由权重，其中 $G[i, j]$ 表示专家 $i$ 选择的第 $j$ 个 token 的权重；
+   - **token 索引矩阵 $I \in \mathbb{R}^{e \times k}$：** 表示每个专家选择的 token 在输入中的索引。
+
+3. **One-hot 编码**  
+
+   将 token 索引矩阵 $I$ 转换为 one-hot 编码矩阵 $P \in \mathbb{R}^{e \times k \times n}$，用于后续计算：
+
+   $$
+   P = \operatorname{one}-\operatorname{hot}(I)
+   $$
+
+4. **构造 Gated FFN 层输入**  
+
+   对于每个专家 $i$，其 gated FFN 层的输入为：
+
+   $$
+  (P \cdot X) \in \mathbb{R}^{e \times k \times d}.
+   $$
+
+EC 通过正则化限制每个 token 被路由到的专家数量，从而控制模型的稀疏性。一个常见的正则化目标如下：
+
+$$
+\begin{aligned}
+& \max_{A} \langle S^{\top}, A \rangle + \lambda H(A) \\
+& \text{s.t. } \forall i: \sum_{j'} A[i, j'] = k, \quad \forall j: \sum_{i'} A[i', j] \leq b, \quad \forall i,j: 0 \leq A[i, j] \leq 1,
+\end{aligned}
+$$
+
+考虑的优化问题中定义了一个矩阵 $A$，其第 $i$ 行第 $j$ 列的元素表示第 $i$ 个专家是否选择了第 $j$ 个 token(取值 0 或 1)。由于该优化问题求解较为复杂，论文中采用 [Dykstra 算法](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)(通过多次迭代获得近似解)来解决。
+
+参数 $b$ 通常由批量中 token 总数 $n$ 与容量因子决定，其中容量因子表示每个 token 平均使用的专家数量。大多数实验采用较高的容量因子，实验结果表明，即使在容量降低的情况下，EC 整体表现仍优于传统的 top-1 token 选择路由，尽管 capped expert choice 略微降低了微调性能。
+
+EC 的优势主要体现在以下两方面：
+- **完美负载均衡：** 每个专家固定处理 $k$ 个 token，从而避免了部分专家过载而其他专家闲置的问题，实现了理想的负载均衡。
+- **更高训练效率：** 实验表明，EC 能将训练收敛速度提升约 2 倍，相较于传统 token 选择路由具有更高的效率。
+
+但 EC 也存在以下局限性：
+- **批量大小要求：** 由于 EC 对 batch size 有较高要求，因此不适用于较小 batch size 的场景。
+- **自回归生成限制：** 在自回归文本生成任务中，由于无法预知未来 token，EC 的 top-k 选择无法实现，因此不适用于此类任务。
 
 ### DeepSeekMoE
 
@@ -540,7 +644,7 @@ MoE 模型的一个核心挑战是负载均衡：确保所有专家都能得到�
     *   **Token 丢弃:** 在训练期间，如果某个设备接收到的 token 数量超过了预设的容量因子（通常略大于平均值），则会丢弃一部分具有最低路由权重（亲和度）的 token，以避免计算资源的浪费。但会保留约 10% 序列的 token 不被丢弃。
 
 *   **DeepSeek-V3:**
-    *   **主要策略：无辅助损失的负载均衡 (Auxiliary-Loss-Free Load Balancing)** V3 认为辅助损失会损害模型性能，因此采用了一种创新的**无辅助损失的负载均衡**([Wang et al., 2024a](https://arxiv.org/abs/2408.15664))。它通过动态调整前面提到的可学习偏置项 \(b_i\) 来实现负载均衡：
+    *   **主要策略：无辅助损失的负载均衡 (Auxiliary-Loss-Free Load Balancing)** V3 认为辅助损失会损害模型性能，因此采用了一种创新的**无辅助损失的负载均衡**([Wang et al., 2024](https://arxiv.org/abs/2408.15664))。它通过动态调整前面提到的可学习偏置项 \(b_i\) 来实现负载均衡：
         *   **偏置更新:** 在每个训练步骤之后，监控每个专家 \(i\) 在当前 batch 中处理的 token 数量。
             *   如果专家 \(i\) 过载（处理的 token 数 > Batch 总 token 数 / \(N_r\)），则降低其偏置：\(b_i \leftarrow b_i - \gamma\)。
             *   如果专家 \(i\) 欠载（处理的 token 数 < Batch 总 token 数 / \(N_r\)），则增加其偏置：\(b_i \leftarrow b_i + \gamma\)。
@@ -562,7 +666,7 @@ V3 的无辅助损失策略旨在最小化负载均衡机制对模型最终性�
 
 {{< figure
     src="auxiliary_loss_free_result.png"
-    caption="Fig. 11. Ablation results for the auxiliary-loss-free balancing strategy. Compared with the purely auxiliary-loss-based method, the auxiliary-loss-free strategy consistently achieves better model performance on most of the evaluation benchmarks. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 11. Ablation results for the auxiliary-loss-free balancing strategy. Compared with the purely auxiliary-loss-based method, the auxiliary-loss-free strategy consistently achieves better model performance on most of the evaluation benchmarks. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -571,7 +675,7 @@ V3 的无辅助损失策略旨在最小化负载均衡机制对模型最终性�
 
 {{< figure
     src="expert_load.png"
-    caption="Fig. 12. Expert load of auxiliary-loss-free and auxiliary-loss-based models on three domains in the Pile test set. The auxiliary-loss-free model shows greater expert specialization patterns than the auxiliary-loss-based one. The relative expert load denotes the ratio between the actual expert load and the theoretically balanced expert load. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 12. Expert load of auxiliary-loss-free and auxiliary-loss-based models on three domains in the Pile test set. The auxiliary-loss-free model shows greater expert specialization patterns than the auxiliary-loss-based one. The relative expert load denotes the ratio between the actual expert load and the theoretically balanced expert load. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -592,9 +696,9 @@ V3 的无辅助损失策略旨在最小化负载均衡机制对模型最终性�
 | **均衡粒度**             | 主要通过辅助损失在序列/Batch 级别强制均衡                                                                                                                                    | 主要通过偏置调整在 Batch 级别动态均衡，约束更宽松                                                                                                                                                           |
 | **对模型性能影响**       | 辅助损失可能对模型性能产生负面影响                                                                                                                                             | 设计上旨在最小化均衡策略对性能的负面影响，允许更好的专家特化                                                                                                                                                   |
 
-### 多令牌预测 (MTP)
+### 多 token 预测 (MTP)
 
-为了进一步提升模型性能和数据效率，DeepSeek-V3 引入了**多令牌预测 (Multi-Token Prediction, MTP)** 训练目标 ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737) 启发)。标准的语言模型只预测下一个 token，而 MTP 让模型在每个位置预测未来多个（V3 中是 \(D_{MTP}=1\)，即预测下下个 token）token。
+为了进一步提升模型性能和数据效率，DeepSeek-V3 引入了**多 token 预测 (Multi-Token Prediction, MTP)** 训练目标 ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737) 启发)。标准的语言模型只预测下一个 token，而 MTP 让模型在每个位置预测未来多个（V3 中是 \(D_{MTP}=1\)，即预测下下个 token）token。
 
 #### MTP 实现
 
@@ -622,7 +726,7 @@ MTP 通过 \(D_{MTP}\) 个顺序模块实现。第 \(k\) 个 MTP 模块 (\(k=1, 
 
 {{< figure
     src="mtp.png"
-    caption="Fig. 13. Illustration of our Multi-Token Prediction (MTP) implementation. They keep the complete causal chain for the prediction of each token at each depth. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 13. Illustration of our Multi-Token Prediction (MTP) implementation. They keep the complete causal chain for the prediction of each token at each depth. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -657,7 +761,7 @@ DeepSeek-V3 在一个配备了 **2048 块 NVIDIA H800 GPU** 的集群上进行�
 ### 训练框架
 
 DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体上采用了：
-*   **16 路流水线并行 (Pipeline Parallelism, PP)** ([Qi et al., 2023a](https://arxiv.org/abs/2401.10241))
+*   **16 路流水线并行 (Pipeline Parallelism, PP)** ([Qi et al., 2023](https://arxiv.org/abs/2401.10241))
 *   **64 路专家并行 (Expert Parallelism, EP)** (跨 8 节点) ([Lepikhin et al., 2021](https://arxiv.org/abs/2006.16668))
 *   **ZeRO-1 数据并行 (Data Parallelism, DP)** ([Rajbhandari et al., 2020](https://arxiv.org/pdf/1910.02054))
 
@@ -672,24 +776,24 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
 
 {{< figure
     src="forward_backward_chucks.png"
-    caption="Fig. 17. Overlapping strategy for a pair of forward and backward chunks with misaligned transformer block boundaries. Orange: forward, green: backward for input, blue: backward for weights, purple: PP communication, red: barriers. Both all-to-all and PP communications are fully hidden. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 17. Overlapping strategy for a pair of forward and backward chunks with misaligned transformer block boundaries. Orange: forward, green: backward for input, blue: backward for weights, purple: PP communication, red: barriers. Both all-to-all and PP communications are fully hidden. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
 
-*   **核心思想:** 重叠一对独立的前向和反向 chunk 内的计算和通信。将每个 chunk 分解为 **Attention**、**All-to-all Dispatch**、**MLP**、**All-to-all Combine** 四个组件（反向的 Attention 和 MLP 进一步细分为 backward for input 和 backward for weights，类似 **ZeroBubble** ([Qi et al., 2023b](https://arxiv.org/abs/2401.10241)）。通过重排这些组件并手动调整用于通信与计算的 GPU SM 比例，实现 All-to-all 和 PP 通信的完全隐藏。
+*   **核心思想:** 重叠一对独立的前向和反向 chunk 内的计算和通信。将每个 chunk 分解为 **Attention**、**All-to-all Dispatch**、**MLP**、**All-to-all Combine** 四个组件（反向的 Attention 和 MLP 进一步细分为 backward for input 和 backward for weights，类似 **ZeroBubble** ([Qi et al., 2023](https://arxiv.org/abs/2401.10241)）。通过重排这些组件并手动调整用于通信与计算的 GPU SM 比例，实现 All-to-all 和 PP 通信的完全隐藏。
 *   **调度:** 采用双向流水线调度，同时从流水线的两端输入微批次，大部分通信可以被完全重叠。
 
 {{< figure
     src="dualpipe.png"
-    caption="Fig. 18. Example DualPipe scheduling with 8 PP ranks and 20 micro-batches in both directions. The reverse-direction micro-batches mirror the forward ones, so their batch IDs are omitted for simplicity. Two cells within a shared black border represent mutually overlapped computation and communication. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 18. Example DualPipe scheduling with 8 PP ranks and 20 micro-batches in both directions. The reverse-direction micro-batches mirror the forward ones, so their batch IDs are omitted for simplicity. Two cells within a shared black border represent mutually overlapped computation and communication. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
 
 *   **优势:**
     *   即使在没有重通信负担的一般场景下也具有效率优势。
-    *   相比 **ZB1P** ([Qi et al., 2023b](https://arxiv.org/abs/2401.10241)) 和 **1F1B** ([Harlap et al., 2018](https://arxiv.org/abs/1806.03377))，显著减少流水线气泡，仅增加 \(\frac{1}{PP}\) 倍的峰值激活内存。
+    *   相比 **ZB1P** ([Qi et al., 2023](https://arxiv.org/abs/2401.10241)) 和 **1F1B** ([Harlap et al., 2018](https://arxiv.org/abs/1806.03377))，显著减少流水线气泡，仅增加 \(\frac{1}{PP}\) 倍的峰值激活内存。
     *   虽然需要两份模型参数副本，但由于训练中使用了大的 EP size，内存增加不显著。
     *   相比 **Chimera** ([Li and Hoefler, 2021](https://dl.acm.org/doi/10.1145/3458817.3476145))，对微批次数量的要求更宽松（只需能被 2 整除），且气泡和激活内存不随微批次数量增加而增长。
 
@@ -725,7 +829,7 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
 
 ### FP8 训练
 
-为了加速训练并减少显存占用，DeepSeek-V3 采用了 **FP8 混合精度训练框架** ([Dettmers et al., 2022](https://arxiv.org/pdf/2208.07339); [Noune et al., 2022](https://arxiv.org/abs/2206.02915); [Peng et al., 2023b](https://arxiv.org/abs/2310.18313))，并在超大规模模型上首次验证了其有效性。
+为了加速训练并减少显存占用，DeepSeek-V3 采用了 **FP8 混合精度训练框架** ([Dettmers et al., 2022](https://arxiv.org/pdf/2208.07339); [Noune et al., 2022](https://arxiv.org/abs/2206.02915); [Peng et al., 2023](https://arxiv.org/abs/2310.18313))，并在超大规模模型上首次验证了其有效性。
 
 #### 混合精度框架
 
@@ -735,24 +839,24 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
 
 {{< figure
     src="fp8_framework.png"
-    caption="Fig. 14. The overall mixed precision framework with FP8 data format. For clarification, only the Linear operator is illustrated. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 14. The overall mixed precision framework with FP8 data format. For clarification, only the Linear operator is illustrated. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
 
 #### 精度提升策略
 
-1.  **细粒度量化:** 为了解决 FP8 **动态范围有限和对离群值敏感**的问题 ([Fishman et al., 2024](https://arxiv.org/abs/2409.12517); [He et al., 2024](https://arxiv.org/abs/2406.05161); [Sun et al., 2024](https://arxiv.org/abs/2402.17762))，采用更细粒度的量化：
+1.  **细粒度量化:** 为了解决 FP8 **动态范围有限和对离群值敏感**的问题 ([Fishman et al., 2024](https://arxiv.org/abs/2409.12517); [He et al., 2024](https://arxiv.org/abs/2405.19279); [Sun et al., 2024](https://arxiv.org/abs/2402.17762))，采用更细粒度的量化：
     *   **激活:** 按 \(1 \times 128\) 的 tile 分组缩放。
     *   **权重:** 按 \(128 \times 128\) 的 block 分组缩放。
     这种方法让缩放因子更适应局部数据的范围，减少量化误差。
 2.  **提升累加精度:** H800 的 Tensor Core 进行 FP8 GEMM 时累加精度有限（约 14 位）。为解决此问题，采用 **Promotion to CUDA Cores** 策略 ([Thakkar et al., 2023](https://github.com/NVIDIA/cutlass))：Tensor Core 计算部分累加和（例如每 \(N_C=128\) 个元素），然后将结果传输到 CUDA Core 的 FP32 寄存器中进行全精度累加。细粒度量化的缩放因子也可以在 CUDA Core 上高效应用。通过 WGMMA 操作的并发执行，这种方法在提升精度的同时，对计算效率影响较小。
-3.  **E4M3 格式:** V3 在所有张量上统一使用 **E4M3 格式**（4 位指数，3 位尾数），而非混合使用 **E5M2** ([NVIDIA, 2024b](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023b](https://arxiv.org/abs/2310.18313); [Sun et al., 2019b](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html))。细粒度量化策略有效缓解了 E4M3 动态范围较小的问题。
-4.  **在线量化:** 实时计算每个 tile/block 的**最大绝对值来确定缩放因子，而非依赖历史值** ([NVIDIA, 2024b](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023b](https://arxiv.org/abs/2310.18313))，确保量化精度。
+3.  **E4M3 格式:** V3 在所有张量上统一使用 **E4M3 格式**（4 位指数，3 位尾数），而非混合使用 **E5M2** ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313); [Sun et al., 2019b](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html))。细粒度量化策略有效缓解了 E4M3 动态范围较小的问题。
+4.  **在线量化:** 实时计算每个 tile/block 的**最大绝对值来确定缩放因子，而非依赖历史值** ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313))，确保量化精度。
 
 {{< figure
     src="fp8_quantization_enhancement.png"
-    caption="Fig. 15. (a) Fine-grained quantization method to mitigate quantization errors. (b) Improved FP8 GEMM precision by promoting to CUDA Cores for high-precision accumulation. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 15. (a) Fine-grained quantization method to mitigate quantization errors. (b) Improved FP8 GEMM precision by promoting to CUDA Cores for high-precision accumulation. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -767,7 +871,7 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
 
 {{< figure
     src="fp8_vs_bf16_loss_curves.png"
-    caption="Fig. 16. Loss curves comparison between BF16 and FP8 training. Results are smoothed by Exponential Moving Average (EMA) with a coefficient of 0.9 [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 16. Loss curves comparison between BF16 and FP8 training. Results are smoothed by Exponential Moving Average (EMA) with a coefficient of 0.9 [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -817,7 +921,7 @@ DeepSeek 团队基于 **All-to-all 通信**和 **FP8 训练方案**的实现，�
     *   为 All-to-all Combine 执行 Reduce 操作。
     *   在跨 IB 和 NVLink 域向多个专家分块传输数据时管理细粒度内存布局。
 *   **期望:**
-    *   未来供应商开发硬件，将这些通信任务从宝贵的计算单元 SM **卸载**，作为 GPU 协处理器或网络协处理器（类似 NVIDIA SHARP [Graham et al., 2016](https://network.nvidia.com/pdf/solutions/hpc/paperieee_copyright.pdf)）。
+    *   未来供应商开发硬件，将这些通信任务从宝贵的计算单元 SM **卸载**，作为 GPU 协处理器或网络协处理器其类似于 NVIDIA SHARP([Graham et al., 2016](https://network.nvidia.com/pdf/solutions/hpc/paperieee_copyright.pdf))。
     *   为降低应用编程复杂性，期望该硬件能从计算单元的角度**统一 IB (scale-out) 和 NVLink (scale-up) 网络**。通过这个统一接口，计算单元可以通过提交基于简单原语的通信请求，轻松完成在整个 IB-NVLink 统一域内的读、写、多播和 Reduce 等操作。
 
 #### 计算硬件
@@ -865,9 +969,9 @@ DeepSeek 团队基于 **All-to-all 通信**和 **FP8 训练方案**的实现，�
 
 2. **训练策略与技术创新**
    - **文档打包**
-     结合 **Document Packing**[Ding et al., 2024](https://arxiv.org/abs/2404.10830) 方法，将连贯文本打包为更长片段，以提升 GPU 利用率和上下文完整性；未采用跨样本注意力掩码，保持实现简洁。
+     结合 **Document Packing**([Ding et al., 2024](https://arxiv.org/abs/2404.10830))方法，将连贯文本打包为更长片段，以提升 GPU 利用率和上下文完整性；未采用跨样本注意力掩码，保持实现简洁。
    - **Fill‑in‑Middle（FIM）策略**
-     - **动机**：借鉴 DeepSeekCoder‑V2[DeepSeek‑AI, 2024a](https://arxiv.org/abs/2406.11931) 的方法，旨在提升模型对中间缺失信息的填充能力。
+     - **动机**：借鉴 DeepSeekCoder‑V2([DeepSeek‑AI, 2024](https://arxiv.org/abs/2406.11931))的方法，旨在提升模型对中间缺失信息的填充能力。
      - **框架**：引入 Prefix‑Suffix‑Middle (PSM) 结构 ，样例如下：
        ```
        <|fim_begin|> f_pre <|fim_hole|> f_suf <|fim_end|> f_middle <|eos_token|>
@@ -877,7 +981,7 @@ DeepSeek 团队基于 **All-to-all 通信**和 **FP8 训练方案**的实现，�
 3. **Tokenizer 优化**
    - **BBPE 词表扩容**：采用 Byte‑level BPE，词表由 100K 扩至 **128K**，提升罕见词与专有名词覆盖。
    - **预分词器改进**：针对多语言场景，调整分词规则，提升压缩效率与编码一致性。
-   - **边界偏见缓解**：参考 [Lundberg, 2023](https://github.com/guidance-ai/guidance/blob/main/notebooks/art_of_prompt_design/prompt_boundaries_and_token_healing.ipynb)，为减少标点符号+换行组合 token 在 few‑shot 场景下的偏倚，引入随机拆分机制，让模型接触更多边界变体。
+   - **边界偏见缓解**：参考 [Lundberg, 2023](https://github.com/guidance-ai/guidance/blob/main/notebooks/art_of_prompt_design/prompt_boundaries_and_token_healing.ipynb) 的方法为减少标点符号+换行组合 token 在 few‑shot 场景下的偏倚，引入随机拆分机制，让模型接触更多边界变体。
 
 ### 超参数
 
@@ -914,7 +1018,7 @@ DeepSeek 团队基于 **All-to-all 通信**和 **FP8 训练方案**的实现，�
 
 ### 长上下文扩展
 
-两者均使用 YaRN ([Peng et al., 2023a](https://arxiv.org/abs/2309.00071)) 技术扩展上下文窗口。
+两者均使用 **YaRN** ([Peng et al., 2023](https://arxiv.org/abs/2309.00071)) 技术扩展上下文窗口。
 *   **DeepSeek-V2:** 从 4K 扩展到 128K。使用 YaRN (scale \(s=40, \alpha=1, \beta=32\))，在 32K 序列长度上训练 1000 步。调整了长度缩放因子 \(\sqrt{t}=0.0707 \ln s+1\)。
 *   **DeepSeek-V3:** 分两阶段从 4K 扩展到 32K，再到 128K。每阶段训练 1000 步。YaRN 参数与 V2 相同，长度缩放因子 \(\sqrt{t}=0.1 \ln s+1\)。第一阶段序列长度 32K，第二阶段 128K。
 
@@ -922,14 +1026,14 @@ DeepSeek 团队基于 **All-to-all 通信**和 **FP8 训练方案**的实现，�
 
 {{< figure
     src="deepseek_v2_niah.png"
-    caption="Fig. 19. Evaluation results on the 'Needle In A Haystack' (NIAH) tests for DeepSeek-V2. (Image source: [DeepSeek-AI, 2024a](https://arxiv.org/abs/2405.04434))"
+    caption="Fig. 19. Evaluation results on the 'Needle In A Haystack' (NIAH) tests for DeepSeek-V2. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2405.04434))"
     align="center"
     width="100%"
 >}}
 
 {{< figure
     src="deepseek_v3_niah.png"
-    caption="Fig. 20. Evaluation results on the 'Needle In A Haystack' (NIAH) tests for DeepSeek-V3. (Image source: [DeepSeek-AI, 2024b](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 20. Evaluation results on the 'Needle In A Haystack' (NIAH) tests for DeepSeek-V3. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -956,15 +1060,15 @@ DeepSeek-V3-Base 与代表性开源模型对比 (部分结果)。DeepSeek-V3-Bas
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |  | \# Activated Params | - | 21B | 72B | 405B | **37B** |
 | English | MMLU ([Hendrycks et al., 2020](https://arxiv.org/abs/2009.03300)) (EM) | 5-shot | 78.4 | 85.0 | 84.4 | **87.1** |
-|  | MMLU-Pro ([Wang et al., 2024b](https://arxiv.org/abs/2406.01574)) (em) | 5-shot | 51.4 | 58.3 | 52.8 | **64.4** |
+|  | MMLU-Pro ([Wang et al., 2024](https://arxiv.org/abs/2406.01574)) (em) | 5-shot | 51.4 | 58.3 | 52.8 | **64.4** |
 | Code | HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) (Pass@1) | 0-shot | 43.3 | 53.0 | 54.9 | **65.2** |
 |  | LiveCodeBench-Base ([Jain et al., 2024](https://arxiv.org/abs/2403.07974)) (Pass@1) | 3-shot | 11.6 | 12.9 | 15.5 | **19.4** |
 | Math | GSM8K ([Cobbe et al., 2021](https://arxiv.org/abs/2110.14168)) (Em) | 8-shot | 81.6 | 88.3 | 83.5 | **89.3** |
 |  | MATH ([Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)) (EM) | 4-shot | 43.4 | 54.4 | 49.0 | **61.6** |
 | Chinese | C-Eval ([Huang et al., 2023](https://arxiv.org/abs/2305.08322)) (EM) | 5-shot | 81.4 | 89.2 | 72.5 | **90.1** |
-| Multilingual | MMMLU-non-English ([OpenAI, 2024b](https://huggingface.co/datasets/openai/MMMLU)) (em) | 5-shot | 64.0 | 74.8 | 73.8 | **79.4** |
+| Multilingual | MMMLU-non-English ([OpenAI, 2024](https://huggingface.co/datasets/openai/MMMLU)) (em) | 5-shot | 64.0 | 74.8 | 73.8 | **79.4** |
 
-**总结:** DeepSeek-V3-Base 凭借其架构创新、更大规模的训练数据和高效的训练方法，全面超越了 DeepSeek-V2-Base 和其他顶尖开源模型（包括参数量远超其激活参数的 LLaMA-3.1 405B），成为当前最强的开源基础模型。
+**总结:** DeepSeek-V3-Base 凭借其架构创新、更大规模的训练数据和高效的训练方法，全面超越了 DeepSeek-V2-Base 和其他顶尖开源模型（包括参数量远超其激活参数的 LLaMA-3.1 405B）。
 
 ## 对齐
 
@@ -1035,7 +1139,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 |  | Benchmark (Metric) | DeepSeek V2.5-0905 | Qwen2.5 72B-Inst. | LLaMA-3.1 405B-Inst. | Claude-3.5- Sonnet-1022 | GPT-4o 0513 | DeepSeek V3 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | English | MMLU ([Hendrycks et al., 2020](https://arxiv.org/abs/2009.03300)) (EM) | 80.6 | 85.3 | 88.6 | 88.3 | 87.2 | **88.5** |
-|  | MMLU-Pro ([Wang et al., 2024b](https://arxiv.org/abs/2406.01574)) (EM) | 66.2 | 71.6 | 73.3 | **78.0** | 72.6 | 75.9 |
+|  | MMLU-Pro ([Wang et al., 2024](https://arxiv.org/abs/2406.01574)) (EM) | 66.2 | 71.6 | 73.3 | **78.0** | 72.6 | 75.9 |
 |  | GPQA-Diamond ([Rein et al., 2023](https://arxiv.org/abs/2311.12022)) (Pass@1) | 41.3 | 49.0 | 51.1 | **65.0** | 49.9 | 59.1 |
 |  | SimpleQA ([OpenAI, 2024c](https://openai.com/index/introducing-simpleqa/)) (Correct) | 10.2 | 9.1 | 17.1 | 28.4 | **38.2** | 24.9 |
 | Code | HumanEval-Mul (Pass@1) | 77.4 | 77.3 | 77.2 | 81.7 | 80.5 | **82.6** |
@@ -1045,19 +1149,19 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 |  | MATH-500 ([Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)) (ЕМ) | 74.7 | 80.0 | 73.8 | 78.3 | 74.6 | **90.2** |
 | Chinese | C-Eval ([Huang et al., 2023](https://arxiv.org/abs/2305.08322)) (EM) | 79.5 | 86.1 | 61.5 | 76.7 | 76.0 | **86.5** |
 |  | C-SimpleQA ([He et al., 2024](https://arxiv.org/abs/2411.07140)) (Correct) | 54.1 | 48.4 | 50.4 | 51.3 | 59.3 | **64.8** |
-| Open-Ended | Arena-Hard ([Li et al., 2024a](https://arxiv.org/abs/2406.11939)) | 76.2 | 81.2 | 69.3 | 85.2 | 80.4 | **85.5** |
+| Open-Ended | Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939)) | 76.2 | 81.2 | 69.3 | 85.2 | 80.4 | **85.5** |
 |  | AlpacaEval 2.0 ([Dubois et al., 2024](https://arxiv.org/abs/2404.04475)) (LC Win Rate) | 50.5 | 49.1 | 40.5 | 52.0 | 51.1 | **70.0** |
 
 **总结:**
 *   DeepSeek-V2 Chat (RL) 在发布时已是顶尖的开源聊天模型，尤其在 AlpacaEval 和中文 AlignBench 上表现优异。
-*   DeepSeek-V3 Chat 进一步提升了性能，成为目前最强的开源聊天模型，在代码、数学、中文知识以及 Arena-Hard ([Li et al., 2024a](https://arxiv.org/abs/2406.11939))、AlpacaEval 等开放式评估中表现极其亮眼，达到了与 GPT-4o、Claude-3.5-Sonnet 相媲美的水平。
+*   DeepSeek-V3 Chat 进一步提升了性能，成为目前最强的开源聊天模型，在代码、数学、中文知识以及 Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939))、AlpacaEval 等开放式评估中表现极其亮眼，达到了与 GPT-4o、Claude-3.5-Sonnet 相媲美的水平。
 *   V3 的 R1 蒸馏显著提升了推理能力，但也可能增加响应长度，需要在准确性和效率间权衡。
 *   V3 的自奖励能力（在 RewardBench ([Lambert et al., 2024](https://arxiv.org/abs/2403.13787)) 上表现优异）为其持续对齐提供了有效途径。
 
 ## 讨论
 
 *   **负载均衡策略演进:** 从 V2 的辅助损失到 V3 的无辅助损失+偏置调整，体现了在保证负载均衡的同时，尽量减少对模型性能本身干扰的趋势。批处理级别的均衡相比序列级均衡，更能促进专家特化。
-*   **MTP 的有效性:** V3 的实验证明，多令牌预测作为辅助训练目标，确实能提升模型在标准评估任务上的性能，同时为推理加速（推测解码）提供了可能。
+*   **MTP 的有效性:** V3 的实验证明，多 token 预测作为辅助训练目标，确实能提升模型在标准评估任务上的性能，同时为推理加速（推测解码）提供了可能。
 *   **R1 蒸馏:** V3 成功地将 DeepSeek-R1 的长链推理能力蒸馏到标准 LLM 中，显著提升了数学和代码能力。这是一个重要的技术方向，但也需要注意控制生成长度。
 *   **自奖励:** V3 强大的判断能力（**RewardBench** 结果 ([Lambert et al., 2024](https://arxiv.org/abs/2403.13787))）使其能有效进行自反馈和自对齐，这对于减少对人类标注的依赖、实现模型持续自我提升至关重要。
 *   **SFT 数据量:** 虽然在**LIMA**[Zhou et al., 2024](https://arxiv.org/abs/2305.11206)）认为少量高质量 SFT 数据即可达到不错的效果，但对于特定技能（如指令遵循 IFEval），仍需足够数据量的高质量数据才能达到满意效果。
@@ -1065,7 +1169,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 
 ## 结论、局限性与未来方向
 
-**结论:** DeepSeek-V2 和 DeepSeek-V3 是两款强大、经济且高效的 MoE 语言模型。它们通过 MLA 和 DeepSeekMoE 架构创新，以及 V3 引入的无辅助损失负载均衡、MTP、FP8 训练和 R1 蒸馏等技术，在性能、训练成本和推理效率上取得了显著突破。DeepSeek-V3 已成为当前最强的开源模型之一，性能可与顶尖闭源模型竞争。
+**结论:** DeepSeek-V2 和 DeepSeek-V3 是两款强大、经济且高效的 MoE 语言模型。它们通过 MLA 和 DeepSeekMoE 架构创新，以及 V3 引入的无辅助损失负载均衡、MTP、FP8 训练和 R1 蒸馏等技术，在性能、训练成本和推理效率上取得了突破。DeepSeek-V3 已成为当前最强的开源模型之一，性能可与顶尖闭源模型竞争。
 
 **局限性:**
 *   **通用 LLM 局限:** 如知识截止、幻觉、事实性错误等。
@@ -1080,70 +1184,126 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 *   **评估方法:** 发展更全面、多维度的评估方法，避免过拟合特定基准。
 *   **对齐与安全:** 持续改进对齐技术（如自奖励），确保模型有用、诚实、无害，与人类价值观对齐。
 
+
 ## 参考文献
 
-1.  DeepSeek-AI. ["Deepseek-v2: A strong, economical, and efficient mixture-of-experts language model."](https://arxiv.org/abs/2405.04434) CoRR, abs/2405.04434, 2024a.
-2.  DeepSeek-AI. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) CoRR, abs/2412.19437, 2024b.
-3.  Vaswani, Ashish, et al. ["Attention is all you need."](https://arxiv.org/abs/1706.03762) Advances in neural information processing systems 30 (2017).
-4.  Ainslie, Joshua, et al. ["Gqa: Training generalized multi-query transformer models from multi-head checkpoints."](https://arxiv.org/abs/2305.13245) arXiv preprint arXiv:2305.13245 (2023).
-5.  Shazeer, Noam. ["Fast transformer decoding: One write-head is all you need."](https://arxiv.org/abs/1911.02150) CoRR, abs/1911.02150, 2019.
-6.  Dai, Damai, et al. ["Deepseekmoe: Towards ultimate expert specialization in mixture-of-experts language models."](https://arxiv.org/abs/2401.06066) CoRR, abs/2401.06066, 2024.
-7.  Lepikhin, Dmitry, et al. ["Gshard: Scaling giant models with conditional computation and automatic sharding."](https://openreview.net/forum?id=qrwe7XHTmYb) In 9th International Conference on Learning Representations, ICLR 2021. OpenReview.net, 2021.
-8.  Su, Jianlin, et al. ["Roformer: Enhanced transformer with rotary position embedding."](https://arxiv.org/abs/2104.09864) Neurocomputing 568 (2024): 127063.
-9.  Fedus, William, Barret Zoph, and Noam Shazeer. ["Switch transformers: Scaling to trillion parameter models with simple and efficient sparsity."](https://arxiv.org/abs/2101.03961) CoRR, abs/2101.03961, 2021.
-10. Shazeer, Noam, et al. ["Outrageously large neural networks: The sparsely-gated mixture-of-experts layer."](https://openreview.net/forum?id=B1ckMDqlg) In 5th International Conference on Learning Representations, ICLR 2017. OpenReview.net, 2017.
-11. Wang, Lean, et al. ["Auxiliary-loss-free load balancing strategy for mixture-of-experts."](https://arxiv.org/abs/2408.15664) CoRR, abs/2408.15664, 2024a.
-12. Zhou, K., S. Yu, D. Yu, C. Zhang, H. Wang, C. Riquelme, J. Puigcerver, T. Chen, Y. Tay, and Q. V. Le. ["Expert choice routing: Scalable, trained sparsity for large language models."](https://arxiv.org/abs/2202.09368) arXiv preprint arXiv:2202.09368 (2022).
-13. Gloeckle, Fabian, et al. ["Better & faster large language models via multi-token prediction."](https://openreview.net/forum?id=pEWAcejiU2) In Forty-first International Conference on Machine Learning, ICML 2024. OpenReview.net, 2024.
-14. Leviathan, Yaniv, Matan Kalman, and Yossi Matias. ["Fast inference from transformers via speculative decoding."](https://proceedings.mlr.press/v202/leviathan23a.html) In International Conference on Machine Learning, ICML 2023. PMLR, 2023.
-15. Xia, He, et al. ["Speculative decoding: Exploiting speculative execution for accelerating seq2seq generation."](https://doi.org/10.18653/v1/2023.findings-emnlp.257) In Findings of the Association for Computational Linguistics: EMNLP 2023. Association for Computational Linguistics, 2023.
-16. Qi, Peng, et al. ["Zero bubble pipeline parallelism."](https://arxiv.org/abs/2401.10241) arXiv preprint arXiv:2401.10241, 2023a.
-17. Rajbhandari, Samyam, et al. ["Zero: Memory optimizations toward training trillion parameter models."](https://ieeexplore.ieee.org/document/9355201) In SC20: International Conference for High Performance Computing, Networking, Storage and Analysis. IEEE, 2020.
-18. Qi, Peng, et al. ["Zero bubble pipeline parallelism."](https://arxiv.org/abs/2401.10241) arXiv preprint arXiv:2401.10241, 2023b.
-19. Harlap, Aaron, et al. ["Pipedream: Fast and efficient pipeline parallel dnn training."](https://arxiv.org/abs/1806.03377) arXiv preprint arXiv:1806.03377 (2018).
-20. Li, Shiqing, and Torsten Hoefler. ["Chimera: efficiently training large-scale neural networks with bidirectional pipelines."](https://doi.org/10.1145/3458817.3476145) In Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, SC '21. ACM, 2021.
-21. Bauer, Michael, Sean Treichler, and Alex Aiken. ["Singe: leveraging warp specialization for high performance on GPUs."](https://doi.org/10.1145/2555243.2555258) In Proceedings of the 19th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming, PPoPP '14. Association for Computing Machinery, 2014.
-22. Dettmers, Tim, et al. ["Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale."](https://proceedings.neurips.cc/paper_files/paper/2022/hash/102f0bb6ef9e41114581ac4503137821-Abstract-Conference.html) Advances in Neural Information Processing Systems 35 (2022): 30318-30332.
-23. Noune, B., P. Jones, D. Justus, D. Masters, and C. Luschi. ["8-bit numerical formats for deep neural networks."](https://arxiv.org/abs/2206.02915) arXiv preprint arXiv:2206.02915 (2022).
-24. Peng, Hao, et al. ["FP8-LM: Training FP8 large language models."](https://arxiv.org/abs/2310.18313) arXiv preprint arXiv:2310.18313 (2023b).
-25. Fishman, Michael, et al. ["Scaling FP8 training to trillion-token llms."](https://arxiv.org/abs/2409.12517) arXiv preprint arXiv:2409.12517 (2024).
-26. He, B., L. Noci, D. Paliotta, I. Schlag, and T. Hofmann. ["Understanding and minimising outlier features in transformer training."](https://arxiv.org/abs/2406.05161) In The Thirty-eighth Annual Conference on Neural Information Processing Systems. 2024.
-27. Sun, Ming, et al. ["Massive activations in large language models."](https://arxiv.org/abs/2402.17762) arXiv preprint arXiv:2402.17762 (2024).
-28. Thakkar, Vishal, et al. ["CUTLASS."](https://github.com/NVIDIA/cutlass) Jan. 2023.
-29. NVIDIA. ["Blackwell architecture."](https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/) 2024a.
-30. NVIDIA. ["TransformerEngine."](https://github.com/NVIDIA/TransformerEngine) 2024b.
-31. Sun, Xiao, et al. ["Hybrid 8-bit floating point (HFP8) training and inference for deep neural networks."](https://proceedings.neurips.cc/paper/2019/hash/7c009545a11f8ff397547d8a595a6cfc-Abstract.html) Advances in neural information processing systems 32 (2019b).
-32. Loshchilov, Ilya, and Frank Hutter. ["Decoupled weight decay regularization."](https://arxiv.org/abs/1711.05101) arXiv preprint arXiv:1711.05101 (2017).
-33. NVIDIA. ["Improving network performance of HPC systems using NVIDIA Magnum IO NVSHMEM and GPUDirect Async."](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/) 2022.
-34. Graham, Richard L., et al. ["Scalable hierarchical aggregation protocol (SHArP): A hardware architecture for efficient data reduction."](https://ieeexplore.ieee.org/document/7830208) In 2016 First International Workshop on Communication Optimizations in HPC (COMHPC). IEEE, 2016.
-35. Ding, Haomiao, et al. ["Fewer truncations improve language modeling."](https://arxiv.org/abs/2404.10830) arXiv preprint arXiv:2404.10830 (2024).
-36. DeepSeek-AI. ["Deepseek-coder-v2: Breaking the barrier of closed-source models in code intelligence."](https://arxiv.org/abs/2406.11931) CoRR, abs/2406.11931, 2024a.
-37. Lundberg, Scott. ["The art of prompt design: Prompt boundaries and token healing."](https://towardsdatascience.com/the-art-of-prompt-design-prompt-boundaries-and-token-healing-3b2448b0be38) 2023.
-38. Peng, Bowen, et al. ["Yarn: Efficient context window extension of large language models."](https://arxiv.org/abs/2309.00071) arXiv preprint arXiv:2309.00071 (2023a).
-39. Hendrycks, Dan, et al. ["Measuring massive multitask language understanding."](https://arxiv.org/abs/2009.03300) arXiv preprint arXiv:2009.03300 (2020).
-40. Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) CoRR, abs/2107.03374, 2021.
-41. Cobbe, Karl, et al. ["Training verifiers to solve math word problems."](https://arxiv.org/abs/2110.14168) arXiv preprint arXiv:2110.14168 (2021).
-42. Huang, Yuzhen, et al. ["C-Eval: A multi-level multi-discipline chinese evaluation suite for foundation models."](https://arxiv.org/abs/2305.08322) arXiv preprint arXiv:2305.08322 (2023).
-43. Wang, Yiran, et al. ["Mmlu-pro: A more robust and challenging multi-task language understanding benchmark."](https://arxiv.org/abs/2406.01574) CoRR, abs/2406.01574, 2024b.
-44. Jain, Neel, et al. ["Livecodebench: Holistic and contamination free evaluation of large language models for code."](https://arxiv.org/abs/2403.07974) CoRR, abs/2403.07974, 2024.
-45. Hendrycks, Dan, et al. ["Measuring mathematical problem solving with the math dataset."](https://arxiv.org/abs/2103.03874) arXiv preprint arXiv:2103.03874 (2021).
-46. OpenAI. ["Multilingual massive multitask language understanding (mmmlu)."](https://huggingface.co/datasets/openai/MMMLU) 2024b.
-47. Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
-48. Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
-49. Bai, Yuntao, et al. ["Constitutional AI: Harmlessness from AI feedback."](https://arxiv.org/abs/2212.08073) arXiv preprint arXiv:2212.08073 (2022).
-50. Kwon, Woosuk, et al. ["Efficient memory management for large language model serving with pagedattention."](https://dl.acm.org/doi/10.1145/3600006.3613165) In Proceedings of the ACM SIGOPS 29th Symposium on Operating Systems Principles, 2023.
-51. Zheng, Lianmin, et al. ["Judging llm-as-a-judge with mt-bench and chatbot arena."](https://arxiv.org/abs/2306.05685) arXiv preprint arXiv:2306.05685 (2023).
-52. Dubois, Yann, et al. ["Length-controlled alpacaeval: A simple way to debias automatic evaluators."](https://arxiv.org/abs/2404.04475) arXiv preprint arXiv:2404.04475 (2024).
-53. Liu, Xuechen, et al. ["Alignbench: Benchmarking chinese alignment of large language models."](https://doi.org/10.48550/arXiv.2311.18743) CoRR, abs/2311.18743, 2023.
-54. Rein, Daniel, et al. ["GPQA: A graduate-level google-proof q&a benchmark."](https://arxiv.org/abs/2311.12022) arXiv preprint arXiv:2311.12022 (2023).
-55. OpenAI. ["Introducing SimpleQA."](https://openai.com/index/introducing-simpleqa/) 2024c.
-56. OpenAI. ["Introducing SWE-bench verified we're releasing a human-validated subset of swebench that more."](https://openai.com/index/introducing-swe-bench-verified/) 2024d.
-57. MAA. ["American invitational mathematics examination - aime."](https://maa.org/math-competitions/american-invitational-mathematics-examination-aime) 2024.
-58. He, Y., S. Li, J. Liu, Y. Tan, W. Wang, H. Huang, X. Bu, H. Guo, C. Hu, B. Zheng, et al. ["Chinese simpleqa: A chinese factuality evaluation for large language models."](https://arxiv.org/abs/2411.07140) arXiv preprint arXiv:2411.07140 (2024).
-59. Li, Tony Z., et al. ["From crowdsourced data to high-quality benchmarks: Arena-hard and benchbuilder pipeline."](https://arxiv.org/abs/2406.11939) arXiv preprint arXiv:2406.11939 (2024a).
-60. Lambert, Nathan, et al. ["Rewardbench: Evaluating reward models for language modeling."](https://arxiv.org/abs/2403.13787) arXiv preprint arXiv:2403.13787 (2024).
-61. Zhou, C., P. Liu, P. Xu, S. Iyer, J. Sun, Y. Mao, X. Ma, A. Efrat, P. Yu, L. Yu, et al. ["Lima: Less is more for alignment."](https://proceedings.neurips.cc/paper_files/paper/2023/hash/5d3916b6c3b74e377497bb30574f6944-Abstract-Conference.html) Advances in Neural Information Processing Systems 36 (2024).
-62. Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html) Advances in neural information processing systems 35 (2022): 27730-27744.
+[1] Liu, Aixin, et al. ["Deepseek-v2: A strong, economical, and efficient mixture-of-experts language model."](https://arxiv.org/abs/2405.04434) arXiv preprint arXiv:2405.04434 (2024).
+
+[2] Liu, Aixin, et al. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
+
+[3] Dai, Damai, et al. ["Deepseekmoe: Towards ultimate expert specialization in mixture-of-experts language models."](https://arxiv.org/abs/2401.06066) arXiv preprint arXiv:2401.06066 (2024).
+
+[4] Wang, Lean, et al. ["Auxiliary-loss-free load balancing strategy for mixture-of-experts."](https://arxiv.org/abs/2408.15664) arXiv preprint arXiv:2408.15664 (2024).
+
+[5] Gloeckle, Fabian, et al. ["Better & faster large language models via multi-token prediction."](https://arxiv.org/abs/2404.19737) Proceedings of the 41st International Conference on Machine Learning. PMLR 235:16821-16841 (2024).
+
+[6] Vaswani, Ashish, et al. ["Attention is all you need."](https://arxiv.org/abs/1706.03762) Advances in neural information processing systems 30 (2017).
+
+[7] Shazeer, Noam. ["Fast transformer decoding: One write-head is all you need."](https://arxiv.org/abs/1911.02150) arXiv preprint arXiv:1911.02150 (2019).
+
+[8] Ainslie, Joshua, et al. ["GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints."](https://arxiv.org/abs/2305.13245) Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing. pp. 4895-4901 (2023).
+
+[9] Su, Jianlin, et al. ["Roformer: Enhanced transformer with rotary position embedding."](https://arxiv.org/abs/2104.09864) Neurocomputing 568 (2024): 127063.
+
+[10] Shazeer, Noam, et al. ["Outrageously large neural networks: The sparsely-gated mixture-of-experts layer."](https://arxiv.org/abs/1701.06538) arXiv preprint arXiv:1701.06538 (2017).
+
+[11] Lepikhin, Dmitry, et al. ["Gshard: Scaling giant models with conditional computation and automatic sharding."](https://arxiv.org/abs/2006.16668) arXiv preprint arXiv:2006.16668 (2020).
+
+[12] Fedus, William, Barret Zoph, and Noam Shazeer. ["Switch transformers: Scaling to trillion parameter models with simple and efficient sparsity."](https://arxiv.org/abs/2101.03961) The Journal of Machine Learning Research 23.1: 5232-5270 (2022).
+
+[13] Zhou, Zexuan, et al. ["Mixture-of-experts with expert choice routing."](https://arxiv.org/abs/2202.09368) Advances in Neural Information Processing Systems 35: 7103-7114 (2022).
+
+[14] Leviathan, Yaniv, Matan Kalman, and Yossi Matias. ["Fast inference from transformers via speculative decoding."](https://arxiv.org/abs/2211.17192) Proceedings of the 40th International Conference on Machine Learning. PMLR 202:19274-19286 (2023).
+
+[15] Xia, Yichao, et al. ["Accelerating large language model decoding with speculative sampling."](https://arxiv.org/abs/2302.01318) arXiv preprint arXiv:2302.01318 (2023).
+
+[16] Qi, Hai, et al. ["ZeroBubble: A High-Performance Framework for Training Mixture-of-Experts Models."](https://arxiv.org/abs/2401.10241) arXiv preprint arXiv:2401.10241 (2024).
+
+[17] Rajbhandari, Samyam, et al. ["Zero: Memory optimizations toward training trillion parameter models."](https://arxiv.org/abs/1910.02054) SC20: International Conference for High Performance Computing, Networking, Storage and Analysis. IEEE (2020).
+
+[18] Harlap, Aaron, et al. ["Pipedream: Fast and efficient pipeline parallel dnn training."](https://arxiv.org/abs/1806.03377) arXiv preprint arXiv:1806.03377 (2018).
+
+[19] Li, Shigang, and Torsten Hoefler. ["Chimera: Efficiently training large-scale neural networks with bidirectional pipelines."](https://arxiv.org/abs/2107.06925) Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis. 2021.
+
+[20] Bauer, Michael, Sean Treichler, and Alex Aiken. ["Singe: Leveraging warp specialization for high performance on gpus."](https://dl.acm.org/doi/10.1145/2692916.2555258) Proceedings of the 19th ACM SIGPLAN symposium on Principles and practice of parallel programming. 2014.
+
+[21] Dettmers, Tim, et al. ["Llm. int8 (): 8-bit matrix multiplication for transformers at scale."](https://arxiv.org/abs/2208.07339) Advances in Neural Information Processing Systems 35: 34138-34151 (2022).
+
+[22] Noune, Badreddine, et al. ["8-bit numerical formats for deep neural networks."](https://arxiv.org/abs/2206.02915) arXiv preprint arXiv:2206.02915 (2022).
+
+[23] Peng, Houwen, et al. ["FP8-LM: Training FP8 Large Language Models."](https://arxiv.org/abs/2310.18313) arXiv preprint arXiv:2310.18313 (2023).
+
+[24] Fishman, Maxim, et al. ["Scaling FP8 training to trillion-token LLMs."](https://arxiv.org/abs/2409.12517)) arXiv preprint arXiv:2409.12517 (2024).
+
+[25] He, Bobby, et al. ["Understanding and minimising outlier features in neural network training."](https://arxiv.org/abs/2405.19279) arXiv preprint arXiv:2405.19279 (2024).
+
+[26] Sun, Xiao, et al. ["Massive activations in large language models."](https://arxiv.org/abs/2402.17762) arXiv preprint arXiv:2402.17762 (2024).
+
+[27] NVIDIA. ["Transformer Engine."](https://github.com/NVIDIA/TransformerEngine) GitHub Repository (Accessed 2024).
+
+[28] Sun, Xiao, et al. ["Hybrid 8-bit floating point (HFP8) training and inference for deep neural networks."](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html) Advances in neural information processing systems 32 (2019).
+
+[29] Loshchilov, Ilya, and Frank Hutter. ["Decoupled weight decay regularization."](https://arxiv.org/abs/1711.05101) arXiv preprint arXiv:1711.05101 (2017).
+
+[30] NVIDIA. ["GPUDirect Storage: A Direct Path Between Storage and GPU Memory."](https://developer.nvidia.com/blog/gpudirect-storage/) NVIDIA Developer Blog (2022).
+
+[31] Graham, Richard L., et al. ["Scalable hierarchical aggregation protocol (SHArP): A hardware architecture for efficient data reduction."](https://network.nvidia.com/pdf/solutions/hpc/paperieee_copyright.pdf) 2016 First International Workshop on Communication Optimizations in HPC (COMHPC). IEEE, 2016.
+
+[32] Ding, Yiran, et al. ["Longrope: Extending llm context window beyond 2 million tokens."](https://arxiv.org/abs/2402.13753) arXiv preprint arXiv:2402.13753 (2024).
+
+[33] Zhu, Qihao, et al. ["DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence."](https://arxiv.org/abs/2406.11931) arXiv preprint arXiv:2406.11931 (2024).
+
+[34] Lundberg, Scott M. ["Guidance: Prompt Boundaries and Token Healing."](https://github.com/guidance-ai/guidance/blob/main/notebooks/art_of_prompt_design/prompt_boundaries_and_token_healing.ipynb) GitHub Notebook (2023).
+
+[35] Peng, Bowen, et al. ["YaRN: Efficient Context Window Extension of Large Language Models."](https://arxiv.org/abs/2309.00071) arXiv preprint arXiv:2309.00071 (2023).
+
+[36] Hendrycks, Dan, et al. ["Measuring massive multitask language understanding."](https://arxiv.org/abs/2009.03300) arXiv preprint arXiv:2009.03300 (2020).
+
+[37] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
+
+[38] Cobbe, Karl, et al. ["Training verifiers to solve math word problems."](https://arxiv.org/abs/2110.14168) arXiv preprint arXiv:2110.14168 (2021).
+
+[39] Huang, Yuzhen, et al. ["C-Eval: A Multi-Level Multi-Discipline Chinese Evaluation Suite for Foundation Models."](https://arxiv.org/abs/2305.08322) Advances in Neural Information Processing Systems 36 (2023): 62991-63010.
+
+[40] Wang, Yubo, et al. ["Mmlu-pro: A more robust and challenging multi-task language understanding benchmark."](https://arxiv.org/abs/2406.01574) The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track. 2024.
+
+[41] Jain, Naman, et al. ["LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code."](https://arxiv.org/abs/2403.07974) arXiv preprint arXiv:2403.07974 (2024).
+
+[42] Hendrycks, Dan, et al. ["Measuring mathematical problem solving with the math dataset."](https://arxiv.org/abs/2103.03874) arXiv preprint arXiv:2103.03874 (2021).
+
+[43] OpenAI. ["MMMLU Dataset."](https://huggingface.co/datasets/openai/MMMLU) Hugging Face Datasets (Accessed 2024).
+
+[44] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
+
+[45] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+
+[46] Bai, Yuntao, et al. ["Constitutional ai: Harmlessness from ai feedback."](https://arxiv.org/abs/2212.08073) arXiv preprint arXiv:2212.08073 (2022).
+
+[47] Kwon, Woosuk, et al. ["Efficient memory management for large language model serving with pagedattention."](https://arxiv.org/abs/2309.06180) Proceedings of the 29th Symposium on Operating Systems Principles. 2023.
+
+[48] Zheng, Lianmin, et al. ["Judging llm-as-a-judge with mt-bench and chatbot arena."](https://arxiv.org/abs/2306.05685) Advances in Neural Information Processing Systems 36 (2023): 46595-46623.
+
+[49] Dubois, Yann, et al. ["Length-controlled alpacaeval: A simple way to debias automatic evaluators."](https://arxiv.org/abs/2404.04475) arXiv preprint arXiv:2404.04475 (2024).
+
+[50] Liu, Xiao, et al. ["Alignbench: Benchmarking chinese alignment of large language models."](https://arxiv.org/abs/2311.18743) arXiv preprint arXiv:2311.18743 (2023).
+
+[51] Rein, David, et al. ["GPQA: A Graduate-Level Google-Proof Q&A Benchmark."](https://arxiv.org/abs/2311.12022) First Conference on Language Modeling. 2024.
+
+[52] OpenAI. ["Introducing SimpleQA"](https://openai.com/index/introducing-simpleqa/) OpenAI Blog (2024).
+
+[53] OpenAI. ["Introducing SWE-bench Verified
+"](https://openai.com/index/introducing-swe-bench-verified/) OpenAI Blog (2024).
+
+[54] Mathematical Association of America (MAA). ["2024 AIME I Problems."](https://artofproblemsolving.com/wiki/index.php/2024_AIME_I) Art of Problem Solving Wiki (2024).
+
+[55] Li, Tianle, et al. ["From crowdsourced data to high-quality benchmarks: Arena-hard and benchbuilder pipeline."](https://arxiv.org/abs/2406.11939) arXiv preprint arXiv:2406.11939 (2024).
+
+[56] Lambert, Nathan, et al. ["RewardBench: Evaluating Reward Models for Language Modeling."](https://arxiv.org/abs/2403.13787) arXiv preprint arXiv:2403.13787 (2024).
+
+[57] Zhou, Chunting, et al. ["Lima: Less is more for alignment."](https://arxiv.org/abs/2305.11206) Advances in Neural Information Processing Systems 36 (2023): 55006-55021.
+
+[58] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
+
 
 ## 引用
 
@@ -1152,7 +1312,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 **Cited as:**
 
 > Yue Shui. (Apr 2025). DeepSeek-V2 vs V3.
-https://syhya.github.io/posts/2025-04-18-deepseek-v2-v3
+https://syhya.github.io/zh/posts/2025-04-18-deepseek-v2-v3
 
 Or
 
@@ -1163,5 +1323,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Apr",
-  url     = "https://syhya.github.io/posts/2025-04-18-deepseek-v2-v3"
+  url     = "https://syhya.github.io/zh/posts/2025-04-18-deepseek-v2-v3"
 }
+```

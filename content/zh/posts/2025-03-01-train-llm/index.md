@@ -189,7 +189,7 @@ $$
   \theta \leftarrow \theta - \eta \cdot G.  
 $$  
   
-由于梯度同步不再是每个 mini-batch 都进行，而是每累计 $K$ 个 mini-batch 执行一次，通信开销可显著降低。但参数更新频率降低也可能导致训练收敛速度放缓，需在吞吐量与收敛性能之间做权衡。  
+由于梯度同步不再是每个 mini-batch 都进行，而是每累计 $K$ 个 mini-batch 执行一次，**通信开销可显著降低**。但参数更新频率降低也可能导致训练收敛速度放缓，需在吞吐量与收敛性能之间做权衡。  
   
 ### 分布式数据并行
   
@@ -264,7 +264,7 @@ $$
 
 ### GPipe
 
-GPipe([Huang et al. 2018](https://arxiv.org/abs/1811.06965)) 是 Google 提出的一个高效的流水线并行训练系统，旨在解决朴素流水线并行的气泡问题。GPipe 的核心思想是将 **mini-batch** 划分为多个 **micro-batch**，并采用**同步梯度聚合**的方式来缓解气泡问题，提高流水线效率。
+**GPipe**([Huang et al. 2018](https://arxiv.org/abs/1811.06965)) 是 Google 提出的一个高效的流水线并行训练系统，旨在解决朴素流水线并行的气泡问题。GPipe 的核心思想是将 **mini-batch** 划分为多个 **micro-batch**，并采用**同步梯度聚合**的方式来缓解气泡问题，提高流水线效率。
 
 {{< figure
     src="gpipe.png"
@@ -306,7 +306,7 @@ $$
     width="100%"
 >}}
 
-PipeDream([Harlap et al. 2018](https://arxiv.org/abs/1806.03377))是另一种高效的流水线并行训练系统，它采用了 1F1B(1-Forward-1-Backward) 调度策略，并引入了权重暂存(Weight Stashing) 技术，进一步减少气泡，提高流水线效率，并解决 1F1B 调度可能导致的权重版本不一致问题。
+**PipeDream**([Harlap et al. 2018](https://arxiv.org/abs/1806.03377))是另一种高效的流水线并行训练系统，它采用了 1F1B(1-Forward-1-Backward) 调度策略，并引入了权重暂存(Weight Stashing) 技术，进一步减少气泡，提高流水线效率，并解决 1F1B 调度可能导致的权重版本不一致问题。
 
 PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执行前向传播和反向传播，尽可能地并行工作，减少 GPU 空闲时间。具体流程如下：
 
@@ -316,7 +316,7 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
 
 ### 权重暂存
 
-由于 1F1B 调度中，前向传播和反向传播可能使用不同版本的模型权重，会导致权重版本不一致问题，影响训练的正确性和收敛性。PipeDream 引入了权重暂存(Weight Stashing)技术来解决这个问题。权重暂存的核心思想是，每个 GPU 维护多个版本的模型权重，并确保前向传播和反向传播使用同一版本的权重。
+由于 1F1B 调度中，前向传播和反向传播可能使用不同版本的模型权重，会导致权重版本不一致问题，影响训练的正确性和收敛性。PipeDream 引入了 **权重暂存(Weight Stashing)** 技术来解决这个问题。权重暂存的核心思想是，每个 GPU 维护多个版本的模型权重，并确保前向传播和反向传播使用同一版本的权重。
 
 **权重暂存实现方式:**
 
@@ -325,7 +325,7 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
 * **版本更新:**  在完成一个 mini-batch 的所有 micro-batch 的反向传播后，更新模型权重，并生成新的权重版本。
 
 
-> 为了进一步优化 PipeDream 的内存使用，尤其是在权重暂存方面，PipeDream 衍生出了 PipeDream-flush 和 PipeDream-2BW 两种内存优化变体。
+为了进一步优化 PipeDream 的内存使用，尤其是在权重暂存方面，PipeDream 衍生出了 **PipeDream-flush** 和 **PipeDream-2BW** 两种内存优化变体。
 
 ### PipeDream-flush
 
@@ -336,12 +336,12 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
     width="100%"
 >}}
 
- PipeDream-flush 在 PipeDream 的基础上，周期性地进行全局同步的流水线刷新(flush)，类似于 GPipe 的同步梯度聚合。通过定期刷新，PipeDream-flush 可以大幅减少权重暂存所需的内存空间，只需维护单个版本的模型权重，但会牺牲少量吞吐量。
+**PipeDream-flush** 在 PipeDream 的基础上，周期性地进行全局同步的流水线刷新(flush)，类似于 GPipe 的同步梯度聚合。通过定期刷新，PipeDream-flush 可以大幅减少权重暂存所需的内存空间，只需维护单个版本的模型权重，但会牺牲少量吞吐量。
 
 
 ### PipeDream-2BW
 
-PipeDream-2BW(Double-Buffered Weights) 维护两个版本的模型权重，即 "双缓冲权重"。它每 $k$ 个 micro-batch 更新一次模型版本，其中 $k$ 大于流水线深度 $d$($k > d$). 新更新的模型版本不会立即完全替换旧版本，因为可能还有一些剩余的反向传播操作仍然依赖于旧版本。通过双缓冲权重，PipeDream-2BW 可以将权重暂存的内存开销降低到只维护两个版本的模型权重，显著减少内存占用。
+***PipeDream-2BW(Double-Buffered Weights)** 维护两个版本的模型权重，即 "双缓冲权重"。它每 $k$ 个 micro-batch 更新一次模型版本，其中 $k$ 大于流水线深度 $d$($k > d$). 新更新的模型版本不会立即完全替换旧版本，因为可能还有一些剩余的反向传播操作仍然依赖于旧版本。通过双缓冲权重，PipeDream-2BW 可以将权重暂存的内存开销降低到只维护两个版本的模型权重，显著减少内存占用。
 
 {{< figure
     src="pipe_dream_2bw.png"
@@ -367,7 +367,7 @@ PipeDream-2BW 策略有以下优点：
 
 ### Megatron-LM
 
-Megatron-LM([Shoeybi et al. 2019](https://arxiv.org/abs/1909.08053)) 是 NVIDIA 提出的一个用于训练超大型语言模型的系统，它采用了张量并行技术，对 Transformer 模型层内部的矩阵乘法操作进行并行化，包括 **self-attention** 和 **MLP** 中的矩阵乘法。
+**Megatron-LM**([Shoeybi et al. 2019](https://arxiv.org/abs/1909.08053)) 是 NVIDIA 提出的一个用于训练超大型语言模型的系统，它采用了张量并行技术，对 Transformer 模型层内部的矩阵乘法操作进行并行化，包括 **self-attention** 和 **MLP** 中的矩阵乘法。
 
 {{< figure
     src="Megatron-LM.png"
@@ -394,7 +394,7 @@ $$
 
 **自注意力层张量并行**
 
-Megatron-LM 也对 Transformer 的自注意力层中的 Query($Q$), Key($K$), Value($V$) 权重矩阵进行张量并行切分，并进行相应的局部矩阵乘法和全局拼接操作，实现自注意力层的张量并行化。。自注意力层的计算公式为：
+Megatron-LM 也对 Transformer 的自注意力层中的 Query($Q$), Key($K$), Value($V$) 权重矩阵进行张量并行切分，并进行相应的局部矩阵乘法和全局拼接操作，实现自注意力层的张量并行化。自注意力层的计算公式为：
 
 $$
 \text{Attention}(X, Q, K, V) = \text{softmax}\left(\frac{(XQ)(XK)^T}{\sqrt{d_k}}\right)XV
@@ -403,7 +403,7 @@ $$
 
 ### PTD-P
 
-PTD-P(Pipeline, Tensor, and Data Parallelism)([Narayanan et al. 2021](https://arxiv.org/abs/2104.04473))是一个结合了流水线并行、张量并行和数据并行的多维并行策略。PTD-P 旨在充分利用各种并行技术的优势，提高超大型模型训练的效率和可扩展性。
+**PTD-P(Pipeline, Tensor, and Data Parallelism)**([Narayanan et al. 2021](https://arxiv.org/abs/2104.04473))是一个结合了流水线并行、张量并行和数据并行的多维并行策略。PTD-P 旨在充分利用各种并行技术的优势，提高超大型模型训练的效率和可扩展性。
 
 **PTD-P 的特点:**
 
@@ -502,7 +502,7 @@ $$
 
 ### 辅助损失
 
-为了避免门控网络过度偏向少数专家，MoE 引入了辅助损失(Auxiliary Loss)([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
+为了避免门控网络过度偏向少数专家，MoE 引入了**辅助损失(Auxiliary Loss)**([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
 
 $$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
@@ -518,7 +518,7 @@ $$
 
 ### GShard
 
-GShard([Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层(例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
+**GShard**([Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668))主要对 MoE 层进行分片，将 MoE 层中的专家网络 $\{E_1, E_2, ..., E_n\}$ 分散到多个 TPU 设备上。例如，如果有 $P$ 个 TPU 设备，可以将专家网络划分为 $P$ 组，每组专家网络分配到一个 TPU 设备上。Transformer 模型的其他层(例如自注意力层、LayerNorm 层) 则在所有 TPU 设备上复制。
 
 **GShard 的改进门控机制:**
 
@@ -547,7 +547,7 @@ GShard 在 Noisy Top-k Gating 的基础上，进行了一些改进，以提高�
 
 ### Switch Transformer
 
-Switch Transformer([Fedus et al. 2021](https://arxiv.org/pdf/2101.03961)) 是 Google 提出的一个参数量达到**万亿**级别的 MoE 模型。其核心创新是将 Transformer 模型中的密集前馈网络(FFN) 层替换为稀疏的 Switch FFN 层。与 GShard 的 Top-2 Gating 不同，Switch Transformer 每个输入 token 只路由到一个专家网络，具有更高的稀疏性，进一步降低了计算成本，使得训练万亿参数模型成为可能。鼓励 token 路由在 $N$ 个专家之间更加均衡。Switch Transformer 的辅助损失基于实际路由比例与预测路由概率的乘积累加，具体公式如下：
+**Switch Transformer**([Fedus et al. 2021](https://arxiv.org/pdf/2101.03961)) 是 Google 提出的一个参数量达到**万亿**级别的 MoE 模型。其核心创新是将 Transformer 模型中的密集前馈网络(FFN) 层替换为稀疏的 Switch FFN 层。与 GShard 的 Top-2 Gating 不同，Switch Transformer 每个输入 token 只路由到一个专家网络，具有更高的稀疏性，进一步降低了计算成本，使得训练万亿参数模型成为可能。鼓励 token 路由在 $N$ 个专家之间更加均衡。Switch Transformer 的辅助损失基于实际路由比例与预测路由概率的乘积累加，具体公式如下：
 
 $$
 \text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
@@ -622,7 +622,7 @@ Switch Transformers 论文中使用下图直观的展示了使用不同的并行
 
 ### 专家选择
 
-专家选择(Expert Choice, EC)([Zhou et al. 2022](https://arxiv.org/abs/2202.09368)) 是一种与 token 选择路由(如 GShard 的 top-2 或 Switch Transformer 的 top-1)相反的路由策略。在 token 选择路由中，每个 token 从所有专家中选择 top-k 个进行路由；而在专家选择路由中，每个专家从所有 token 中挑选 top-k 个进行处理。这种方法旨在解决 token 选择路由中的负载不均和 token 浪费问题，同时显著提高训练效率。下面是具体的计算过程：
+**专家选择(Expert Choice, EC)**([Zhou et al. 2022](https://arxiv.org/abs/2202.09368)) 是一种与 token 选择路由(如 GShard 的 top-2 或 Switch Transformer 的 top-1)相反的路由策略。在 token 选择路由中，每个 token 从所有专家中选择 top-k 个进行路由；而在专家选择路由中，每个专家从所有 token 中挑选 top-k 个进行处理。这种方法旨在解决 token 选择路由中的负载不均和 token 浪费问题，同时显著提高训练效率。下面是具体的计算过程：
 
 1. **计算 token-to-expert 亲和度分数**  
 
@@ -672,7 +672,7 @@ $$
 
 考虑的优化问题中定义了一个矩阵 $A$，其第 $i$ 行第 $j$ 列的元素表示第 $i$ 个专家是否选择了第 $j$ 个 token(取值 0 或 1)。由于该优化问题求解较为复杂，论文中采用 [Dykstra 算法](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)(通过多次迭代获得近似解)来解决。
 
-参数 $b$ 通常由批量中 token 总数 $n$ 与容量因子决定，其中容量因子表示每个 token 平均使用的专家数量。大多数实验采用较高的容量因子，实验结果表明，即使在容量降低的情况下，EC(Expert Choice)整体表现仍优于传统的 top-1 token 选择路由，尽管 capped expert choice 略微降低了微调性能。
+参数 $b$ 通常由批量中 token 总数 $n$ 与容量因子决定，其中容量因子表示每个 token 平均使用的专家数量。大多数实验采用较高的容量因子，实验结果表明，即使在容量降低的情况下，EC 整体表现仍优于传统的 top-1 token 选择路由，尽管 capped expert choice 略微降低了微调性能。
 
 EC 的优势主要体现在以下两方面：
 - **完美负载均衡：** 每个专家固定处理 $k$ 个 token，从而避免了部分专家过载而其他专家闲置的问题，实现了理想的负载均衡。
@@ -695,7 +695,7 @@ EC 的优势主要体现在以下两方面：
     width="100%"
 >}}  
 
-自注意力(self-attention) 的计算复杂度和内存开销与序列长度 $s$ 的平方 $O(s^2)$ 成正比，长序列数据将增加中间 activation 内存使用量，从而限制设备的训练能力。Colossal-AI 序列并行([Li, et al. 2021](https://arxiv.org/abs/2105.13120))从系统角度提出**拆分超长序列到多卡**，具体的解决步骤如下。
+自注意力(self-attention) 的计算复杂度和内存开销与序列长度 $s$ 的平方 $O(s^2)$ 成正比，长序列数据将增加中间 activation 内存使用量，从而限制设备的训练能力。**Colossal-AI 序列并行**([Li, et al. 2021](https://arxiv.org/abs/2105.13120))从系统角度提出**拆分超长序列到多卡**，具体的解决步骤如下。
 
 1. **序列分块**  
    将输入序列划分为若干块，每个块由不同 GPU 保存和计算；因此每张卡只需存储自己对应的序列块激活，避免单卡内存爆炸。  
@@ -713,7 +713,7 @@ EC 的优势主要体现在以下两方面：
 
 ### Megatron-LM 序列并行
 
-Megatron-LM([Shoeybi et al. 2019](https://arxiv.org/pdf/1909.08053)) 原本使用张量并行分担部分激活值，但 Transformer 中的 LayerNorm、Dropout 等操作的激活值仍需完整保存在单卡，显存消耗依旧庞大。因此 NVIDIA 提出 Megatron-LM 序列并行([Korthikanti, et al. 2022](https://arxiv.org/abs/2205.05198))在序列维度对这些**激活值进行切分**，大幅降低占用。
+**Megatron-LM**([Shoeybi et al. 2019](https://arxiv.org/pdf/1909.08053)) 原本使用张量并行分担部分激活值，但 Transformer 中的 LayerNorm、Dropout 等操作的激活值仍需完整保存在单卡，显存消耗依旧庞大。因此 NVIDIA 提出 Megatron-LM 序列并行([Korthikanti, et al. 2022](https://arxiv.org/abs/2205.05198))在序列维度对这些**激活值进行切分**，大幅降低占用。
 
 {{< figure
     src="Megatron-LM-transformer-sp.png"
@@ -738,7 +738,7 @@ Megatron-LM([Shoeybi et al. 2019](https://arxiv.org/pdf/1909.08053)) 原本使�
 
 ### DeepSpeed-Ulysses 序列并行
 
-DeepSpeed-Ulysses([Jacobs et al. 2023](https://arxiv.org/abs/2309.14509)) 针对超长序列训练提出了一种高效的序列并行方案，通过在序列维度对输入进行划分，并结合两阶段的全对全通信，有效降低通信量和激活内存，从而支持训练百万 token 级别的长序列 Transformer 模型。
+**DeepSpeed-Ulysses**([Jacobs et al. 2023](https://arxiv.org/abs/2309.14509)) 针对超长序列训练提出了一种高效的序列并行方案，通过在序列维度对输入进行划分，并结合两阶段的全对全通信，有效降低通信量和激活内存，从而支持训练百万 token 级别的长序列 Transformer 模型。
 
 {{< figure
     src="deepspeed_sp.png"
@@ -882,7 +882,7 @@ ZeRO 分为三个阶段，每个阶段在前一阶段基础上进一步减少内
 
 ### 4D 并行
 
-为了进一步扩展模型规模，Llama3([Grattafiori et al. 2024](https://arxiv.org/abs/2407.21783)) 训练的时候采用了 4D 并行策略，它结合了四种并行方法，将模型进行更细粒度的分片，使每个 GPU 上的模型参数、优化器状态、梯度和激活值均能适配高带宽内存(HBM)的容量限制。这四种并行方法分别是：
+为了进一步扩展模型规模，Llama3([Grattafiori et al. 2024](https://arxiv.org/abs/2407.21783)) 训练的时候采用了 **4D 并行**，它结合了四种并行方法，将模型进行更细粒度的分片，使每个 GPU 上的模型参数、优化器状态、梯度和激活值均能适配高带宽内存(HBM)的容量限制。这四种并行方法分别是：
 
 - **张量并行(Tensor Parallelism, TP)：** 将单个权重张量划分为多个块，分布在不同设备上；
 - **流水线并行(Pipeline Parallelism, PP)：** 将模型垂直划分为多个阶段，各阶段在不同设备上并行处理不同微批次；
@@ -901,14 +901,13 @@ ZeRO 分为三个阶段，每个阶段在前一阶段基础上进一步减少内
 通过 4D 并行策略，Llama3 在训练时能够充分利用多个 GPU 的计算资源，同时有效减少内存占用，支持训练超大规模的模型。
 
 
-
 ## 内存优化技术
 
 除了并行训练技术，还有许多内存优化技术设计可以帮助训练 LLMs，这些设计主要从减少训练过程中各个环节的内存占用入手。
 
 ### CPU Offloading
 
-CPU Offloading([Rhu et al. 2016](https://arxiv.org/abs/1602.08124)) 是指当 GPU 内存不足时，将暂时无需使用的数据或者张量卸载到 CPU 并在需要时再加载回 GPU是一种常见且直观的做法。它的主要目的是利用 CPU 内存更大的容量来扩展可用空间，从而在显存受限的环境下也能训练更大规模的模型。然而，这种方法会带来额外的数据传输开销，通常会降低训练速度，因此近年来应用相对减少。
+**CPU Offloading**([Rhu et al. 2016](https://arxiv.org/abs/1602.08124)) 是指当 GPU 内存不足时，将暂时无需使用的数据或者张量卸载到 CPU 并在需要时再加载回 GPU是一种常见且直观的做法。它的主要目的是利用 CPU 内存更大的容量来扩展可用空间，从而在显存受限的环境下也能训练更大规模的模型。然而，这种方法会带来额外的数据传输开销，通常会降低训练速度，因此近年来应用相对减少。
 
 1. **识别可卸载张量:**  识别训练过程中暂时不使用的张量，例如模型参数、优化器状态、中间激活值等。判断张量是否可以卸载的依据可以是张量的使用频率、生命周期等。
 2. **张量卸载:** 将可卸载的张量从 GPU 内存移动到 CPU 内存。数据传输通常通过 PCIe 总线进行。
@@ -929,7 +928,7 @@ ZeRO-Offload 和 ZeRO-Infinity 是 DeepSpeed 库中实现的基于 CPU 卸载的
 
 ### 激活重计算/梯度检查点
 
-激活重计算/梯度检查点(Activation Recomputation/Gradient Checkpointing)([Chen et al. 2016](https://arxiv.org/abs/1604.06174)) 是一种**以计算换内存的技术**。在训练过程中，只保存部分激活值(例如每个 Transformer 层的输入激活值)，在反向传播时，重新计算未保存的激活值。激活重计算可以显著减少训练过程中的激活值内存占用，尤其是在训练深层神经网络时效果明显。
+**激活重计算/梯度检查点(Activation Recomputation/Gradient Checkpointing)**([Chen et al. 2016](https://arxiv.org/abs/1604.06174)) 是一种**以计算换内存的技术**。在训练过程中，只保存部分激活值(例如每个 Transformer 层的输入激活值)，在反向传播时，重新计算未保存的激活值。激活重计算可以显著减少训练过程中的激活值内存占用，尤其是在训练深层神经网络时效果明显。
 
 1. **选择检查点:** 选择模型中的一些层作为 checkpoint。通常选择模型中的关键层，例如 Transformer 层的输入层。  
 2. **前向传播(Forward Pass):** 在前向传播过程中，只保存检查点层的激活值，对于非检查点层的激活值，在计算完成后立即释放，不进行保存。  
@@ -983,7 +982,7 @@ $$
 
 ### 混合精度训练
 
-混合精度训练(Mixed Precision Training)([Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))是一种在模型训练过程中同时利用低精度浮点数(如 FP16 或 BF16)与高精度浮点数(如 FP32)的技术，其核心目标是在**减少显存占用**、**加速训练**的同时，尽可能保持与全精度训练相当的模型精度。
+**混合精度训练(Mixed Precision Training)**([Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))是一种在模型训练过程中同时利用低精度浮点数(如 FP16 或 BF16)与高精度浮点数(如 FP32)的技术，其核心目标是在**减少显存占用**、**加速训练**的同时，尽可能保持与全精度训练相当的模型精度。
 
 现代 GPU 在低精度计算上具有更高的吞吐量和更低的显存占用，从而降低访存开销与内存带宽需求，使混合精度训练能显著提升训练速度。下图展示了一个网络层中混合精度训练的基本流程：前向和反向传播主要采用半精度(FP16)运算，而在梯度累积与参数更新时使用全精度(FP32)，以规避低精度计算可能带来的数值精度问题。
 
@@ -1042,7 +1041,7 @@ $$
 2. **有损压缩(Lossy Compression):**  
    使用如 JPEG 或 MPEG 等算法，在允许一定数据损失的前提下获得更高的压缩率。这种方法能显著降低内存占用，但可能对模型精度和收敛性产生一定影响。
 
-Gist([Jain et al. 2018](https://www.microsoft.com/en-us/research/uploads/prod/2018/04/fiddle-gist-isca18.pdf))是一种用于激活值压缩的内存优化技术，其核心在于利用数据编码策略压缩中间结果，主要包含两种编码方案：
+**Gist**([Jain et al. 2018](https://www.microsoft.com/en-us/research/uploads/prod/2018/04/fiddle-gist-isca18.pdf))是一种用于激活值压缩的内存优化技术，其核心在于利用数据编码策略压缩中间结果，主要包含两种编码方案：
 
 - **层特定无损编码(Layer-Specific Lossless Encoding):**  
   针对特定层结构(例如 ReLU-Pool 与 ReLU-Conv)，设计专门的无损编码方案：  
@@ -1050,24 +1049,24 @@ Gist([Jain et al. 2018](https://www.microsoft.com/en-us/research/uploads/prod/20
   - 对于 ReLU-Conv 层，则使用稀疏存储与稠密计算编码。
 
 - **激进有损编码(Aggressive Lossy Encoding):**  
-  采用延迟精度降低(Delayed Precision Reduction, DPR)技术。DPR 的核心思想是：激活值在前向传播时需保持高精度，而在反向传播时可容忍较低精度。因此，在前向传播后将激活值压缩到较低精度，反向传播前再解压至高精度。
+  采用 **延迟精度降低(Delayed Precision Reduction, DPR)** 技术。DPR 的核心思想是：**激活值在前向传播时需保持高精度，而在反向传播时可容忍较低精度**。因此，在前向传播后将激活值压缩到较低精度，反向传播前再解压至高精度。
 
 ### 内存高效优化器
 
-传统优化器(如 Adam、SGD with Momentum)在训练过程中需要为每个模型参数维护大量状态数据(例如 momentum 和 variance)，其内存占用往往与模型参数量相当甚至更高。例如，以 Adam 优化器([Kingma et al. 2014](https://arxiv.org/pdf/1412.6980))为例，每个参数需要存储一阶矩和二阶矩，与参数本身及其梯度加起来，整个训练过程大约需要 4 倍于模型权重的内存，这对大型模型训练构成了严峻挑战。
+传统优化器(如 Adam、SGD with Momentum)在训练过程中需要为每个模型参数维护大量状态数据(例如 momentum 和 variance)，其内存占用往往与模型参数量相当甚至更高。例如，以 **Adam 优化器**([Kingma et al. 2014](https://arxiv.org/pdf/1412.6980))为例，每个参数需要存储一阶矩和二阶矩，与参数本身及其梯度加起来，整个训练过程**大约需要 4 倍于模型权重的内存**，这对大型模型训练构成了严峻挑战。
 
-为降低内存消耗，内存高效优化器主要通过以下策略进行设计：
+为降低内存消耗，**内存高效优化器**主要通过以下策略进行设计：
 - **减少状态变量数量：** 只保存必要的统计信息，而非完整矩阵；
 - **降低状态变量精度：** 采用 FP16 或 bfloat16 存储；
 - **共享状态变量：** 在多个参数间共享部分状态信息。
 
 #### Adafactor
 
-Adafactor([Shazeer et al. 2018](https://arxiv.org/abs/1804.04235)) 是一种内存高效的自适应学习率优化器。与 Adam 不同，Adafactor 不存储完整的二阶矩估计矩阵，而是只存储两个向量(行、列统计)替代完整的二阶矩矩阵，显著降低了内存占用，特别适用于参数矩阵具有低秩结构的场景。
+**Adafactor**([Shazeer et al. 2018](https://arxiv.org/abs/1804.04235)) 是一种内存高效的自适应学习率优化器。与 Adam 不同，Adafactor 不存储完整的二阶矩估计矩阵，而是只存储两个向量(行、列统计)替代完整的二阶矩矩阵，显著降低了内存占用，特别适用于参数矩阵具有低秩结构的场景。
 
 #### SM3
 
-SM3(Sparse Momentum for Massive Models)([Anil et al. 2019](https://arxiv.org/abs/1905.11286)) 通过稀疏更新和状态共享，提供了一种同样内存高效的自适应优化方案。
+**SM3(Sparse Momentum for Massive Models)**([Anil et al. 2019](https://arxiv.org/abs/1905.11286)) 通过稀疏更新和状态共享，提供了一种同样内存高效的自适应优化方案。
 
 - **稀疏 Momentum：** 只对梯度非零的参数更新 Momentum，从而减少计算和存储开销；
 - **状态共享：** 在一定程度上允许不同参数共享状态变量，进一步降低内存消耗；
@@ -1076,7 +1075,7 @@ SM3(Sparse Momentum for Massive Models)([Anil et al. 2019](https://arxiv.org/abs
 
 ### LoRA
 
-LoRA (Low-Rank Adaptation)([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) 提出在预训练权重旁引入 **低秩适配器** 的方法，通过添加少量参数实现高效微调，同时保持预训练模型原有的推理能力。
+**LoRA (Low-Rank Adaptation)**([Hu et al. 2021](https://arxiv.org/abs/2106.09685)) 提出在预训练权重旁引入 **低秩适配器** 的方法，通过添加少量参数实现高效微调，同时保持预训练模型原有的推理能力。
 
 下图直观展示了 LoRA 的原理和初始化策略：
 
@@ -1141,7 +1140,7 @@ $$
 
 ### QLoRA
 
-QLoRA([Dettmers et al. 2023](https://arxiv.org/abs/2305.14314)) 是在 LoRA 基础上结合量化思想对大规模模型进行高效微调的一种方法。它通过以下三个关键改进，大幅降低显存占用，同时保持模型精度基本不变：
+**QLoRA**([Dettmers et al. 2023](https://arxiv.org/abs/2305.14314)) 是在 LoRA 基础上结合量化思想对大规模模型进行高效微调的一种方法。它通过以下三个关键改进，大幅降低显存占用，同时保持模型精度基本不变：
 
 1. **4 位标准浮点数(NF4) 量化**  
    采用基于分块的分位量化策略，将原始模型权重量化为 4 位，从而在细微损失精度的情况下实现显著的存储压缩。

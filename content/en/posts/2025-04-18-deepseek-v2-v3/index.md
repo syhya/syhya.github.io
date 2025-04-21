@@ -525,7 +525,7 @@ $$
 \end{aligned}
 $$
 
-The optimization problem defines a matrix $A$ where the element at row $i$, column $j$ indicates whether expert $i$ selected token $j$ (value 0 or 1). Since solving this optimization problem is complex, the paper uses [Dykstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) (obtaining an approximate solution through multiple iterations).
+The optimization problem defines a matrix $A$ where the element at row $i$, column $j$ indicates whether expert $i$ selected token $j$ (value 0 or 1). Since solving this optimization problem is complex, the paper uses [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) (obtaining an approximate solution through multiple iterations).
 
 The parameter $b$ is typically determined by the total number of tokens $n$ in the batch and a capacity factor, which represents the average number of experts used per token. Most experiments use a high capacity factor. Experimental results show that even with reduced capacity, EC generally outperforms traditional top-1 token choice routing, although capped expert choice slightly degrades fine-tuning performance.
 

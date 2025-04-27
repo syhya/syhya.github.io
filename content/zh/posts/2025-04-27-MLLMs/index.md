@@ -2,7 +2,7 @@
 title: "多模态大语言模型（长期更新）"
 date: 2025-04-27T12:00:00+08:00
 author: "Yue Shui"
-tags: ["多模态", "视觉语言", "ViT", "CLIP", "BLIP", "LLaVA", "Qwen-VL", "Kimi-VL", "o3", "o4-mini", "MCoT", "大语言模型", "人工智能", "深度学习", "NLP", "CV"]
+tags: ["多模态", "MLLMs", "ViT", "CLIP", "BLIP", "LLaVA", "Qwen-VL", "Kimi-VL", "o3", "o4-mini", "MCoT", "人工智能", "深度学习", "NLP", "CV"]
 categories: ["技术博客"]
 ShowReadingTime: true
 toc: true
@@ -27,7 +27,6 @@ math: true
 | \( V \) 或 \( \mathbf{Z}_v \) | 图像特征或嵌入 |
 | \( L \) 或 \( \mathbf{H}_v, \mathbf{H}_q, \mathbf{H}_a \) | 文本特征或嵌入 |
 | \( E_{img}, E_{text} \) | 图像编码器, 文本编码器 |
-| \( \pi_\theta, \pi_{\text{ref}} \) | 策略模型及其参考模型 |
 | \( \mathcal{L} \) | 损失函数 (e.g., \( \mathcal{L}_{ITC}, \mathcal{L}_{ITM}, \mathcal{L}_{LM}, \mathcal{L}_{SFT} \)) |
 | \( \theta, \phi \) | 模型参数 |
 | \( N \) | 批处理大小 (Batch size) |
@@ -35,11 +34,6 @@ math: true
 | \( \tau \) | 温度参数 (Temperature parameter) |
 | \( \text{sim}(u, v) \) | 向量 \( u \) 和 \( v \) 之间的相似度 (通常是余弦相似度) |
 | \( \mathbb{E} \) | 期望 |
-| \( \log p(\cdot) \) | 对数似然 |
-| \( \mathbb{D}_{KL} \) | KL 散度 |
-| \( \alpha, \beta, \lambda \) | 超参数或权重系数 |
-| \( \sigma(\cdot) \) | Sigmoid 函数 |
-| \( \mathcal{D} \) | 数据集或数据分布 |
 
 ## 多模态基础知识
 
@@ -432,7 +426,7 @@ LLaVA 采用两阶段指令微调流程。
 
 **训练目标:**
 
-对于每张图像 \( \mathbf{X}_{\mathrm{v}} \)，生成包含 \( T \) 轮的多轮对话数据 \( \left(\mathbf{X}_{\mathrm{q}}^{1}, \mathbf{X}_{\mathrm{a}}^{1}, \cdots, \mathbf{X}_{\mathrm{q}}^{T}, \mathbf{X}_{\mathrm{a}}^{T}\right) \)，其中 \( T \) 是总对话轮数。将这些数据组织成一个序列，并将所有答案 \( \mathbf{X}_{\mathrm{a}} \) 视为模型的回应。其输入序列的组织形式采用了 Vicuna 格式。在第 \( t \) 轮对话中，指令 \( \mathbf{X}_{\text{instruct}}^{t} \) 定义为：
+对于每张图像 \( \mathbf{X}_{\mathrm{v}} \)，生成包含 \( T \) 轮的多轮对话数据 \( \left(\mathbf{X}_{\mathrm{q}}^{1}, \mathbf{X}_{\mathrm{a}}^{1}, \cdots, \mathbf{X}_{\mathrm{q}}^{T}, \mathbf{X}_{\mathrm{a}}^{T}\right) \)，其中 \( T \) 是总对话轮数。我们将这些数据组织成一个序列，并将所有答案 \( \mathbf{X}_{\mathrm{a}} \) 视为模型的回应。其输入序列的组织形式采用了 Vicuna 格式。在第 \( t \) 轮对话中，指令 \( \mathbf{X}_{\text{instruct}}^{t} \) 定义为：
 
 
 $$
@@ -791,18 +785,18 @@ MCoT 是当前 MLLM 研究的热点，它不仅提升了模型的推理能力，
 
 **Cited as:**
 
-> Yue Shui. (Apr 2025). 多模态 AI 综述：从基础到前沿技术演进.
-> [你的博客链接]
+> Yue Shui. (Apr 2025). 多模态大语言模型（长期更新）.
+> https://syhya.github.io/posts/2025-04-27-MLLMs/
 
 Or
 
 ```bibtex
-@article{yue_shui_multimodal_survey_2025,
-  title   = "多模态 AI 综述：从基础到前沿技术演进",
+@article{yue_shui_multimodal_llm,
+  title   = "多模态大语言模型（长期更新）",
   author  = "Yue Shui",
-  journal = "你的博客名称或网址",
+  journal = "syhya.github.io",
   year    = "2025",
   month   = "Apr",
-  url     = "[你的博客链接]"
+  url     = "https://syhya.github.io/zh/posts/2025-04-27-MLLMs/"
 }
 ```

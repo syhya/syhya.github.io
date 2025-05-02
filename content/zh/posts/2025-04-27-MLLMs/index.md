@@ -41,11 +41,11 @@ math: true
 
 ### 什么是多模态？
 
-**多模态 (Multimodality)** 指的是使用多种不同类型的数据或信息通道（模态）来表示和处理信息。人类天生就是多模态的生物，我们通过视觉、听觉、触觉、嗅觉、味觉以及语言来感知和理解世界。在人工智能领域，多模态学习旨在构建能够处理和关联来自不同模态（如文本、图像、视频、音频、表格数据、3D 数据等）信息的模型。
+**多模态 (Multimodality)** 指的是使用多种不同类型的数据或信息通道（模态）来表示和处理信息。人类天生就是多模态的生物，我们通过视觉、听觉、触觉、嗅觉、味觉以及语言来感知和理解世界。在人工智能领域，多模态学习旨在构建能够处理和关联来自不同模态（如文本、图像、视频、音频等）信息的模型。
 
 {{< figure
     src="multimodality_data.png"
-    caption="Fig. 1. Multimodality Data. (Image source: [GPT-4o Image Generation](https://chatgpt.com/s/m_680de852ca60819196a2c729b2603f33))"
+    caption="Fig. 1. Multimodality Data. (Image source: [GPT-4o Image Generation](https://chatgpt.com/s/m_6814c5d31e288191a5409a7420ee30f4))"
     align="center"
     width="60%"
 >}}
@@ -65,17 +65,6 @@ math: true
 3.  **更自然的交互方式:** 多模态 AI 使得人机交互更加自然和灵活。用户可以通过语音、文字、图像等多种方式与 AI 系统交互，AI 系统也能以多种模态（如生成带有图片的文本回复，或生成语音回答）进行响应。
 4.  **解锁新应用场景:** 多模态能力催生了许多新的应用，如自动驾驶（融合摄像头、雷达、激光雷达数据）、医疗诊断（结合医学影像和病历文本）、内容创作（文生图、文生视频）、虚拟助手、机器人交互等。
 5.  **促进可访问性:** 多模态技术可以帮助有感官障碍的人士。例如，图像描述可以帮助视障人士理解图片内容，语音识别和合成可以帮助听障或语障人士交流。
-
-### 多模态 AI 的核心挑战
-
-尽管多模态 AI 前景广阔，但也面临诸多挑战：
-
-1.  **模态对齐 (Modality Alignment):** 不同模态的数据具有不同的结构和统计特性。如何学习不同模态数据之间的对应关系，将它们映射到一个共享的表示空间，是多模态学习的核心挑战。例如，如何将图像中的“狗”区域与文本中的“dog”一词对齐。
-2.  **信息融合 (Information Fusion):** 如何有效地融合来自不同模态的信息是一个关键问题。简单的拼接可能效果不佳，需要设计更复杂的融合机制（如注意力机制、门控机制等）来捕捉模态间的交互和互补信息。
-3.  **表示学习 (Representation Learning):** 如何学习到既能捕捉各模态内部信息，又能反映模态间关联的联合表示（Joint Representation）或协调表示（Coordinated Representation）至关重要。
-4.  **数据稀疏与噪声:** 高质量、大规模、标注良好的多模态数据集相对稀缺，尤其是在特定领域。许多现有数据集（特别是从网络爬取的）包含大量噪声（如图像与文本描述不匹配），如何有效利用这些含噪数据是一个挑战。
-5.  **计算成本:** 处理和融合多种模态数据通常需要更大的模型和更多的计算资源，导致训练和推理成本高昂。
-6.  **评估困难:** 评估多模态模型性能的指标和基准仍在发展中，如何全面、公正地评估模型的综合能力是一个挑战。
 
 ### 常见多模态任务
 
@@ -461,32 +450,78 @@ LLaVA 在多模态对话方面展示了令人印象深刻的能力，有时能�
 
 LLaVA 的成功证明了视觉指令微调的有效性，其开源的数据、代码和模型极大地促进了后续多模态大模型的研究，为构建通用的、能够理解并遵循视觉和语言指令的 AI 助手开辟了新的途径。
 
-### Qwen2-VL
 
-**Qwen2-VL** ([Wang et al., 2024f](https://arxiv.org/abs/2409.12191)) 是 Qwen-VL ([Bai et al., 2023b](https://arxiv.org/abs/2308.12966)) 的升级版，在处理可变分辨率视觉输入和融合多模态位置信息方面取得了显著进展。
+### Qwen-VL
 
+**Qwen-VL** ([Bai et al., 2023](https://arxiv.org/abs/2308.12966))模型是 Qwen 团队研发的首个开源大型视觉语言模型，其架构由三大模块组成：
+
+* **大语言模型 (Large Language Model)**：采用预训练的 Qwen-7B 文本模型作为语言解码器。这部分负责理解和生成文本，与标准的 LLM 架构一致。
+* **视觉编码器 (Visual Encoder)**：使用 Vision Transformer 提取图像特征。具体实现上，Qwen-VL 利用采用 [OpenCLIP](https://github.com/mlfoundations/open_clip) 的 ViT-bigG 模型初始化视觉编码部分。在训练和推理阶段，输入图像都会被调整为特定分辨率。视觉编码器通过以 14 的步幅将图像切分为多个图像块，从而提取出一组图像特征。
+
+* **位置感知视觉-语言适配器(Position-aware Vision-Language Adapter)**：为高效融合长序列图像特征，引入了一个适配器将视觉特征序列压缩至固定长度。具体而言，该适配器包含一组随机初始化的**可学习查询向量**，通过单层的**交叉注意力（cross-attention）** 模块与 ViT 输出的图像特征进行计算，将图像特征压缩为长度固定为256的序列。
+
+注意力计算公式如下：
+
+$$
+\text{CrossAttn}(Q, K, V) = \mathrm{softmax}\!\left(\frac{QK^T}{\sqrt{d}}\right)V
+$$
+
+其中，\$Q\$ 为适配器内部定义的可训练查询向量矩阵，而\$K, V\$ 均直接使用视觉编码器（ViT）输出的图像特征序列作为键（Key）和值（Value）。
+
+通过这一机制，适配器能够根据学习到的查询向量从众多图像特征中选择并聚合最相关的信息。此外，为缓解图像特征压缩过程中可能引发的空间位置信息损失，在注意力计算的查询-键对中额外融入了**二维绝对位置编码**，强化了对图像空间结构的感知能力。
 
 {{< figure
-    src="qwen2_vl.jpg"
-    caption="Fig. 13. Qwen2-VL is capable of accurately identifying and comprehending the content within images, regardless of their clarity, resolution, or extreme aspect ratios.: ([Wang et al., 2024f](https://arxiv.org/abs/2409.12191))"
+    src="qwen_vl_pipeline.png"
+    caption="Fig. 13. The training pipeline of the Qwen-VL series. (Image source: [Bai et al., 2023](https://arxiv.org/abs/2308.12966))"
     align="center"
     width="100%"
 >}}
 
-**核心贡献:**
+Qwen-VL 采用“三阶段” 逐步训练策略，将视觉感知能力注入通用大模型。第一阶段冻结 LLM 仅训练视觉模块，第二阶段解冻联合多任务训练，第三阶段指令微调得到聊天模型。上图中雪花 ❄ 表示冻结，火焰 🔥 表示参与训练。
 
-1.  **原生动态分辨率 (Naive Dynamic Resolution):** 模型能够处理任意分辨率的图像，并将其动态地转换为变长的视觉 token 序列。这通过在 ViT 中使用 **2D-RoPE** 替代绝对位置编码实现。
-2.  **多模态旋转位置编码 (Multimodal Rotary Position Embedding, M-RoPE):** 提出了一种新的位置编码方法，可以统一处理文本、图像和视频的位置信息。
-3.  **统一图像与视频理解:** 采用混合训练范式和特定架构设计（如 3D 卷积处理视频）来同时处理图像和视频。
-4.  **模型扩展:** 发布了 2B, 8B, 72B 三种规模的模型，探索了 LVLM 的扩展规律。
+**训练策略：** Qwen-VL 系列采用**分三阶段**的逐步训练流程：
 
-**架构改进:**
+1. **纯图文预训练阶段**：
+   * 固定语言模型（7B）参数，仅训练视觉编码器和VL适配器；
+   * 使用约14亿对弱标注图文数据（英文占77.3%、中文占22.7%）；
+   * 图像统一缩放至较低分辨率（如 224×224）以提高效率；
+   * 采用自回归方式进行语言建模，训练模型生成图像描述文本；
+   * 训练约5万步（15亿样本）后，初步实现图文对齐能力（Qwen-VL）。
 
-*   **动态分辨率 ViT:**
+2. **多任务联合训练阶段**：
+   * 解冻语言模型，与视觉部分端到端共同训练；
+   * 提升输入图像分辨率（如448×448以上）；
+   * 加入多种细粒度视觉任务（如图像描述、视觉问答、内容定位、OCR 识别等），共涉及7大类任务；
+   * 训练数据混合多来源数据集，并加入约 2480 万条 OCR 数据和 780 万条纯文本数据；
+   * 所有任务数据随机混合训练，每条样本带任务前缀并填充至 2048 序列长度；
+   * 模型显著提升图像理解、跨模态检索、定位、阅读等能力。
+
+3. **监督微调（SFT）阶段**：
+   * 在多模态指令数据（约35万条）上进行微调，得到对话增强版 Qwen-VL-Chat；
+   * 特别设计复杂的多图推理、细粒度定位、多轮交互任务数据；
+   * 微调期间再次冻结视觉编码器，仅微调语言模型和适配器；
+   * 最终模型表现出优异的多模态对话、指令跟随和复杂推理能力。
+
+
+### Qwen2-VL
+
+**Qwen2-VL** ([Wang et al., 2024](https://arxiv.org/abs/2409.12191)) 是 Qwen-VL 的升级版，在处理可变分辨率视觉输入和融合多模态位置信息方面取得了进展。
+
+{{< figure
+    src="qwen2_vl.jpg"
+    caption="Fig. 14. Qwen2-VL is capable of accurately identifying and comprehending the content within images, regardless of their clarity, resolution, or extreme aspect ratios.: ([Wang et al., 2024](https://arxiv.org/abs/2409.12191))"
+    align="center"
+    width="100%"
+>}}
+
+从上图我们可以看出，Qwen2-VL 在处理不同分辨率和长宽比的图像时，能够准确识别和理解图像中的内容。主要采用了以下技术：
+
+*   **原生动态分辨率 (Naive Dynamic Resolution):**([Dehghani et al., 2024](https://arxiv.org/abs/2307.06304))模型能够处理任意分辨率的图像，并将其动态地转换为变长的视觉 token 序列。
     *   移除 ViT 的绝对位置编码，引入 **2D-RoPE**。
     *   推理时，可变分辨率图像被打包处理，限制总 token 长度以控制显存。
     *   ViT 输出后，使用 MLP 压缩相邻 \( 2 \times 2 \) 的 token 为一个，减少输入 LLM 的序列长度。使用 `<|vision_start|>` 和 `<|vision_end|>` 包裹视觉 token。
-*   **M-RoPE:**
+
+*   **多模态旋转位置编码 (Multimodal Rotary Position Embedding, M-RoPE):** 提出了一种新的位置编码方法，可以统一处理文本、图像和视频的位置信息。
     *   将 RoPE 分解为 **时间 (Temporal)**、**高度 (Height)**、**宽度 (Width)** 三个分量。
     *   **文本:** 三个分量使用相同的位置 ID，等价于 1D-RoPE。
     *   **图像:** 时间 ID 恒定，高度和宽度 ID 根据 token 在图像中的二维位置赋值。
@@ -496,38 +531,25 @@ LLaVA 的成功证明了视觉指令微调的有效性，其开源的数据、�
 
 {{< figure
     src="mrope.png"
-    caption="Fig. 14. Illustration of M-RoPE. By decomposing rotary embedding into temporal, height, and width components, M-RoPE can explicitly model the positional information of text, images, and video in LLM. (Image source: [Wang et al., 2024f](https://arxiv.org/abs/2409.12191))"
+    caption="Fig. 15. Illustration of M-RoPE. By decomposing rotary embedding into temporal, height, and width components, M-RoPE can explicitly model the positional information of text, images, and video in LLM. (Image source: [Wang et al., 2024](https://arxiv.org/abs/2409.12191))"
     align="center"
     width="100%"
 >}}
 
-*   **统一图像/视频处理:**
+*   **统一图像与视频理解:** 采用混合训练范式和特定架构设计（如 3D 卷积处理视频）来同时处理图像和视频。
     *   混合图像和视频数据进行训练。
     *   视频以 2 FPS 采样。
     *   ViT 中集成 **3D 卷积** 处理视频输入 (处理 \( 2 \times 14 \times 14 \) 的 3D 块)，减少 token 数量。
     *   图像被视为两帧相同的视频帧。
     *   动态调整视频帧分辨率，限制每段视频的总 token 数（如 16384）。
 
-**训练:** 沿用 Qwen-VL 的三阶段训练：ViT 预训练 -> 全模型预训练 -> LLM 指令微调。预训练数据包含图文对、OCR、图文交错文章、VQA、视频对话、图像知识等。指令微调使用 ChatML 格式。
+**训练:** 沿用 Qwen-VL 的三阶段训练：ViT 预训练 -> 全模型预训练 -> LLM 指令微调。预训练数据包含图文对、OCR、图文交错文章、VQA、视频对话、图像知识等。指令微调使用 ChatML 格式。发布了 2B, 8B, 72B 三种规模的模型，探索了 MLLMs 的 scaling law。
 
 **效果:** Qwen2-VL 在多种分辨率和长宽比的图像理解、长视频理解（超过 20 分钟）以及视觉 Agent 能力方面表现出色。
 
 ### Qwen2.5-VL
 
 **Qwen2.5-VL** ([Bai et al., 2025](https://arxiv.org/abs/2502.13923)) 在 Qwen2-VL 的基础上进一步优化了效率和时序建模能力。
-
-**核心贡献:**
-
-1.  **高效 ViT 架构:** 在 ViT 中引入 **窗口注意力 (Window Attention)**，将大部分层的注意力计算限制在局部窗口内，使计算复杂度与图像块数量成线性关系，显著提升处理高分辨率图像的效率。仅保留少数层进行全局注意力计算。
-2.  **动态 FPS 采样:** 将动态分辨率思想扩展到时间维度，训练时对视频采用 **动态帧率 (Dynamic FPS)** 采样，增强模型对不同速率视频的理解能力。
-3.  **绝对时间对齐 M-RoPE (TMRoPE):** 改进 M-RoPE，将其 **时间分量与绝对时间戳对齐**（例如，每个时间 ID 对应 40ms），而不是仅仅基于帧序号。这使得模型能够感知事件的真实速率和精确定位时间点，不受采样 FPS 变化的影响。
-4.  **增强的数据与能力:** 使用更大规模（4.1T tokens）和更高质量的数据进行预训练和微调，特别加强了文档解析（表格、图表、公式、乐谱等）、对象定位（支持点和框）、长视频理解（小时级）和 Agent 能力。
-
-**架构改进:**
-
-*   **窗口注意力 ViT:** 大部分 ViT 层使用窗口注意力（如 \( 8 \times 8 \) patch 窗口），少数层（如每隔 8 层）使用全注意力。
-*   **TMRoPE:** M-RoPE 的时间 ID 不再是简单的帧序号，而是根据视频帧的实际时间戳计算得出，保持时间 ID 与绝对时间的对应关系（如 1 ID = 40ms）。
-*   **视频处理:** 依然采用 3D 块处理（\( 2 \times 14 \times 14 \)），结合动态 FPS 采样和 TMRoPE。
 
 {{< figure
     src="qwen2.5vl_arc.jpeg"
@@ -536,8 +558,17 @@ LLaVA 的成功证明了视觉指令微调的有效性，其开源的数据、�
     width="100%"
 >}}
 
-**数据增强:**
+**模型优化：**
 
+Qwen2.5-VL 在 Qwen2-VL 的基础上进行了多项优化，主要包括：
+
+1. **高效 ViT 架构：** 在 Vision Transformer 中引入**窗口注意力(Window Attention)** 机制，将大部分层的注意力计算限制在局部窗口（如 $8 \times 8$ patch），使得计算复杂度随图像块数量呈线性增长，显著提升对高分辨率图像的处理效率。同时，仅在少数层（如每隔 8 层）执行全局注意力以保留整体上下文信息。
+
+2. **动态 FPS 采样与视频处理：** 引入**动态帧率（Dynamic FPS）采样**机制，将动态分辨率思想拓展至时间维度，提升模型对不同速率视频的适应能力。在视频处理上，保持3D 块结构（$2 \times 14 \times 14$）设计，并结合动态 FPS 和时间感知编码优化整体时序建模效果。
+
+3. **更强的数据与任务能力支持：** 模型在大规模（4.1T tokens）、高质量数据集上进行预训练与微调，重点提升了**文档解析**（表格、图表、公式、乐谱等）、**对象定位**（支持点和框标注）、**长视频理解（小时级）**以及**Agent 多任务能力**，拓宽了多模态理解的应用边界。
+
+**数据增强:**
 *   **文档全解析数据:** 构建了包含表格、图表、公式、图片、乐谱、化学式的 HTML 格式数据，包含布局框信息和坐标。
 *   **定位数据:** 扩展了边界框和点的定位数据，覆盖超过 1 万个类别，并合成了包含不存在对象和多实例对象的难例。使用了 Grounding DINO 和 SAM 等工具合成数据。
 *   **OCR 数据:** 增加了多语言 OCR 数据（覆盖欧洲主要语言及日韩阿越等），并包含手写体、密集文本、网页、公式、图表、表格等多种场景。
@@ -548,8 +579,6 @@ LLaVA 的成功证明了视觉指令微调的有效性，其开源的数据、�
 
 ### Qwen2.5-Omni
 
-**Qwen2.5-Omni** ([Qwen Team, 2025](https://arxiv.org/pdf/2503.20215)) 是一个端到端的多模态模型，旨在统一处理文本、图像、音频和视频输入，并能同时 **流式生成文本和自然语音** 输出。
-
 {{< figure
     src="qwen2.5_omni.png"
     caption="Fig. 16. Qwen2.5-Omni is an end-to-end multimodal model designed to perceive diverse modalities, including text, images, audio, and video, while simultaneously generating text and natural speech responses in a streaming manner. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
@@ -557,40 +586,46 @@ LLaVA 的成功证明了视觉指令微调的有效性，其开源的数据、�
     width="100%"
 >}}
 
-**核心贡献:**
+**Qwen2.5-Omni** ([Qwen Team, 2025](https://arxiv.org/abs/2503.20215)) 是一个端到端的多模态模型，支持处理包括文本、图像、音频和视频全模态的输入，并能同时 **流式生成文本和自然语音** 输出。
 
-1.  **全模态感知:** 单一模型处理文本、图像、音频、视频四种模态输入。
-2.  **时序对齐 TMRoPE:** 进一步优化 Qwen2.5-VL 的 TMRoPE，通过 **时间交错 (Time-interleaving)** 结构将视频帧和音频帧按时间顺序排列，并使用绝对时间戳对齐位置编码，实现音视频同步理解。
-3.  **Thinker-Talker 架构:** 提出一种新颖架构用于解耦文本生成和语音生成，避免相互干扰，同时允许端到端训练。
-    *   **Thinker:** 核心 LLM (基于 Qwen2.5)，负责理解多模态输入，生成高级表示和文本输出。
-    *   **Talker:** 一个 **双轨自回归 Transformer 解码器**，接收 Thinker 的隐层表示和生成的文本 token，专门负责生成 **离散语音 token**。
-4.  **流式处理:**
-    *   **输入:** 音频和视觉编码器采用 **分块处理 (Block-wise Processing)**，支持流式输入和预填充 (Prefilling)。
-    *   **输出:** Talker 生成离散语音 token，一个 **流式音频解码器 (Streaming Audio Codec)** (基于滑动窗口 DiT 和 Flow Matching) 将这些 token 实时转换为音频波形，显著降低首包延迟。
-
-**架构细节:**
-
-*   **输入处理:**
-    *   文本: Qwen tokenizer。
-    *   音频: 16kHz 采样，128 通道梅尔频谱图 (25ms 窗长, 10ms 步长)，使用 Qwen2-Audio 的编码器 (每帧约 40ms)。
-    *   图像/视频: 使用 Qwen2.5-VL 的 ViT，视频采用动态 FPS 采样。
-    *   **时间交错与 TMRoPE:** 对于带音频的视频，每 2 秒切块，块内先排视频帧表示，后排音频帧表示。所有模态使用 TMRoPE 进行位置编码，时间 ID 与绝对时间 (40ms 粒度) 对齐。
-*   **Thinker-Talker:**
-    *   Thinker 是基于 Qwen2.5 的 Transformer 解码器。
-    *   Talker 接收 Thinker 的 **高维隐层表示** (提供语义和韵律信息) 和 **采样的文本 token** (消除语音歧义)，自回归地生成离散语音 token。
-    *   两者共享历史上下文，端到端训练。
-*   **流式语音解码:**
-    *   使用 qwen-tts-tokenizer 将语音编码为离散 token。
-    *   解码器基于 **DiT (Diffusion Transformer)**，采用 **滑动窗口块注意力 (Sliding Window Block Attention)** (如回看 2 块，前看 1 块)，限制感受野，实现流式生成。
-    *   使用 **Flow Matching** 将离散 token 转换为梅尔频谱图块。
-    *   使用修改版的 **BigVGAN** 将梅尔频谱图块流式转换为波形。
+从下图可以看出，Qwen2.5-Omni 采用了**Thinker-Talker**架构，其主要特点包括：
 
 {{< figure
     src="qwen2.5_omini_arc.png"
     caption="Fig. 17. Qwen2.5-Omni Overview. Adopts Thinker-Talker architecture. Thinker is tasked with text generation while Talker focuses on generating streaming speech tokens by receiving high-level representations directly from Thinker. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
     align="center"
+    width="80%"
+>}}
+
+1. **统一多模态处理与时序建模：**
+
+   * **全模态感知:** 单一模型能够同时处理文本、图像、音频、视频四种模态输入，实现多模态统一理解。
+
+{{< figure
+    src="TMRoPE.png"
+    caption="Fig. 18. An illustration of Time-aligned Multimodal RoPE (TMRoPE). (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    align="center"
     width="100%"
 >}}
+
+   * **时序对齐多模态旋转位置编码（Time-aligned Multimodal RoPE，TMRoPE）:** 在Qwen2.5-VL基础上进一步优化 TMRoPE，通过**时间交错 (Time-interleaving)** 结构，将视频帧和音频帧每2秒切块后按时间顺序排列，块内先视频后音频。所有模态使用绝对时间戳（40ms粒度）与位置编码（TMRoPE）对齐，实现精准的音视频同步。
+   * **输入处理细节:** 文本使用Qwen tokenizer；音频为16kHz采样、128通道梅尔频谱图（25ms窗长，10ms步长），每帧约40ms，通过Qwen2-Audio编码器处理；图像/视频通过Qwen2.5-VL的ViT架构处理，视频支持动态FPS采样。
+
+2. **Thinker-Talker 架构设计与功能解耦：**
+
+   * 提出创新的Thinker-Talker架构，将文本生成和语音生成解耦，避免相互干扰，同时允许端到端联合训练。
+   * **Thinker:** 基于Qwen2.5的Transformer解码器，处理多模态输入，生成高级隐层表示（包含语义和韵律信息）及文本token输出。
+   * **Talker:** 双轨自回归Transformer解码器，接收Thinker输出的隐层表示和文本token，结合消除语音歧义的能力，自回归地生成离散语音token。
+   * Thinker与Talker共享历史上下文，支持端到端训练，提升语音生成一致性与上下文保持能力。
+
+3. **高效流式处理能力：**
+
+   * **输入流式处理:** 音频和视觉编码器采用**分块处理 (Block-wise Processing)**，支持流式输入及预填充 (Prefilling)。
+   * **输出流式处理:**
+
+     * Talker生成的离散语音token实时送入**流式音频解码器 (Streaming Audio Codec)**。
+     * 解码器采用基于**Diffusion Transformer (DiT)** 的 **滑动窗口块注意力 (Sliding Window Block Attention)**（回看2个块，前看1个块），控制感受野，实现流式生成。
+     * 使用 **Flow Matching** ([Lipman, et al., 2022](https://arxiv.org/abs/2210.02747)) 将离散 token 转换为梅尔频谱图，再通过改进版 **BigVGAN**([Lee et al., 2022](https://arxiv.org/abs/2206.04658)) 将频谱图流式转换为音频波形，有效降低首包延迟，提升生成实时性。
 
 **训练:** 包含三个阶段：编码器与 LLM 对齐 -> 全模型多模态预训练 -> 长上下文预训练 (32k)。Talker 单独进行三阶段训练：上下文学习 -> DPO (优化稳定性) -> 多说话人指令微调 (提升自然度)。
 
@@ -618,7 +653,7 @@ LLaVA 的成功证明了视觉指令微调的有效性，其开源的数据、�
 
 {{< figure
     src="kimi_vl_arch.png"
-    caption="Fig. 18. Model architecture of Kimi-VL and Kimi-VL-Thinking, consisting of a MoonViT that allows native-resolution images, an MLP projector, and a Mixture-of-Experts (MoE) language decoder. (Image source: [Kimi Team, 2025](https://arxiv.org/abs/2504.16790))"
+    caption="Fig. 19. Model architecture of Kimi-VL and Kimi-VL-Thinking, consisting of a MoonViT that allows native-resolution images, an MLP projector, and a Mixture-of-Experts (MoE) language decoder. (Image source: [Kimi Team, 2025](https://arxiv.org/abs/2504.16790))"
     align="center"
     width="100%"
 >}}
@@ -661,7 +696,7 @@ OpenAI 的 **o3** 和 **o4-mini** ([OpenAI, 2025](https://openai.com/index/intro
 
 {{< figure
     src="thinking_with_images_static.webp"
-    caption="Fig. 19. o3 model demonstrates its multimodal CoT capability by analyzing a user-uploaded image, identifying the ship, and using tools (web search) to find information, ultimately answering the ship's name and its next port of call. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-o3-and-o4-mini/))"
+    caption="Fig. 20. o3 model demonstrates its multimodal CoT capability by analyzing a user-uploaded image, identifying the ship, and using tools (web search) to find information, ultimately answering the ship's name and its next port of call. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-o3-and-o4-mini/))"
     align="center"
     width="100%"
 >}}
@@ -674,7 +709,7 @@ OpenAI 的 **o3** 和 **o4-mini** ([OpenAI, 2025](https://openai.com/index/intro
 
 {{< figure
     src="mcot_timeline.png"
-    caption="Fig. 20. MCoT timeline. (Image source: [Wang et al., 2025](https://arxiv.org/abs/2503.12605))"
+    caption="Fig. 21. MCoT timeline. (Image source: [Wang et al., 2025](https://arxiv.org/abs/2503.12605))"
     align="center"
     width="100%"
 >}}
@@ -714,26 +749,11 @@ OpenAI 的 **o3** 和 **o4-mini** ([OpenAI, 2025](https://openai.com/index/intro
 
 MCoT 是当前 MLLM 研究的热点，它不仅提升了模型的推理能力，也为实现更通用、更接近人类智能的 AI 系统提供了重要途径。
 
-## 讨论
 
-多模态 AI 领域正经历着飞速的发展，从早期的简单模态融合到如今能够进行复杂推理、遵循指令、甚至使用工具的 MLLMs，技术演进的轨迹清晰可见。我们可以观察到以下几个关键趋势和挑战：
-
-1.  **架构融合与统一:** 模型架构趋向于更加统一和灵活。早期的模型往往针对特定任务设计，而像 BLIP 的 MED、BLIP-2 的 Q-Former、LLaVA 的简单连接器、Qwen 系列的统一框架以及 Kimi-VL 的 MoE 设计，都体现了构建通用多模态基础模型的努力。Qwen2.5-Omni 更是将多种输入和输出模态整合到单一模型中。
-2.  **效率与性能的平衡:** 随着模型规模的增大，计算成本成为瓶颈。BLIP-2 的冻结模型策略、Qwen2.5-VL 的窗口注意力、Kimi-VL 的 MoE 架构都是在追求更高性能的同时，探索更高效的训练和推理方法。o4-mini 的推出也明确指向了对高性价比模型的需求。
-3.  **指令遵循与交互性:** 从简单的 VQA、描述生成，到 LLaVA 开创的视觉指令微调，再到 Qwen 系列和 Kimi-VL 展示的 Agent 能力，模型与用户的交互方式越来越丰富和主动，逐渐从被动回答转向主动执行任务。
-4.  **深度推理与 CoT:** 简单地关联图文已不能满足需求，模型需要具备更深层次的推理能力。MCoT 的引入，特别是结合 RL 和长思考时间的 o3/o4-mini 以及 Kimi-VL-Thinking，显著提升了模型解决复杂问题的能力。如何有效地生成和利用高质量的推理链数据是未来的关键。
-5.  **原生分辨率与时序理解:** 突破固定分辨率限制（如 Qwen2-VL, Kimi-VL）和增强对视频时序动态的理解（如 Qwen2.5-VL/Omni 的 TMRoPE）是提升模型感知真实世界能力的重要方向。
-6.  **数据的作用:** 高质量、大规模的多模态数据是驱动模型进步的核心燃料。无论是 CLIP 的 WIT 数据集，还是 BLIP 的 CapFilt 技术，亦或是 LLaVA 的 GPT-4 生成数据，以及 Qwen 和 Kimi 系列对数据工程的重视，都凸显了数据在 MLLM 发展中的关键作用。如何高效获取、清洗、生成和利用多模态数据（尤其是包含推理链的数据）将持续是研究热点。
-7.  **挑战依然存在:**
-    *   **模型幻觉 (Hallucination):** MLLMs 仍可能生成与视觉内容不符或凭空捏造的信息。
-    *   **细粒度理解:** 对于图像或视频中的精细细节、复杂关系和微妙变化的理解仍有提升空间。
-    *   **常识与世界知识:** 如何将丰富的常识和世界知识有效融入多模态理解与推理中。
-    *   **评估:** 如何全面、可靠地评估 MLLMs 的综合能力，特别是其推理和泛化能力，仍然是一个难题。
-    *   **安全与偏见:** 模型可能继承训练数据中的偏见，并可能被用于生成有害内容或执行不当任务。
 
 ## 总结
 
-多模态 AI 正在从基础的感知对齐走向更高级的认知智能。以 ViT 为代表的视觉编码器奠定了基础，CLIP 通过对比学习实现了高效的图文对齐。BLIP 和 BLIP-2 探索了统一理解与生成以及利用冻结模型的效率优化路径。LLaVA 引入了视觉指令微调，增强了模型的交互性。Qwen 系列在动态分辨率、时序建模和全模态处理上不断突破。Kimi-VL 则展示了 MoE 架构在效率和长上下文处理上的潜力。o3/o4-mini 和 MCoT 的研究将模型的推理能力推向了新的高度，并结合工具使用，展现了未来 Agent 形态的雏形。
+总体来看，多模态大模型 正在从“感知对齐”迈向“认知智能”，未来将聚焦于更强的推理链、全模态一体化、可解释性与可靠性，最终构建真正通用、可信赖的多模态智能助手。
 
 ## 参考文献
 

@@ -869,7 +869,7 @@ Multimodal Large Language Models are advancing towards being more comprehensive,
 **Cited as:**
 
 > Yue Shui. (May 2025). Multimodal Large Language Models.
-> https://syhya.github.io/en/posts/2025-05-04-multimodal-llm/
+> https://syhya.github.io/posts/2025-05-04-multimodal-llm/
 
 Or
 
@@ -880,6 +880,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "May",
-  url     = "https://syhya.github.io/en/posts/2025-05-04-multimodal-llm/"
+  url     = "https://syhya.github.io/posts/2025-05-04-multimodal-llm/"
 }
 ```

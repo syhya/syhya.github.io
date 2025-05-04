@@ -2,6 +2,191 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://syhya.github.io/tags/blip/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/blip/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/blip/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/categories/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/clip/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/clip/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/clip/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/kimi-vl/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/kimi-vl/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/kimi-vl/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/llava/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/llava/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/llava/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/mllms/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/mllms/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/mllms/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/multimodal/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/multimodal/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/multimodal/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/2025-05-04-multimodal-llm/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2025-05-04-multimodal-llm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2025-05-04-multimodal-llm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/openai/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/openai/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/openai/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/qwen-vl/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/qwen-vl/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/qwen-vl/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/technical-blog/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/vit/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/vit/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/vit/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/</loc>
+    <lastmod>2025-05-04T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/tags/ai/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -13,19 +198,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/ai/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/categories/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/deep-learning/</loc>
@@ -184,19 +356,6 @@
                 href="https://syhya.github.io/tags/mtp/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/posts/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/rl/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -223,22 +382,6 @@
                 href="https://syhya.github.io/tags/sft/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/tags/transformer/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -250,19 +393,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/tags/transformer/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/</loc>
-    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/llama/</loc>

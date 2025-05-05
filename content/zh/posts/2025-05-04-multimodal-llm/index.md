@@ -63,7 +63,7 @@ math: true
 
 ### 什么是多模态？
 
-**多模态 (Multimodality)** 指的是使用多种不同类型的数据或信息通道（模态）来表示和处理信息。人类天生就是多模态的生物，我们通过视觉、听觉、触觉、嗅觉、味觉以及语言来感知和理解世界。在人工智能领域，多模态学习为了构建能够处理和关联来自不同模态（如文本、图像、视频、音频等）信息的模型。
+**多模态 (Multimodality)** 指的是使用多种不同类型的数据或信息通道（模态）来表示和处理信息。人类天生就是多模态的生物，我们通过**视觉、听觉、触觉、嗅觉和味觉**感知和理解世界。在人工智能领域，多模态学习为了构建能够处理和关联来自不同模态（如文本、图像、视频、音频等）信息的模型。
 
 {{< figure
     src="multimodality_data.png"
@@ -77,7 +77,7 @@ math: true
 *   **图像 (Image):** 静态视觉信息，包含丰富的场景、物体和纹理细节。
 *   **视频 (Video):** 动态视觉信息，由连续的图像帧组成，通常伴随音频。视频不仅包含空间信息，还包含时间信息。
 *   **音频 (Audio):** 声音信息，包括语音、音乐和环境声音。
-*   **其他:** 表格数据、3D 点云、传感器数据（如雷达、激光雷达）、生物信号（如 EEG、ECG）等。
+*   **其他:** 表格数据、[3D 点云](https://en.wikipedia.org/wiki/Point_cloud)、传感器数据（如雷达、激光雷达）、生物信号（如 [EEG](https://en.wikipedia.org/wiki/Electroencephalography)、[ECG](https://en.wikipedia.org/wiki/Electrocardiography)）等。
 
 ### 为什么需要多模态 AI？
 
@@ -91,18 +91,19 @@ math: true
 
 以下表格列举了一些常见的多模态任务，这些任务通常需要结合多种模态的信息进行处理和生成。
 
-| 任务名称                  | 说明                   |
+| 任务名称 | 说明 |
 | :------------------------------------- | :--------------------------------------------------------- |
-| 视觉问答 (VQA)                         | 根据图像和相关问题生成文本答案。                             |
-| 图像/视频描述生成 (Image/Video Captioning) | 为图像或视频生成自然语言文字描述。                           |
-| 文本到多模态生成 (Text-to-X Generation)  | 根据文本描述生成相应的图像、视频或音频内容。                 |
-| 跨模态检索 (Cross-Modal Retrieval)       | 使用一种模态（如文本）查询另一种模态（如图像）的相关数据。     |
-| 多模态情感分析 (Multimodal Sentiment)    | 结合文本、音频、视频等多种信息判断情感倾向。                 |
-| 视觉推理 (Visual Reasoning)            | 基于图像或视频内容进行逻辑判断与关系推理。                   |
-| 视觉语言导航 (VLN)                     | 根据自然语言指令在视觉环境中指导智能体导航。                 |
-| 多模态机器翻译 (MMT)                   | 利用相关图像信息辅助文本翻译以消除歧义。                     |
-| 音视频语音识别 (AVSR)                  | 结合音频信号和说话者唇动视觉信息进行语音识别。               |
-| 视觉定位 (Visual Grounding)   | 将文本中的词语或短语与图像或视频中的对应区域或物体关联起来。 |
+| [视觉问答 (VQA)](https://paperswithcode.com/task/visual-question-answering) | 根据图像和相关问题生成文本答案。 |
+| [图像/视频描述生成 (Image/Video Captioning)](https://paperswithcode.com/task/image-captioning) | 为图像或视频生成自然语言文字描述。 |
+| [文本到多模态生成 (Text-to-X Generation)](https://paperswithcode.com/task/text-to-image-generation) | 根据文本描述生成相应的图像、视频或音频内容。 |
+| [跨模态检索 (Cross-Modal Retrieval)](https://paperswithcode.com/task/cross-modal-retrieval) | 使用一种模态（如文本）查询另一种模态（如图像）的相关数据。 |
+| [多模态情感分析 (Multimodal Sentiment)](https://paperswithcode.com/task/multimodal-sentiment-analysis) | 结合文本、音频、视频等多种信息判断情感倾向。 |
+| [视觉推理 (Visual Reasoning)](https://paperswithcode.com/task/visual-reasoning) | 基于图像或视频内容进行逻辑判断与关系推理。 |
+| [视觉语言导航 (VLN)](https://paperswithcode.com/task/vision-language-navigation) | 根据自然语言指令在视觉环境中指导智能体导航。 |
+| [多模态机器翻译 (MMT)](https://paperswithcode.com/task/multimodal-machine-translation) | 利用相关图像信息辅助文本翻译以消除歧义。 |
+| [音视频语音识别 (AVSR)](https://paperswithcode.com/task/audio-visual-speech-recognition) | 结合音频信号和说话者唇动视觉信息进行语音识别。 |
+| [视觉定位 (Visual Grounding)](https://paperswithcode.com/task/visual-grounding) | 将文本中的词语或短语与图像或视频中的对应区域或物体关联起来。 |
+
 
 ## 关键技术
 

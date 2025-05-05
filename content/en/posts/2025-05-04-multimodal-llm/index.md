@@ -63,7 +63,7 @@ Before diving into specific technologies, let's understand some basic concepts o
 
 ### What is Multimodality?
 
-**Multimodality** refers to the use of multiple different types of data or information channels (modalities) to represent and process information. Humans are inherently multimodal beings; we perceive and understand the world through vision, hearing, touch, smell, taste, and language. In the field of artificial intelligence, multimodal learning aims to build models capable of processing and correlating information from different modalities (such as text, images, videos, audio, etc.).
+**Multimodality** refers to the use of multiple different types of data or information channels (modalities) to represent and process information. Humans are inherently multimodal beings; we perceive and understand the world through **vision, hearing, touch, smell and taste**. In the field of artificial intelligence, multimodal learning aims to build models capable of processing and correlating information from different modalities (such as text, images, videos, audio, etc.).
 
 {{< figure
     src="multimodality_data.png"
@@ -77,7 +77,7 @@ Before diving into specific technologies, let's understand some basic concepts o
 *   **Image:** Static visual information, containing rich details of scenes, objects, and textures.
 *   **Video:** Dynamic visual information, composed of sequential image frames, often accompanied by audio. Video contains not only spatial information but also temporal information.
 *   **Audio:** Sound information, including speech, music, and environmental sounds.
-*   **Others:** Tabular data, 3D point clouds, sensor data (e.g., radar, LiDAR), biological signals (e.g., EEG, ECG), etc.
+*   **Others:** Tabular data, [3D point clouds](https://zh.wikipedia.org/wiki/%E9%BB%9E%E9%9B%B2), sensor data (e.g., radar, LiDAR), biological signals (e.g., [EEG](https://en.wikipedia.org/wiki/Electroencephalography), [ECG](https://en.wikipedia.org/wiki/Electrocardiography)), etc.
 
 ### Why Do We Need Multimodal AI?
 
@@ -93,16 +93,16 @@ The following table lists some common multimodal tasks, which typically require 
 
 | Task Name                       | Description                                                              |
 | :------------------------------ | :----------------------------------------------------------------------- |
-| Visual Question Answering (VQA) | Generate text answers based on an image and a related question.          |
-| Image/Video Captioning          | Generate natural language descriptions for images or videos.             |
-| Text-to-X Generation            | Generate corresponding image, video, or audio content from text descriptions. |
-| Cross-Modal Retrieval           | Use one modality (e.g., text) to query relevant data in another modality (e.g., image). |
-| Multimodal Sentiment Analysis   | Determine sentiment by combining information from text, audio, video, etc. |
-| Visual Reasoning                | Perform logical judgment and relationship inference based on image or video content. |
-| Visual Language Navigation (VLN)| Guide an agent to navigate in a visual environment based on natural language instructions. |
-| Multimodal Machine Translation (MMT) | Utilize relevant image information to assist text translation and resolve ambiguity. |
-| Audio-Visual Speech Recognition (AVSR) | Perform speech recognition by combining audio signals and visual information of the speaker's lip movements. |
-| Visual Grounding                | Associate words or phrases in text with corresponding regions or objects in images or videos. |
+| [Visual Question Answering (VQA)](https://paperswithcode.com/task/visual-question-answering) | Generate text answers based on an image and a related question.          |
+| [Image/Video Captioning](https://paperswithcode.com/task/image-captioning)          | Generate natural language descriptions for images or videos.             |
+| [Text-to-X Generation](https://paperswithcode.com/task/text-to-image-generation)            | Generate corresponding image, video, or audio content from text descriptions. |
+| [Cross-Modal Retrieval](https://paperswithcode.com/task/cross-modal-retrieval)           | Use one modality (e.g., text) to query relevant data in another modality (e.g., image). |
+| [Multimodal Sentiment Analysis](https://paperswithcode.com/task/multimodal-sentiment-analysis)   | Determine sentiment by combining information from text, audio, video, etc. |
+| [Visual Reasoning](https://paperswithcode.com/task/visual-reasoning)                | Perform logical judgment and relationship inference based on image or video content. |
+| [Visual Language Navigation (VLN)](https://paperswithcode.com/task/vision-language-navigation)| Guide an agent to navigate in a visual environment based on natural language instructions. |
+| [Multimodal Machine Translation (MMT)](https://paperswithcode.com/task/multimodal-machine-translation) | Utilize relevant image information to assist text translation and resolve ambiguity. |
+| [Audio-Visual Speech Recognition (AVSR)](https://paperswithcode.com/task/audio-visual-speech-recognition) | Perform speech recognition by combining audio signals and visual information of the speaker's lip movements. |
+| [Visual Grounding](https://paperswithcode.com/task/visual-grounding)                | Associate words or phrases in text with corresponding regions or objects in images or videos. |
 
 ## Key Technologies
 

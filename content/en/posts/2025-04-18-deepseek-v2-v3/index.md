@@ -1153,15 +1153,19 @@ Comparison of DeepSeek-V3 Chat with representative open-source and closed-source
 
 ## Conclusion, Limitations & Future Directions
 
-**Conclusion:** DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE language models. Through innovations like the MLA and DeepSeekMoE architectures, along with V3's introduction of auxiliary-loss-free load balancing, MTP, FP8 training, and R1 distillation, they have achieved breakthroughs in performance, training cost, and inference efficiency. DeepSeek-V3 has become one of the strongest open-source models currently available, with performance competitive with top closed-source models.
+### Conclusion
 
-**Limitations:**
+DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE language models. Through innovations like the MLA and DeepSeekMoE architectures, along with V3's introduction of auxiliary-loss-free load balancing, MTP, FP8 training, and R1 distillation, they have achieved breakthroughs in performance, training cost, and inference efficiency. DeepSeek-V3 has become one of the strongest open-source models currently available, with performance competitive with top closed-source models.
+
+### Limitations
+
 *   **General LLM Limitations:** Such as knowledge cutoffs, hallucinations, factual errors, etc.
 *   **Language Coverage:** Primarily focused on Chinese and English, with limited capabilities in other languages (V2). V3 expanded multilingual support but remains predominantly focused on Chinese and English.
 *   **Deployment Threshold (V3):** Efficient inference requires relatively large deployment units (multi-node), which might be challenging for smaller teams.
 *   **Inference Efficiency:** Although V3's inference efficiency improved over V2, there is still room for optimization.
 
-**Future Directions:**
+### Future Directions
+
 *   **Architectural Innovation:** Continue optimizing MoE architectures, exploring new architectures supporting infinite context and overcoming Transformer limitations.
 *   **Data Expansion:** Improve the quantity, quality, and dimensionality (multimodality, etc.) of training data.
 *   **Deeper Reasoning:** Enhance the model's reasoning length and depth, increasing intelligence levels.

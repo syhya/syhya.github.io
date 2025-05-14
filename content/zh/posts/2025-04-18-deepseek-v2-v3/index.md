@@ -698,7 +698,7 @@ V3 的无辅助损失策略旨在最小化负载均衡机制对模型最终性�
 
 ### 多 token 预测 (MTP)
 
-为了进一步提升模型性能和数据效率，DeepSeek-V3 引入了**多 token 预测 (Multi-Token Prediction, MTP)** 训练目标 ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737) 启发)。标准的语言模型只预测下一个 token，而 MTP 让模型在每个位置预测未来多个（V3 中是 \(D_{MTP}=1\)，即预测下下个 token）token。
+为了进一步提升模型性能和数据效率，DeepSeek-V3 引入了**多 token 预测 (Multi-Token Prediction, MTP)** 训练目标 ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737))。标准的语言模型只预测下一个 token，而 MTP 让模型在每个位置预测未来多个（V3 中是 \(D_{MTP}=1\)，即预测下下个 token）token。
 
 #### MTP 实现
 

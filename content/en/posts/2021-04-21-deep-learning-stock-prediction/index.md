@@ -921,9 +921,9 @@ I R=\frac{\overline{I C}}{\sigma_{I C}}
 $$
 
 Where:
--   $x_{k}^{T}$: Exposure of factor $k$ in period $T$ of the selected stocks
--   $r^{T+1}$: Return rate of the selected stocks in period $T+1$
--   $\overline{I C}: Mean of IC
+* $x_{k}^{T}$: the exposure of the selected stock to factor $k$ in period $T$
+* $r^{T+1}$: the return of the selected stock in period $T+1$
+* $\overline{IC}$: the mean of the Information Coefficient (IC)
 
 This paper uses IR to judge the quality of factors. Through "screening" a large number of different combinations of operators and basic data and IC and IR, this paper obtains the 50 price-volume factors selected in this paper. After IR testing, the table shown in the figure below is obtained by sorting IR from high to low. From the table below, we can see that the IRs of the selected 50 price-volume factors are all greater than 0.5, indicating that these factors have a strong ability to stably obtain excess returns.
 

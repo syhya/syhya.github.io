@@ -1,6 +1,6 @@
 ---
 title: "检索增强生成 (RAG) 技术综述（长期更新中）"
-date: 2025-03-07T12:00:00+08:00
+date: 2025-02-03T12:00:00+08:00
 author: "Yue Shui"
 tags: ["AI", "LLM", "RAG", "NLP", "Information Retrieval", "Vector Database", "Embedding", "Naive RAG", "Advanced RAG", "Modular RAG", "GraphRAG", "Agentic RAG", "Multimodal RAG", "RAG Evaluation", "Ragas", "Chunking", "Azure AI Search", "BM25", "Vector Search", "HNSW", "Hybrid Search", "RRF", "Re-ranking", "Prompt Engineering"]
 categories: ["技术博客"]
@@ -30,7 +30,7 @@ math: true
 
 
 {{< figure
-    src="image.png"
+    src="rag_pipeline.png"
     caption="Fig. 1. A representative instance of the RAG process applied to question answering. (Image source: Mathpix based on general RAG concepts)"
     align="center"
     width="90%"

@@ -31,7 +31,7 @@ math: true
 
 {{< figure
     src="rag_pipeline.png"
-    caption="Fig. 1. A representative instance of the RAG process applied to question answering. (Image source: Mathpix based on general RAG concepts)"
+    caption="Fig. 1. A representative instance of the RAG process applied to question answering. (Image source: general RAG concepts)"
     align="center"
     width="90%"
 >}}
@@ -420,40 +420,50 @@ $$ r = G_{model}(q, X) $$
 
 ### 关键技术与创新
 
-多模态 RAG 的实现涉及以下几个关键环节的技术创新 ([Abootorabi et al., 2025](#abootorabi-et-al-2025)):
+多模态 RAG 的实现涉及以下几个关键环节的技术创新
+([Abootorabi et al., 2025](https://arxiv.org/abs/2502.08826))
 
-1.  **多模态数据处理与索引 (Multimodal Data Processing and Indexing):**
-    *   对不同模态的数据进行预处理和特征提取。例如，图像可以使用视觉编码器（如 ViT, CLIP Image Encoder ([Radford et al., 2021](#radford-et-al-2021))）提取特征向量，音频可以使用语音识别（ASR）转换为文本或使用音频编码器（如 CLAP ([Wu et al., 2023a](#wu-et-al-2023a))）提取声学特征向量。
-    *   将不同模态的特征向量存储在多模态向量数据库中，或者为每种模态维护独立的索引。MegaPairs ([Zhou et al., 2024a](#zhou-et-al-2024a)) 是一个大规模多模态配对数据集，用于训练通用多模态检索器。
+1. **多模态数据处理与索引 (Multimodal Data Processing and Indexing)**
 
-2.  **多模态检索策略 (Multimodal Retrieval Strategy):**
-    *   **高效搜索与相似性检索:** 依赖于将不同模态输入编码到统一嵌入空间的方法，如基于 CLIP ([Radford et al., 2021](#radford-et-al-2021)) 或 BLIP ([Li et al., 2022a](#li-et-al-2022a)) 的模型。使用最大内积搜索 (MIPS) 及其变体（如 ScaNN, FAISS）进行高效检索。
-    *   **模态中心检索 (Modality-Centric Retrieval):**
-        *   **文本中心:** 仍然是基础，使用 BM25、DPR、Contriever ([Izacard et al., 2022](#izacard-et-al-2022)) 等。
-        *   **视觉中心:** 直接利用图像表示进行检索，如 EchoSight、ImgRet。组合图像检索 (Composed Image Retrieval, CIR) 模型允许使用多个图像特征组合查询。
-        *   **视频中心:** 结合时序动态信息，如 iRAG ([Arefeen et al., 2024](#arefeen-et-al-2024)) 的增量检索，Video-RAG ([Luo et al., 2024b](#luo-et-al-2024b)) 利用 OCR/ASR 辅助文本。
-        *   **文档检索与布局理解:** 处理包含文本、图像、表格和布局信息的整个文档页面，如 ColPali ([Faysse et al., 2024](#faysse-et-al-2024))、DocLLM ([Wang et al., 2024a](#wang-et-al-2024a))。
-    *   **重排序与选择策略:**
-        *   **优化样本选择:** 多步检索，结合有监督和无监督选择。
-        *   **相关性评分评估:** 使用 SSIM、NCC、BERTScore 等多模态相似性度量进行重排序。
-        *   **过滤机制:** 通过硬负例挖掘、一致性过滤等去除不相关数据。
+   * 对不同模态的数据进行预处理和特征提取。例如，图像可用视觉编码器（如 ViT、CLIP Image Encoder ([Radford et al., 2021](https://arxiv.org/abs/2103.00020))）提取特征向量；音频可先用 ASR 转文本，或利用音频编码器（如 CLAP ([Wu et al., 2023a](https://arxiv.org/abs/2211.06687)) 提取声学向量。
+   * 将不同模态的特征向量存储在多模态向量数据库中，或为每种模态维护独立索引。**MegaPairs** ([Zhou et al., 2024a](https://arxiv.org/abs/2412.14475)) 是一个大规模多模态配对数据集，可用于训练通用检索器。 
 
-3.  **多模态融合机制 (Multimodal Fusion Mechanisms):**
-    *   **分数融合与对齐 (Score Fusion and Alignment):** 将不同模态的检索得分或特征进行融合。例如，将文本、表格、图像转换为统一的文本格式后进行评分，或将图像和查询嵌入到共享的 CLIP 空间中。REVEAL ([Hu et al., 2023a](#hu-et-al-2023a)) 将检索分数注入注意力层。
-    *   **基于注意力的机制 (Attention-Based Mechanisms):** 使用交叉注意力（Cross-Attention）等机制动态加权不同模态间的交互，以支持特定任务的推理。例如，RAMM ([Yuan et al., 2023](#yuan-et-al-2023)) 使用双流共同注意力 Transformer。
-    *   **统一框架与投影 (Unified Frameworks and Projections):** 将多模态输入整合为一致的表示。例如，M3DocRAG ([Cho et al., 2024](#cho-et-al-2024)) 将多页文档展平为单个嵌入张量。SAM-RAG ([Zhai, 2024](#zhai-2024)) 通过为图像生成标题，将多模态输入转换为单模态文本。
+2. **多模态检索策略 (Multimodal Retrieval Strategy)**
 
-4.  **多模态增强技术 (Multimodal Augmentation Techniques):**
-    *   **上下文丰富 (Context Enrichment):** 通过添加额外的上下文元素（文本块、图像标记、结构化数据）来增强检索知识的相关性。
-    *   **自适应与迭代检索 (Adaptive and Iterative Retrieval):**
-        *   **自适应检索:** 根据查询复杂度动态调整检索策略。SKURG ([Yang et al., 2023](#yang-et-al-2023)) 根据查询复杂度决定检索跳数。OmniSearch ([Li et al., 2024b](#li-et-al-2024b)) 使用自适应检索代理分解复杂问题。
-        *   **迭代检索:** 通过多轮检索并结合先前迭代的反馈来优化结果。IRAMIG ([Liu et al., 2024b](#liu-et-al-2024b)) 根据检索到的内容动态更新查询。
+   * **高效搜索与相似性检索:** 依赖于把不同模态输入映射到统一嵌入空间的模型，如基于 CLIP ([Radford et al., 2021](https://arxiv.org/abs/2103.00020)) 或 BLIP ([Li et al., 2022a](https://arxiv.org/abs/2201.12086))。利用 MIPS（如 ScaNN、FAISS）进行高效检索。
+   * **模态中心检索 (Modality‑Centric Retrieval):**
 
-5.  **多模态生成技术 (Multimodal Generation Techniques):**
-    *   **上下文学习 (In-Context Learning, ICL):** 利用检索到的多模态内容作为少样本示例，无需重新训练即可增强 MLLM (如 GPT-4V ([OpenAI, 2023](#openai-2023)), LLaVA ([Liu et al., 2023a](#liu-et-al-2023a)), Gemini ([Team et al., 2023](#team-et-al-2023))) 的推理能力。Raven ([Rao et al., 2024](#rao-et-al-2024)) 提出 Fusion-in-Context Learning。
-    *   **推理 (Reasoning):** 使用结构化推理技术（如思维链, Chain-of-Thought, CoT）将复杂推理分解为顺序步骤。RAGAR ([Khaliq et al., 2024](#khaliq-et-al-2024)) 引入 Chain of RAG 和 Tree of RAG。
-    *   **指令调优 (Instruction Tuning):** 针对特定应用对生成组件进行微调或指令调优。RA-BLIP ([Ding et al., 2024b](#ding-et-al-2024b)) 利用 InstructBLIP 的 QFormer 架构。
-    *   **来源归属与证据透明性 (Source Attribution and Evidence Transparency):** 确保生成的内内容能够追溯到其原始来源。VISA ([Ma et al., 2024b](#ma-et-al-2024b)) 生成带有视觉来源归属的答案。
+     * **文本中心:** 传统基础，使用 BM25、DPR、**Contriever** ([Izacard et al., 2022](https://arxiv.org/abs/2112.09118)) 等。
+     * **视觉中心:** 直接基于图像向量检索，如 EchoSight、ImgRet；**CIR** 模型支持多图组合查询。
+     * **视频中心:** 融合时序动态信息，例如 **iRAG** ([Arefeen et al., 2024](https://arxiv.org/abs/2404.12309)) 的增量检索、**Video‑RAG** ([Luo et al., 2024b](https://arxiv.org/abs/2411.13093)) 借助 OCR/ASR 辅助文本。
+     * **文档检索与布局理解:** 处理含文本、图像、表格、布局信息的整页文档，如 **ColPali** ([Faysse et al., 2024](https://arxiv.org/abs/2407.01449))、**DocLLM** ([Wang et al., 2024a](https://arxiv.org/abs/2401.00908))。
+   * **重排序与选择策略:**
+
+     * **优化样本选择:** 采用多步检索，结合有监督 / 无监督的候选筛选。
+     * **相关性评分评估:** 使用 SSIM、NCC、BERTScore 等多模态相似度度量进行重排序。
+     * **过滤机制:** 通过硬负例挖掘、一致性过滤等方法去除不相关结果。
+
+3. **多模态融合机制 (Multimodal Fusion Mechanisms)**
+
+   * **分数融合与对齐 (Score Fusion and Alignment):** 将不同模态的检索得分或特征进行融合。例如，将文本、表格、图像转换为统一的文本格式后进行评分，或将图像和查询嵌入到共享的 CLIP 空间中。REVEAL ([Hu et al., 2023a](https://arxiv.org/abs/2212.05221)) 将检索分数注入注意力层。
+   * **基于注意力的机制 (Attention‑Based Mechanisms):** 使用交叉注意力等机制动态加权不同模态间的交互，以支持特定任务的推理。例如，RAMM ([Yuan et al., 2023](https://arxiv.org/abs/2303.00534)) 使用双流共同注意力 Transformer。
+   * **统一框架与投影 (Unified Frameworks and Projections):** 将多模态输入整合为一致的表示。例如，M3DocRAG ([Cho et al., 2024](https://arxiv.org/abs/2411.04952)) 将多页文档展平为单个嵌入张量；SAM‑RAG ([Zhai, 2024](https://arxiv.org/abs/2410.11321)) 通过为图像生成标题，将多模态输入转换为单模态文本。 
+
+4. **多模态增强技术 (Multimodal Augmentation Techniques)**
+
+   * **上下文丰富 (Context Enrichment):** 通过添加额外的上下文元素（文本块、图像标记、结构化数据）来增强检索知识的相关性。
+   * **自适应与迭代检索 (Adaptive and Iterative Retrieval):**
+
+     * **自适应检索：** 根据查询复杂度动态调整检索策略。SKURG ([Yang et al., 2023](https://arxiv.org/abs/2212.08632)) 根据查询复杂度决定检索跳数；OmniSearch ([Li et al., 2024b](https://arxiv.org/abs/2411.02937)) 使用自适应检索代理分解复杂问题。
+     * **迭代检索：** 通过多轮检索并结合先前迭代的反馈来优化结果。IRAMIG ([Liu et al., 2024b](https://www.researchgate.net/publication/384073519_Iterative_Retrieval_Augmentation_for_Multi-Modal_Knowledge_Integration_and_Generation)) 根据检索到的内容动态更新查询。
+
+5. **多模态生成技术 (Multimodal Generation Techniques)**
+
+   * **上下文学习 (In‑Context Learning, ICL)：** 利用检索到的多模态内容作为少样本示例，无需重新训练即可增强 MLLM (如 GPT‑4V ([OpenAI, 2023](https://arxiv.org/abs/2303.08774)), LLaVA ([Liu et al., 2023a](https://arxiv.org/abs/2304.08485)), Gemini (*暂无 arXiv 预印本*)) 的推理能力。Raven ([Rao et al., 2024](https://arxiv.org/abs/2308.07922)) 提出 Fusion‑in‑Context Learning。 
+   * **推理 (Reasoning)：** 使用结构化推理技术（如 Chain‑of‑Thought）将复杂推理分解为顺序步骤。RAGAR ([Khaliq et al., 2024](https://arxiv.org/abs/2404.12065)) 引入 Chain of RAG 和 Tree of RAG。 
+   * **指令调优 (Instruction Tuning)：** 针对特定应用对生成组件进行微调或指令调优。RA‑BLIP ([Ding et al., 2024b](https://arxiv.org/abs/2410.14154)) 利用 InstructBLIP 的 QFormer 架构。 
+   * **来源归属与证据透明性 (Source Attribution and Evidence Transparency)：** 确保生成的内容能追溯到其原始来源。VISA ([Ma et al., 2024b](https://arxiv.org/abs/2412.14457)) 生成带有视觉来源归属的答案。
+
 
 6.  **训练策略与损失函数 (Training Strategies and Loss Functions):**
     *   **对齐 (Alignment):** 主要使用对比学习（Contrastive Learning）来提高表示质量，常用损失函数为 InfoNCE loss：
@@ -467,7 +477,7 @@ $$ r = G_{model}(q, X) $$
             扩散模型通常使用均方误差 (MSE) 损失进行噪声预测。
     *   **鲁棒性与噪声管理 (Robustness and Noise Management):** 通过在训练中注入不相关结果、使用渐进式知识蒸馏、噪声注入训练（如添加硬负例、高斯噪声）等方法来提高模型对噪声输入的鲁棒性。
 
-多模态 RAG 通过整合来自不同来源和类型的知识，极大地丰富了 LLM 的上下文理解和生成能力，为构建更智能、更全面的 AI 系统奠定了基础。例如，在 SharePoint 文档库中，可能包含 PPT、Word 文档、图片等，多模态 RAG 可以帮助用户基于这些混合内容进行问答 ([Choudhary & Galla, 2024](#choudhary-and-galla-2024))。
+多模态 RAG 通过整合来自不同来源和类型的知识，极大地丰富了 LLM 的上下文理解和生成能力，为构建更智能、更全面的 AI 系统奠定了基础。例如，在 SharePoint 文档库中，可能包含 PPT、Word 文档、图片等，多模态 RAG 可以帮助用户基于这些混合内容进行问答。
 
 ## RAG 系统的评估
 

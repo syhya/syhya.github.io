@@ -13,7 +13,7 @@ draft: false
 math: true
 ---
 
-As the parameters of Large Language Models (LLMs) continue to grow, deploying and serving these models presents significant challenges. [vLLM](https://github.com/vllm-project/vllm) is an open-source library designed for fast, convenient, and cost-effective LLM inference and online serving. Its core lies in the **PagedAttention** algorithm, which efficiently manages the Key-Value cache (KV Cache) in the attention mechanism.
+As the parameters of Large Language Models (LLMs) continue to grow, deploying and serving these models presents significant challenges. [vLLM](https://github.com/vllm-project/vllm) is an open-source library designed for fast, convenient, and cost-effective LLM inference and online serving. Its core lies in the **PagedAttention** algorithm, which efficiently manages the KV Cache in the attention mechanism.
 
 ## Evaluation Metrics
 
@@ -27,9 +27,9 @@ To evaluate the performance of LLM inference and serving engines, we primarily f
 
 **Time Per Output Token (TPOT)** indicates the average time required for the model to generate one new token. It directly determines the user-perceived "speed" of the response. To enhance user experience, [Streaming](https://platform.openai.com/docs/guides/streaming-responses?api-mode=responses) is commonly used in practical applications. For example, if TPOT is 0.1 seconds/token, it means the model can generate about 10 tokens per second, equivalent to approximately 450 words per minute, which exceeds the reading speed of most people.
 
-### Overall Latency
+### Latency
 
-**Overall Latency (Latency)** is the total time required for the model to generate a complete response for the user. Overall latency can be calculated from TTFT and TPOT using the following formula:
+**Latency** is the total time required for the model to generate a complete response for the user. It can be calculated from TTFT and TPOT using the following formula:
 
 $$
 \text{Latency} = \text{TTFT} + \text{TPOT} \times (\text{Number of Output Tokens})
@@ -449,9 +449,7 @@ Building on V0, vLLM V1 comprehensively refactors and optimizes the core archite
 
 [10] InternLM Team. ["LMDeploy."](https://github.com/InternLM/lmdeploy) GitHub Repository, 2025.
 
-[11] Paszke, Adam, et al. ["PyTorch: An Imperative Style, High-Performance Deep Learning Library."](https://papers.nips.cc/paper/2019/hash/bdbca288fee7f92f2bfa9f7012727740-Abstract.html) In Advances in Neural Information Processing Systems 32. 2019.
-
-[12] Dao, Tri. ["FlashAttention-3: Fusing Attention with More Kernels."](https://arxiv.org/abs/2407.08608) arXiv preprint arXiv:2407.08608, 2024.
+[12] Shah, Jay, et al. ["Flashattention-3: Fast and accurate attention with asynchrony and low-precision."](https://arxiv.org/abs/2407.08608) Advances in Neural Information Processing Systems 37 (2024): 68658-68685.
 
 [13] ModelTC. ["LightLLM."](https://github.com/ModelTC/lightllm) GitHub Repository, 2025.
 

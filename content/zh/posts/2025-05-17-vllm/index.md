@@ -96,7 +96,7 @@ $$
 
 ### KV 缓存
 
-LLM 服务性能的主要瓶颈在于内存管理，在自回归解码过程中，LLM 为输入序列中的每个 token 生成注意力键（Key）和值（Value）张量，这些张量（KV 缓存）必须保留在 GPU 内存中以生成后续的 token。KV 缓存具有以下特点：
+LLM 服务性能的主要瓶颈在于内存管理，在自回归解码过程中，LLM 为输入序列中的每个 token 生成注意力键和值张量，这些 KV 缓存必须保留在 GPU 内存中以生成后续的 token。KV 缓存具有以下特点：
 
 1.  **占用空间大:** 对于 LLaMA-13B 模型，单个序列的 KV 缓存可能高达 1.7 GB。
 2.  **动态性:** KV 缓存的大小取决于序列长度，而序列长度是高度可变且不可预测的。
@@ -162,7 +162,7 @@ A_{i j}=\frac{\exp \left(q_{i}^{\top} K_{j} / \sqrt{d}\right)}{\sum_{t=1}^{\lcei
 
 vLLM 的内存管理器借鉴了操作系统的虚拟内存机制：
 
-1.  **逻辑块与物理块:** 每个请求的 KV 缓存被表示为一系列逻辑块。GPU 工作节点上的块引擎 (Block Engine) 分配物理内存并将其划分为物理块。
+1.  **逻辑块与物理块:** 每个请求的 KV 缓存被表示为一系列逻辑块。GPU 工作节点上的块引擎分配物理内存并将其划分为物理块。
 2.  **块表:** 维护每个请求的逻辑块到物理块的映射。每个条目记录物理块地址和块内已填充的 token 数量。
 3.  **动态分配:** 物理块按需分配，无需预先保留最大长度的空间，从而消除了大部分内存浪费。
 
@@ -182,7 +182,7 @@ vLLM 的内存管理器借鉴了操作系统的虚拟内存机制：
 
 这种按需分配的方式将内存浪费限制在每个序列的最后一个块内，实现了接近最优的内存利用率（浪费低于 4%），从而可以批处理更多请求，提高吞吐量。
 
-图8中展示了 vLLM 如何管理两个序列的内存空间。两个序列的逻辑块被映射到 GPU 工作节点（GPU worker）上由区块引擎（block engine）预留的不同物理块中。这意味着，即使在逻辑层面相邻的块在物理 GPU 内存中也无需连续，从而两个序列可以有效地共享和利用物理内存空间。
+图8中展示了 vLLM 如何管理两个序列的内存空间。两个序列的逻辑块被映射到 GPU 工作节点（GPU worker）上由区块引擎预留的不同物理块中。这意味着，即使在逻辑层面相邻的块在物理 GPU 内存中也无需连续，从而两个序列可以有效地共享和利用物理内存空间。
 
 {{< figure
     src="two_requests_vllm.png"
@@ -313,7 +313,7 @@ vLLM 支持 [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) 风格的张量
 
 *   **统一处理:** 不再区分 "prefill" 和 "decode" 阶段，统一处理用户输入 token 和模型生成 token。
 *   **简单表示:** 调度决策用字典表示，如 `{request_id: num_tokens}`，指定每步为每个请求处理多少 token。
-*   **通用性:** 这种表示足以支持块状预填充 (Chunked Prefills)、前缀缓存 (Prefix Caching)、推测解码 (Speculative Decoding) 等特性。例如，块状预填充只需在固定 token 预算下动态分配各请求的处理数量。
+*   **通用性:** 这种表示足以支持块状预填充 (Chunked Prefills)、前缀缓存 (Prefix Caching)、投机解码 (Speculative Decoding) 等特性。例如，块状预填充只需在固定 token 预算下动态分配各请求的处理数量。
 
 ### 零开销前缀缓存
 
@@ -342,7 +342,7 @@ V1 优化了前缀缓存（基于哈希匹配和 LRU 驱逐）的实现：
 V1 解决了 V0 中调度器和 Worker 0 耦合导致的非对称架构问题：
 
 *   **Worker 端状态缓存:** 请求状态缓存在 Worker 端。
-*   **增量更新:** 每步只传输状态的增量变化 (diffs)，极大减少了进程间通信。
+*   **增量更新:** 每步只传输状态的**增量变化 (diffs)**，极大减少了进程间通信。
 *   **对称架构:** 调度器和 Worker 0 可以运行在不同进程中，架构更清晰、对称。
 *   **抽象分布式逻辑:** Worker 在单 GPU 和多 GPU 设置下行为一致。
 
@@ -450,7 +450,7 @@ vLLM V1 在 V0 的基础上，对核心架构进行了全面重构和优化，�
 
 [10] InternLM Team. ["LMDeploy."](https://github.com/InternLM/lmdeploy) GitHub Repository, 2025.
 
-[12] Dao, Tri. ["FlashAttention-3: Fusing Attention with More Kernels."](https://arxiv.org/abs/2407.08608) arXiv preprint arXiv:2407.08608, 2024.
+[12] Shah, Jay, et al. ["Flashattention-3: Fast and accurate attention with asynchrony and low-precision."](https://arxiv.org/abs/2407.08608) Advances in Neural Information Processing Systems 37 (2024): 68658-68685.
 
 [13] ModelTC. ["LightLLM."](https://github.com/ModelTC/lightllm) GitHub Repository, 2025.
 

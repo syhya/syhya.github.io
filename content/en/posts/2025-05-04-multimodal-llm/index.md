@@ -24,15 +24,15 @@ The following table lists the key mathematical symbols used in this article and 
 | \( T, \mathbf{X}_c, \mathbf{X}_q, \mathbf{X}_a, \mathbf{X}_{\text{instruct}} \) | Text input, specifically could refer to image caption (\( \mathbf{X}_c \)), user question (\( \mathbf{X}_q \)), model answer (\( \mathbf{X}_a \)), or instruction (\( \mathbf{X}_{\text{instruct}} \)) |
 | \( V, \mathbf{Z}_v \)                                                        | Raw image features or embedding sequence output by the image encoder                                                                                             |
 | \( L, \mathbf{H}_q, \mathbf{H}_a \)                                          | Text features or embedding sequence output by the text encoder                                                                                             |
-| \( \mathbf{H}_v \)                                                           | Visual token sequence input to the LLM after processing by a projection layer (e.g., LLaVA, Qwen)                                                                    |
-| \( Z \)                                                                      | Query embeddings output by Q-Former, serving as a compressed representation of visual information (BLIP-2)                                                                         |
-| \( P_Z \)                                                                    | Soft Visual Prompt derived from the Q-Former output (BLIP-2)                                                               |
+| \( \mathbf{H}_v \)                                                           | Visual token sequence input to the LLM after processing by a projection layer                                                                    |
+| \( Z \)                                                                      | Query embeddings output by Q-Former, serving as a compressed representation of visual information                                                                       |
+| \( P_Z \)                                                                    | Soft Visual Prompt derived from the Q-Former output                                                              |
 | \( I_e, T_e \)                                                               | Image and text embeddings in CLIP's shared multimodal embedding space                                                                                     |
 | \( z_p \)                                                                    | Embedding vector of a single image patch after linear projection in ViT                                                                                   |
 | \( x_{class} \)                                                              | Embedding of the learnable `[class]` token used for classification tasks in ViT                                                                                   |
 | \( x_i \)                                                                    | The \( i \)-th element or token in a sequence (e.g., word \( w_i \) in a text sequence)                                                                   |
 | \( E_{img}, g(\cdot) \)                                                      | Image encoder model (e.g., ViT)                                                                                                          |
-| \( E_{text}, f_{\phi}(\cdot) \)                                              | Text encoder or Large Language Model (LLM)                                                                                                     |
+| \( E_{text}, f_{\phi}(\cdot) \)                                              | Text encoder or LLM                                                                                                     |
 | \( E, \mathbf{W}, \mathbf{W}_i, \mathbf{W}_t \)                              | Linear projection matrix, used for feature transformation or modality alignment                                                                                             |
 | \( E_{pos} \)                                                                | Positional encoding vector, used to provide sequence position information to the Transformer                                                                                |
 | \( Q, K, V \)                                                                | Query, Key, Value matrices in the attention mechanism                                                                              |
@@ -43,7 +43,7 @@ The following table lists the key mathematical symbols used in this article and 
 | \( N_{patches} \)                                                            | Number of image patches the ViT model divides an image into                                                                                                 |
 | \( D \)                                                                      | Main dimension of embedding vectors in the model                                                                                                         |
 | \( d, d_k \)                                                                 | Dimension of the key vector in the attention mechanism, used for scaling the dot product                                                                                      |
-| \( T_{turns} \)                                                              | Total number of conversation turns in multi-turn dialogue data (LLaVA)                                                                                               |
+| \( T_{turns} \)                                                              | Total number of conversation turns in multi-turn dialogue data                                                                                             |
 | \( \mathcal{L} \)                                                            | Loss function, the objective optimized by the model (e.g., \( \mathcal{L}_{ITC}, \mathcal{L}_{ITM}, \mathcal{L}_{LM}, \mathcal{L}_{CLIP}, \mathcal{L}_{siglip} \)) |
 | \( \tau \)                                                                   | Learnable parameter, such as temperature in contrastive loss or KL regularization weight in reinforcement learning                                                                           |
 | \( \lambda \)                                                                | Hyperparameter, such as the weight of different loss terms or length penalty factor in reinforcement learning                                                                                 |
@@ -132,7 +132,7 @@ The development of multimodal large models is driven by a series of technologies
 
 1.  **Patch Embedding:** Divide the input image \( I \in \mathbb{R}^{H \times W \times C} \) into \( N_{patches} \) fixed-size non-overlapping image patches \( x_p \in \mathbb{R}^{P^2 \times C} \), where \( (H, W) \) is the image resolution, \( C \) is the number of channels, \( P \) is the size of each patch, and \( N_{patches} = HW/P^2 \) is the number of patches.
 2.  **Linear Projection:** Flatten each patch \( x_p \) into a 1D vector and map it to a \( D \)-dimensional embedding space using a learnable linear projection matrix \( E \), resulting in patch embeddings \( z_p = x_p E \).
-3.  **Position Embedding:** To preserve the spatial position information of the patches, ViT adds learnable **Position Embeddings** \( E_{pos} \) to the patch embeddings.
+3.  **Position Embedding:** To preserve the spatial position information of the patches, ViT adds learnable Position Embeddings \( E_{pos} \) to the patch embeddings.
     \[ z_0 = [x_{class}; z_p^1; z_p^2; \dots; z_p^{N_{patches}}] + E_{pos}, \quad E \in \mathbb{R}^{(P^2 \cdot C) \times D}, E_{pos} \in \mathbb{R}^{(N_{patches}+1) \times D} \]
     Often, a learnable `[class]` token embedding \( x_{class} \) is also added. Its corresponding vector at the Transformer's output is used for image classification tasks.
 4.  **Transformer Encoder:** Feed the sequence of patch embeddings with added position encodings into a standard Transformer encoder. The encoder consists of multiple layers of **Multi-Head Self-Attention (MSA)** and **Feed Forward Network (FFN)**.
@@ -178,13 +178,13 @@ As research progresses, ViT itself is continuously being optimized to meet the d
 3.  **Linear Projection Layer:** Projects the image features \( V \) and text features \( L \) into the shared multimodal embedding space, obtaining \( I_e = V W_i \) and \( T_e = L W_t \), where \( W_i \) and \( W_t \) are learnable projection matrices.
 
 {{< figure
-    src="https://cdn.mathpix.com/cropped/2025_04_14_455634672e9a2826be22g-02.jpg?height=629&width=1709&top_left_y=214&top_left_x=181"
+    src="clip.png"
     caption="Fig. 5. CLIP Architecture Overview. CLIP jointly trains an image encoder and a text encoder to predict the correct pairings of a batch of (image, text) training examples. At test time the learned text encoder synthesizes a zero-shot linear classifier by embedding the names or descriptions of the target dataset's classes. (Image source: [Radford et al., 2021](https://arxiv.org/abs/2103.00020))"
     align="center"
     width="100%"
 >}}
 
-**Training Data (WIT):** CLIP's success is largely attributed to its massive pre-training dataset, **WIT (WebImageText)**. The research team collected 400 million (image, text) pairs from the internet. They built the dataset by searching for approximately 500,000 query terms (derived from Wikipedia vocabulary, high-frequency bigrams, Wikipedia article titles, and WordNet synsets), limiting the number of samples per query to a maximum of 20,000 to balance the data distribution. This approach of using native web image-text pairs is called **natural language supervision**, which avoids expensive manual annotation and allows for easy scaling of data size.
+**Training Data:** CLIP's success is largely attributed to its massive pre-training dataset, **WIT (WebImageText)**. The research team collected 400 million (image, text) pairs from the internet. They built the dataset by searching for approximately 500,000 query terms (derived from Wikipedia vocabulary, high-frequency bigrams, Wikipedia article titles, and WordNet synsets), limiting the number of samples per query to a maximum of 20,000 to balance the data distribution. This approach of using native web image-text pairs is called **natural language supervision**, which avoids expensive manual annotation and allows for easy scaling of data size.
 
 **Contrastive Loss:** The core of CLIP is the contrastive learning objective. Given a batch of \( N \) (image, text) pairs \( \{(I_1, T_1), \dots, (I_N, T_N)\} \), the model's goal is to predict which of the \( N \times N \) possible pairings are the true pairings.
 
@@ -266,9 +266,7 @@ CLIP primarily focuses on learning aligned representations but has limited capab
 
 **BLIP (Bootstrapping Language-Image Pre-training)** ([Li et al., 2022](https://arxiv.org/abs/2201.12086)) aimed to address the limitations of existing **Vision-Language Pre-training (VLP)** methods in terms of both models and data: models often excel at either understanding or generation, but not both; data relies on massive and noisy web image-text pairs.
 
-**MED (Multimodal Encoder-Decoder):**
-
-BLIP proposed the **MED (Multimodal Encoder-Decoder)** architecture, designed to unify understanding and generation tasks. It combines the advantages of CLIP's contrastive learning and autoregressive generation, capable of handling multimodal data.
+BLIP proposed the **Multimodal Encoder-Decoder (MED)** architecture, designed to unify understanding and generation tasks. It combines the advantages of CLIP's contrastive learning and autoregressive generation, capable of handling multimodal data.
 
 {{< figure
     src="blip_model_architecture.png"
@@ -302,7 +300,6 @@ $$L_{BLIP} = L_{ITC} + L_{ITM} + L_{LM}$$
 
 **Parameter Sharing:** For efficiency and the benefits of multi-task learning, the text encoder and decoder share all parameters except for the SA layers (i.e., embedding layer, CA layers, FFN layers).
 
-**CapFilt:**
 
 **CapFilt (Captioning and Filtering)** is an innovative dataset bootstrapping method used to generate high-quality synthetic captions for unlabeled web images and filter out noisy data (including original web text and synthetic text).
 
@@ -399,7 +396,7 @@ $$L_{BLIP} = L_{ITC} + L_{ITM} + L_{LM}$$
 **Core Contributions:**
 
 1.  **Proposed Visual Instruction Tuning:** Explored applying instruction tuning to language-image multimodal models, aiming to build general-purpose visual assistants.
-2.  **GPT-Assisted Data Generation:** Facing the lack of visual instruction data, innovatively used a **language-only model GPT-4** (or ChatGPT) to generate multimodal language-image instruction-following data containing visual content.
+2.  **GPT-Assisted Data Generation:** Facing the lack of visual instruction data, innovatively used a **language-only model GPT-4** to generate multimodal language-image instruction-following data containing visual content.
 3.  **Built LLaVA Model:** Proposed an end-to-end trained architecture connecting a pre-trained visual encoder (CLIP ViT-L/14) and a large language model (LLM, Vicuna).
 4.  **Created Evaluation Benchmark:** Constructed LLaVA-Bench, comprising diverse and challenging tasks to evaluate the instruction-following capabilities of multimodal models.
 5.  **Open Source Contribution:** Released the GPT-4 generated visual instruction data, model code, and pre-trained weights, greatly promoting community research in this direction.
@@ -690,7 +687,7 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
 1.  **Efficient MoE Architecture:**
     The language model part uses an MoE architecture (based on Moonlight, similar to DeepSeek-V3 architecture), with a total of **16B** parameters, activating only **2.8B** parameters per inference (e.g., activating 2/8 experts per layer). This significantly reduces computational cost while maintaining model performance. Supports a maximum context window of **128K tokens**, suitable for long documents, long videos, etc.
 
-2.  **Native Resolution Vision Encoder (MoonViT):**
+2.  **Native Resolution Vision Encoder:**
     Proposes a **400M** parameter vision encoder, MoonViT, supporting **native resolution processing** for images without scaling or padding, maximally preserving image details. The architecture is based on ViT and incorporates the following techniques:
     *   **NaViT Patch n' Pack strategy**: Enables efficient batch processing of variable-length image sequences.
     *   **Interpolated Absolute Position Embeddings**: Initialized from **SigLIP** ([Zhai et al. 2023](https://arxiv.org/abs/2303.15343)), enhancing positional awareness.
@@ -700,8 +697,8 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
 3.  **Multimodal Fusion Module:**
     Image features output by MoonViT pass through a **two-layer MLP Projector** containing a **Pixel Shuffle operation** for spatial compression and format conversion. They are then concatenated with text token-level features and input into the MoE LLM for image-text fusion processing.
 
-4.  **Long Chain-of-Thought Reasoning (Kimi-VL-Thinking):**
-    Based on the main model, a long-chain thinking training process, including **Supervised Fine-Tuning (SFT) with long Chain-of-Thought (CoT)** and **Reinforcement Learning (RL) optimization**, enhances the model's performance in multi-turn, multi-step reasoning tasks, supporting complex logical Q&A and scene understanding.
+4.  **Long Chain-of-Thought Reasoning :**
+    Based on the main model, a long-chain thinking training process, including **Long CoT SFT** and **Reinforcement Learning optimization**, enhances the model's performance in multi-turn, multi-step reasoning tasks, supporting complex logical Q&A and scene understanding.
 
 **Training:**
 
@@ -730,8 +727,8 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
 
 *   **Post-Training:**
     1.  **Joint SFT:** Use ChatML format, fine-tune on mixed text and multimodal instruction data (first 32K then 128K context).
-    2.  **(Kimi-VL-Thinking) Long CoT SFT:** Perform SFT using a small amount of high-quality long CoT data to activate long-chain reasoning capabilities.
-    3.  **(Kimi-VL-Thinking) Reinforcement Learning (RL):** Employ the same Online Policy Mirror Descent algorithm used for the **KIMI K1.5** model ([Kimi Team, 2025](https://arxiv.org/abs/2501.12599)) for training. This stage aims to further enhance the model's complex reasoning and planning abilities (e.g., error identification, backtracking, solution optimization) through reinforcement learning, enabling it to utilize long Chain-of-Thought (long CoT) context for implicit search, thereby approximating the effectiveness of explicit planning algorithms while maintaining the simplicity of autoregressive generation.
+    2.  **Long CoT SFT:** Perform SFT using a small amount of high-quality long CoT data to activate long-chain reasoning capabilities.
+    3.  **Reinforcement Learning:** Employ the same Online Policy Mirror Descent algorithm used for the **KIMI K1.5** model ([Kimi Team, 2025](https://arxiv.org/abs/2501.12599)) for training. This stage aims to further enhance the model's complex reasoning and planning abilities (e.g., error identification, backtracking, solution optimization) through reinforcement learning, enabling it to utilize long Chain-of-Thought (long CoT) context for implicit search, thereby approximating the effectiveness of explicit planning algorithms while maintaining the simplicity of autoregressive generation.
         *   **Core Objective:** Optimize the policy model $\pi_{\theta}$ such that for a question $x \in \mathcal{D}$, the generated chain-of-thought $z$ and final answer $y$ maximize the expected reward based on the ground truth answer $y^*$:
             $$
             \max _{\theta} \mathbb{E}_{\left(x, y^{*}\right) \sim \mathcal{D},(y, z) \sim \pi_{\theta}}\left[r\left(x, y, y^{*}\right)\right]
@@ -750,7 +747,7 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
                 where the length penalty factor $\lambda = 0.5 - \frac{\text{len}(i) - \text{min\_len}}{\text{max\_len} - \text{min\_len}}$. The final total reward used for optimization is a weighted sum of the correctness reward and the length reward. This penalty is introduced gradually (warm-up).
 
         *   **Training Characteristics:**
-            *   **Algorithm:** Based on Online Policy Mirror Descent, the training process is iterative. In iteration $i$, the current model $\pi_{\theta_i}$ is used as the reference policy to optimize the following objective with relative entropy (KL divergence) regularization:
+            *   **Algorithm:** Based on **Online Policy Mirror Descent**, the training process is iterative. In iteration $i$, the current model $\pi_{\theta_i}$ is used as the reference policy to optimize the following objective with relative entropy (KL divergence) regularization:
                 $$
                 \max _{\theta} \mathbb{E}_{\left(x, y^{*}\right) \sim \mathcal{D}}\left[\mathbb{E}_{(y, z) \sim \pi_{\theta}}\left[r\left(x, y, y^{*}\right)\right]-\tau \operatorname{KL}\left(\pi_{\theta}(x) \| \pi_{\theta_{i}}(x)\right)\right]
                 $$

@@ -851,7 +851,7 @@ $$
 ### 性能测试
 
 本实验在一台配备双 NVIDIA RTX 4090 GPU 的环境下进行，采用数据并行（Data Parallel, DP）方式，将批量大小（batch size）均匀拆分到两张 GPU 上。实验仅测试了前向传播的性能表现，包括平均延迟时间（Time_mean，单位：ms）和峰值显存占用（Peak_Mem_mean，单位：MB），以评估不同注意力机制（MHA、MQA 和 GQA）在推理阶段的资源需求和效率。
-- 实验代码请参考[benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/bechmark_attention.py)。
+- 实验代码请参考[benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/benchmark_attention.py)。
 
 测试基于 Llama3 8B 参数超参数设置
 {{< figure 

@@ -852,7 +852,7 @@ In summary, from a **theoretical** standpoint, all three attention mechanisms (M
 ### Performance Testing
 
 This experiment was conducted on an environment equipped with dual NVIDIA RTX 4090 GPUs using data parallelism (DP), evenly splitting the batch size across both GPUs. The experiment only tested the performance of the forward pass, including average latency time (Time_mean, unit: ms) and peak memory usage (Peak_Mem_mean, unit: MB), to evaluate the resource requirements and efficiency of different attention mechanisms (MHA, MQA, and GQA) during the inference phase. 
-You can get the source code in [benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/bechmark_attention.py).
+You can get the source code in [benchmark_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/benchmark_attention.py).
 - The tests were based on Llama3 8B hyperparameters.
 
 {{< figure 

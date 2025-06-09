@@ -158,9 +158,9 @@ if __name__ == "__main__":
     # v1: Boardcast
     # attention_mask_v1 has shape: (batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len)
     attention_mask_v1 = torch.tril(torch.ones(batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len))
-    gqa_boradcast = GQABroadcast(hidden_dim=hidden_dim, nums_head=nums_head,
+    gqa_broadcast = GQABroadcast(hidden_dim=hidden_dim, nums_head=nums_head,
                                                 nums_kv_head=nums_kv_head, dropout_rate=0.1)
-    x_forward_v1 = gqa_boradcast.forward(x, attention_mask=attention_mask_v1)
+    x_forward_v1 = gqa_broadcast.forward(x, attention_mask=attention_mask_v1)
 
     # print(x_forward_v1)
     print(x_forward_v1.size())

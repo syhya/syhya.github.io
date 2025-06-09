@@ -22,7 +22,7 @@ The LLaMA series of open-source models released by Meta AI has become one of the
 **LLaMA 1** ([Touvron et al., 2023a](https://arxiv.org/abs/2302.13971)), released in February 2023, was Meta's first series of open-source foundation language models. LLaMA was offered in four parameter sizes: 7B, 13B, 33B, and 65B. Its core characteristic was being trained entirely on **publicly available datasets**, without relying on any proprietary data. Despite having a significantly smaller parameter count than the contemporary GPT-3 (175B), the LLaMA 13B model outperformed GPT-3 on most benchmarks, while the 65B model achieved performance comparable to top models like Chinchilla-70B and PaLM-540B.
 
 {{< figure
-    src="llama1_bechmark.png"
+    src="llama1_benchmark.png"
     caption="Fig. 1. Zero-shot performance of LLaMA models on Common Sense Reasoning tasks compared to other foundation models. (Source: [Touvron et al., 2023a](https://arxiv.org/abs/2302.13971))"
     align="center"
     width="100%"

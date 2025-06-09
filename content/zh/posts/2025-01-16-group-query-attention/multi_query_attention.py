@@ -36,7 +36,7 @@ class MultiQueryAttention(nn.Module):
         attention_val = (q @ k.transpose(-1, -2)) / math.sqrt(self.head_dim)
         print(f"attention_val  shape is {attention_val.size()}")
 
-        if  attention_mask is not None:
+        if attention_mask is not None:
             attention_val = torch.masked_fill(attention_val, attention_mask == 0, float("-inf"))
           
         attention_weight = torch.softmax(attention_val, dim=-1)

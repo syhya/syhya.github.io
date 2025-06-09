@@ -42,8 +42,8 @@ class MultiHeadAttention(nn.Module):
         attention_val = torch.matmul(q, k.transpose(-1, -2)) / math.sqrt(self.head_dim)
 
         print(f"attention_val shape is {attention_val.size()}")
-        print(f"attention_mask shape is {attention_mask.size()}")
         if attention_mask is not None:
+            print(f"attention_mask shape is {attention_mask.size()}")
             # If attention_mask is provided, it should have shape (batch_size, nums_head, seq_len, seq_len).
             assert attention_val.size() == attention_mask.size()
             attention_val = torch.masked_fill(attention_val, attention_mask == 0, float("-inf"))

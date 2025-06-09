@@ -389,7 +389,7 @@ V0 每步重新创建模型输入张量和元数据，CPU 开销大。V1 采用 
 
 {{< figure
     src="v1_qwen2vl.png"
-    caption="Fig. 18. Performance comparison between vLLM V0 and V1 on Qwen2-VL 7B (1xH100). (Image source: [vLLM Blog, 2025](https://blog.vllm.ai/2025/01/27/v1-alpha-release.html))"
+    caption="Fig. 19. Performance comparison between vLLM V0 and V1 on Qwen2-VL 7B (1xH100). (Image source: [vLLM Blog, 2025](https://blog.vllm.ai/2025/01/27/v1-alpha-release.html))"
     align="center"
     width="60%"
 >}}

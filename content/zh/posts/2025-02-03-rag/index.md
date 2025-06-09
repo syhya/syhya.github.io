@@ -62,7 +62,7 @@ RAG 的第一步是准备和处理外部知识源。这些知识源可以是各�
         *   **LSH (Locality Sensitive Hashing)**: 通过哈希函数将相似的向量映射到相同的桶中。
 
 {{< figure
-    src="vecotr_index.png"
+    src="vector_index.png"
     caption="Fig. 3. Comparison of different ANN algorithms: Flat, LSH, HNSW, IVF. (Image source: [Pinecone](https://www.pinecone.io/learn/vector-indexes/))"
     align="center"
     width="100%"

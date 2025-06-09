@@ -267,7 +267,7 @@ class MultiHeadAttention(nn.Module):
         # resulting in a non-contiguous tensor. The contiguous() method makes the tensor contiguous in memory,
         # allowing subsequent view or reshape operations without error.
         output_tmp = output_tmp.transpose(1, 2).contiguous().view(batch_size, seq_len, self.hidden_dim)
-        # output = output_mid.permute(0, 2, 1, 3).reshpae(batch_size, seq_len, self.hidden_dim)  # # [Another approach to do it]
+        # output = output_mid.permute(0, 2, 1, 3).reshape(batch_size, seq_len, self.hidden_dim)  # # [Another approach to do it]
 
         output = self.output_proj(output_tmp)
         return output

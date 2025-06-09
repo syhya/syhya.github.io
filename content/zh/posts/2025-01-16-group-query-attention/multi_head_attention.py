@@ -31,7 +31,7 @@ class MultiHeadAttention(nn.Module):
 
         # Reshaping from (batch_size, seq_len, hidden_dim) to (batch_size, seq_len, nums_head, head_dim)
         # Then transpose to (batch_size, nums_head, seq_len, head_dim)
-        # q_state = Q.view(batch_size, seq_len, self.head_num, self.head_dim).permute(0, 2, 1, 3)  # [Another approach to do it]
+        # q_state = Q.view(batch_size, seq_len, self.nums_head, self.head_dim).permute(0, 2, 1, 3)  # [Another approach to do it]
         q = Q.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
         k = K.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)
         v = V.view(batch_size, seq_len, self.nums_head, self.head_dim).transpose(1, 2)

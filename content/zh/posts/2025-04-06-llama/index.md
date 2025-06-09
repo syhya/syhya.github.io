@@ -22,7 +22,7 @@ Meta AI 推出的 LLaMA 系列开源模型已成为大语言模型社区的基�
 **LLaMA 1** ([Touvron et al., 2023a](https://arxiv.org/abs/2302.13971)) 于 2023 年 2 月发布，是 Meta 开源的首个基础语言模型系列。LLaMA 提供了 7B、13B、33B、65B 四种参数规模，其核心特点在于完全使用**公开可用的数据集**进行训练，未依赖任何专有数据。尽管参数量远小于当时的 GPT-3 (175B)，LLaMA 13B 模型在多数基准测试上超越了 GPT-3，而 65B 模型则达到了与 Chinchilla-70B 和 PaLM-540B 等顶尖模型相媲美的性能水平。
 
 {{< figure
-    src="llama1_bechmark.png"
+    src="llama1_benchmark.png"
     caption="Fig. 1. Zero-shot performance of LLaMA models on Common Sense Reasoning tasks compared to other foundation models. (Source: [Touvron et al., 2023a](https://arxiv.org/abs/2302.13971))"
     align="center"
     width="100%"

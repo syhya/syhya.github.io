@@ -193,7 +193,7 @@ y_i = \frac{\exp(z_i)}{\sum_{j=1}^{n} \exp(z_j)}
 
 ### 实现代码片段
 
-下面是使用 PyTorch 简单实现的 **MHA** 、**MQA**和 **GQA** 的代码, 其中 GQA采用了广播（Boardcast）和复制（Repeat）两种方法。此外 需要注意的是，在实际的 LLaMA3 源代码中，GQA 的实现还引入了 KV Cache。为简化示例，以下代码并未包含该部分。如果感兴趣，可以参考源代码 [model.py](https://github.com/meta-llama/llama3/blob/main/llama/model.py) 获取更完整的代码细节。
+下面是使用 PyTorch 简单实现的 **MHA** 、**MQA**和 **GQA** 的代码, 其中 GQA采用了广播（Broadcast）和复制（Repeat）两种方法。此外 需要注意的是，在实际的 LLaMA3 源代码中，GQA 的实现还引入了 KV Cache。为简化示例，以下代码并未包含该部分。如果感兴趣，可以参考源代码 [model.py](https://github.com/meta-llama/llama3/blob/main/llama/model.py) 获取更完整的代码细节。
 
 {{< collapse summary="MHA 代码片段" openByDefault=false >}}[multi_head_attention.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-16-group-query-attention/multi_head_attention.py)
 ```python
@@ -523,12 +523,12 @@ if __name__ == "__main__":
     nums_kv_head = 4
     q_heads_per_group = nums_head // nums_kv_head
     
-    # v1: Boardcast
+    # v1: Broadcast
     # attention_mask_v1 has shape: (batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len)
     attention_mask_v1 = torch.tril(torch.ones(batch_size, nums_kv_head, q_heads_per_group, seq_len, seq_len))
-    gqa_boradcast = GQABroadcast(hidden_dim=hidden_dim, nums_head=nums_head,
+    gqa_broadcast = GQABroadcast(hidden_dim=hidden_dim, nums_head=nums_head,
                                                 nums_kv_head=nums_kv_head, dropout_rate=0.1)
-    x_forward_v1 = gqa_boradcast.forward(x, attention_mask=attention_mask_v1)
+    x_forward_v1 = gqa_broadcast.forward(x, attention_mask=attention_mask_v1)
 
     # print(x_forward_v1)
     print(x_forward_v1.size())

@@ -712,68 +712,17 @@ Token级别的路由是动态的，每个Token的路由决策是独立做出的�
 
 *   **Multi-Query Attention (MQA) & Grouped-Query Attention (GQA)**：标准的多头注意力（Multi-Head Attention, MHA）中，每个头都有一套独立的Key和Value投影矩阵。MQA ([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) 提出让所有的查询头（Query heads）共享同一套Key和Value头，极大地减小了KV Cache的体积。GQA ([Ainslie et al., 2023](https://arxiv.org/abs/2305.13245)) 则是MHA和MQA的折中，它将查询头分组，组内的头共享一套K/V，在性能和效果上取得了很好的平衡。
 
-*   **PagedAttention (vLLM)**：`vLLM` ([Kwon et al., 2023](https://arxiv.org/abs/2309.06180)) 借鉴了操作系统中虚拟内存和分页的思想，提出了PagedAttention。它将KV Cache分割成固定大小的块（Block），这些块在物理显存中可以不连续存储，通过一个“块表”来管理逻辑块到物理块的映射。
+*   **PagedAttention (vLLM)**：`vLLM` ([Kwon et al., 2023](https://arxiv.org/abs/2309.06180)) 借鉴了操作系统中虚拟内存和分页的思想，提出了PagedAttention。它将KV Cache分割成固定大小的块（Block），这些块在物理显存中可以不连续存储，通过一个“块表”来管理逻辑块到物理块的映射。关于 vLLM 的详细介绍可以参考我之前的博客[vLLM：高吞吐、有效内存的LLM服务引擎](https://syhya.github.io/zh/posts/2025-05-17-vllm/)。这种方法几乎完全消除了内存碎片（内部和外部），使得显存利用率接近100%。更重要的是，它通过写时复制（Copy-on-Write）机制，可以非常高效地实现跨请求的 KV Cache 共享，极大地提升了并行采样、Beam Search 等复杂解码场景下的吞吐量。
 
-    <!-- {{< figure
-        src="https://cdn.mathpix.com/cropped/2025_06_09_8f672b83ac03f16cfcdeg-06.jpg?height=414&width=851&top_left_y=240&top_left_x=171"
-        caption="Fig. 13. Block Table Translation in vLLM. (Image source: [Kwon et al., 2023](https://arxiv.org/abs/2309.06180))"
-        align="center"
-        width="70%"
-    >}} -->
+#### Attention机制优化
 
-    这种方法几乎完全消除了内存碎片（内部和外部），使得显存利用率接近100%。更重要的是，它通过写时复制（Copy-on-Write）机制，可以非常高效地实现跨请求的KV Cache共享，极大地提升了并行采样、Beam Search等复杂解码场景下的吞吐量。
-
-#### 2.2.2 Attention机制优化
-
-*   **FlashAttention**：`FlashAttention` ([Dao et al., 2022](https://arxiv.org/abs/2205.14135)) 是一种IO感知的精确注意力算法。它认识到标准Attention实现的主要瓶颈在于GPU HBM（高带宽内存）和SRAM（片上高速缓存）之间的数据读写。FlashAttention通过**Tiling（分块）**和**Recomputation（重计算）**技术，将整个Attention计算融合到一个CUDA核中，避免了将巨大的 $N \times N$ 注意力矩阵写入和读出HBM。这极大地减少了内存访问量，从而在不牺牲精度的情况下，将Attention的计算速度提升了数倍。`FlashAttention-2` ([Dao, 2023](https://arxiv.org/abs/2307.08691)) 进一步优化了并行度和硬件利用率。
-
-### 高效模型架构 (Efficient Model Architectures)
-
-除了优化现有Transformer架构，研究界也在探索全新的、更高效的模型架构。
-
-#### 稀疏注意力 (Sparse Attention)
-
-标准Attention是全连接的，每个Token都与所有其他Token交互。稀疏注意力 ([Tay et al., 2020](https://arxiv.org/abs/2009.06732)) 通过预定义的模式（如局部窗口、步长、随机模式）或可学习的模式，让每个Token只与一部分Token进行交互，从而将计算复杂度从 $O(N^2)$ 降低到 $O(N \log N)$ 或 $O(N\sqrt{N})$。`Longformer` ([Beltagy et al., 2020](https://arxiv.org/abs/2004.05150)) 是一个典型的例子，它结合了局部窗口注意力和全局注意力。
-
-#### 专家混合模型 (Mixture-of-Experts, MoE)
-
-MoE模型 ([Fedus et al., 2022](https://arxiv.org/abs/2209.01667)) 在Transformer的FFN层中引入了多个“专家”网络。对于每个输入的Token，一个可学习的“路由器”（Router）会动态地选择一到两个专家来处理它，而其他专家则保持不激活。这使得模型可以在总参数量大幅增加（从而提升模型容量）的同时，保持每个Token的实际计算量不变。`Mixtral 8x7B` ([Jiang et al., 2024](https://arxiv.org/abs/2401.04088)) 就是一个成功的开源MoE模型。
-
-每个专家的容量由一个容量因子 $C$ 控制：
-$$
-\text { Expert capacity }=\operatorname{round}\left(C \cdot k \cdot \frac{\text { total } \# \text { tokens in one batch }}{\# \text { experts }}\right)
-$$
-其中 $k$ 是每个Token选择的专家数量。
-
-##### MoE优化
-
-*   **路由策略优化**：`V-MoE` ([Riquelme et al., 2021](https://arxiv.org/abs/2106.05974)) 提出的**批量优先路由（Batch Priority Routing, BPR）**会优先为得分高的重要Token分配专家容量，避免它们因容量耗尽而被丢弃。
-
-    {{< figure
-        src="https://cdn.mathpix.com/cropped/2025_06_09_8f672b83ac03f16cfcdeg-18.jpg?height=330&width=1740&top_left_y=1788&top_left_x=164"
-        caption="Fig. 14. In V-MoE with BPR, high-priority image patches are processed first, while low-priority ones are dropped if capacity is exceeded. (Image source: [Riquelme et al., 2021](https://arxiv.org/abs/2106.05974))"
-        align="center"
-        width="90%"
-    >}}
-
-*   **内核优化**：`DeepSpeed-MoE` ([Rajbhandari et al., 2022](https://arxiv.org/abs/2201.05596)) 和 `TUTEL` ([Hwang et al., 2022](https://arxiv.org/abs/2206.03382)) 实现了层级化的All-to-All通信，优化了大规模分布式训练和推理中的通信瓶颈。
-
-#### 稀疏化Transformer (Sparsified Transformer)
-`Scaling Transformer` ([Jaszczur et al., 2021](https://arxiv.org/abs/2111.12763)) 通过稀疏化FFN和QKV层来加速推理。
-*   **稀疏FFN层**：使用一个低秩的`Controller`网络动态地为每个Token选择激活的神经元子集，从而在推理时只加载和计算必要的权重。
-    $$
-    \operatorname{Controller}(x) =\arg \max \left(\operatorname{Reshape}\left(x C_{1} C_{2},(-1, N)\right)\right)
-    $$
-*   **稀疏QKV层**：使用一个`Multiplicative Layer`将输入嵌入分解到不同的模块，再通过2D卷积处理，减少了参数量和计算量。
-    $$
-    y_{s, m}=\sum_{i} x_{i} D_{i, s} E_{i, m}
-    $$
+*   **FlashAttention**：`FlashAttention` ([Dao et al., 2022](https://arxiv.org/abs/2205.14135)) 是一种IO感知的精确注意力算法。它认识到标准Attention实现的主要瓶颈在于GPU HBM（高带宽内存）和SRAM（片上高速缓存）之间的数据读写。FlashAttention通过 **Tiling（分块）**和**Recomputation（重计算）** 技术，将整个Attention计算融合到一个CUDA核中，避免了将巨大的 $N \times N$ 注意力矩阵写入和读出HBM。这极大地减少了内存访问量，从而在不牺牲精度的情况下，将Attention的计算速度提升了数倍。`FlashAttention-2` ([Dao, 2023](https://arxiv.org/abs/2307.08691)) 进一步优化了并行度和硬件利用率。
 
 {{< figure
-    src="https://cdn.mathpix.com/cropped/2025_06_09_8f672b83ac03f16cfcdeg-16.jpg?height=694&width=1705&top_left_y=1332&top_left_x=187"
-    caption="Fig. 15. Sparse FFN layer in Scaling Transformer. (Image source: [Jaszczur et al., 2021](https://arxiv.org/abs/2111.12763))"
+    src="flash_attention.png"
+    caption="Fig. 25. FlashAttention uses tiling to avoid materializing the large N × N attention matrix on slow GPU HBM, achieving up to 7.6× speedup over PyTorch. (Image source: [Dao et al., 2022](https://arxiv.org/abs/2205.14135))"
     align="center"
-    width="90%"
+    width="100%"
 >}}
 
 ### 自适应注意力 (Adaptive Attention)

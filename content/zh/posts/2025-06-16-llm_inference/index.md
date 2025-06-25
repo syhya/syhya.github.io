@@ -16,14 +16,14 @@ math: true
 
 近年来，大语言模型（Large Language Models, LLMs）在自然语言处理、代码生成乃至多模态交互等领域取得了革命性的突破。然而，这些模型强大的能力背后是巨大的计算和内存开销，尤其是在推理（Inference）阶段。高效地部署和运行这些数十亿甚至数万亿参数的模型，已成为将LLM技术规模化应用到实际产品中的核心挑战。
 
-LLM推理的挑战主要源于两个方面 ([Pope et al., 2022](https://arxiv.org/abs/2211.05102))：
+LLM推理的挑战主要源于两个方面 ：
 
-1.  **巨大的内存占用 (Large memory footprint)**：除了模型参数本身，推理过程中还需要存储大量的中间状态，尤其是**KV缓存 (KV Cache)**。例如，对于一个批处理大小为512、序列长度为2048的请求，其KV缓存可能高达3TB，数倍于模型本身的体积。
+1.  **巨大的内存占用 (Large memory footprint)**：除了模型参数本身，推理过程中还需要存储大量的中间状态，尤其是**KV缓存 (KV Cache)**。例如，对于一个批处理大小为512、序列长度为2048的请求，其KV缓存可能高达3TB，数倍于模型本身的体积。此外，自注意力计算复杂度随序列长度呈二次增长。
 2.  **低并行性 (Low parallelizability)**：LLM的文本生成本质上是一个自回归（Autoregressive）过程，即逐个Token生成，下一个Token的生成依赖于之前所有已生成的Tokens。这种串行特性使得解码过程难以高效并行。
 
 本篇综述旨在系统性地梳理大模型推理优化的相关技术。我们将从大模型推理的基本原理和Token生成策略入手，为初学者构建清晰的概念框架。随后，我们将深入剖析当前最前沿的推理优化技术，涵盖模型压缩、内存与计算优化、高效模型架构等多个层面，希望能为相关领域的研究者和开发者提供一份详尽而有价值的参考。
 
-## 大模型推理与 Token 生成原理
+## Token 生成原理
 
 为了更好地理解后续的优化技术，我们首先需要了解大模型是如何生成文本的，以及其推理过程中的关键瓶颈。
 
@@ -39,7 +39,7 @@ $$
 
 ### Prefilling 与 Decoding
 
-自回归的生成方式决定了LLM的推理过程可以被清晰地划分为两个阶段：**Prefilling（预填充）阶段**和**Decoding（解码）阶段** ([Pope et al., 2022](https://arxiv.org/abs/2211.05102))。
+自回归的生成方式决定了LLM的推理过程可以被清晰地划分为两个阶段：**Prefilling（预填充）阶段**和**Decoding（解码）阶段**。
 
 {{< figure
     src="prefilling_decoding.png"
@@ -52,8 +52,6 @@ $$
 
 2.  **Decoding 阶段**：在此阶段，模型逐个生成后续的Token。每生成一个Token，它就会被添加到现有序列的末尾，作为下一次预测的输入。这个过程是**串行**的，因为下一个Token的生成依赖于前一个Token。因此，这个阶段的计算特点是**内存访问密集（Memory-bound）**，其主要瓶颈在于从GPU显存中加载庞大的模型权重，而不是计算本身。
 
-#### KV Cache
-
 {{< figure
     src="inference_memory.png"
     caption="Fig. 2. Illustration of the memory variation through time (latency) during one generation process. Note that author ignore the activation size in this figure for a simplification. (Image source: [Zhou et al., 2024](https://arxiv.org/abs/2404.14294))"
@@ -65,9 +63,9 @@ $$
 
 如图2随着生成序列的增长，KV Cache的体积会线性增大。对于一个拥有数十亿参数的模型和长序列，KV Cache可能占用数GB甚至数十GB的显存。这使得显存成为LLM推理中最稀缺的资源，极大地限制了系统能够同时处理的请求数量（即批处理大小，Batch Size），从而直接影响了推理的吞吐量。因此，**如何高效地管理和优化KV Cache是LLM推理优化的核心问题之一**。
 
-### Token生成策略 (Decoding Strategies)
+### 解码策略 (Decoding Strategies)
 
-在每个解码步骤，模型会输出一个覆盖整个词汇表的概率分布。如何从这个分布中选择下一个Token，是由Token生成策略（或称解码策略）决定的。不同的策略会显著影响生成文本的质量、创造性和连贯性。
+在每个解码步骤，模型会输出一个覆盖整个词汇表的概率分布。如何从这个分布中选择下一个Token，是由解码策略（或称Token生成策略）决定的。不同的策略会显著影响生成文本的质量、创造性和连贯性。
 
 #### 贪心搜索 (Greedy Search)
 
@@ -128,11 +126,7 @@ def greedy_search(model, input_ids, max_len=20, eos_token_id=2):
 
 这种方式扩大了搜索空间，有效地减少了局部最优的影响，通常能够生成更高质量、更连贯的文本。然而，束搜索的本质依然是选择整体概率最高的路径，这使得它在处理开放式生成任务时仍会倾向于产生高频、常见的表达，可能缺乏创造性和多样化的输出。
 
-#### 采样 (Sampling)
-
-与确定性的搜索方法不同，采样方法引入了随机性，使得生成的文本更加多样和富有创造力。
-
-##### 温度采样 (Temperature Sampling)
+#### 温度采样 (Temperature Sampling)
 
 
 {{< figure
@@ -142,8 +136,7 @@ def greedy_search(model, input_ids, max_len=20, eos_token_id=2):
     width="80%"
 >}}
 
-
-最基础的采样方法是直接根据模型的概率分布进行随机抽样。温度采样通过一个温度系数 $T$ 来调节原始概率分布的形状，加在Softmax上。温度系数用来调节大模型输出token的概率分布的平坦程度，越大概率分布越平坦，输出越随机，越小概率分布越极端，输出越稳定。
+与确定性的搜索方法不同，采样方法引入了随机性，使得生成的文本更加多样和富有创造力。最基础的采样方法是直接根据模型的概率分布进行随机抽样。**温度采样**通过一个温度系数 $T$ 来调节原始概率分布的形状，加在Softmax上。温度系数用来调节大模型输出token的概率分布的平坦程度，越大概率分布越平坦，输出越随机，越小概率分布越极端，输出越稳定。
 
 $$
 P_T(w_i) = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}
@@ -154,9 +147,9 @@ $$
 *   当 $T < 1$ 时（降温），分布会变得更“尖锐”，高概率的词更容易被选中，生成结果更接近贪心搜索。
 *   当 $T > 1$ 时（升温），分布会变得更“平坦”，低概率的词也有机会被选中，生成结果更具多样性和随机性。
 
-##### Top-K 采样
+#### Top-K 采样
 
-Top-K 采样 ([Fan et al., 2018](https://arxiv.org/abs/1805.04833)) 在采样前，只保留概率最高的 $K$ 个候选词，然后在这 $K$ 个词中重新进行归一化和采样。这有效防止了模型从概率极低的词中采样，避免生成不连贯的文本。但其缺点是 $K$ 的取值是固定的，无法动态适应不同的概率分布。
+**Top-K 采样**([Fan et al., 2018](https://arxiv.org/abs/1805.04833)) 在采样前，只保留概率最高的 $K$ 个候选词，然后在这 $K$ 个词中重新进行归一化和采样。这有效防止了模型从概率极低的词中采样，避免生成不连贯的文本。但其缺点是 $K$ 的取值是固定的，无法动态适应不同的概率分布。
 
 {{< figure
     src="top_k.png"
@@ -167,7 +160,7 @@ Top-K 采样 ([Fan et al., 2018](https://arxiv.org/abs/1805.04833)) 在采样前
 
 ##### Top-p 采样
 
-Top-p 采样 ([Holtzman et al., 2019](https://arxiv.org/abs/1904.09751)) 采用动态选择候选词集合的方法。它从概率最高的词开始，累加它们的概率，直到总和超过一个预设的阈值 $p$（例如0.9）。然后，模型只在这个动态生成的、最小的候选词集合 $V_{\text{top-p}}$ 中进行采样。这种方法兼顾了文本的连贯性和创造性，是目前开放式文本生成中最常用且效果最好的策略之一。
+**Top-p 采样**([Holtzman et al., 2019](https://arxiv.org/abs/1904.09751)) 采用动态选择候选词集合的方法。它从概率最高的词开始，累加它们的概率，直到总和超过一个预设的阈值 $p$（例如0.9）。然后，模型只在这个动态生成的、最小的候选词集合 $V_{\text{top-p}}$ 中进行采样。这种方法兼顾了文本的连贯性和创造性，是目前开放式文本生成中最常用且效果最好的策略之一。
 
 {{< figure
     src="top_p.png"
@@ -176,7 +169,7 @@ Top-p 采样 ([Holtzman et al., 2019](https://arxiv.org/abs/1904.09751)) 采用�
     width="80%"
 >}}
 
-**采样代码实现 (Top-K, Top-p, Temperature)**:
+**联合采样代码实现 (Top-K, Top-p, Temperature)**:
 ```python
 import torch
 import torch.nn.functional as F
@@ -227,7 +220,7 @@ def generate_with_sampling(model, idx, max_new_tokens, temperature=1.0, top_k=No
 
 #### 推测解码 (Speculative Decoding)
 
-推测解码 ([Leviathan et al., 2023](https://arxiv.org/abs/2211.17192)) 是一种创新的加速技术，旨在用小模型的速度实现大模型的生成质量，从而在不牺牲生成质量的前提下降低延迟。
+**推测解码** ([Leviathan et al., 2023](https://arxiv.org/abs/2211.17192)) 是一种创新的加速技术，旨在用小模型的速度实现大模型的生成质量，从而在不牺牲生成质量的前提下降低延迟。
 
 它使用一个小型、快速的 Draft Model 一次性生成多个（例如 $k$ 个）候选 Token。然后，大型的 Target Model 并行地对这 $k$ 个Token进行一次前向传播验证。如果草稿模型预测的Token与目标模型一致，那么这些Token就被接受，从而实现了一次前向传播生成多个Token的效果。如果不一致，则丢弃草稿模型的后续预测，并使用目标模型的预测进行修正。
 
@@ -270,11 +263,11 @@ def generate_with_sampling(model, idx, max_new_tokens, temperature=1.0, top_k=No
 
 ## 知识蒸馏 (Knowledge Distillation)
 
-知识蒸馏（Knowledge Distillation, KD; [Hinton et al. 2015](https://proceedings.neurips.cc/paper/2015/hash/a14ac55a4f27472c5d894ec1c3af708e-Abstract.html), [Gou et al. 2020](https://arxiv.org/abs/2006.05525)）是一种直接的方法，通过将一个预训练好的昂贵模型（“教师模型”）的知识迁移到一个更小、更廉价的模型（“学生模型”）中，来构建一个更小的模型以加速推理。除了要求学生模型的输出空间与教师模型匹配以便构建合适的学习目标外，对于学生模型的架构没有太多限制。
+知识蒸馏(Knowledge Distillation, KD)([Hinton et al., 2015](https://arxiv.org/abs/1503.02531))是一种直接的方法，通过将一个预训练好的昂贵模型（“教师模型”）的知识迁移到一个更小、更廉价的模型（“学生模型”）中，来构建一个更小的模型以加速推理。除了要求学生模型的输出空间与教师模型匹配以便构建合适的学习目标外，对于学生模型的架构没有太多限制。
 
 {{< figure
     src="knowledge_distillation.png"
-    caption="Fig. 7. The generic framework of teacher-student knowledge distillation training. (Image source: [Gou et al. 2020](https://arxiv.org/abs/2006.05525))"
+    caption="Fig. 7. The generic framework of teacher-student knowledge distillation training. (Image source: [Gou et al., 2020](https://arxiv.org/abs/2006.05525))"
     align="center"
     width="90%"
 >}}
@@ -289,32 +282,69 @@ $$
 
 一个早期的成功案例是 **DistilBERT** ([Sanh et al. 2019](https://arxiv.org/abs/1910.01108))，它能够将BERT的参数减少40%，同时在下游微调任务上保持BERT 97%的性能，并且运行速度快71%。DistilBERT的预训练损失是软蒸馏损失、监督训练损失（在BERT中即掩码语言建模损失 $\mathcal{L}_{\text{MLM}}$）以及一个特殊的余弦嵌入损失的组合，后者用于对齐教师和学生模型之间的隐藏状态向量。
 
+
+{{< figure
+    src="DistilBERT.png"
+    caption="Fig. 7. The performance of DistilBERT (Image source: [Sanh et al., 2019](https://arxiv.org/abs/1910.01108))"
+    align="center"
+    width="90%"
+>}}
+
 蒸馏可以很容易地与**量化**、**剪枝**或**稀疏化**技术相结合，其中教师模型是原始的全精度、密集模型，而学生模型则被量化、剪枝或修剪以达到更高的稀疏度。
 
 ## 量化 (Quantization)
+
+为了在推理过程中进一步提升模型性能，我们可以超越低精度浮点数，转而使用**量化（Quantization）** 技术。量化将模型的浮点权重转换为低位宽的整数表示，例如 8 位整数（INT8），甚至 4 位整数（INT4）。
 
 在深度神经网络上应用量化通常有两种方法：
 
 1.  **训练后量化 (Post-Training Quantization, PTQ)**：首先将模型训练至收敛，然后在不进行更多训练的情况下将其权重转换为较低的精度。与训练相比，这种方法的实现成本通常很低。
 2.  **量化感知训练 (Quantization-Aware Training, QAT)**：在预训练或进一步微调的过程中应用量化。QAT能够获得更好的性能，但需要额外的计算资源和对代表性训练数据的访问。
 
-我们应该意识到理论上最优的量化策略与硬件内核支持之间的差距。由于GPU内核对某些类型的矩阵乘法（例如INT4 x FP16）缺乏支持，并非所有下述方法都能在实际推理中带来加速。
+### 精度对比
 
-### Transformer量化的挑战
+在深度学习领域，数值精度决定着计算速度和模型性能之间的微妙平衡。理解不同浮点数和整数格式的优缺点，是优化大规模模型性能的关键。浮点数在计算机中以三部分表示：
 
-许多关于Transformer模型量化的研究都有一个共同的发现：简单的低精度（例如8-bit）训练后量化会导致显著的性能下降，这主要是由于**激活值存在高动态范围**，而一个简单的激活值量化策略无法保持模型的性能。
+* **符号位（Sign）**：表示数值的正负。
+* **指数位（Exponent）**：决定数值的动态范围。
+* **尾数位（Mantissa或Significand）**：决定数值的精确度，为了方便通常我们将尾数位称为小数(fraction)。
 
+{{< figure
+    src="combined_float_diagrams.png"
+    caption="Fig. 7. fp32 vs fp16 vs bf16 (Image source: [Raschka, 2023](https://sebastianraschka.com/blog/2023/llm-mixed-precision-copy.html))"
+    align="center"
+    width="70%"
+>}}
+
+
+| 类型       | 总位数 | 符号位 | 指数位 | 尾数位 | 特性                                  |
+| -------- | --- | --- | --- | --- | ----------------------------------- |
+| [**FP64(双精度)**](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) | 64  | 1   | 11  | 52  | 极高精度，广泛用于科学计算，但计算昂贵，内存占用大，深度学习中少用   |
+| [**FP32(单精度)**](https://en.wikipedia.org/wiki/Single-precision_floating-point_format) | 32  | 1   | 8   | 23  | 深度学习训练标准格式，速度适中，内存占用较大              |
+| [**FP16(半精度)**](https://en.wikipedia.org/wiki/Half-precision_floating-point_format) | 16  | 1   | 5   | 10  | 更快计算，内存占用是FP32的一半，但动态范围受限，易发生数值溢出   |
+| [**BF16(Brain Floating Point)**](https://cloud.google.com/tpu/docs/bfloat16) | 16  | 1   | 8   | 7   | 动态范围与FP32相同，避免溢出，更适合大语言模型，精度略低于FP16 |
+
+纯粹的FP16精度虽速度快、内存小，但由于动态范围有限，极易出现数值溢出（overflow）和下溢（underflow），使训练不稳定甚至无法收敛。因此，采用[混合精度训练（Mixed-Precision）](https://syhya.github.io/posts/2025-03-01-train-llm/#mixed-precision-training)至关重要。
+
+量化将浮点数映射为整数，进一步降低计算复杂度与内存占用。具体来说：
+
+* **INT8**：占用内存仅为FP32的1/4，显著加速推理速度，但可能会略微降低模型精度。
+* **INT4**：更极端的压缩方案，更适合资源极其受限的设备，或需要极高吞吐量的推理场景。
+
+### Transformer 量化挑战
+
+许多关于 Transformer 模型量化的研究都有一个共同的发现：简单的低精度（例如8-bit）训练后量化会导致显著的性能下降，这主要是由于**激活值存在高动态范围**，而一个简单的激活值量化策略无法保持模型的性能。
 
 
 {{< figure
     src="glue_benchmark.png"
-    caption="Fig. 8. Only quantizing model weights to 8-bit while keeping activation at full precision (`W8A32`) achieves much better results when activations are quantized to 8-bit irrespective of whether weights are in lower precision (`W8A8` and `W32A8`). (Image source: [Bondarenko et al. 2021](https://aclanthology.org/2021.acl-long.211/))"
+    caption="Fig. 8. Only quantizing model weights to 8-bit while keeping activation at full precision (`W8A32`) achieves much better results when activations are quantized to 8-bit irrespective of whether weights are in lower precision (`W8A8` and `W32A8`). (Image source: [Bondarenko et al. 2021](https://arxiv.org/abs/2109.12948))"
     align="center"
 >}}
 
-[Bondarenko et al. (2021)](https://aclanthology.org/2021.acl-long.211/) 在一个小型BERT模型中观察到，由于输出张量中存在强烈的**离群值（outliers）**，FFN（前馈网络）的输入和输出具有非常不同的动态范围。因此，对FFN的残差和进行逐张量（per-tensor）量化可能会导致显著的误差。
+[Bondarenko et al. (2021)](https://arxiv.org/abs/2109.12948) 在小型 BERT 模型进行实验发现由于输出张量中存在强烈的**离群值（outliers）**，FFN（前馈网络）的输入和输出具有非常不同的动态范围。因此，对FFN的残差和进行逐张量（per-tensor）量化可能会导致显著的误差。
 
-随着模型规模增长到数十亿参数，所有Transformer层中都开始出现**大幅度的离群特征**，这导致简单的低比特量化失败。[Dettmers et al. (2022)](https://arxiv.org/abs/2208.07339) 在大于67亿参数的OPT模型中观察到了这种现象。更大的模型有更多的层带有极端的离群值，而这些离群特征对模型性能有显著影响。在少数维度上，激活值离群点的规模可以比其他大多数值大约100倍。
+随着模型规模增长到数十亿参数，所有 Transformer 层中都开始出现**大幅度的离群特征**，这导致简单的低比特量化失败。研究人员在大于 6.7B 参数大小的 **OPT** ([Zhang et al. 2022](https://arxiv.org/abs/2205.01068)) 模型中观察到了这种现象。更大的模型有更多的层带有极端的离群值，而这些离群特征对模型性能有显著影响。在少数维度上，激活值离群点的规模可以比其他大多数值大约100倍。
 
 {{< figure
     src="int8_outliner.png"
@@ -329,9 +359,17 @@ $$
 
 解决上述量化挑战最直接的方法是为权重和激活值实现不同精度的量化。
 
-**GOBO** ([Zadeh et al. 2020](https://ieeexplore.ieee.org/document/9292619)) 是最早在Transformer（即一个小型BERT模型）上应用训练后量化的模型之一。它假设每层的模型权重服从高斯分布，因此通过跟踪每层的均值和标准差来检测离群值。离群特征保持原始形式，而其他值被分成多个桶（bin），只存储相应的桶索引和质心值。
+**GOBO** ([Zadeh et al. 2020](https://arxiv.org/abs/2005.03842)) 是最早在 BERT 上应用训练后量化的模型之一。它假设每层的模型权重服从高斯分布，因此通过跟踪每层的均值和标准差来检测离群值。离群特征保持原始形式，而其他值被分成多个桶（bin），只存储相应的桶索引和质心值。
 
-基于在BERT中只有某些激活层（例如FFN后的残差连接）会导致大的性能下降的观察，[Bondarenko et al. (2021)](https://aclanthology.org/2021.acl-long.211/) 采用了混合精度量化，对有问题的激活值使用16位量化，而对其他部分使用8位量化。
+{{< figure
+    src="gobo.png"
+    caption="Fig. 10. The pseudocode for GOBO algorithm. (Image source: [Zadeh et al. 2020](https://arxiv.org/abs/2005.03842))"
+    align="center"
+    width="80%"
+>}}
+
+基于在 BERT 中只有某些激活层（例如FFN后的残差连接）会导致大的性能下降的观察，[Bondarenko et al. (2021)](https://arxiv.org/abs/2109.12948) 采用了混合精度量化，对有问题的激活值使用16位量化，而对其他部分使用8位量化。
+
 
 **LLM.int8()** ([Dettmers et al. 2022](https://arxiv.org/abs/2208.07339)) 中的混合精度量化通过两种混合精度分解实现：
 
@@ -356,15 +394,15 @@ $$
 
 简单地将一层中的整个权重矩阵进行量化（“逐张量”或“逐层”量化）最容易实现，但无法达到良好的量化粒度。
 
-**Q-BERT** ([Shen, Dong & Ye, et al. 2020](https://ojs.aaai.org/index.php/AAAI/article/view/6421)) 对一个微调过的BERT模型应用了**分组量化（group-wise quantization）**，将MHSA（多头自注意力）中每个头对应的单个矩阵 $W$ 视为一个组，然后应用基于Hessian矩阵的混合精度量化。
+**Q-BERT** ([Shen, et al. 2020](https://arxiv.org/abs/1909.05840)) 对一个微调过的BERT模型应用了**分组量化（group-wise quantization）**，将 MHSA（多头自注意力）中每个头对应的单个矩阵 $W$ 视为一个组，然后应用基于 Hessian 矩阵的混合精度量化。
 
-**逐嵌入组（Per-embedding group, PEG）** 激活值量化的动机是观察到离群值只出现在 $d$（隐藏状态/模型大小）维度中的少数几个维度上 ([Bondarenko et al. 2021](https://aclanthology.org/2021.acl-long.211/))。逐嵌入量化计算成本相当高。相比之下，PEG量化将激活张量沿着嵌入维度分成几个大小均匀的组，其中同一组中的元素共享量化参数。为了确保所有离群值被分到同一组，他们应用了一种确定性的基于范围的嵌入维度排列，其中维度按其值范围排序。
+**逐嵌入组（Per-embedding group, PEG）** ([Bondarenko et al. 2021](https://arxiv.org/abs/2109.12948)) 激活值量化的动机是观察到离群值只出现在 $d$（隐藏状态/模型大小）维度中的少数几个维度上。逐嵌入量化计算成本相当高。相比之下，PEG量化将激活张量沿着嵌入维度分成几个大小均匀的组，其中同一组中的元素共享量化参数。为了确保所有离群值被分到同一组，他们应用了一种确定性的基于范围的嵌入维度排列，其中维度按其值范围排序。
 
 **ZeroQuant** ([Yao et al. 2022](https://arxiv.org/abs/2206.01861)) 对权重使用分组量化（与Q-BERT相同），对激活值使用**逐Token量化（token-wise quantization）**。为了避免昂贵的量化和反量化计算，ZeroQuant构建了定制化的内核，将量化操作与其前一个操作符合并。
 
 #### 二阶信息用于量化 (Second order information for quantization)
 
-**Q-BERT** ([Shen, Dong & Ye, et al. 2020](https://ojs.aaai.org/index.php/AAAI/article/view/6421)) 为其混合精度量化开发了**Hessian感知量化（Hessian AWare Quantization, HAWQ）**。其动机是，具有较高Hessian谱（即较大的顶层特征值）的参数对量化更敏感，因此需要更高的精度。这实质上是一种识别离群值的方法。
+**Q-BERT** ([Shen, et al. 2020](https://arxiv.org/abs/1909.05840)) 为其混合精度量化开发了**Hessian 感知量化（Hessian AWare Quantization, HAWQ）**([Dong, et al. 2019](https://arxiv.org/abs/1905.03696))。其动机是具有较高 Hessian 谱（即较大的顶层特征值）的参数对量化更敏感，因此需要更高的精度。这实质上是一种识别离群值的方法。
 
 从另一个角度看，量化问题是一个优化问题。给定权重矩阵 $\mathbf{W}$ 和输入矩阵 $\mathbf{X}$，我们希望找到一个量化后的权重矩阵 $\hat{\mathbf{W}}$ 来最小化均方误差（MSE）：
 
@@ -372,11 +410,21 @@ $$
 \hat{\mathbf{W}}^* = \arg \min_{\hat{\mathbf{W}}} |\mathbf{W}\mathbf{X} - \hat{\mathbf{W}}\mathbf{X}|
 $$
 
-**GPTQ** ([Frantar et al. 2022](https://arxiv.org/abs/2210.17323)) 将权重矩阵 $\mathbf{W}$ 视为行向量 $\mathbf{w}$ 的集合，并独立地对每一行进行量化。GPTQ迭代地量化更多的权重，这些权重是贪婪选择的，以最小化量化误差。对所选权重的更新有一个利用Hessian矩阵的闭式解公式。如果感兴趣，可以阅读论文和OBQ（Optimal Brain Quantization; [Frantar & Alistarh 2022](https://arxiv.org/abs/2208.03158)）方法中的更多细节。GPTQ可以将OPT-175B中权重的位宽降低到3或4位而没有太多性能损失，但它只适用于模型权重，不适用于激活值。
+[**GPTQ**](https://github.com/IST-DASLab/gptq) ([Frantar et al. 2022](https://arxiv.org/abs/2210.17323)) 在 **OBC（Optimal Brain Compression）**[Frantar et al. 2022](https://arxiv.org/abs/2208.11580)）方法基础上进行优化将权重矩阵 $\mathbf{W}$ 视为行向量 $\mathbf{w}$ 的集合，并独立地对每一行进行量化。GPTQ迭代地量化更多的权重，这些权重是贪婪选择的，以最小化量化误差。对所选权重的更新有一个利用 Hessian 矩阵的闭式解公式。
+
+
+{{< figure
+    src="gptq.png"
+    caption="Fig. 10. The pseudocode for GPTQ algorithm. (Image source: [Frantar et al. 2022](https://arxiv.org/abs/2210.17323))"
+    align="center"
+    width="100%"
+>}}
+
+GPTQ可以将 OPT-175B 中权重的位宽降低到 **3 bit** 或 **4 bit** 而没有太多性能损失，但它只适用于模型权重，不适用于激活值。
 
 #### 离群值平滑 (Outlier smoothing)
 
-众所周知，在Transformer模型中，激活值比权重更难量化。**SmoothQuant** ([Xiao & Lin 2022](https://arxiv.org/abs/2211.10438)) 提出了一个聪明的解决方案，通过数学上等价的变换将离群特征从激活值平滑到权重，然后对权重和激活值都进行量化（`W8A8`）。因此，SmoothQuant比混合精度量化具有更好的硬件效率。
+在Transformer模型中，激活值比权重更难量化。**SmoothQuant** ([Xiao et al. 2022](https://arxiv.org/abs/2211.10438)) 提出了一个聪明的解决方案，**通过数学上等价的变换将离群特征从激活值平滑到权重**，然后对权重和激活值都进行量化（`W8A8`）。因此，SmoothQuant比混合精度量化具有更好的硬件效率。
 
 {{< figure
     src="smooth_quant.png"

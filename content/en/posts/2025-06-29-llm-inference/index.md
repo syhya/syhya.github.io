@@ -222,7 +222,7 @@ It uses a small, fast Draft Model to generate multiple (e.g., $k$) candidate tok
     src="online_speculative_decoding.png"
     caption="Fig. 8. Overview of online speculative decoding (OSD) framework: For each prompt, the draft model suggests multiple tokens and the target model performs the verification. (Image source: [Liu et al., 2024](https://arxiv.org/abs/2310.07177))"
     align="center"
-    width="80%"
+    width="100%"
 >}}
 
 As long as there is some consistency between the predictions of the draft and target models, speculative decoding can significantly reduce generation latency. Variations include **Self-speculative decoding**, which uses the early layers of the model itself as the draft model.

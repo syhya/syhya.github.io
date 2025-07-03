@@ -223,7 +223,7 @@ def generate_with_sampling(model, idx, max_new_tokens, temperature=1.0, top_k=No
     src="online_speculative_decoding.png"
     caption="Fig. 8. Overview of online speculative decoding (OSD) framework: For each prompt, the draft model suggests multiple tokens and the target model performs the verification. (Image source: [Liu et al., 2024](https://arxiv.org/abs/2310.07177))"
     align="center"
-    width="80%"
+    width="100%"
 >}}
 
 只要草稿模型与目标模型的预测有一定的一致性，推测解码就能显著降低生成延迟。其变体包括使用模型自身的早期层作为草稿模型的**自推测解码** (Self-speculative decoding) 等。

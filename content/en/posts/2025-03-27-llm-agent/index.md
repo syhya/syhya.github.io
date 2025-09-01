@@ -129,7 +129,7 @@ Planning is crucial for the successful execution of complex tasks. It can be app
 
 Here are some subsequent optimization efforts:
 
-- ([Wang et al. 2022b](https://arxiv.org/abs/2207.00747)) subsequently used another ensemble learning method for optimization, increasing randomness by changing the order of examples or replacing human-written reasoning with model-generated reasoning, and then using majority voting.
+- ([Wang et al. 2022b](https://arxiv.org/abs/2207.00747)) subsequently used another ensemble learning method for optimization, increasing randomness by **changing the order of examples** or **replacing human-written reasoning with model-generated reasoning**, and then using majority voting.
 
 {{< figure
     src="rationale_augmented.png"
@@ -264,7 +264,7 @@ The following shows examples of Reflexion's application in decision-making, prog
 
 {{< figure
     src="reflextion_examples.png"
-    caption="Fig. 14. Reflexion works on decision-making, programming 4.3, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 14. Reflexion works on decision-making, programming, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}

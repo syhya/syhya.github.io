@@ -133,7 +133,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 下面是一些后续优化的工作：
 
-- ([Wang et al. 2022b](https://arxiv.org/abs/2207.00747))后续采用另一种集成学习方法进行优化, 通过改变示例顺序或以模型生成的推理代替人为书写，增加随机性后再多数投票。
+- ([Wang et al. 2022b](https://arxiv.org/abs/2207.00747))后续采用另一种集成学习方法进行优化, 通过**改变示例顺序**或以**模型生成的推理代替人为书写**，增加随机性后再多数投票。
 
 {{< figure
     src="rationale_augmented.png"
@@ -270,7 +270,7 @@ Reflexion 的核心循环与算法描述如下：
 
 {{< figure
     src="reflextion_examples.png"
-    caption="Fig. 14. Reflexion works on decision-making, programming 4.3, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 14. Reflexion works on decision-making, programming, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}

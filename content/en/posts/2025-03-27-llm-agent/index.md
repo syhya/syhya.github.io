@@ -1,6 +1,7 @@
 ---
 title: "Large Language Model Agents"
 date: "2025-03-27T10:00:00+00:00"
+lastmod: "2025-09-02T10:00:00+00:00"
 author: "Yue Shui"
 categories: ["Technical Blog"]
 tags: ["Large Language Model", "AI", "Agent", "Reinforcement Learning", "Planning", "Memory", "Tool Use", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI Operator", "CoT", "ToT", "Workflow"]

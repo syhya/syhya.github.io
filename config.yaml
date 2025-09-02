@@ -9,7 +9,7 @@ theme: ["PaperMod"]
 languageCode: "en-us"
 
 publishDir: "public"
-enableGitInfo: true            # <-- 新增：让 .Lastmod 跟随 Git 最近一次 commit
+enableGitInfo: False            # <-- 新增：让 .Lastmod 跟随 Git 最近一次 commit
 enableRobotsTXT: true
 buildDrafts: false
 buildFuture: false
@@ -32,6 +32,8 @@ outputs:
     - JSON # necessary for search
 
 # config.yaml
+
+
 
 
 # math setting
@@ -121,6 +123,7 @@ languages:
     # PaperMod Parameters
     # ──────────────────────────────────────────────────────────────────────────
     params:
+      fancybox: true
       math: true
       env: production
       title: "Yue Shui Blog"
@@ -259,6 +262,7 @@ languages:
     # PaperMod Parameters
     # ──────────────────────────────────────────────────────────────────────────
     params:
+      fancybox: true
       math: true
       env: production
       title: "Yue Shui 博客"

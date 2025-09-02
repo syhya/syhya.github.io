@@ -1,6 +1,7 @@
 ---
 title: "大语言模型智能体"
 date: "2025-03-27T10:00:00+00:00"
+lastmod: "2025-09-02T10:00:00+00:00"
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["大语言模型", "AI", "智能体", "强化学习", "计划", "记忆", "工具使用", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI Operator", "CoT", "ToT", "工作流"]

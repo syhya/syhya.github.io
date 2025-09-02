@@ -83,119 +83,6 @@ $$
 - 利用强化学习方法训练 Reasoning LLM(如 o1/o3)，使其更适合作为 LLM 智能体的基础模型。
 - 同时，记录 LLM 智能体执行任务的数据与反馈，为 Reasoning LLM 提供丰富的训练数据，从而提升模型性能。
 
-## 提示词工程
-
-**提示工程（Prompt Engineering）**，又称为**上下文提示（In-Context Prompting）**，通过优化输入 prompt 来引导 LLM 产生期望输出的技巧。其核心目标是在**不更新模型权重**的前提下，通过与模型的高效沟通来控制其行为。
-
-### 零样本提示
-
-**零样本提示 (Zero-Shot Prompting)** 直接向模型提供任务指令，而不提供任何示例。这种方法完全依赖模型在预训练阶段学到的知识和指令遵循能力。例如，进行情感分析：
-
-{{< figure
-    src="zero_shot.png"
-    caption="Fig. 3. Zero-Shot Prompting."
-    align="center"
-    width="100%"
->}}
-
-对于已经过指令微调的模型，如 GPT-5 或 Claude 4，它们能够很好地理解并执行这类直接指令。
-
-### 少样本提示
-
-**少样本提示 (Few-Shot Prompting)** 是在提示中提供一组高质量的示例，每个示例都包含输入和期望的输出。通过这些示例，模型能够更好地理解用户的意图和任务的具体要求，从而获得比零样本提示更优的性能。然而，这种方法的缺点是会消耗更多的上下文窗口长度。例如，提供几个情感分析的示例：
-
-{{< figure
-    src="few_shot.png"
-    caption="Fig. 4. Few-Shot Prompting."
-    align="center"
-    width="100%"
->}}
-
-### 自动提示构建
-
-**自动提示工程师（Automatic Prompt Engineer, APE）**([Zhou et al. 2022](https://arxiv.org/abs/2211.01910)) 是一种在模型生成的候选指令池中进行搜索的方法。它通过筛选候选集合，并依据选定的评分函数最终选择得分最高的候选指令。
-
-
-{{< figure
-    src="ape.png"
-    caption="Fig. 5. Automatic Prompt Engineer (APE) workflow. (Image source: [Zhou et al. 2022](https://arxiv.org/abs/2211.01910))"
-    align="center"
-    width="100%"
->}}
-
-**自动思维链 (Automatic Chain-of-Thought, Auto-CoT)** ([Zhang et al. 2022](https://arxiv.org/abs/2210.03493)) 提出了一种自动化构建思维链示例的方法，旨在解决人工设计提示耗时且可能并非最优的问题。其核心思想是，通过**聚类技术**对问题进行采样，然后**利用大语言模型 (LLM) 自身的零样本推理能力来自动生成推理链**，从而构建多样的、高质量的示例。
-
-{{< figure
-    src="auto_cot.png"
-    caption="Fig. 6. Overview of the Auto-CoT method. (Image source: [Zhang et al. 2022](https://arxiv.org/abs/2210.03493))"
-    align="center"
-    width="100%"
->}}
-
-**Auto-CoT 包含两个主要阶段：**
-1.  **问题聚类 (Question Clustering)**：将数据集中的问题进行嵌入并运行 $k$-means 等算法进行聚类。此步骤旨在将相似的问题划分到同一个簇，以保证后续采样问题的多样性。
-2.  **示例选择与推理生成 (Demonstration Selection & Rationale Generation)**：从每个簇中选择一个或多个有代表性的问题（例如，选择离簇中心最近的问题）。随后，利用 **Zero-Shot CoT** 提示来让 LLM 为这些选定的问题生成推理链。这些自动生成的“问题-推理链”对便组成了最终用于执行任务的少样本提示。
-
-
-## 知识增强
-
-在应对知识密集型或常识推理任务时，单纯依赖 LLM的参数化知识往往不足，可能导致错误或过时答案。为解决这一问题，研究者提出了两类思路：
-
-**生成知识提示 (Generated Knowledge Prompting)**([Liu et al. 2022](https://arxiv.org/abs/2110.08387)) 是一种在预测之前让模型**先生成相关知识**的方法。其核心思想是：当任务需要常识或外部信息时，模型可能因缺乏背景而犯错；若先引导模型生成与输入相关的知识，再基于这些知识作答，则能提升推理的准确性。
-
-{{< figure
-    src="generated_knowledge_prompting.png"
-    caption="Fig. 7. Overview of the Generated Knowledge Prompting. (Image source: [Liu et al. 2022](https://arxiv.org/abs/2110.08387))"
-    align="center"
-    width="100%"
->}}
-
-1. **知识生成 (Knowledge Generation)**：根据输入，模型先生成相关事实性知识。
-2. **知识整合 (Knowledge Integration)**：将生成的知识与原问题合并，形成新的提示输入。
-3. **答案推理 (Answer Prediction)**：基于增强后的输入进行回答。
-
-
-**检索增强生成 (Retrieval Augmented Generation, RAG)**([Lewis et al. 2021](https://arxiv.org/abs/2005.11401)) 是一种结合 **信息检索与文本生成** 的方法，旨在解决知识密集型任务。其核心思想是：单纯依赖 LLM 的参数化知识（静态）容易导致事实错误，而通过引入外部知识库检索，可以提升生成结果的 **事实一致性与时效性**。
-
-{{< figure
-    src="rag.png"
-    caption="Fig. 8. Overview of the Retrieval Augmented Generation. (Image source: [Lewis et al. 2021](https://arxiv.org/abs/2005.11401))"
-    align="center"
-    width="100%"
->}}
-
-1. **检索 (Retrieval)**：从外部知识源（如 Wikipedia 或者私有知识库）检索相关文档。
-2. **整合 (Augmentation)**：将检索到的文档与原始输入拼接，作为提示上下文。
-3. **生成 (Generation)**：由生成模型（原始论文使用的预训练 seq2seq 模型, 如今主流使用 LLM）基于扩展后的提示输出答案。
-
-### 多模态思维链提示
-
-**多模态思维链提示 (Multimodal CoT Prompting, MCoT)**([Zhang et al. 2023](https://arxiv.org/abs/2302.00923)) 将 **文本与视觉信息** 融合到推理过程中，突破了传统 CoT 仅依赖语言模态的局限。其框架分为两阶段：
-1. **推理链生成 (Rationale Generation)**：基于多模态信息（文本 + 图像）生成解释性推理链。
-2. **答案推断 (Answer Inference)**：利用生成的推理链作为辅助，完成最终答案推断。
-
-{{< figure
-    src="MCoT.png"
-    caption="Fig. 9. Overview of our Multimodal-CoT framework. (Image source: [Zhang et al. 2023](https://arxiv.org/abs/2302.00923))"
-    align="center"
-    width="100%"
->}}
-
-### 主动提示
-
-**主动提示（Active Prompt）**([Diao et al. 2023](https://arxiv.org/abs/2302.12246))针对传统 CoT 方法依赖固定人工标注示例的局限提出改进。问题在于：**固定示例并不一定最适合所有任务，可能导致泛化不足**。Active Prompt 通过引入 active learning 策略，自适应地选择和更新任务相关的最佳示例，从而提升模型的推理效果。
-
-{{< figure
-    src="active_prompt.png"
-    caption="Fig. 10. Illustrations of active prompting framework. (Image source: [Diao et al. 2023](https://arxiv.org/abs/2302.12246))"
-    align="center"
-    width="100%"
->}}
-
-1. **不确定性估计 (Uncertainty Estimation)**：在有或没有少量人工 CoT 示例的情况下，让 LLM 针对训练问题生成 *k* 个答案（文中 *k=5*），并基于这些答案的差异性计算不确定性指标。
-2. **选择 (Selection)**：根据不确定性水平，筛选最不确定的问题。
-3. **人工标注 (Annotation)**：对筛选出的问题进行人工标注，补充新的高质量 CoT 示例。
-4. **推理 (Inference)**：使用新标注的示例进行推理，从而提升模型在目标任务上的表现。
 
 ## 规划: 任务分解
 
@@ -203,7 +90,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="llm_agent_overview.png"
-    caption="Fig. 11. Overview of a LLM-powered autonomous agent system. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 3. Overview of a LLM-powered autonomous agent system. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
     align="center"
     width="100%"
 >}}
@@ -216,7 +103,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="cot.png"
-    caption="Fig. 12. The comparison example of few-shot prompting and CoT prompting. (Image source: [Wei et al. 2022](https://arxiv.org/abs/2201.11903))"
+    caption="Fig. 4. The comparison example of few-shot prompting and CoT prompting. (Image source: [Wei et al. 2022](https://arxiv.org/abs/2201.11903))"
     align="center"
     width="100%"
 >}}
@@ -227,7 +114,19 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="zero_shot_cot.png"
-    caption="Fig. 13. The comparison example of few-shot prompting and CoT prompting. (Image source: [Kojima et al. 2022](https://arxiv.org/abs/2205.11916))"
+    caption="Fig. 5. The comparison example of few-shot prompting and CoT prompting. (Image source: [Kojima et al. 2022](https://arxiv.org/abs/2205.11916))"
+    align="center"
+    width="100%"
+>}}
+
+
+**多模态思维链 (Multimodal CoT, MCoT)**([Zhang et al. 2023](https://arxiv.org/abs/2302.00923)) 将 **文本与视觉信息** 融合到推理过程中，突破了传统 CoT 仅依赖语言模态的局限。其框架分为两阶段：
+1. **推理链生成**：基于多模态信息（文本 + 图像）生成解释性推理链。
+2. **答案推断**：利用生成的推理链作为辅助，完成最终答案推断。
+
+{{< figure
+    src="MCoT.png"
+    caption="Fig. 6. Overview of Multimodal-CoT framework. (Image source: [Zhang et al. 2023](https://arxiv.org/abs/2302.00923))"
     align="center"
     width="100%"
 >}}
@@ -238,7 +137,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="self_consistency.png"
-    caption="Fig. 14. Overview of the Self-Consistency Method for Chain-of-Thought Reasoning. (Image source: [Wang et al. 2022a](https://arxiv.org/abs/2203.11171))"
+    caption="Fig. 7. Overview of the Self-Consistency Method for Chain-of-Thought Reasoning. (Image source: [Wang et al. 2022a](https://arxiv.org/abs/2203.11171))"
     align="center"
     width="100%"
 >}}
@@ -250,7 +149,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="rationale_augmented.png"
-    caption="Fig. 15. An overview of different ways of composing rationale-augmented ensembles, depending on how the randomness of rationales is introduced. (Image source: [Wang et al. 2022b](https://arxiv.org/abs/2207.00747))"
+    caption="Fig. 8. An overview of different ways of composing rationale-augmented ensembles, depending on how the randomness of rationales is introduced. (Image source: [Wang et al. 2022b](https://arxiv.org/abs/2207.00747))"
     align="center"
     width="100%"
 >}}
@@ -260,7 +159,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="STaR.png"
-    caption="Fig. 16. An overview of STaR and a STaR-generated rationale on CommonsenseQA. (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
+    caption="Fig. 9. An overview of STaR and a STaR-generated rationale on CommonsenseQA. (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
     align="center"
     width="100%"
 >}}
@@ -269,7 +168,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="linebreak.png"
-    caption="Fig. 17. Sensitivity analysis on step formatting. Complex prompts consistently lead to better performance with regard to different step formatting. (Image source: [Fu et al. 2023](https://arxiv.org/abs/2210.00720))"
+    caption="Fig. 10. Sensitivity analysis on step formatting. Complex prompts consistently lead to better performance with regard to different step formatting. (Image source: [Fu et al. 2023](https://arxiv.org/abs/2210.00720))"
     align="center"
     width="100%"
 >}}
@@ -287,10 +186,113 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="tot.png"
-    caption="Fig. 18. Schematic illustrating various approaches to problem solving with LLMs. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
+    caption="Fig. 11. Schematic illustrating various approaches to problem solving with LLMs. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
     align="center"
     width="100%"
 >}}
+
+
+## 提示词工程
+
+**提示工程（Prompt Engineering）**，又称为**上下文提示（In-Context Prompting）**，通过优化输入 prompt 来引导 LLM 产生期望输出的技巧。其核心目标是在**不更新模型权重**的前提下，通过与模型的高效沟通来控制其行为。
+
+### 零样本提示
+
+**零样本提示 (Zero-Shot Prompting)** 直接向模型提供任务指令，而不提供任何示例。这种方法完全依赖模型在预训练阶段学到的知识和指令遵循能力。例如，进行情感分析：
+
+{{< figure
+    src="zero_shot.png"
+    caption="Fig. 12. Zero-Shot Prompting."
+    align="center"
+    width="100%"
+>}}
+
+对于已经过指令微调的模型，如 GPT-5 或 Claude 4，它们能够很好地理解并执行这类直接指令。
+
+### 少样本提示
+
+**少样本提示 (Few-Shot Prompting)** 是在提示中提供一组高质量的示例，每个示例都包含输入和期望的输出。通过这些示例，模型能够更好地理解用户的意图和任务的具体要求，从而获得比零样本提示更优的性能。然而，这种方法的缺点是会消耗更多的上下文窗口长度。例如，提供几个情感分析的示例：
+
+{{< figure
+    src="few_shot.png"
+    caption="Fig. 13. Few-Shot Prompting."
+    align="center"
+    width="100%"
+>}}
+
+### 自动提示构建
+
+**自动提示工程师（Automatic Prompt Engineer, APE）**([Zhou et al. 2022](https://arxiv.org/abs/2211.01910)) 是一种在模型生成的候选指令池中进行搜索的方法。它通过筛选候选集合，并依据选定的评分函数最终选择得分最高的候选指令。
+
+
+{{< figure
+    src="ape.png"
+    caption="Fig. 14. Automatic Prompt Engineer (APE) workflow. (Image source: [Zhou et al. 2022](https://arxiv.org/abs/2211.01910))"
+    align="center"
+    width="90%"
+>}}
+
+**自动思维链 (Automatic Chain-of-Thought, Auto-CoT)** ([Zhang et al. 2022](https://arxiv.org/abs/2210.03493)) 提出了一种自动化构建思维链示例的方法，旨在解决人工设计提示耗时且可能并非最优的问题。其核心思想是，通过**聚类技术**对问题进行采样，然后**利用大语言模型 (LLM) 自身的零样本推理能力来自动生成推理链**，从而构建多样的、高质量的示例。
+
+{{< figure
+    src="auto_cot.png"
+    caption="Fig. 15. Overview of the Auto-CoT method. (Image source: [Zhang et al. 2022](https://arxiv.org/abs/2210.03493))"
+    align="center"
+    width="90%"
+>}}
+
+**Auto-CoT 包含两个主要阶段：**
+1.  **问题聚类**：将数据集中的问题进行嵌入并运行 $k$-means 等算法进行聚类。此步骤旨在将相似的问题划分到同一个簇，以保证后续采样问题的多样性。
+2.  **示例选择与推理生成**：从每个簇中选择一个或多个有代表性的问题（例如，选择离簇中心最近的问题）。随后，利用 **Zero-Shot CoT** 提示来让 LLM 为这些选定的问题生成推理链。这些自动生成的“问题-推理链”对便组成了最终用于执行任务的少样本提示。
+
+
+### 知识增强
+
+在应对知识密集型或常识推理任务时，单纯依赖 LLM的参数化知识往往不足，可能导致错误或过时答案。为解决这一问题，研究者提出了两类思路：
+
+**生成知识提示 (Generated Knowledge Prompting)**([Liu et al. 2022](https://arxiv.org/abs/2110.08387)) 是一种在预测之前让模型**先生成相关知识**的方法。其核心思想是：当任务需要常识或外部信息时，模型可能因缺乏背景而犯错；若先引导模型生成与输入相关的知识，再基于这些知识作答，则能提升推理的准确性。
+
+{{< figure
+    src="generated_knowledge_prompting.png"
+    caption="Fig. 16. Overview of the Generated Knowledge Prompting. (Image source: [Liu et al. 2022](https://arxiv.org/abs/2110.08387))"
+    align="center"
+    width="70%"
+>}}
+
+1. **知识生成**：根据输入，模型先生成相关事实性知识。
+2. **知识整合**：将生成的知识与原问题合并，形成新的提示输入。
+3. **答案推理**：基于增强后的输入进行回答。
+
+
+**检索增强生成 (Retrieval Augmented Generation, RAG)**([Lewis et al. 2021](https://arxiv.org/abs/2005.11401)) 是一种结合 **信息检索与文本生成** 的方法，旨在解决知识密集型任务。其核心思想是：单纯依赖 LLM 的参数化知识（静态）容易导致事实错误，而通过引入外部知识库检索，可以提升生成结果的 **事实一致性与时效性**。
+
+{{< figure
+    src="rag.png"
+    caption="Fig. 17. Overview of the Retrieval Augmented Generation. (Image source: [Lewis et al. 2021](https://arxiv.org/abs/2005.11401))"
+    align="center"
+    width="100%"
+>}}
+
+1. **检索**：从外部知识源（如 Wikipedia 或者私有知识库）检索相关文档。
+2. **整合**：将检索到的文档与原始输入拼接，作为提示上下文。
+3. **生成**：由生成模型（原始论文使用的预训练 seq2seq 模型, 如今主流使用 LLM）基于扩展后的提示输出答案。
+
+### 主动提示
+
+**主动提示（Active Prompt）**([Diao et al. 2023](https://arxiv.org/abs/2302.12246))针对传统 CoT 方法依赖固定人工标注示例的局限提出改进。问题在于：**固定示例并不一定最适合所有任务，可能导致泛化不足**。Active Prompt 通过引入 active learning 策略，自适应地选择和更新任务相关的最佳示例，从而提升模型的推理效果。
+
+{{< figure
+    src="active_prompt.png"
+    caption="Fig. 18. Illustrations of active prompting framework. (Image source: [Diao et al. 2023](https://arxiv.org/abs/2302.12246))"
+    align="center"
+    width="100%"
+>}}
+
+1. **不确定性估计**：在有或没有少量人工 CoT 示例的情况下，让 LLM 针对训练问题生成 *k* 个答案（文中 *k=5*），并基于这些答案的差异性计算不确定性指标。
+2. **选择**：根据不确定性水平，筛选最不确定的问题。
+3. **人工标注**：对筛选出的问题进行人工标注，补充新的高质量 CoT 示例。
+4. **推理**：使用新标注的示例进行推理，从而提升模型在目标任务上的表现。
+
 
 ## 规划: 自我反思
 
@@ -765,31 +767,31 @@ OpenAI Deep Research 训练过程采用了专为研究场景定制的**浏览器
 
 [3] Weng, Lilian. ["LLM-powered Autonomous Agents."](https://lilianweng.github.io/posts/2023-06-23-agent/) Lil’Log, 2023.
 
-[4] Zhou, Yongchao, et al. ["Large language models are human-level prompt engineers."](https://arxiv.org/abs/2211.01910) The eleventh international conference on learning representations. 2022.
+[4] Wei, Jason, et al. ["Chain-of-thought prompting elicits reasoning in large language models."](https://arxiv.org/abs/2201.11903) Advances in neural information processing systems 35 (2022): 24824-24837. 
 
-[5] Zhang, Zhuosheng, et al. ["Automatic chain of thought prompting in large language models."](https://arxiv.org/abs/2210.03493) arXiv preprint arXiv:2210.03493 (2022).
+[5] Kojima, Takeshi, et al. ["Large language models are zero-shot reasoners."](https://arxiv.org/abs/2205.11916) Advances in neural information processing systems 35 (2022): 22199-22213.
 
-[6] Liu, Jiacheng, et al. ["Generated knowledge prompting for commonsense reasoning."](https://arxiv.org/abs/2110.08387) arXiv preprint arXiv:2110.08387 (2021).
+[6] Zhang, Zhuosheng, et al. ["Multimodal chain-of-thought reasoning in language models."](https://arxiv.org/abs/2302.00923) arXiv preprint arXiv:2302.00923 (2023).
 
-[7] Lewis, Patrick, et al. ["Retrieval-augmented generation for knowledge-intensive nlp tasks."](https://arxiv.org/abs/2005.11401) Advances in neural information processing systems 33 (2020): 9459-9474.
+[7] Wang, Xuezhi, et al. ["Self-consistency improves chain of thought reasoning in language models."](https://arxiv.org/abs/2203.11171)  arXiv preprint arXiv:2203.11171 (2022).
 
-[8] Zhang, Zhuosheng, et al. ["Multimodal chain-of-thought reasoning in language models."](https://arxiv.org/abs/2302.00923) arXiv preprint arXiv:2302.00923 (2023).
+[8] Wang, Xuezhi, et al. ["Rationale-augmented ensembles in language models."](https://arxiv.org/abs/2207.00747) arXiv preprint arXiv:2207.00747 (2022).
 
-[9] Diao, Shizhe, et al. ["Active prompting with chain-of-thought for large language models."](https://arxiv.org/abs/2302.12246) arXiv preprint arXiv:2302.12246 (2023).
+[9] Zelikman, Eric, et al. ["Star: Bootstrapping reasoning with reasoning."](https://arxiv.org/abs/2203.14465) Advances in Neural Information Processing Systems 35 (2022): 15476-15488.
 
-[10] Wei, Jason, et al. ["Chain-of-thought prompting elicits reasoning in large language models."](https://arxiv.org/abs/2201.11903) Advances in neural information processing systems 35 (2022): 24824-24837. 
+[10] Fu, Yao, et al. ["Complexity-based prompting for multi-step reasoning."](https://arxiv.org/abs/2210.00720) arXiv preprint arXiv:2210.00720 (2022).
 
-[11] Kojima, Takeshi, et al. ["Large language models are zero-shot reasoners."](https://arxiv.org/abs/2205.11916) Advances in neural information processing systems 35 (2022): 22199-22213.
+[11] Yao, Shunyu, et al. ["Tree of thoughts: Deliberate problem solving with large language models."](https://arxiv.org/abs/2305.10601) Advances in neural information processing systems 36 (2023): 11809-11822.
 
-[12] Wang, Xuezhi, et al. ["Self-consistency improves chain of thought reasoning in language models."](https://arxiv.org/abs/2203.11171)  arXiv preprint arXiv:2203.11171 (2022).
+[12] Zhou, Yongchao, et al. ["Large language models are human-level prompt engineers."](https://arxiv.org/abs/2211.01910) The eleventh international conference on learning representations. 2022.
 
-[13] Wang, Xuezhi, et al. ["Rationale-augmented ensembles in language models."](https://arxiv.org/abs/2207.00747) arXiv preprint arXiv:2207.00747 (2022).
+[13] Zhang, Zhuosheng, et al. ["Automatic chain of thought prompting in large language models."](https://arxiv.org/abs/2210.03493) arXiv preprint arXiv:2210.03493 (2022).
 
-[14] Zelikman, Eric, et al. ["Star: Bootstrapping reasoning with reasoning."](https://arxiv.org/abs/2203.14465) Advances in Neural Information Processing Systems 35 (2022): 15476-15488.
+[14] Liu, Jiacheng, et al. ["Generated knowledge prompting for commonsense reasoning."](https://arxiv.org/abs/2110.08387) arXiv preprint arXiv:2110.08387 (2021).
 
-[15] Fu, Yao, et al. ["Complexity-based prompting for multi-step reasoning."](https://arxiv.org/abs/2210.00720) arXiv preprint arXiv:2210.00720 (2022).
+[15] Lewis, Patrick, et al. ["Retrieval-augmented generation for knowledge-intensive nlp tasks."](https://arxiv.org/abs/2005.11401) Advances in neural information processing systems 33 (2020): 9459-9474.
 
-[16] Yao, Shunyu, et al. ["Tree of thoughts: Deliberate problem solving with large language models."](https://arxiv.org/abs/2305.10601) Advances in neural information processing systems 36 (2023): 11809-11822.
+[16] Diao, Shizhe, et al. ["Active prompting with chain-of-thought for large language models."](https://arxiv.org/abs/2302.12246) arXiv preprint arXiv:2302.12246 (2023).
 
 [17] Yao, Shunyu, et al. ["React: Synergizing reasoning and acting in language models."](https://arxiv.org/abs/2210.03629) International Conference on Learning Representations (ICLR). 2023.
 

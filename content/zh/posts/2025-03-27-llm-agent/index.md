@@ -1,7 +1,6 @@
 ---
 title: "大语言模型智能体"
 date: "2025-03-27T10:00:00+00:00"
-lastmod: "2025-03-27T10:00:00+00:00"
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["大语言模型", "AI", "智能体", "强化学习", "计划", "记忆", "工具使用", "Deep Research", "ReAct", "Reflexion", "WebVoyager", "OpenAI Operator", "CoT", "ToT", "工作流"]
@@ -83,6 +82,119 @@ $$
 - 利用强化学习方法训练 Reasoning LLM(如 o1/o3)，使其更适合作为 LLM 智能体的基础模型。
 - 同时，记录 LLM 智能体执行任务的数据与反馈，为 Reasoning LLM 提供丰富的训练数据，从而提升模型性能。
 
+## 提示词工程
+
+**提示工程（Prompt Engineering）**，又称为**上下文提示（In-Context Prompting）**，通过优化输入 prompt 来引导 LLM 产生期望输出的技巧。其核心目标是在**不更新模型权重**的前提下，通过与模型的高效沟通来控制其行为。
+
+### 零样本提示
+
+**零样本提示 (Zero-Shot Prompting)** 直接向模型提供任务指令，而不提供任何示例。这种方法完全依赖模型在预训练阶段学到的知识和指令遵循能力。例如，进行情感分析：
+
+{{< figure
+    src="zero_shot.png"
+    caption="Fig. 3. Zero-Shot Prompting."
+    align="center"
+    width="100%"
+>}}
+
+对于已经过指令微调的模型，如 GPT-5 或 Claude 4，它们能够很好地理解并执行这类直接指令。
+
+### 少样本提示
+
+**少样本提示 (Few-Shot Prompting)** 是在提示中提供一组高质量的示例，每个示例都包含输入和期望的输出。通过这些示例，模型能够更好地理解用户的意图和任务的具体要求，从而获得比零样本提示更优的性能。然而，这种方法的缺点是会消耗更多的上下文窗口长度。例如，提供几个情感分析的示例：
+
+{{< figure
+    src="few_shot.png"
+    caption="Fig. 4. Few-Shot Prompting."
+    align="center"
+    width="100%"
+>}}
+
+### 自动提示构建
+
+**自动提示工程师（Automatic Prompt Engineer, APE）**([Zhou et al. 2022](https://arxiv.org/abs/2211.01910)) 是一种在模型生成的候选指令池中进行搜索的方法。它通过筛选候选集合，并依据选定的评分函数最终选择得分最高的候选指令。
+
+
+{{< figure
+    src="ape.png"
+    caption="Fig. 5. Automatic Prompt Engineer (APE) workflow. (Image source: [Zhou et al. 2022](https://arxiv.org/abs/2211.01910))"
+    align="center"
+    width="100%"
+>}}
+
+**自动思维链 (Automatic Chain-of-Thought, Auto-CoT)** ([Zhang et al. 2022](https://arxiv.org/abs/2210.03493)) 提出了一种自动化构建思维链示例的方法，旨在解决人工设计提示耗时且可能并非最优的问题。其核心思想是，通过**聚类技术**对问题进行采样，然后**利用大语言模型 (LLM) 自身的零样本推理能力来自动生成推理链**，从而构建多样的、高质量的示例。
+
+{{< figure
+    src="auto_cot.png"
+    caption="Fig. 6. Overview of the Auto-CoT method. (Image source: [Zhang et al. 2022](https://arxiv.org/abs/2210.03493))"
+    align="center"
+    width="100%"
+>}}
+
+**Auto-CoT 包含两个主要阶段：**
+1.  **问题聚类 (Question Clustering)**：将数据集中的问题进行嵌入并运行 $k$-means 等算法进行聚类。此步骤旨在将相似的问题划分到同一个簇，以保证后续采样问题的多样性。
+2.  **示例选择与推理生成 (Demonstration Selection & Rationale Generation)**：从每个簇中选择一个或多个有代表性的问题（例如，选择离簇中心最近的问题）。随后，利用 **Zero-Shot CoT** 提示来让 LLM 为这些选定的问题生成推理链。这些自动生成的“问题-推理链”对便组成了最终用于执行任务的少样本提示。
+
+
+## 知识增强
+
+在应对知识密集型或常识推理任务时，单纯依赖 LLM的参数化知识往往不足，可能导致错误或过时答案。为解决这一问题，研究者提出了两类思路：
+
+**生成知识提示 (Generated Knowledge Prompting)**([Liu et al. 2022](https://arxiv.org/abs/2110.08387)) 是一种在预测之前让模型**先生成相关知识**的方法。其核心思想是：当任务需要常识或外部信息时，模型可能因缺乏背景而犯错；若先引导模型生成与输入相关的知识，再基于这些知识作答，则能提升推理的准确性。
+
+{{< figure
+    src="generated_knowledge_prompting.png"
+    caption="Fig. 7. Overview of the Generated Knowledge Prompting. (Image source: [Liu et al. 2022](https://arxiv.org/abs/2110.08387))"
+    align="center"
+    width="100%"
+>}}
+
+1. **知识生成 (Knowledge Generation)**：根据输入，模型先生成相关事实性知识。
+2. **知识整合 (Knowledge Integration)**：将生成的知识与原问题合并，形成新的提示输入。
+3. **答案推理 (Answer Prediction)**：基于增强后的输入进行回答。
+
+
+**检索增强生成 (Retrieval Augmented Generation, RAG)**([Lewis et al. 2021](https://arxiv.org/abs/2005.11401)) 是一种结合 **信息检索与文本生成** 的方法，旨在解决知识密集型任务。其核心思想是：单纯依赖 LLM 的参数化知识（静态）容易导致事实错误，而通过引入外部知识库检索，可以提升生成结果的 **事实一致性与时效性**。
+
+{{< figure
+    src="rag.png"
+    caption="Fig. 8. Overview of the Retrieval Augmented Generation. (Image source: [Lewis et al. 2021](https://arxiv.org/abs/2005.11401))"
+    align="center"
+    width="100%"
+>}}
+
+1. **检索 (Retrieval)**：从外部知识源（如 Wikipedia 或者私有知识库）检索相关文档。
+2. **整合 (Augmentation)**：将检索到的文档与原始输入拼接，作为提示上下文。
+3. **生成 (Generation)**：由生成模型（原始论文使用的预训练 seq2seq 模型, 如今主流使用 LLM）基于扩展后的提示输出答案。
+
+### 多模态思维链提示
+
+**多模态思维链提示 (Multimodal CoT Prompting, MCoT)**([Zhang et al. 2023](https://arxiv.org/abs/2302.00923)) 将 **文本与视觉信息** 融合到推理过程中，突破了传统 CoT 仅依赖语言模态的局限。其框架分为两阶段：
+1. **推理链生成 (Rationale Generation)**：基于多模态信息（文本 + 图像）生成解释性推理链。
+2. **答案推断 (Answer Inference)**：利用生成的推理链作为辅助，完成最终答案推断。
+
+{{< figure
+    src="MCoT.png"
+    caption="Fig. 9. Overview of our Multimodal-CoT framework. (Image source: [Zhang et al. 2023](https://arxiv.org/abs/2302.00923))"
+    align="center"
+    width="100%"
+>}}
+
+### 主动提示
+
+**主动提示（Active Prompt）**([Diao et al. 2023](https://arxiv.org/abs/2302.12246))针对传统 CoT 方法依赖固定人工标注示例的局限提出改进。问题在于：**固定示例并不一定最适合所有任务，可能导致泛化不足**。Active Prompt 通过引入 active learning 策略，自适应地选择和更新任务相关的最佳示例，从而提升模型的推理效果。
+
+{{< figure
+    src="active_prompt.png"
+    caption="Fig. 10. Illustrations of active prompting framework. (Image source: [Diao et al. 2023](https://arxiv.org/abs/2302.12246))"
+    align="center"
+    width="100%"
+>}}
+
+1. **不确定性估计 (Uncertainty Estimation)**：在有或没有少量人工 CoT 示例的情况下，让 LLM 针对训练问题生成 *k* 个答案（文中 *k=5*），并基于这些答案的差异性计算不确定性指标。
+2. **选择 (Selection)**：根据不确定性水平，筛选最不确定的问题。
+3. **人工标注 (Annotation)**：对筛选出的问题进行人工标注，补充新的高质量 CoT 示例。
+4. **推理 (Inference)**：使用新标注的示例进行推理，从而提升模型在目标任务上的表现。
 
 ## 规划: 任务分解
 
@@ -90,7 +202,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="llm_agent_overview.png"
-    caption="Fig. 3. Overview of a LLM-powered autonomous agent system. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 11. Overview of a LLM-powered autonomous agent system. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
     align="center"
     width="100%"
 >}}
@@ -103,7 +215,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="cot.png"
-    caption="Fig. 4. The comparison example of few-shot prompting and CoT prompting. (Image source: [Wei et al. 2022](https://arxiv.org/abs/2201.11903))"
+    caption="Fig. 12. The comparison example of few-shot prompting and CoT prompting. (Image source: [Wei et al. 2022](https://arxiv.org/abs/2201.11903))"
     align="center"
     width="100%"
 >}}
@@ -114,7 +226,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="zero_shot_cot.png"
-    caption="Fig. 5. The comparison example of few-shot prompting and CoT prompting. (Image source: [Kojima et al. 2022](https://arxiv.org/abs/2205.11916))"
+    caption="Fig. 13. The comparison example of few-shot prompting and CoT prompting. (Image source: [Kojima et al. 2022](https://arxiv.org/abs/2205.11916))"
     align="center"
     width="100%"
 >}}
@@ -125,7 +237,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="self_consistency.png"
-    caption="Fig. 6. Overview of the Self-Consistency Method for Chain-of-Thought Reasoning. (Image source: [Wang et al. 2022a](https://arxiv.org/abs/2203.11171))"
+    caption="Fig. 14. Overview of the Self-Consistency Method for Chain-of-Thought Reasoning. (Image source: [Wang et al. 2022a](https://arxiv.org/abs/2203.11171))"
     align="center"
     width="100%"
 >}}
@@ -137,18 +249,17 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="rationale_augmented.png"
-    caption="Fig. 7. An overview of different ways of composing rationale-augmented ensembles, depending on how the randomness of rationales is introduced. (Image source: [Wang et al. 2022b](https://arxiv.org/abs/2207.00747))"
+    caption="Fig. 15. An overview of different ways of composing rationale-augmented ensembles, depending on how the randomness of rationales is introduced. (Image source: [Wang et al. 2022b](https://arxiv.org/abs/2207.00747))"
     align="center"
     width="100%"
 >}}
 
-- 如果训练样本仅提供正确答案而无推理依据，可采用**STaR(Self-Taught Reasoner)**([Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))方法：
-(1) 让LLM生成推理链，仅保留正确答案的推理。
+- 如果训练样本仅提供正确答案而无推理依据，可采用**STaR(Self-Taught Reasoner)**([Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))方法：(1) 让LLM生成推理链，仅保留正确答案的推理。
 (2) 用生成的推理微调模型，反复迭代直至收敛。注意 `temperature` 高时易生成带正确答案但错误推理的结果。如无标准答案，可考虑将多数投票视作“正确答案”。
 
 {{< figure
     src="STaR.png"
-    caption="Fig. 8. An overview of STaR and a STaR-generated rationale on CommonsenseQA. (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
+    caption="Fig. 16. An overview of STaR and a STaR-generated rationale on CommonsenseQA. (Image source: [Zelikman et al. 2022](https://arxiv.org/abs/2203.14465))"
     align="center"
     width="100%"
 >}}
@@ -157,7 +268,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="linebreak.png"
-    caption="Fig. 9. Sensitivity analysis on step formatting. Complex prompts consistently lead to better performance with regard to different step formatting. (Image source: [Fu et al. 2023](https://arxiv.org/abs/2210.00720))"
+    caption="Fig. 17. Sensitivity analysis on step formatting. Complex prompts consistently lead to better performance with regard to different step formatting. (Image source: [Fu et al. 2023](https://arxiv.org/abs/2210.00720))"
     align="center"
     width="100%"
 >}}
@@ -175,7 +286,7 @@ LLM Agent 的核心组件包括**规划**、**记忆**和**工具使用**，这�
 
 {{< figure
     src="tot.png"
-    caption="Fig. 10. Schematic illustrating various approaches to problem solving with LLMs. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
+    caption="Fig. 18. Schematic illustrating various approaches to problem solving with LLMs. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2305.10601))"
     align="center"
     width="100%"
 >}}
@@ -199,16 +310,16 @@ Observation：...
 
 {{< figure
     src="ReAct.png"
-    caption="Fig. 11. Examples of reasoning trajectories for knowledge-intensive tasks (e.g. HotpotQA, FEVER) and decision-making tasks (e.g. AlfWorld Env, WebShop). (Image source: [Yao et al. 2023](https://arxiv.org/abs/2210.03629))"
+    caption="Fig. 19. Examples of reasoning trajectories for knowledge-intensive tasks (e.g. HotpotQA, FEVER) and decision-making tasks (e.g. AlfWorld Env, WebShop). (Image source: [Yao et al. 2023](https://arxiv.org/abs/2210.03629))"
     align="center"
     width="100%"
 >}}
 
-从下图可以看出在知识密集型任务和决策任务中，ReAct 的表现均明显优于仅依赖`Actor`的基础方法，从而展示了其在提升推理效果和交互性能方面的优势。
+从下图可以看出在知识密集型任务和决策任务中，ReAct 的表现均明显优于仅依赖`Action`的基础方法，从而展示了其在提升推理效果和交互性能方面的优势。
 
 {{< figure
     src="ReAct_res.png"
-    caption="Fig. 12. PaLM-540B prompting results on HotpotQA and Fever. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2210.03629))"
+    caption="Fig. 20. PaLM-540B prompting results on HotpotQA and Fever. (Image source: [Yao et al. 2023](https://arxiv.org/abs/2210.03629))"
     align="center"
     width="50%"
 >}}
@@ -240,7 +351,7 @@ Observation：...
 
 {{< figure
     src="Reflexion.png"
-    caption="Fig. 13. (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 21. (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -270,7 +381,7 @@ Reflexion 的核心循环与算法描述如下：
 
 {{< figure
     src="reflextion_examples.png"
-    caption="Fig. 14. Reflexion works on decision-making, programming, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 22. Reflexion works on decision-making, programming, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -279,7 +390,7 @@ Reflexion 的核心循环与算法描述如下：
 
 {{< figure
     src="reflextion_result.png"
-    caption="Fig. 15. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
+    caption="Fig. 23. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
 >}}
@@ -300,7 +411,7 @@ DeepSeek-R1-Zero 在训练过程中的关键转变 — 随着训练的深入，�
 
 {{< figure
     src="deepseek_r1_zero_response_time.png"
-    caption="Fig. 16. The average response length of DeepSeek-R1-Zero on the training set during the RL process. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
+    caption="Fig. 24. The average response length of DeepSeek-R1-Zero on the training set during the RL process. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
     align="center"
     width="90%"
 >}}
@@ -309,7 +420,7 @@ DeepSeek-R1-Zero 训练过程中也涌现出一个典型"顿悟时刻"(aha momen
 
 {{< figure
     src="aha_moment.png"
-    caption="Fig. 17. An interesting “aha moment” of an intermediate version of DeepSeek-R1-Zero. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
+    caption="Fig. 25. An interesting “aha moment” of an intermediate version of DeepSeek-R1-Zero. (Image source: [DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))"
     align="center"
     width="90%"
 >}}
@@ -323,7 +434,7 @@ DeepSeek-R1-Zero 训练过程中也涌现出一个典型"顿悟时刻"(aha momen
 
 {{< figure
     src="category_human_memory.png"
-    caption="Fig. 18. Categorization of human memory. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 26. Categorization of human memory. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
     align="center"
     width="100%"
 >}}
@@ -354,7 +465,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="llm_memory_overview.png"
-    caption="Fig. 19. An overview of the sources, forms, and operations of the memory in LLM-based agents. (Image source: [Zhang et al. 2024](https://arxiv.org/abs/2404.13501))"
+    caption="Fig. 27. An overview of the sources, forms, and operations of the memory in LLM-based agents. (Image source: [Zhang et al. 2024](https://arxiv.org/abs/2404.13501))"
     align="center"
     width="100%"
 >}}
@@ -384,7 +495,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="gui_agent_memory_illustration.png"
-    caption="Fig. 20: Illustration of short-term memory and long-term memory in an LLM-brained GUI agent. (Image source: [Zhang et al. 2024](https://arxiv.org/abs/2411.18279))"
+    caption="Fig. 28: Illustration of short-term memory and long-term memory in an LLM-brained GUI agent. (Image source: [Zhang et al. 2024](https://arxiv.org/abs/2411.18279))"
     align="center"
     width="100%"
 >}}
@@ -409,7 +520,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="LongMem.png"
-    caption="Fig. 21. Overview of the memory caching and retrieval flow of LongMem. (Image source: [Wang, et al. 2023](https://arxiv.org/abs/2306.07174))"
+    caption="Fig. 29. Overview of the memory caching and retrieval flow of LongMem. (Image source: [Wang, et al. 2023](https://arxiv.org/abs/2306.07174))"
     align="center"
     width="100%"
 >}}
@@ -444,7 +555,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="Toolformer_api.png"
-    caption="Fig. 22. Examples of inputs and outputs for all APIs used. (Image source: [Schick, et al. 2023](https://arxiv.org/abs/2302.04761))"
+    caption="Fig. 30. Examples of inputs and outputs for all APIs used. (Image source: [Schick, et al. 2023](https://arxiv.org/abs/2302.04761))"
     align="center"
     width="100%"
 >}}
@@ -455,7 +566,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="HuggingGPT.png"
-    caption="Fig. 23. Illustration of how HuggingGPT works. (Image source: [Shen, et al. 2023](https://arxiv.org/abs/2303.17580))"
+    caption="Fig. 31. Illustration of how HuggingGPT works. (Image source: [Shen, et al. 2023](https://arxiv.org/abs/2303.17580))"
     align="center"
     width="100%"
 >}}
@@ -476,7 +587,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="generative_agent_sandbox.png"
-    caption="Fig. 24. The screenshot of generative agent sandbox. (Image source: [Park, et al. 2023](https://arxiv.org/abs/2304.03442))"
+    caption="Fig. 32. The screenshot of generative agent sandbox. (Image source: [Park, et al. 2023](https://arxiv.org/abs/2304.03442))"
     align="center"
     width="100%"
 >}}
@@ -498,7 +609,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="WebVoyager.png"
-    caption="Fig. 26. The overall workflow of WebVoyager. (Image source: [He et al. 2024](https://arxiv.org/abs/2401.13919))"
+    caption="Fig. 33. The overall workflow of WebVoyager. (Image source: [He et al. 2024](https://arxiv.org/abs/2401.13919))"
     align="center"
     width="100%"
 >}}
@@ -509,7 +620,7 @@ Agent 与用户多轮互动、执行多步任务时，可以利用不同形式�
 
 {{< figure
     src="cua_overview.png"
-    caption="Fig. 27. Overview of OpenAI CUA. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
+    caption="Fig. 34. Overview of OpenAI CUA. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
     align="center"
     width="100%"
 >}}
@@ -526,7 +637,7 @@ CUA 和之前现有的 WebVoyager 不同之处在于这是一个专门经过强�
 
 {{< figure
     src="cua_benchmark.png"
-    caption="Fig. 28. OpenAI CUA Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
+    caption="Fig. 35. OpenAI CUA Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
     align="center"
     width="100%"
 >}}
@@ -548,16 +659,29 @@ Workflow Agent 这种方式依赖开发人员预先使用设计的工作流和�
 
 {{< figure
     src="langgraph_workflow.png"
-    caption="Fig. 29. A workflow of the LangGraph. (Image source: [LangGraph, 2025](https://langchain-ai.github.io/langgraph/tutorials/workflows/?h=workflow))"
+    caption="Fig. 36. A workflow of the LangGraph. (Image source: [LangGraph, 2025](https://langchain-ai.github.io/langgraph/tutorials/workflows/?h=workflow))"
     align="center"
     width="100%"
 >}}
+
+
+以下表格对比了 5 种常见的工作流和 agent 的模式:
+
+| 模式                  | 核心机制                | 优势              | 局限            | 应用场景             |
+| ------------------- | ------------------- | --------------- | ------------- | ---------------- |
+| **Prompt Chaining**     | 顺序调用 LLM，逐步传递结果     | 适合分阶段推理，结果更准确   | 流程固定，延迟高      | 文档生成（提纲→内容）、翻译润色 |
+| **Parallelization**     | 拆分子任务并行处理，或多模型投票    | 提升速度，结果更稳健      | 子任务需独立，资源消耗大  | 内容审核并行处理、多模型代码检测 |
+| **Routing**             | 先分类，再分配到不同模型/流程     | 针对性强，提高效率       | 分类准确性决定效果     | 客服问答分流、模型大小动态选择  |
+| **Evaluator-Optimizer** | 生成 → 评估 → 优化迭代      | 提高结果质量，适合有标准的任务 | 成本高，多轮迭代增加延迟  | 翻译优化、多轮检索 refine |
+| **Orchestrator-Worker** | 中央编排，动态拆解并调度子任务     | 灵活，可处理复杂任务      | 架构复杂，调度成本高    | 多文件代码修改、实时研究整合   |
+| **Agent**               | LLM 自主决策，基于环境反馈调用工具 | 高度灵活，适应动态环境     | 难以预测，成本和安全需控制 | 自主研究代理、交互式问题求解   |
+
 
 目前 Github 上已经有多个开源项目实现了基于工作流的 Deep Research Agent，如 [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 和 [open deep research](https://github.com/langchain-ai/open_deep_research) 等。
 
 {{< figure
     src="open_deep_research.png"
-    caption="Fig. 30. An overview of the open deep research. (Image source: [LangChain, 2025](https://github.com/langchain-ai/open_deep_research))"
+    caption="Fig. 37. An overview of the open deep research. (Image source: [LangChain, 2025](https://github.com/langchain-ai/open_deep_research))"
     align="center"
     width="100%"
 >}}
@@ -609,7 +733,7 @@ OpenAI Deep Research 训练过程采用了专为研究场景定制的**浏览器
 
 {{< figure
     src="human_last_exam.png"
-    caption="Fig. 31. Humanity's Last Exam Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
+    caption="Fig. 38. Humanity's Last Exam Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
     align="center"
     width="80%"
 >}}
@@ -640,61 +764,73 @@ OpenAI Deep Research 训练过程采用了专为研究场景定制的**浏览器
 
 [3] Weng, Lilian. ["LLM-powered Autonomous Agents."](https://lilianweng.github.io/posts/2023-06-23-agent/) Lil’Log, 2023.
 
-[4] Wei, Jason, et al. ["Chain-of-thought prompting elicits reasoning in large language models."](https://arxiv.org/abs/2201.11903) Advances in neural information processing systems 35 (2022): 24824-24837. 
+[4] Zhou, Yongchao, et al. ["Large language models are human-level prompt engineers."](https://arxiv.org/abs/2211.01910) The eleventh international conference on learning representations. 2022.
 
-[5] Kojima, Takeshi, et al. ["Large language models are zero-shot reasoners."](https://arxiv.org/abs/2205.11916) Advances in neural information processing systems 35 (2022): 22199-22213.
+[5] Zhang, Zhuosheng, et al. ["Automatic chain of thought prompting in large language models."](https://arxiv.org/abs/2210.03493) arXiv preprint arXiv:2210.03493 (2022).
 
-[6] Wang, Xuezhi, et al. ["Self-consistency improves chain of thought reasoning in language models."](https://arxiv.org/abs/2203.11171)  arXiv preprint arXiv:2203.11171 (2022).
+[6] Liu, Jiacheng, et al. ["Generated knowledge prompting for commonsense reasoning."](https://arxiv.org/abs/2110.08387) arXiv preprint arXiv:2110.08387 (2021).
 
-[7] Wang, Xuezhi, et al. ["Rationale-augmented ensembles in language models."](https://arxiv.org/abs/2207.00747) arXiv preprint arXiv:2207.00747 (2022).
+[7] Lewis, Patrick, et al. ["Retrieval-augmented generation for knowledge-intensive nlp tasks."](https://arxiv.org/abs/2005.11401) Advances in neural information processing systems 33 (2020): 9459-9474.
 
-[8] Zelikman, Eric, et al. ["Star: Bootstrapping reasoning with reasoning."](https://arxiv.org/abs/2203.14465) Advances in Neural Information Processing Systems 35 (2022): 15476-15488.
+[8] Zhang, Zhuosheng, et al. ["Multimodal chain-of-thought reasoning in language models."](https://arxiv.org/abs/2302.00923) arXiv preprint arXiv:2302.00923 (2023).
 
-[9] Fu, Yao, et al. ["Complexity-based prompting for multi-step reasoning."](https://arxiv.org/abs/2210.00720) arXiv preprint arXiv:2210.00720 (2022).
+[9] Diao, Shizhe, et al. ["Active prompting with chain-of-thought for large language models."](https://arxiv.org/abs/2302.12246) arXiv preprint arXiv:2302.12246 (2023).
 
-[10] Yao, Shunyu, et al. ["Tree of thoughts: Deliberate problem solving with large language models."](https://arxiv.org/abs/2305.10601) Advances in neural information processing systems 36 (2023): 11809-11822.
+[10] Wei, Jason, et al. ["Chain-of-thought prompting elicits reasoning in large language models."](https://arxiv.org/abs/2201.11903) Advances in neural information processing systems 35 (2022): 24824-24837. 
 
-[11] Yao, Shunyu, et al. ["React: Synergizing reasoning and acting in language models."](https://arxiv.org/abs/2210.03629) International Conference on Learning Representations (ICLR). 2023.
+[11] Kojima, Takeshi, et al. ["Large language models are zero-shot reasoners."](https://arxiv.org/abs/2205.11916) Advances in neural information processing systems 35 (2022): 22199-22213.
 
-[12] Shinn, Noah, et al. ["Reflexion: Language agents with verbal reinforcement learning."](https://arxiv.org/abs/2303.11366) Advances in Neural Information Processing Systems 36 (2023): 8634-8652.
+[12] Wang, Xuezhi, et al. ["Self-consistency improves chain of thought reasoning in language models."](https://arxiv.org/abs/2203.11171)  arXiv preprint arXiv:2203.11171 (2022).
 
-[13] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
+[13] Wang, Xuezhi, et al. ["Rationale-augmented ensembles in language models."](https://arxiv.org/abs/2207.00747) arXiv preprint arXiv:2207.00747 (2022).
 
-[14] OpenAI. ["Introducing OpenAI o1"](https://openai.com/o1/) OpenAI, 2024.
+[14] Zelikman, Eric, et al. ["Star: Bootstrapping reasoning with reasoning."](https://arxiv.org/abs/2203.14465) Advances in Neural Information Processing Systems 35 (2022): 15476-15488.
 
-[15] Zhang, Zeyu, et al. ["A survey on the memory mechanism of large language model based agents."](https://arxiv.org/abs/2404.13501) arXiv preprint arXiv:2404.13501 (2024).
+[15] Fu, Yao, et al. ["Complexity-based prompting for multi-step reasoning."](https://arxiv.org/abs/2210.00720) arXiv preprint arXiv:2210.00720 (2022).
 
-[16] Zhang, Chaoyun, et al. ["Large language model-brained gui agents: A survey."](https://arxiv.org/abs/2411.18279) arXiv preprint arXiv:2411.18279 (2024).
+[16] Yao, Shunyu, et al. ["Tree of thoughts: Deliberate problem solving with large language models."](https://arxiv.org/abs/2305.10601) Advances in neural information processing systems 36 (2023): 11809-11822.
 
-[17] Wang, Weizhi, et al. ["Augmenting language models with long-term memory."](https://arxiv.org/abs/2306.07174) Advances in Neural Information Processing Systems 36 (2023): 74530-74543.
+[17] Yao, Shunyu, et al. ["React: Synergizing reasoning and acting in language models."](https://arxiv.org/abs/2210.03629) International Conference on Learning Representations (ICLR). 2023.
 
-[18] Schick, Timo, et al. ["Toolformer: Language models can teach themselves to use tools."](https://arxiv.org/abs/2302.04761) Advances in Neural Information Processing Systems 36 (2023): 68539-68551.
+[18] Shinn, Noah, et al. ["Reflexion: Language agents with verbal reinforcement learning."](https://arxiv.org/abs/2303.11366) Advances in Neural Information Processing Systems 36 (2023): 8634-8652.
 
-[19] Shen, Yongliang, et al. ["Hugginggpt: Solving ai tasks with chatgpt and its friends in hugging face."](https://arxiv.org/abs/2303.17580) Advances in Neural Information Processing Systems 36 (2023): 38154-38180.
+[19] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
 
-[20] Park, Joon Sung, et al. ["Generative agents: Interactive simulacra of human behavior."](https://arxiv.org/abs/2304.03442) Proceedings of the 36th annual acm symposium on user interface software and technology. 2023.
+[20] OpenAI. ["Introducing OpenAI o1"](https://openai.com/o1/) OpenAI, 2024.
 
-[21] He, Hongliang, et al. ["WebVoyager: Building an end-to-end web agent with large multimodal models."](https://arxiv.org/abs/2401.13919) arXiv preprint arXiv:2401.13919 (2024).
+[21] Zhang, Zeyu, et al. ["A survey on the memory mechanism of large language model based agents."](https://arxiv.org/abs/2404.13501) arXiv preprint arXiv:2404.13501 (2024).
 
-[22] Yang, Jianwei, et al. ["Set-of-mark prompting unleashes extraordinary visual grounding in gpt-4v."](https://arxiv.org/abs/2310.11441) arXiv preprint arXiv:2310.11441 (2023).
+[22] Zhang, Chaoyun, et al. ["Large language model-brained gui agents: A survey."](https://arxiv.org/abs/2411.18279) arXiv preprint arXiv:2411.18279 (2024).
 
-[23] OpenAI. ["Introducing Operator."](https://openai.com/index/introducing-operator/) OpenAI, 2025.
+[23] Wang, Weizhi, et al. ["Augmenting language models with long-term memory."](https://arxiv.org/abs/2306.07174) Advances in Neural Information Processing Systems 36 (2023): 74530-74543.
 
-[24] OpenAI. ["Computer-Using Agent."](https://openai.com/index/computer-using-agent/) OpenAI, 2025.
+[24] Schick, Timo, et al. ["Toolformer: Language models can teach themselves to use tools."](https://arxiv.org/abs/2302.04761) Advances in Neural Information Processing Systems 36 (2023): 68539-68551.
 
-[25] OpenAI. ["Introducing Deep Research."](https://openai.com/index/introducing-deep-research/) OpenAI, 2025.
+[25] Shen, Yongliang, et al. ["Hugginggpt: Solving ai tasks with chatgpt and its friends in hugging face."](https://arxiv.org/abs/2303.17580) Advances in Neural Information Processing Systems 36 (2023): 38154-38180.
 
-[26] Phan, Long, et al. ["Humanity's Last Exam."](https://arxiv.org/abs/2501.14249) arXiv preprint arXiv:2501.14249 (2025).
+[26] Park, Joon Sung, et al. ["Generative agents: Interactive simulacra of human behavior."](https://arxiv.org/abs/2304.03442) Proceedings of the 36th annual acm symposium on user interface software and technology. 2023.
 
-[27] OpenAI. ["Introducing GPT-4.5."](https://openai.com/index/introducing-gpt-4-5/) OpenAI, 2025.
+[27] He, Hongliang, et al. ["WebVoyager: Building an end-to-end web agent with large multimodal models."](https://arxiv.org/abs/2401.13919) arXiv preprint arXiv:2401.13919 (2024).
 
-[28] Anthropic. ["Introducing the Model Context Protocol."](https://www.anthropic.com/news/model-context-protocol) Anthropic, 2024.
+[28] Yang, Jianwei, et al. ["Set-of-mark prompting unleashes extraordinary visual grounding in gpt-4v."](https://arxiv.org/abs/2310.11441) arXiv preprint arXiv:2310.11441 (2023).
 
-[29] LangGraph. ["A workflow of the LangGraph."](https://langchain-ai.github.io/langgraph/tutorials/workflows/?h=workflow) LangGraph Tutorials, 2025.
+[29] OpenAI. ["Introducing Operator."](https://openai.com/index/introducing-operator/) OpenAI, 2025.
 
-[30] Assaf Elovic. ["GPT Researcher"](https://github.com/assafelovic/gpt-researcher) GitHub Repository, 2025.
+[30] OpenAI. ["Computer-Using Agent."](https://openai.com/index/computer-using-agent/) OpenAI, 2025.
 
-[31] LangChain. ["Open Deep Research"](https://github.com/langchain-ai/open_deep_research) GitHub Repository, 2025.
+[31] OpenAI. ["Introducing Deep Research."](https://openai.com/index/introducing-deep-research/) OpenAI, 2025.
+
+[32] Phan, Long, et al. ["Humanity's Last Exam."](https://arxiv.org/abs/2501.14249) arXiv preprint arXiv:2501.14249 (2025).
+
+[33] OpenAI. ["Introducing GPT-4.5."](https://openai.com/index/introducing-gpt-4-5/) OpenAI, 2025.
+
+[34] Anthropic. ["Introducing the Model Context Protocol."](https://www.anthropic.com/news/model-context-protocol) Anthropic, 2024.
+
+[35] LangGraph. ["A workflow of the LangGraph."](https://langchain-ai.github.io/langgraph/tutorials/workflows/?h=workflow) LangGraph Tutorials, 2025.
+
+[36] Assaf Elovic. ["GPT Researcher"](https://github.com/assafelovic/gpt-researcher) GitHub Repository, 2025.
+
+[37] LangChain. ["Open Deep Research"](https://github.com/langchain-ai/open_deep_research) GitHub Repository, 2025.
 
 ## 引用
 

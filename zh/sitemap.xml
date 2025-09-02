@@ -161,41 +161,6 @@
     <loc>https://syhya.github.io/zh/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2025-09-02T10:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://syhya.github.io/zh/tags/cot/</loc>
-    <lastmod>2025-09-02T10:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/cot/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/cot/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/preparedness-framework/</loc>
-    <lastmod>2025-08-07T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/rl/</loc>
-    <lastmod>2025-08-07T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/rl/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/rl/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/zh/tags/safe-completions/</loc>
-    <lastmod>2025-08-07T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/zh/posts/test/</loc>
-    <lastmod>2025-08-07T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://syhya.github.io/zh/tags/attention/</loc>
     <lastmod>2025-06-29T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -703,6 +668,19 @@
                 href="https://syhya.github.io/zh/tags/mtp/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/zh/tags/rl/</loc>
+    <lastmod>2025-04-18T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/rl/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/rl/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/zh/tags/sft/</loc>
     <lastmod>2025-04-18T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -779,6 +757,19 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="https://syhya.github.io/zh/tags/pre-training/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/zh/tags/cot/</loc>
+    <lastmod>2025-09-02T10:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/cot/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/cot/"
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/deep-research/</loc>

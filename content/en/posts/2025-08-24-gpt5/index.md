@@ -191,7 +191,7 @@ Through CoT monitoring, OpenAI found that the incidence of deceptive behavior in
 GPT-5 excels across multiple benchmarks, setting new standards, especially in reasoning, coding, and multimodal capabilities. Compared to its predecessors, it not only achieves a leap in accuracy but also makes significant strides in efficiency, often achieving or surpassing the performance of o3 with 50-80% less output.
 
 {{< figure
-    src="gpt5_swe_bench.svg"
+    src="gpt5_swe_bench.png"
     caption="Fig. 10. GPT-5 performance in SWE-bench Verified Software Engineering. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-gpt-5/))"
     align="center"
     width="100%"

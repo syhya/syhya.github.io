@@ -981,17 +981,28 @@ $$
 
 ## 参考文献
 
-[1] Vaswani A. [Attention is all you need](https://arxiv.org/abs/1706.03762) [J]. *Advances in Neural Information Processing Systems*, 2017.  
-[2] Devlin J. [Bert: Pre-training of deep bidirectional transformers for language understanding](https://arxiv.org/abs/1810.04805) [J]. *arXiv preprint arXiv:1810.04805*, 2018.  
-[3] Radford A. [Improving language understanding by generative pre-training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) [J]. 2018.  
-[4] Touvron H, Lavril T, Izacard G, et al. [Llama: Open and efficient foundation language models](https://arxiv.org/abs/2302.13971) [J]. *arXiv preprint arXiv:2302.13971*, 2023.  
-[5] Achiam J, Adler S, Agarwal S, et al. [Gpt-4 technical report](https://arxiv.org/abs/2303.08774) [J]. *arXiv preprint arXiv:2303.08774*, 2023.  
-[6] Shazeer N. [Fast transformer decoding: One write-head is all you need](https://arxiv.org/pdf/1911.02150) [J]. *arXiv preprint arXiv:1911.02150*, 2019.  
-[7] Ainslie J, Lee-Thorp J, de Jong M, et al. [Gqa: Training generalized multi-query transformer models from multi-head checkpoints](https://arxiv.org/pdf/2305.13245) [J]. *arXiv preprint arXiv:2305.13245*, 2023.  
-[8] Hu E J, Shen Y, Wallis P, et al. [Lora: Low-rank adaptation of large language models](https://arxiv.org/pdf/2106.09685) [J]. *arXiv preprint arXiv:2106.09685*, 2021.  
-[9] Dettmers T, Lewis M, Belkada Y, et al. [Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale](https://arxiv.org/pdf/2208.07339) [J]. *Advances in Neural Information Processing Systems*, 2022, 35: 30318-30332.  
-[10] Frantar E, Ashkboos S, Hoefler T, et al. [Gptq: Accurate post-training quantization for generative pre-trained transformers](https://arxiv.org/abs/2210.17323) [J]. *arXiv preprint arXiv:2210.17323*, 2022.  
-[11] Hinton G. [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531) [J]. *arXiv preprint arXiv:1503.02531*, 2015.  
+[1] Vaswani A. [Attention is all you need](https://arxiv.org/abs/1706.03762) [J]. *Advances in Neural Information Processing Systems*, 2017.
+
+[2] Devlin J. [Bert: Pre-training of deep bidirectional transformers for language understanding](https://arxiv.org/abs/1810.04805) [J]. *arXiv preprint arXiv:1810.04805*, 2018.
+
+[3] Radford A. [Improving language understanding by generative pre-training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) [J]. 2018.
+
+[4] Touvron H, Lavril T, Izacard G, et al. [Llama: Open and efficient foundation language models](https://arxiv.org/abs/2302.13971) [J]. *arXiv preprint arXiv:2302.13971*, 2023.
+
+[5] Achiam J, Adler S, Agarwal S, et al. [Gpt-4 technical report](https://arxiv.org/abs/2303.08774) [J]. *arXiv preprint arXiv:2303.08774*, 2023.
+
+[6] Shazeer N. [Fast transformer decoding: One write-head is all you need](https://arxiv.org/pdf/1911.02150) [J]. *arXiv preprint arXiv:1911.02150*, 2019.
+
+[7] Ainslie J, Lee-Thorp J, de Jong M, et al. [Gqa: Training generalized multi-query transformer models from multi-head checkpoints](https://arxiv.org/pdf/2305.13245) [J]. *arXiv preprint arXiv:2305.13245*, 2023.
+
+[8] Hu E J, Shen Y, Wallis P, et al. [Lora: Low-rank adaptation of large language models](https://arxiv.org/pdf/2106.09685) [J]. *arXiv preprint arXiv:2106.09685*, 2021.
+
+[9] Dettmers T, Lewis M, Belkada Y, et al. [Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale](https://arxiv.org/pdf/2208.07339) [J]. *Advances in Neural Information Processing Systems*, 2022, 35: 30318-30332.
+
+[10] Frantar E, Ashkboos S, Hoefler T, et al. [Gptq: Accurate post-training quantization for generative pre-trained transformers](https://arxiv.org/abs/2210.17323) [J]. *arXiv preprint arXiv:2210.17323*, 2022.
+
+[11] Hinton G. [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531) [J]. *arXiv preprint arXiv:1503.02531*, 2015.
+  
 [12] Chen C, Borgeaud S, Irving G, et al. [Accelerating large language model decoding with speculative sampling](https://arxiv.org/pdf/2302.01318) [J]. *arXiv preprint arXiv:2302.01318*, 2023.  
 
 ## 引用

@@ -73,7 +73,7 @@ $$
 This method greatly reduces computational complexity and produces results quickly, but it has clear limitations. Because it only makes locally optimal choices at each step, greedy search can easily get stuck in local optima, overlooking globally better possibilities. This often results in generated text that is dull, repetitive, and lacks diversity and creativity.
 
 {{< figure
-    src="greedy_search.svg"
+    src="greedy_search.png"
     caption="Fig. 3. At each time step, greedy search selects the token with the highest conditional probability. (Image source: [d2l-en, 2019](https://d2l.ai/chapter_recurrent-modern/beam-search.html#id1))"
     align="center"
     width="50%"
@@ -113,7 +113,7 @@ def greedy_search(model, input_ids, max_len=20, eos_token_id=2):
 To overcome the local optima problem of greedy search, beam search maintains $k$ (`num_beams` or beam width) most likely candidate sequences (called "beams") at each decoding step. In the next step, it expands based on these $k$ sequences and again selects the $k$ new sequences with the highest overall probability. Finally, the algorithm selects the candidate sequence with the highest overall probability from all completed sequences as the final output.
 
 {{< figure
-    src="beam_search.svg"
+    src="beam_search.png"
     caption="Fig. 4. The process of beam search (beam size $=2$; maximum length of an output sequence $=3$ ). The candidate output sequences are $A, C, A B, C E, A B D$, and $C E D$. (Image source: [d2l-en, 2019](https://d2l.ai/chapter_recurrent-modern/beam-search.html#id1))"
     align="center"
     width="100%"

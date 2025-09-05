@@ -73,7 +73,7 @@ $$
 通过这样的方式，它可以极大地减少计算复杂度，快速地产生结果，但这种方法存在明显的局限性：因为每一步只做局部的最优选择，贪心搜索很容易陷入局部最优，从而忽略整体更优的可能性，导致生成的文本常常显得枯燥、重复，缺乏多样性和创造性。
 
 {{< figure
-    src="greedy_search.svg"
+    src="greedy_search.png"
     caption="Fig. 3. At each time step, greedy search selects the token with the highest conditional probability. (Image source: [d2l-en, 2019](https://d2l.ai/chapter_recurrent-modern/beam-search.html#id1))"
     align="center"
     width="50%"
@@ -113,7 +113,7 @@ def greedy_search(model, input_ids, max_len=20, eos_token_id=2):
 为了克服贪心搜索的局部最优问题，束搜索在每个解码步骤保留 $k$ 个 (`num_beams` 或束宽度) 最可能的候选序列 (称为“束”)。在下一步，它会基于这 $k$ 个序列扩展，并再次选出总概率最高的 $k$ 个新序列。最后，算法会从所有完成的候选序列中选择一个整体概率最高的作为最终输出。
 
 {{< figure
-    src="beam_search.svg"
+    src="beam_search.png"
     caption="Fig. 4. The process of beam search (beam size $=2$; maximum length of an output sequence $=3$ ). The candidate output sequences are $A, C, A B, C E, A B D$, and $C E D$. (Image source: [d2l-en, 2019](https://d2l.ai/chapter_recurrent-modern/beam-search.html#id1))"
     align="center"
     width="100%"

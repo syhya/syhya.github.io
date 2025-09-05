@@ -621,20 +621,20 @@ Qwen2.5-VL incorporates several optimizations over Qwen2-VL, primarily including
 
 {{< figure
     src="qwen2.5_omni.png"
-    caption="Fig. 18. Qwen2.5-Omni is an end-to-end multimodal model designed to perceive diverse modalities, including text, images, audio, and video, while simultaneously generating text and natural speech responses in a streaming manner. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    caption="Fig. 18. Qwen2.5-Omni is an end-to-end multimodal model designed to perceive diverse modalities, including text, images, audio, and video, while simultaneously generating text and natural speech responses in a streaming manner. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
     width="100%"
 >}}
 
-**Qwen2.5-Omni** ([Qwen Team, 2025](https://arxiv.org/abs/2504.14786)) is an end-to-end multimodal model similar to GPT-4o ([OpenAI, 2024](https://openai.com/index/hello-gpt-4o/)), supporting input processing across all modalities including text, image, audio, and video, and capable of simultaneously **streaming text and natural speech** output.
+**Qwen2.5-Omni** ([Qwen Team, 2025](https://arxiv.org/abs/2503.20215)) is an end-to-end multimodal model similar to GPT-4o ([OpenAI, 2024](https://openai.com/index/hello-gpt-4o/)), supporting input processing across all modalities including text, image, audio, and video, and capable of simultaneously **streaming text and natural speech** output.
 
 As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** architecture, with key features including:
 
 {{< figure
     src="qwen2.5_omini_arc.png"
-    caption="Fig. 19. Qwen2.5-Omni Overview. Adopts Thinker-Talker architecture. Thinker is tasked with text generation while Talker focuses on generating streaming speech tokens by receiving high-level representations directly from Thinker. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    caption="Fig. 19. Qwen2.5-Omni Overview. Adopts Thinker-Talker architecture. Thinker is tasked with text generation while Talker focuses on generating streaming speech tokens by receiving high-level representations directly from Thinker. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
-    width="80%"
+    width="100%"
 >}}
 
 1.  **Unified Multimodal Processing and Temporal Modeling:**
@@ -643,7 +643,7 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
 
     {{< figure
     src="TMRoPE.png"
-    caption="Fig. 20. An illustration of Time-aligned Multimodal RoPE (TMRoPE). (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    caption="Fig. 20. An illustration of Time-aligned Multimodal RoPE (TMRoPE). (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
     width="100%"
     >}}

@@ -636,20 +636,20 @@ Qwen2.5-VL 在 Qwen2-VL 的基础上进行了多项优化，主要包括：
 
 {{< figure
     src="qwen2.5_omni.png"
-    caption="Fig. 18. Qwen2.5-Omni is an end-to-end multimodal model designed to perceive diverse modalities, including text, images, audio, and video, while simultaneously generating text and natural speech responses in a streaming manner. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    caption="Fig. 18. Qwen2.5-Omni is an end-to-end multimodal model designed to perceive diverse modalities, including text, images, audio, and video, while simultaneously generating text and natural speech responses in a streaming manner. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
     width="100%"
 >}}
 
-**Qwen2.5-Omni** ([Qwen Team, 2025](https://arxiv.org/abs/2504.14786)) 是一个类似于 GPT-4o([OpenAI, 2024](https://openai.com/index/hello-gpt-4o/)) 的端到端多模态模型，支持处理包括文本、图像、音频和视频全模态的输入，并能同时 **流式生成文本和自然语音** 输出。
+**Qwen2.5-Omni** ([Qwen Team, 2025](https://arxiv.org/abs/2503.20215)) 是一个类似于 GPT-4o([OpenAI, 2024](https://openai.com/index/hello-gpt-4o/)) 的端到端多模态模型，支持处理包括文本、图像、音频和视频全模态的输入，并能同时 **流式生成文本和自然语音** 输出。
 
 从下图可以看出，Qwen2.5-Omni 采用了**Thinker-Talker**架构，其主要特点包括：
 
 {{< figure
     src="qwen2.5_omini_arc.png"
-    caption="Fig. 19. Qwen2.5-Omni Overview. Adopts Thinker-Talker architecture. Thinker is tasked with text generation while Talker focuses on generating streaming speech tokens by receiving high-level representations directly from Thinker. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    caption="Fig. 19. Qwen2.5-Omni Overview. Adopts Thinker-Talker architecture. Thinker is tasked with text generation while Talker focuses on generating streaming speech tokens by receiving high-level representations directly from Thinker. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
-    width="80%"
+    width="100%"
 >}}
 
 1. **统一多模态处理与时序建模：**
@@ -658,7 +658,7 @@ Qwen2.5-VL 在 Qwen2-VL 的基础上进行了多项优化，主要包括：
 
     {{< figure
     src="TMRoPE.png"
-    caption="Fig. 20. An illustration of Time-aligned Multimodal RoPE (TMRoPE). (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2504.14786))"
+    caption="Fig. 20. An illustration of Time-aligned Multimodal RoPE (TMRoPE). (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
     width="100%"
     >}}

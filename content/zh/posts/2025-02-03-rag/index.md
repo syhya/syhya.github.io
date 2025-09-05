@@ -132,8 +132,13 @@ RAG 的第一步是准备和处理外部知识源。这些知识源可以是各�
 
 ## RAG 的核心技术与范式演进
 
+{{< figure
+    src="three_rag.png"
+    caption="Fig. 4. The Evaluation of RAG system."
+    align="center"
+    width="100%"
+>}}
 
-![alt text](three_rag.png)
 
 RAG 技术自提出以来，经历了从简单到复杂，从通用到模块化的演进过程。理解这些演进有助于我们更好地设计和优化 RAG 系统。
 

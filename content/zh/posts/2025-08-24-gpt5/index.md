@@ -200,7 +200,7 @@ OpenAI 采用 **思维链监控 (CoT Monitoring)**([Baker et al., 2025](https://
 GPT-5 在多个基准测试中表现出色，尤其在推理、编码和多模态能力上树立了新的标杆。与前代模型相比，它不仅在准确率上实现了飞跃，还在效率上取得了显著进步，通常能用 50-80% 更少的输出来达到甚至超越 o3 的性能。
 
 {{< figure
-    src="gpt5_swe_bench.svg"
+    src="gpt5_swe_bench.png"
     caption="Fig. 10. GPT-5 performance in SWE-bench Verified Software Engineering. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-gpt-5/))"
     align="center"
     width="100%"

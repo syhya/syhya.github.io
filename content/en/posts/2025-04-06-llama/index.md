@@ -486,6 +486,7 @@ Assume an MoE layer has $N$ experts $E_1, E_2, \dots, E_N$ (e.g., each expert is
 
 
 ## References
+
 [1] Touvron, Hugo, et al. ["LLaMA: Open and Efficient Foundation Language Models."](https://arxiv.org/abs/2302.13971) arXiv preprint arXiv:2302.13971 (2023).
 
 [2] Facebook Research. ["xformers."](https://github.com/facebookresearch/xformers) GitHub repository (Accessed 2024).

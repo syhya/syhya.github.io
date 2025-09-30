@@ -113,7 +113,7 @@ Agentic RL 通过让模型与外部世界（如搜索引擎、代码解释器、
     src="BrowseComp_scale.png"
     caption="Fig. 4. BrowseComp performance of an early version of OpenAI Deep Research scales smoothly with test-time compute. (Image source: [Wei et al., 2025](https://arxiv.org/abs/2504.12516))"
     align="center"
-    width="70%"
+    width="60%"
 >}}
 
 BrowseComp 衡量的是 Agent 的核心浏览能力：事实推理、持久导航和创造性搜索。如图所示，强大的浏览 Agent (如 OpenAI Deep Research) 在该基准上的性能会随着测试时计算量（即浏览努力程度）的增加而平滑提升，这表明该评测集能有效衡量 Agent 的深度搜索和信息整合能力。
@@ -384,7 +384,7 @@ $$
     src="ReTool_arch.png"
     caption="Fig. 18. The architecture of ReTool. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
-    width="80%"
+    width="100%"
 >}}
 
 ReTool 采用“**冷启动 SFT → 工具增强 RL**”两阶段流程：

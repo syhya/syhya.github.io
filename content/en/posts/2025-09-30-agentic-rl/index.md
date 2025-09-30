@@ -113,7 +113,7 @@ Unlike software engineering tasks, web browsing tasks aim to find specific infor
     src="BrowseComp_scale.png"
     caption="Fig. 4. BrowseComp performance of an early version of OpenAI Deep Research scales smoothly with test-time compute. (Image source: [Wei et al., 2025](https://arxiv.org/abs/2504.12516))"
     align="center"
-    width="70%"
+    width="60%"
 >}}
 
 BrowseComp measures an agent's core browsing abilities: factual reasoning, persistent navigation, and creative search. As shown in the figure, the performance of a powerful browsing agent (like OpenAI Deep Research) on this benchmark scales smoothly with test-time compute (i.e., browsing effort), indicating that the eval effectively measures an agent's deep search and information integration capabilities.
@@ -218,11 +218,11 @@ $$
 \mathcal{J}_{\mathrm{PPO}}(\theta)=\mathbb{E}_{x \sim \mathcal{D}, y \sim \pi_{\theta_{\text {old }}}(\cdot \mid x)}\left[\frac{1}{|y|} \sum_{t=1}^{|y|} \min \left(w_t(\theta) \widehat{A}_t, \operatorname{clip}\left(w_t(\theta), 1-\varepsilon, 1+\varepsilon\right) \widehat{A}_t\right)\right]
 $$
 
-Here, the importance ratio for token $y_{t}$ is defined as $w_t(\theta)=\frac{\pi_\theta\left(y_t \mid x, y_{<t}\right)}{\pi_{\theta_{\text {old }}}\left(y_t \mid x, y_{<t}\right)}$, the advantage $\widehat{A}_{t}$ for $y_{t}$ is estimated by another Critic model, and $\varepsilon$ is the clipping range for the importance ratio.
+where the importance ratio of the token $y_{t}$ is defined as $w_t(\theta)=\frac{\pi_\theta\left(y_t \mid x, y_{<t}\right)}{\pi_{\theta_{\text {old }}}\left(y_t \mid x, y_{<t}\right)}$, the advantage of $y_{t}$, denoted by $\widehat{A}_{t}$, is estimated by another value model, and $\varepsilon$ is the clipping range of importance ratios.
 
 ### GRPO
 
-**Group Relative Policy Optimization (GRPO)** ([Shao, et al. 2024](https://arxiv.org/abs/2402.03300)) cleverly removes the Critic model. For each problem, it samples a group of $G$ outputs and calculates the **relative advantage** of each output within the group (i.e., the reward value minus the group mean, divided by the standard deviation) to serve as the advantage function. The advantage is at the sequence-level but is still used for token-level updates. This reduces computational costs and improves training stability. The formula below omits the KL divergence penalty term; for the complete version, refer to the author's previous post on [GRPO](https://syhya.github.io/posts/2025-01-27-deepseek-r1/#grpo).
+**Group Relative Policy Optimization (GRPO)** ([Shao, et al. 2024](https://arxiv.org/abs/2402.03300)) cleverly removes the Critic model. For each problem, it samples a group of $G$ outputs and calculates the **relative advantage** of each output within the group (i.e., the reward value minus the group mean, divided by the standard deviation) to serve as the advantage function. The advantage is at the sequence-level but is still used for token-level updates. This reduces computational costs and improves training stability. The formula below omits the KL divergence penalty term; for the complete version, refer to the my previous post on [GRPO](https://syhya.github.io/posts/2025-01-27-deepseek-r1/#grpo).
 
 $$
 \mathcal{J}_{\mathrm{GRPO}}(\theta)=\mathbb{E}_{x \sim \mathcal{D},\left\{y_i\right\}_{i=1}^G \sim \pi_{\theta_{\text {old }}}(\cdot \mid x)}\left[\frac{1}{G} \sum_{i=1}^G \frac{1}{\left|y_i\right|} \sum_{t=1}^{\left|y_i\right|} \min \left(w_{i, t}(\theta) \widehat{A}_{i, t}, \operatorname{clip}\left(w_{i, t}(\theta), 1-\varepsilon, 1+\varepsilon\right) \widehat{A}_{i, t}\right)\right]
@@ -231,7 +231,7 @@ $$
 The importance ratio and advantage for token $y_{i, t}$ are:
 
 $$
-w_{i, t}(\theta)=\frac{\pi_{\theta}\left(y_{i, t} \mid x, y_{i,<t}\right)}{\pi_{\theta_{\text{old}}}\left(y_{i, t} \mid x, y_{i,<t}\right)}, \quad \widehat{A}_{i, t}=\widehat{A}_{i}=\frac{r\left(x, y_{i}\right)-\operatorname{mean}\left(\left\{r\left(x, y_{i}\right)\right\}_{i=1}^{G}\right)}{\operatorname{std}\left(\left\{r\left(x, y_{i}\right)\right\}_{i=1}^{G}\right)},
+w_{i, t}(\theta)=\frac{\pi_{\theta}\left(y_{i, t} \mid x, y_{i,&lt;t}\right)}{\pi_{\theta_{\text{old}}}\left(y_{i, t} \mid x, y_{i,&lt;t}\right)}, \quad \widehat{A}_{i, t}=\widehat{A}_{i}=\frac{r\left(x, y_{i}\right)-\operatorname{mean}\left(\left\{r\left(x, y_{i}\right)\right\}_{i=1}^{G}\right)}{\operatorname{std}\left(\left\{r\left(x, y_{i}\right)\right\}_{i=1}^{G}\right)},
 $$
 
 All tokens within sequence $y_{i}$ share the same advantage $\widehat{A}_{i}$, and $G$ is the number of outputs generated for each query $x$ (i.e., the group size).
@@ -255,7 +255,7 @@ $$
 And the sequence-level importance ratio $s_i(\theta)$ is defined as:
 
 $$
-s_i(\theta)=\left(\frac{\pi_\theta\left(y_i \mid x\right)}{\pi_{\theta_{\text{old}}}\left(y_i \mid x\right)}\right)^{\frac{1}{\left|y_i\right|}}=\exp \left(\frac{1}{\left|y_i\right|} \sum_{t=1}^{\left|y_i\right|} \log \frac{\pi_\theta\left(y_{i, t} \mid x, y_{i,<t}\right)}{\pi_{\theta_{\text{old}}}\left(y_{i, t} \mid x, y_{i,<t}\right)}\right)
+s_i(\theta)=\left(\frac{\pi_\theta\left(y_i \mid x\right)}{\pi_{\theta_{\text{old}}}\left(y_i \mid x\right)}\right)^{\frac{1}{\left|y_i\right|}}=\exp \left(\frac{1}{\left|y_i\right|} \sum_{t=1}^{\left|y_i\right|} \log \frac{\pi_\theta\left(y_{i, t} \mid x, y_{i,&lt;t}\right)}{\pi_{\theta_{\text{old}}}\left(y_{i, t} \mid x, y_{i,&lt;t}\right)}\right)
 $$
 
 It applies clipping to the **entire sequence** rather than individual tokens, keeping the optimization consistent with the sequence-level reward. **Length normalization** is used here to reduce variance and control the numerical range of $s_i(\theta)$, as otherwise, probability changes in a few tokens could cause the ratio to fluctuate dramatically, and different response lengths would lead to inconsistent clipping ranges. It's important to note that because the importance ratio is defined differently, the magnitude of the clipping range in GSPO is typically not the same as in GRPO.
@@ -381,7 +381,7 @@ Experiments show that on the Qwen2.5-7B and Qwen2.5-3B models, Search-R1 achieve
     src="ReTool_arch.png"
     caption="Fig. 18. The architecture of ReTool. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
-    width="80%"
+    width="100%"
 >}}
 
 ReTool adopts a two-stage process: "**Cold-start SFT → Tool-augmented RL**":
@@ -417,45 +417,45 @@ Training is based on the PPO algorithm. Similar to Search-R1, it applies **full 
 
 ## References
 
- Zhang, Guibin, et al. ["The landscape of agentic reinforcement learning for llms: A survey."](https://arxiv.org/abs/2509.02547) arXiv preprint arXiv:2509.02547 (2025).
+[1] Zhang, Guibin, et al. ["The landscape of agentic reinforcement learning for llms: A survey."](https://arxiv.org/abs/2509.02547) arXiv preprint arXiv:2509.02547 (2025).
 
- Wei, Jason. ["Successful language model evals."](https://www.jasonwei.net/blog/evals) Blog post, 2024.
+[2] Wei, Jason. ["Successful language model evals."](https://www.jasonwei.net/blog/evals) Blog post, 2024.
 
- Liang, Percy, et al. ["Holistic evaluation of language models."](https://arxiv.org/abs/2211.09110) arXiv preprint arXiv:2211.09110 (2022).
+[3] Liang, Percy, et al. ["Holistic evaluation of language models."](https://arxiv.org/abs/2211.09110) arXiv preprint arXiv:2211.09110 (2022).
 
- Srivastava, Aarohi, et al. ["Beyond the imitation game: Quantifying and extrapolating the capabilities of language models."](https://arxiv.org/abs/2206.04615) Transactions on machine learning research (2023).
+[4] Srivastava, Aarohi, et al. ["Beyond the imitation game: Quantifying and extrapolating the capabilities of language models."](https://arxiv.org/abs/2206.04615) Transactions on machine learning research (2023).
 
- Wang, Alex, et al. ["GLUE: A multi-task benchmark and analysis platform for natural language understanding."](https://arxiv.org/abs/1804.07461) arXiv preprint arXiv:1804.07461 (2018).
+[5] Wang, Alex, et al. ["GLUE: A multi-task benchmark and analysis platform for natural language understanding."](https://arxiv.org/abs/1804.07461) arXiv preprint arXiv:1804.07461 (2018).
 
- Wang, Alex, et al. ["SuperGLUE: A stickier benchmark for general-purpose language understanding systems."](https://arxiv.org/abs/1905.00537) Advances in neural information processing systems 32 (2019).
+[6] Wang, Alex, et al. ["SuperGLUE: A stickier benchmark for general-purpose language understanding systems."](https://arxiv.org/abs/1905.00537) Advances in neural information processing systems 32 (2019).
 
- Wei, Jason. ["Asymmetry of verification and verifier’s rule."](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law) Blog post, 2025.
+[7] Wei, Jason. ["Asymmetry of verification and verifier’s rule."](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law) Blog post, 2025.
 
- Jimenez, Carlos E., et al. ["SWE-bench: Can language models resolve real-world github issues?."](https://arxiv.org/abs/2310.06770) arXiv preprint arXiv:2310.06770 (2023).
+[8] Jimenez, Carlos E., et al. ["SWE-bench: Can language models resolve real-world github issues?."](https://arxiv.org/abs/2310.06770) arXiv preprint arXiv:2310.06770 (2023).
 
- OpenAI. ["Introducing SWE-bench Verified."](https://openai.com/index/introducing-swe-bench-verified/) OpenAI, 2024 (updated 2025).
+[9] OpenAI. ["Introducing SWE-bench Verified."](https://openai.com/index/introducing-swe-bench-verified/) OpenAI, 2024 (updated 2025).
 
- Wei, Jason, et al. ["Browsecomp: A simple yet challenging benchmark for browsing agents."](https://arxiv.org/abs/2504.12516) arXiv preprint arXiv:2504.12516 (2025).
+[10] Wei, Jason, et al. ["Browsecomp: A simple yet challenging benchmark for browsing agents."](https://arxiv.org/abs/2504.12516) arXiv preprint arXiv:2504.12516 (2025).
 
- Su, Liangcai, et al. ["Scaling Agents via Continual Pre-training."](https://arxiv.org/abs/2509.13310) arXiv preprint arXiv:2509.13310 (2025).
+[11] Su, Liangcai, et al. ["Scaling Agents via Continual Pre-training."](https://arxiv.org/abs/2509.13310) arXiv preprint arXiv:2509.13310 (2025).
 
- Tao, Zhengwei, et al. ["Webshaper: Agentically data synthesizing via information-seeking formalization."](https://arxiv.org/abs/2507.15061) arXiv preprint arXiv:2507.15061 (2025).
+[12] Tao, Zhengwei, et al. ["Webshaper: Agentically data synthesizing via information-seeking formalization."](https://arxiv.org/abs/2507.15061) arXiv preprint arXiv:2507.15061 (2025).
 
- Zheng, Lianmin, et al. [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena."](https://arxiv.org/abs/2306.05685) Advances in neural information processing systems 36 (2023): 46595-46623.
+[13] Zheng, Lianmin, et al. [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena."](https://arxiv.org/abs/2306.05685) Advances in neural information processing systems 36 (2023): 46595-46623.
 
- Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
+[14] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
 
- Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[15] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
- Zheng, Chujie, et al. ["Group sequence policy optimization."](https://arxiv.org/abs/2507.18071) arXiv preprint arXiv:2507.18071 (2025).
+[16] Zheng, Chujie, et al. ["Group sequence policy optimization."](https://arxiv.org/abs/2507.18071) arXiv preprint arXiv:2507.18071 (2025).
 
- Sheng, Guangming, et al. ["Hybridflow: A flexible and efficient rlhf framework."](https://arxiv.org/abs/2409.19256v2) Proceedings of the Twentieth European Conference on Computer Systems. 2025.
+[17] Sheng, Guangming, et al. ["Hybridflow: A flexible and efficient rlhf framework."](https://arxiv.org/abs/2409.19256v2) Proceedings of the Twentieth European Conference on Computer Systems. 2025.
  
- Zhong, Yinmin, et al. ["StreamRL: Scalable, Heterogeneous, and Elastic RL for LLMs with Disaggregated Stream Generation."](https://arxiv.org/abs/2504.15930) arXiv preprint arXiv:2504.15930 (2025).
+[18] Zhong, Yinmin, et al. ["StreamRL: Scalable, Heterogeneous, and Elastic RL for LLMs with Disaggregated Stream Generation."](https://arxiv.org/abs/2504.15930) arXiv preprint arXiv:2504.15930 (2025).
 
- Jin, Bowen, et al. ["Search-r1: Training llms to reason and leverage search engines with reinforcement learning."](https://arxiv.org/abs/2503.09516) arXiv preprint arXiv:2503.09516 (2025).
+[19] Jin, Bowen, et al. ["Search-r1: Training llms to reason and leverage search engines with reinforcement learning."](https://arxiv.org/abs/2503.09516) arXiv preprint arXiv:2503.09516 (2025).
 
- Feng, Jiazhan, et al. ["Retool: Reinforcement learning for strategic tool use in llms."](https://arxiv.org/abs/2504.11536) arXiv preprint arXiv:2504.11536 (2025).
+[20] Feng, Jiazhan, et al. ["Retool: Reinforcement learning for strategic tool use in llms."](https://arxiv.org/abs/2504.11536) arXiv preprint arXiv:2504.11536 (2025).
 
 ## Citation
 

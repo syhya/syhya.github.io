@@ -14,7 +14,7 @@ math: true
 
 DeepSeek AI 近期发布 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948))，其推理性能在多个 benchmark 上已接近 OpenAI o1 ([OpenAI, 2024](https://openai.com/o1/))的水平，是开源社区成功复现 o1 的重要一步。R1 相关代码可以参考huggingface 尝试开源复现 [open-r1](https://github.com/huggingface/open-r1) 项目。以往的研究多依赖于海量的监督数据来提升大语言模型（Large Language Model, LLM）性能，但 DeepSeek-R1 及其早期实验 DeepSeek-R1-Zero 的成功，有力证明了纯粹大规模强化学习在提升 LLM 推理能力方面的潜力。其印证了 Richard Sutton 在 “The Bitter Lesson” 中提出的深刻见解:
 
-> One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are **search** and **learning**. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
+> *One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are **search** and **learning**. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))*
 
 
 ## 符号
@@ -55,7 +55,7 @@ DeepSeek-R1 系列模型的训练是一个多阶段的过程，旨在构建具�
 
 {{< figure
     src="deepseek_r1_pipeline.jpg"
-    caption="Fig. 1. DeepSeek R1 Training Pipeline. (Image source: [Harris Chan's Tweet](https://x.com/SirrahChan/status/1881488738473357753))"
+    caption="Fig. 1. DeepSeek R1 Training Pipeline. (Image source: [Harris Chan's Tweet, 2025](https://x.com/SirrahChan/status/1881488738473357753))"
     align="center"
     width="90%"
 >}}
@@ -81,7 +81,7 @@ DeepSeek-R1 系列模型的训练是一个多阶段的过程，旨在构建具�
 ## DeepSeek-R1-Zero
 
 ### PPO
-**近端策略优化 (Proximal Policy Optimization, PPO)** ([Schulman et al. 2017](https://arxiv.org/abs/1707.06347)) 算法是一种广泛应用于强化学习的经典算法，在 InstructGPT([Ouyang et al. 2022](https://arxiv.org/abs/2203.02155)) 论文中被证明是训练 LLM 强化学习微调阶段的有效且稳定的方法。
+**近端策略优化 (Proximal Policy Optimization, PPO)** ([Schulman et al., 2017](https://arxiv.org/abs/1707.06347)) 算法是一种广泛应用于强化学习的经典算法，在 InstructGPT([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155)) 论文中被证明是训练 LLM 强化学习微调阶段的有效且稳定的方法。
 
 强化学习核心思想是让智能体 (Agent) 在与环境的交互中学习，通过试错来最大化累积奖励。在**LLM场景下**，模型本身就是智能体，“环境” 可以理解为用户提出的问题和期望的回答方式。策略 (Policy) \(\pi_\theta\) 代表了智能体的行为准则，即给定一个输入 (例如问题 \(q\))，策略会输出一个动作 (例如生成文本 \(o\))。策略 \(\pi_\theta\) 通常由一个神经网络模型参数化，训练的目标是找到最优的参数 \(\theta\)，使得策略能够生成高质量的输出。
 
@@ -110,7 +110,7 @@ PPO 的目标是改进策略模型 (Actor)，使其能够生成更高质量的�
 
 - **期望 \(\mathbb{E}[\cdot]\)**：表示对样本的平均。在实际训练中，我们会采样一批数据 (例如用户问题和模型生成的回答)，然后计算这批数据的平均目标函数值。
 - **重要性采样率**：衡量当前策略 \(\pi_\theta\) 与旧策略 \(\pi_{\theta_{\text{old}}}\) 在动作 \(a\) 上的概率比值。PPO 采用 **近端策略更新** 的思想，限制每次策略更新的幅度，避免策略变化过大导致训练不稳定。
-- **优势函数 \(A_t\)**：评估在状态 \(s\) 下采取动作 \(a\) 相对于平均水平的优势。优势函数通常由 Critic 模型 (价值网络) 估计得到，可以是优势估计 (Advantage Estimation) 或 广义优势估计 (Generalized Advantage Estimation, GAE) 等方法。优势函数 \(A_t\) 越大，表示当前动作 \(a\) 越好，策略模型应该增加采取该动作的概率。
+- **优势函数 \(A_t\)**：评估在状态 \(s\) 下采取动作 \(a\) 相对于平均水平的优势。优势函数通常由 Critic 模型 (价值网络) 估计得到，其采用 **广义优势估计 (Generalized Advantage Estimation, GAE)** ([Schulman et al., 2015](https://arxiv.org/abs/1506.02438))方法。优势函数 \(A_t\) 越大，表示当前动作 \(a\) 越好，策略模型应该增加采取该动作的概率。
 - **clip**：PPO 的核心机制之一，本质上可以看作是一个惩罚函数，用于限制重要性采样率的范围在 \([1-\varepsilon, 1+\varepsilon]\) 之间，其中 \(\varepsilon\) 是一个超参数 (通常设置为 0.2)。剪辑操作防止策略更新步幅过大，提高训练的稳定性。
 
     - `clip` 函数通过限制重要性采样率来惩罚过大或过小的策略更新幅度。
@@ -130,7 +130,7 @@ PPO 算法因其 **简单有效、相对稳定** 的特点，成为强化学习�
 
 ### GRPO
 
-**组相对策略优化 (Group Relative Policy Optimization, GRPO)** ([Shao, et al. 2024](https://arxiv.org/abs/2402.03300)) 是 DeepSeek 团队为训练 DeepSeek-R1-Zero 这样的大语言模型而专门设计的一种高效稳定的强化学习算法。GRPO 的核心创新在于摒弃了传统Actor-Critic 框架中对独立价值网络 (critic model) 的依赖，降低了计算成本，并提高了训练的稳定性。 从广义上讲，GRPO 可以被视为一种 **Actor-Only** 的强化学习方法。
+**组相对策略优化 (Group Relative Policy Optimization, GRPO)** ([Shao et al., 2024](https://arxiv.org/abs/2402.03300)) 是 DeepSeek 团队为训练 DeepSeek-R1-Zero 这样的大语言模型而专门设计的一种高效稳定的强化学习算法。GRPO 的核心创新在于摒弃了传统Actor-Critic 框架中对独立价值网络 (critic model) 的依赖，降低了计算成本，并提高了训练的稳定性。 从广义上讲，GRPO 可以被视为一种 **Actor-Only** 的强化学习方法。
 
 GRPO 的灵感来源于 **相对评估** 的思想。在许多实际场景中，我们往往更容易判断一组事物之间的相对好坏，而不是给出绝对的价值评估。例如，在评价一组学生的作业时，老师可能更容易比较不同作业之间的优劣，而不是给每份作业打一个绝对分数。GRPO 将这种相对评估的思想引入强化学习，通过 **组内相对评分**来构建基准 (baseline)，完全替代了对价值网络的依赖。
 
@@ -304,7 +304,7 @@ Schulman 无偏估计器 \( \hat{D}_{KL}^{(k3)}(o) = r(o) - \log r(o) - 1 \) 为
 
 ### 代码生成评估指标
 
-代码生成会采用更严谨的测试方法。通过编译器执行模型生成的代码，并使用预定义的测试用例进行多次单元测试，以判断代码的正确性。常用的评估指标包括 **pass@k**([Chen et al. 2021](https://arxiv.org/abs/2107.03374)) 和 **cons@N**([OpenAI, 2024](https://openai.com/index/learning-to-reason-with-llms/))。
+代码生成会采用更严谨的测试方法。通过编译器执行模型生成的代码，并使用预定义的测试用例进行多次单元测试，以判断代码的正确性。常用的评估指标包括 **pass@k**([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) 和 **cons@N**([OpenAI, 2024](https://openai.com/index/learning-to-reason-with-llms/))。
 
 `pass@k`: 衡量模型在生成 k 个代码样本时，至少有一个样本能够通过所有预定义测试用例的概率。
 
@@ -414,7 +414,7 @@ C_i = \begin{cases}
 #### ORM 与 PRM
 {{< figure
     src="orm_prm_comparison.png"
-    caption="Fig. 3. Outcome reward vs Process reward. (Image source: [Zeng et al. 2024](https://arxiv.org/abs/2412.14135))"
+    caption="Fig. 3. Outcome reward vs Process reward. (Image source: [Zeng et al., 2024](https://arxiv.org/abs/2412.14135))"
     align="center"
     width="100%"
 >}}
@@ -434,7 +434,7 @@ C_i = \begin{cases}
 为了训练 DeepSeek-R1-Zero，DeepSeek 团队选择了**ORM**，而非PRM。此选择基于以下考虑：
 
 - **避免奖励欺骗**  
-  PRM在大规模 RL 训练中，容易被智能体利用，导致奖励欺骗（Reward Hacking）（[Gao et al. 2022](https://arxiv.org/abs/2210.10760)）。模型可能采取“旁门左道”的策略以最大化奖励，而非提升推理能力。基于规则的奖励系统通过明确且可解释的规则，有效避免了奖励欺骗问题。
+  PRM在大规模 RL 训练中，容易被智能体利用，导致奖励欺骗（Reward Hacking）（[Gao et al., 2022](https://arxiv.org/abs/2210.10760)）。模型可能采取“旁门左道”的策略以最大化奖励，而非提升推理能力。基于规则的奖励系统通过明确且可解释的规则，有效避免了奖励欺骗问题。
 
   > 基于规则的奖励系统在问题场景复杂或需要创造性回答时，可能难以覆盖所有类型的问题，规则设计可能存在漏洞被模型利用。
 
@@ -769,7 +769,7 @@ RFT 通过最小化损失函数，引导模型专注于学习高质量答案的�
 
 ### 蒸馏
 
-为了将 DeepSeek-R1 的强大推理能力迁移到更高效的小型模型上，DeepSeek 团队采用了**蒸馏（Distillation）**（[Hinton et al. 2015](https://arxiv.org/abs/1503.02531)）技术。蒸馏过程主要包括以下步骤：
+为了将 DeepSeek-R1 的强大推理能力迁移到更高效的小型模型上，DeepSeek 团队采用了**蒸馏（Distillation）**（[Hinton et al., 2015](https://arxiv.org/abs/1503.02531)）技术。蒸馏过程主要包括以下步骤：
 
 1. **数据生成**: 利用训练好的 DeepSeek-R1 模型，生成约 **80 万条**高质量的推理数据。这些数据不仅包括推理密集型任务 (如数学题、编程题)，也涵盖了通用任务 (如问答、对话)，以保证蒸馏数据的多样性和覆盖面。
 
@@ -807,7 +807,7 @@ DeepSeek-R1 在多阶段训练框架基础上，探索了 Reasoning Model 训练
 - 这简化了 RL 训练架构，降低了资源需求，提高了效率。表明大语言模型的策略网络已具备强大的价值评估能力，无需额外价值网络。
 
 **聚焦最终结果奖励：最小化奖励信号**
-- DeepSeek-R1 采用更加简单的 ORM 奖励策略，主要关注最终结果的准确性奖励，弱化中间推理步骤奖励。这种策略受 AlphaZero ([Silver et al. 2017](https://arxiv.org/abs/1712.01815)) 启发，后者仅关注胜负。
+- DeepSeek-R1 采用更加简单的 ORM 奖励策略，主要关注最终结果的准确性奖励，弱化中间推理步骤奖励。这种策略受 AlphaZero ([Silver et al., 2017](https://arxiv.org/abs/1712.01815)) 启发，后者仅关注胜负。
 - 对于 Reasoning Model，最终结果奖励可能比 PRM 更有效，能帮助模型更自然地学习“思维方式”，减少繁琐的逐步监督。
 
 **增加思考时间：模型自发涌现深度思考**
@@ -836,25 +836,27 @@ DeepSeek-R1 的成功展示了 RL 提升 LLM 推理能力的巨大潜力。DeepS
 
 [8] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
 
-[9] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[9] Schulman, John, et al. ["High-dimensional continuous control using generalized advantage estimation."](https://arxiv.org/abs/1506.02438) arXiv preprint arXiv:1506.02438 (2015).
 
-[10] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
+[10] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
-[11] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
+[11] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
 
-[12] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
+[12] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
 
-[13] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024.
+[13] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
 
-[14] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024.
+[14] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024.
 
-[15] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). Open-Source O1, 2024.
+[15] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024.
 
-[16] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
+[16] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). Open-Source O1, 2024.
 
-[17] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
+[17] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
 
-[18] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
+[18] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
+
+[19] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
 
 
 ## 引用

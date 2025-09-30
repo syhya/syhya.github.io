@@ -14,7 +14,7 @@ math: true
 
 DeepSeek AI recently released **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948)), whose reasoning performance on multiple benchmarks approaches the level of OpenAI's o1 ([OpenAI, 2024](https://openai.com/o1/)), marking a significant step for the open-source community in successfully replicating o1. Relevant code for R1 can be found in the huggingface's attempt to open-source replication project [open-r1](https://github.com/huggingface/open-r1). While previous research has often relied on massive amounts of supervised data to enhance the performance of Large Language Models (LLMs), the success of DeepSeek-R1 and its earlier experiment, DeepSeek-R1-Zero, powerfully demonstrates the potential of purely large-scale reinforcement learning in improving the reasoning capabilities of LLMs. This success reinforces the profound insight proposed by Richard Sutton in "The Bitter Lesson":
 
-> One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are **search** and **learning**. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))
+> *One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are **search** and **learning**. ([Richard Sutton, 2019](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf))*
 
 ## Notations
 
@@ -53,7 +53,7 @@ The training of the DeepSeek-R1 series models is a multi-stage process aimed at 
 
 {{< figure
     src="deepseek_r1_pipeline.jpg"
-    caption="Fig. 1. DeepSeek R1 Training Pipeline. (Image source: [Harris Chan's Tweet](https://x.com/SirrahChan/status/1881488738473357753))"
+    caption="Fig. 1. DeepSeek R1 Training Pipeline. (Image source: [Harris Chan's Tweet, 2025](https://x.com/SirrahChan/status/1881488738473357753))"
     align="center"
     width="90%"
 >}}
@@ -79,7 +79,7 @@ Next, this blog post will delve into the key technologies and methods in the Dee
 ## DeepSeek-R1-Zero
 
 ### PPO
-**Proximal Policy Optimization (PPO)** ([Schulman et al. 2017](https://arxiv.org/abs/1707.06347)) algorithm is a classic algorithm widely used in reinforcement learning. In the InstructGPT ([Ouyang et al. 2022](https://arxiv.org/abs/2203.02155)) paper, it was proven to be an effective and stable method for training LLMs in the reinforcement learning fine-tuning stage.
+**Proximal Policy Optimization (PPO)** ([Schulman et al., 2017](https://arxiv.org/abs/1707.06347)) algorithm is a classic algorithm widely used in reinforcement learning. In the InstructGPT ([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155)) paper, it was proven to be an effective and stable method for training LLMs in the reinforcement learning fine-tuning stage.
 
 The core idea of reinforcement learning is to allow an agent to learn through interaction with an environment, maximizing cumulative rewards through trial and error. In the **LLM scenario**, the model itself is the agent, and the "environment" can be understood as the questions raised by users and the expected ways of answering. The policy \( \pi_\theta \) represents the agent's behavior guidelines, i.e., given an input (e.g., question \( q \)), the policy will output an action (e.g., generate text \( o \)). The policy \( \pi_\theta \) is usually parameterized by a neural network model, and the training objective is to find the optimal parameters \( \theta \) so that the policy can generate high-quality outputs.
 
@@ -109,7 +109,7 @@ The goal of PPO is to improve the policy model (Actor) so that it can generate h
 
 - **Expectation \( \mathbb{E}[\cdot] \)**: Represents the average over samples. In actual training, we sample a batch of data (e.g., user questions and model-generated answers) and then calculate the average objective function value for this batch of data.
 - **Importance Sampling**: Measures the probability ratio of the current policy \( \pi_\theta \) to the old policy \( \pi_{\theta_{\text{old}}} \) on action \( a \). PPO adopts the idea of **proximal policy update**, limiting the magnitude of each policy update to avoid excessive policy changes that lead to training instability.
-- **Advantage Function \( A_t \)**: Evaluates the advantage of taking action \( a \) in state \( s \) relative to the average level. The advantage function is usually estimated by the Critic model (value network), and can be Advantage Estimation or Generalized Advantage Estimation (GAE) and other methods. The larger the advantage function \( A_t \), the better the current action \( a \), and the policy model should increase the probability of taking this action.
+- **Advantage Function \( A_t \)**: Evaluates the advantage of taking action \( a \) in state \( s \) relative to the average level. The advantage function is usually estimated by the Critic model (value network), and can be **Generalized Advantage Estimation (GAE)** ([Schulman et al., 2015](https://arxiv.org/abs/1506.02438)) method. The larger the advantage function \( A_t \), the better the current action \( a \), and the policy model should increase the probability of taking this action.
 - **clip**: One of the core mechanisms of PPO, which can essentially be seen as a penalty function, used to limit the range of the importance sampling between \( [1-\varepsilon, 1+\varepsilon] \), where \( \varepsilon \) is a hyperparameter (usually set to 0.2). The clipping operation prevents excessive policy update steps and improves training stability.
 
     - The `clip` function penalizes excessively large or small policy update magnitudes by limiting the importance sampling.
@@ -129,7 +129,7 @@ The PPO algorithm, due to its characteristics of being **simple and effective, a
 
 ### GRPO
 
-**Group Relative Policy Optimization (GRPO)** ([Shao, et al. 2024](https://arxiv.org/abs/2402.03300)) is an efficient and stable reinforcement learning algorithm specifically designed by the DeepSeek team for training LLMs like DeepSeek-R1-Zero. GRPO's core innovation lies in abandoning the dependence on an independent value network (critic model) in the traditional Actor-Critic framework, reducing computational costs and improving training stability. Broadly speaking, GRPO can be regarded as an **Actor-Only** reinforcement learning method.
+**Group Relative Policy Optimization (GRPO)** ([Shao et al., 2024](https://arxiv.org/abs/2402.03300)) is an efficient and stable reinforcement learning algorithm specifically designed by the DeepSeek team for training LLMs like DeepSeek-R1-Zero. GRPO's core innovation lies in abandoning the dependence on an independent value network (critic model) in the traditional Actor-Critic framework, reducing computational costs and improving training stability. Broadly speaking, GRPO can be regarded as an **Actor-Only** reinforcement learning method.
 
 GRPO is inspired by the idea of **relative evaluation**. In many practical scenarios, we are often better at judging the relative quality among a group of things than giving absolute value evaluations. For example, when evaluating a group of student assignments, teachers may find it easier to compare the merits of different assignments than to give each assignment an absolute score. GRPO introduces this idea of relative evaluation into reinforcement learning, using **in-group relative scoring** to build a baseline, completely replacing the dependence on value networks.
 
@@ -300,7 +300,7 @@ As can be seen from the table, PPO is a general and powerful reinforcement learn
 
 ### Code Generation Evaluation Metrics
 
-Code generation employs more rigorous testing methods. The code generated by the model is executed through a compiler, and multiple unit tests are performed using predefined test cases to determine the correctness of the code. Commonly used evaluation metrics include **pass@k** ([Chen et al. 2021](https://arxiv.org/abs/2107.03374)) and **cons@N** ([OpenAI, 2024](https://openai.com/index/learning-to-reason-with-llms/)).
+Code generation employs more rigorous testing methods. The code generated by the model is executed through a compiler, and multiple unit tests are performed using predefined test cases to determine the correctness of the code. Commonly used evaluation metrics include **pass@k** ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) and **cons@N** ([OpenAI, 2024](https://openai.com/index/learning-to-reason-with-llms/)).
 
 `pass@k`: Measures the probability that at least one sample out of k code samples generated by the model can pass all predefined test cases.
 
@@ -408,7 +408,7 @@ Reward models are crucial in the development of LLMs, mainly used in the followi
 #### ORM vs PRM
 {{< figure
     src="orm_prm_comparison.png"
-    caption="Fig. 3. Outcome reward vs Process reward. (Image source: [Zeng et al. 2024](https://arxiv.org/abs/2412.14135))"
+    caption="Fig. 3. Outcome reward vs Process reward. (Image source: [Zeng et al., 2024](https://arxiv.org/abs/2412.14135))"
     align="center"
     width="100%"
 >}}
@@ -758,7 +758,7 @@ The RL training in this stage combines:
 
 ### Distillation
 
-To transfer the powerful reasoning ability of DeepSeek-R1 to more efficient small models, the DeepSeek team adopted **Distillation** ([Hinton et al. 2015](https://arxiv.org/abs/1503.02531)) technology. The distillation process mainly includes the following steps:
+To transfer the powerful reasoning ability of DeepSeek-R1 to more efficient small models, the DeepSeek team adopted **Distillation** ([Hinton et al., 2015](https://arxiv.org/abs/1503.02531)) technology. The distillation process mainly includes the following steps:
 
 1. **Data Generation**: Use the trained DeepSeek-R1 model to generate about **800,000** high-quality reasoning data. These data not only include reasoning-intensive tasks (such as math problems, programming problems), but also cover general tasks (such as question answering, dialogue) to ensure the diversity and coverage of distillation data.
 
@@ -797,7 +797,7 @@ DeepSeek-R1, based on a multi-stage training framework, explores a simplified pa
 - This simplifies the RL training architecture, reduces resource requirements, and improves efficiency. It shows that the policy network of LLMs already has strong value evaluation capabilities, and no additional value network is needed.
 
 **Focusing on Outcome Rewards: Minimizing Reward Signals**
-- DeepSeek-R1 adopts a simpler ORM reward strategy, mainly focusing on the accuracy reward of the final result, weakening the reward for intermediate reasoning steps. This strategy is inspired by AlphaZero ([Silver et al. 2017](https://arxiv.org/abs/1712.01815)), which only focuses on winning or losing.
+- DeepSeek-R1 adopts a simpler ORM reward strategy, mainly focusing on the accuracy reward of the final result, weakening the reward for intermediate reasoning steps. This strategy is inspired by AlphaZero ([Silver et al., 2017](https://arxiv.org/abs/1712.01815)), which only focuses on winning or losing.
 - For Reasoning Models, outcome rewards may be more effective than PRM, which can help models learn "ways of thinking" more naturally and reduce cumbersome step-by-step supervision.
 
 **Increasing Thinking Time: Model Spontaneously Emerges Deep Thinking**
@@ -826,25 +826,28 @@ The success of DeepSeek-R1 demonstrates the great potential of RL in improving t
 
 [8] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
 
-[9] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[9] Schulman, John, et al. ["High-dimensional continuous control using generalized advantage estimation."](https://arxiv.org/abs/1506.02438) arXiv preprint arXiv:1506.02438 (2015).
 
-[10] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
+[10] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
-[11] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
+[11] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
 
-[12] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
+[12] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://proceedings.mlr.press/v202/gao23b.html) International Conference on Machine Learning. PMLR, 2023.
 
-[13] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024.
+[13] Chen, Mark, et al. ["Evaluating large language models trained on code."](https://arxiv.org/abs/2107.03374) arXiv preprint arXiv:2107.03374 (2021).
 
-[14] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024.
+[14] [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/). OpenAI, 2024.
 
-[15] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). Open-Source O1, 2024.
+[15] [AMC](https://maa.org/student-programs/amc/). Mathematical Association of America (MAA), 2024.
 
-[16] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
+[16] [Open-O1](https://github.com/Open-Source-O1/Open-O1?tab=readme-ov-file). Open-Source O1, 2024.
 
-[17] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
+[17] Zeng, Zhiyuan, et al. ["Scaling of Search and Learning: A Roadmap to Reproduce o1 from Reinforcement Learning Perspective."](https://arxiv.org/abs/2412.14135) arXiv preprint arXiv:2412.14135 (2024).
 
-[18] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
+[18] Hinton, Geoffrey. ["Distilling the Knowledge in a Neural Network."](https://arxiv.org/abs/1503.02531) arXiv preprint arXiv:1503.02531 (2015).
+
+[19] Silver, David, et al. ["Mastering chess and shogi by self-play with a general reinforcement learning algorithm."](https://arxiv.org/abs/1712.01815) arXiv preprint arXiv:1712.01815 (2017).
+
 
 ## Citation
 

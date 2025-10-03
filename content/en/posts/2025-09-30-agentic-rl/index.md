@@ -464,7 +464,7 @@ Training is based on the PPO algorithm. Similar to Search-R1, it applies **full 
 **Cited as:**
 
 > Yue Shui. (September 2025). Agentic RL
-> https://syhya.github.io/en/posts/2025-09-30-agentic-rl/
+> https://syhya.github.io/posts/2025-09-30-agentic-rl/
 
 Or
 
@@ -475,6 +475,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "September",
-  url     = "https://syhya.github.io/en/posts/2025-09-30-agentic-rl/"
+  url     = "https://syhya.github.io/posts/2025-09-30-agentic-rl/"
 }
 ```

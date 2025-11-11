@@ -1,4 +1,6 @@
+# ──────────────────────────────────────────────────────────────────────────────
 # Base Configuration
+# ──────────────────────────────────────────────────────────────────────────────
 baseURL: "https://syhya.github.io/"
 title: "Yue Shui Blog"
 pagination:
@@ -9,21 +11,27 @@ theme: ["PaperMod"]
 languageCode: "en-us"
 
 publishDir: "public"
-enableGitInfo: False            # <-- 新增：让 .Lastmod 跟随 Git 最近一次 commit
+
+# Site build options
+enableGitInfo: false          # 使用 git 最近一次 commit 作为 .Lastmod
 enableRobotsTXT: true
 buildDrafts: false
 buildFuture: false
 buildExpired: false
+enableInlineShortcodes: true
+enableEmoji: true
+pygmentsUseClasses: true
+mainsections: ["posts", "papermod"]
 
 minify:
   disableXML: true
   minifyOutput: true
 
-# Disable RSS
+# Disable RSS (except where explicitly enabled)
 disableKinds:
   - RSS
 
-googleAnalytics: G-SZ2660B91F
+googleAnalytics: "G-SZ2660B91F"
 
 outputs:
   home:
@@ -31,12 +39,9 @@ outputs:
     - RSS
     - JSON # necessary for search
 
-# config.yaml
-
-
-
-
-# math setting
+# ──────────────────────────────────────────────────────────────────────────────
+# Math & Markup
+# ──────────────────────────────────────────────────────────────────────────────
 markup:
   tableOfContents:
     endLevel: 4
@@ -119,9 +124,6 @@ languages:
     languageCode: "en-us"
     title: "Yue Shui Blog"
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # PaperMod Parameters
-    # ──────────────────────────────────────────────────────────────────────────
     params:
       fancybox: true
       math: true
@@ -129,14 +131,13 @@ languages:
       title: "Yue Shui Blog"
       description: "ExampleSite description"
       keywords: [Blog, Portfolio, PaperMod]
-
       author: "Yue Shui"
 
       images: ["<link or path of image for opengraph, twitter-cards>"]
 
       DateFormat: "2006-01-02"
-      ShowLastMod: true        # <-- 新增：文章页显示「最后更新」
-      ShowLastModInList: true  # <-- 新增：列表页也显示更新时间
+      ShowLastMod: true
+      ShowLastModInList: true
 
       defaultTheme: auto
       disableThemeToggle: false
@@ -184,7 +185,7 @@ languages:
             url: "tags"
 
       homeInfoParams:
-        Title: "\U0001F44B Welcome to Yue's blog"
+        Title: "👋 Welcome to Yue's blog"
         Content: "Hi, this is Yue Shui. I’m currently working on LLM algorithms, with a focus on Agentic RL. My past experience includes researching and applying LLMs in fields such as finance, audit, and code generation. This blog is where I document and share insights from my work and learning journey. The grammar mistakes in the posts might give you a hint about ChatGPT’s involvement 😉—let me know if you spot any! My interests include model training, RAG, and LLM Agent. Feel free to connect!"
 
       socialIcons:
@@ -208,7 +209,6 @@ languages:
         hiddenInList: true
         hiddenInSingle: true
 
-      # Enable Fuse.js Search
       fuseOpts:
         isCaseSensitive: false
         shouldSort: true
@@ -222,9 +222,6 @@ languages:
       contact:
         email: "syhya925666582@gmail.com"
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Navigation Menu
-    # ──────────────────────────────────────────────────────────────────────────
     menu:
       main:
         - name: Archive
@@ -238,29 +235,14 @@ languages:
           url: /tags/
           weight: 20
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Code Highlighting
-    # ──────────────────────────────────────────────────────────────────────────
-    # pygmentsUseClasses: true
-    # markup:
-    #   highlight:
-    #     noClasses: false
-    #     style: "monokai"
-    #     # lineNos: true   # Uncomment to enable line numbers
-
   zh:
     languageName: "简体中文"
     weight: 2
     contentDir: "content/zh"
     languageCode: "zh-cn"
     title: "Yue Shui 博客"
-
-    # This will make .Summary and .WordCount behave correctly for CJK languages.
     hasCJKLanguage: true
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # PaperMod Parameters
-    # ──────────────────────────────────────────────────────────────────────────
     params:
       fancybox: true
       math: true
@@ -268,14 +250,13 @@ languages:
       title: "Yue Shui 博客"
       description: "示例网站描述"
       keywords: [博客, 作品集, PaperMod]
-
       author: "Yue Shui"
 
       images: ["<opengraph、twitter-cards 图片的链接或路径>"]
 
       DateFormat: "2006-01-02"
-      ShowLastMod: true        # <-- 新增：文章页显示「最后更新」
-      ShowLastModInList: true  # <-- 新增：列表页也显示更新时间
+      ShowLastMod: true
+      ShowLastModInList: true
 
       defaultTheme: auto
       disableThemeToggle: false
@@ -323,9 +304,8 @@ languages:
             url: "tags"
 
       homeInfoParams:
-        Title: "\U0001F44B 欢迎访问我的博客"
-        Content: "你好，我是 Yue Shui，目前从事大模型算法相关工作，研究方向为 Agentic RL。我的过往经历包括将 LLM 应用于金融、审计和代码生成等领域。这个博客用于记录和分享我在工作与学习中的见解。文章中的语法错误或许能透露出 ChatGPT 的参与程度😉——记得告诉我！我的兴趣包括模型训练、RAG 以及 LLM Agent。欢迎交流！
-"
+        Title: "👋 欢迎访问我的博客"
+        Content: "你好，我是 Yue Shui，目前从事大模型算法相关工作，研究方向为 Agentic RL。我的过往经历包括将 LLM 应用于金融、审计和代码生成等领域。这个博客用于记录和分享我在工作与学习中的见解。文章中的语法错误或许能透露出 ChatGPT 的参与程度😉——记得告诉我！我的兴趣包括模型训练、RAG 以及 LLM Agent。欢迎交流！"
 
       socialIcons:
         - name: linkedin
@@ -334,7 +314,6 @@ languages:
           url: "https://github.com/syhya"
         - name: email
           url: "mailto:syhya925666582@gmail.com"
-        
 
       analytics:
         google:
@@ -349,7 +328,6 @@ languages:
         hiddenInList: true
         hiddenInSingle: true
 
-
       fuseOpts:
         isCaseSensitive: false
         shouldSort: true
@@ -363,9 +341,6 @@ languages:
       contact:
         email: "syhya925666582@gmail.com"
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Navigation Menu
-    # ──────────────────────────────────────────────────────────────────────────
     menu:
       main:
         - name: 归档
@@ -378,27 +353,3 @@ languages:
           name: 标签
           url: /tags/
           weight: 20
-
-    # ──────────────────────────────────────────────────────────────────────────
-    # Code Highlighting
-    # ──────────────────────────────────────────────────────────────────────────
-    # pygmentsUseClasses: true
-    # markup:
-    #   highlight:
-    #     noClasses: false
-    #     style: "monokai"
-    #     # lineNos: true   # Uncomment to enable line numbers
-    
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Global Configuration (if any additional global settings are needed)
-# ──────────────────────────────────────────────────────────────────────────────
-
-enableInlineShortcodes: true
-enableRobotsTXT: true
-buildDrafts: false
-buildFuture: false
-buildExpired: false
-enableEmoji: true
-pygmentsUseClasses: true
-mainsections: ["posts", "papermod"]

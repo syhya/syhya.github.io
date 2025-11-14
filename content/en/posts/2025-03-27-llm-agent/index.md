@@ -388,7 +388,7 @@ In an experiment with 100 HotPotQA questions, a comparison between the CoT metho
 
 **DeepSeek-R1** ([DeepSeek-AI, 2025](https://arxiv.org/abs/2501.12948)) represents a major breakthrough in the open-source community's efforts to replicate OpenAI's o1 ([OpenAI, 2024](https://openai.com/o1/)), successfully training an advanced reasoning model with deep reflection capabilities through reinforcement learning techniques.
 
-> For a detailed training process and technical implementation of DeepSeek R1, please refer to my previous blog post: [Progress in Replicating OpenAI o1: DeepSeek-R1](https://syhya.github.io/en/posts/2025-01-27-deepseek-r1/).
+> For a detailed training process and technical implementation of DeepSeek R1, please refer to my previous blog post: [OpenAI o1 Replication Progress: DeepSeek-R1](https://syhya.github.io/posts/2025-01-27-deepseek-r1/).
 
 A key transformation during the training of DeepSeek-R1-Zero is that as training progresses, the model gradually **emerges** with a remarkable **self-evolution** capability. This capability is manifested in three core aspects:
 

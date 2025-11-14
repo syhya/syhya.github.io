@@ -260,7 +260,7 @@ $$
 
 It applies clipping to the **entire sequence** rather than individual tokens, keeping the optimization consistent with the sequence-level reward. **Length normalization** is used here to reduce variance and control the numerical range of $s_i(\theta)$, as otherwise, probability changes in a few tokens could cause the ratio to fluctuate dramatically, and different response lengths would lead to inconsistent clipping ranges. It's important to note that because the importance ratio is defined differently, the magnitude of the clipping range in GSPO is typically not the same as in GRPO.
 
-### Frameworks
+## Frameworks
 
 The training pipeline for Agentic RL is complex, involving multiple stages such as inference (Rollout), training (Training), and reward calculation. It typically requires a distributed framework for efficient coordination.
 

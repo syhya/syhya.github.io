@@ -1,6 +1,7 @@
 public/
 *.log
 *.csv
+*.DS_Store
 content/zh/posts/2025-02-15-deep-research-llama3
 content/zh/posts/2025-03-20-multimodal-agent
 content/zh/posts/2025-03-29-deepseek-v3
@@ -14,4 +15,6 @@ content/zh/posts/2025-05-14-rag
 content/zh/posts/2025-05-14-rag-backup
 content/zh/posts/2025-08-20-rollout
 content/zh/posts/2025-11-01-da
-*.DS_Store
+content/zh/posts/scale-bakcup-content
+content/zh/posts/2025-11-12-scaling-law
+

@@ -272,3 +272,25 @@ Through large-scale ablation experiments on various RL design choices (such as l
 [7] Muennighoff, Niklas, et al. ["s1: Simple test-time scaling."](https://arxiv.org/abs/2501.19393) Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. 2025.
 
 [8] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for llms."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
+
+## Citation
+
+> **Citation: When reproducing or citing the content of this article, please credit the original author and source.
+
+**Cited as:**
+
+> Yue Shui. (Nov 2025). Scaling Laws.
+> https://syhya.github.io/zh/posts/2025-11-19-scaling-law/
+
+Or
+
+```bibtex
+@article{yue_shui_scaling_laws_2025,
+  title   = {Scaling Laws},
+  author  = {Yue Shui},
+  journal = {syhya.github.io},
+  year    = {2025},
+  month   = {November},
+  url     = {https://syhya.github.io/posts/2025-11-19-scaling-law/}
+}
+```

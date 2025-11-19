@@ -280,7 +280,7 @@ Through large-scale ablation experiments on various RL design choices (such as l
 **Cited as:**
 
 > Yue Shui. (Nov 2025). Scaling Laws.
-> https://syhya.github.io/zh/posts/2025-11-19-scaling-law/
+> https://syhya.github.io/posts/2025-11-19-scaling-law/
 
 Or
 

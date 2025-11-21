@@ -275,7 +275,7 @@ Through large-scale ablation experiments on various RL design choices (such as l
 
 ## Citation
 
-> **Citation: When reproducing or citing the content of this article, please credit the original author and source.
+> **Citation**: When reproducing or citing the content of this article, please credit the original author and source.
 
 **Cited as:**
 

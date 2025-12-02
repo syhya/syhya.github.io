@@ -1,6 +1,7 @@
 ---
 title: "Scaling Laws"
 date: 2025-11-19T12:00:00+08:00
+lastmod: "2025-12-03T10:00:00+00:00"
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "Scaling Laws", "Test-Time Compute", "Reinforcement Learning", "Reward Model", "Compute-Optimal"]
 categories: ["技术博客"]
@@ -173,7 +174,16 @@ $$
 
 ## Test-time Scaling
 
-除了在训练阶段投入算力，还可以在推理阶段通过增加计算量来提升性能。这被称为 **Test-Time Scaling** ([Snell et al.,  2024](https://arxiv.org/abs/2408.03314))。主要策略包括并行采样（Parallel Sampling）和串行修正（Sequential Refinement）。
+除了在训练阶段投入算力，还可以在推理阶段通过增加计算量来提升性能，这被称为 **Test-Time Scaling** ([Snell et al., 2024](https://arxiv.org/abs/2408.03314))。OpenAI 在 **o1**([OpenAI, 2025](https://arxiv.org/abs/2502.06807)) 中展示了这一现象：**训练计算量**和**测试计算量**这两个维度的扩展都能持续提升模型性能，尤其在数学和编程等复杂推理任务中效果显著。
+
+{{< figure
+    src="o1_reasoning.png"
+    caption="Fig. 8. Additional RL training and additional test-time compute improves competitive mathematics performance. (Image source: [OpenAI, 2025](https://arxiv.org/abs/2502.06807))"
+    align="center"
+    width="100%"
+>}}
+
+Test-time scaling 的主要策略包括并行采样（Parallel Sampling）和串行修正（Sequential Refinement）。
 
 *   **并行采样（Parallel Sampling）**：例如 Best-of-N 或多数投票（Majority Voting）。模型针对同一问题生成多个独立样本，然后通过验证器或投票选出最佳答案。
 *   **串行修正（Sequential Refinement）**：如自我修正（Self-Correction），模型基于上一次输出进行迭代改进。
@@ -181,7 +191,7 @@ $$
 ### 效率权衡
 {{< figure
     src="test_time_scaling.png"
-    caption="Fig. 8. Compute-Optimal Scaling for Iterative Self-Refinement and Search: Evaluating Efficiency Against Best-of-N Baselines and Analyzing the Trade-offs Between Test-Time Compute and Pretraining Scaling (Image source: [Snell et al., 2024](https://arxiv.org/abs/2408.03314))"
+    caption="Fig. 9. Compute-Optimal Scaling for Iterative Self-Refinement and Search: Evaluating Efficiency Against Best-of-N Baselines and Analyzing the Trade-offs Between Test-Time Compute and Pretraining Scaling (Image source: [Snell et al., 2024](https://arxiv.org/abs/2408.03314))"
     align="center"
     width="100%"
 >}}
@@ -202,7 +212,7 @@ $$
 
 {{< figure
     src="s1_sample.png"
-    caption="Fig. 9. Budget forcing in s1-32B: suppressing the end-of-thinking delimiter prompts the model to continue after “...is 2.”, triggering a self-correction via “Wait”. (Image source: [Muennighoff et al., 2025](https://arxiv.org/abs/2501.19393))"
+    caption="Fig. 10. Budget forcing in s1-32B: suppressing the end-of-thinking delimiter prompts the model to continue after “...is 2.”, triggering a self-correction via “Wait”. (Image source: [Muennighoff et al., 2025](https://arxiv.org/abs/2501.19393))"
     align="center"
     width="100%"
 >}}
@@ -213,7 +223,7 @@ $$
 
 {{< figure
     src="s1_result.png"
-    caption="Fig. 10. Sequential and parallel test-time scaling. (Image source: [Muennighoff et al., 2025](https://arxiv.org/abs/2501.19393))"
+    caption="Fig. 11. Sequential and parallel test-time scaling. (Image source: [Muennighoff et al., 2025](https://arxiv.org/abs/2501.19393))"
     align="center"
     width="100%"
 >}}
@@ -237,7 +247,7 @@ $$
 
 {{< figure
     src="rl_scaling_fit.png"
-    caption="Fig. 11. Interpretation of the sigmoidal scaling curve for RL. (Image source: [Khatri et al., 2025](https://arxiv.org/abs/2510.13786))"
+    caption="Fig. 12. Interpretation of the sigmoidal scaling curve for RL. (Image source: [Khatri et al., 2025](https://arxiv.org/abs/2510.13786))"
     align="center"
     width="100%"
 >}}
@@ -253,7 +263,7 @@ $$
 
 {{< figure
     src="scale_rl_result.png"
-    caption="Fig. 12. ScaleRL demonstrates more scalable performance compared to other prevalent RL methods. (Image source: [Khatri et al., 2025](https://arxiv.org/abs/2510.13786))"
+    caption="Fig. 13. ScaleRL demonstrates more scalable performance compared to other prevalent RL methods. (Image source: [Khatri et al., 2025](https://arxiv.org/abs/2510.13786))"
     align="center"
     width="90%"
 >}}
@@ -272,9 +282,11 @@ $$
 
 [6] Snell, Charlie, et al. ["Scaling llm test-time compute optimally can be more effective than scaling model parameters."](https://arxiv.org/abs/2408.03314) arXiv preprint arXiv:2408.03314 (2024).
 
-[7] Muennighoff, Niklas, et al. ["s1: Simple test-time scaling."](https://arxiv.org/abs/2501.19393) Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. 2025.
+[7] El-Kishky, Ahmed, et al. ["Competitive programming with large reasoning models."](https://arxiv.org/abs/2502.06807) arXiv preprint arXiv:2502.06807 (2025).
 
-[8] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for llms."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
+[8] Muennighoff, Niklas, et al. ["s1: Simple test-time scaling."](https://arxiv.org/abs/2501.19393) Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. 2025.
+
+[9] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for llms."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
 
 ## 引用
 

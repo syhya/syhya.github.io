@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://syhya.github.io/zh/tags/ai/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/categories/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -29,7 +29,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/compute-optimal/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -42,7 +42,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/deep-learning/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -55,7 +55,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/llm/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -68,7 +68,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/posts/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -81,7 +81,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/reinforcement-learning/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -94,7 +94,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/reward-model/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -107,7 +107,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/posts/2025-11-19-scaling-law/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -120,7 +120,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/scaling-laws/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -133,7 +133,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -146,7 +146,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/tags/test-time-compute/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -159,7 +159,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -172,7 +172,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/zh/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2025-11-19T12:00:00+08:00</lastmod>
+    <lastmod>2025-12-03T10:00:00+00:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/zh/tags/agent/</loc>
     <lastmod>2025-09-30T12:00:00+08:00</lastmod>
@@ -1796,6 +1796,8 @@
                 hreflang="zh-cn"
                 href="https://syhya.github.io/zh/posts/2021-04-21-deep-learning-stock-prediction/"
                 />
+  </url><url>
+    <loc>https://syhya.github.io/zh/posts/backup_test/test/</loc>
   </url><url>
     <loc>https://syhya.github.io/zh/archives/</loc>
     <xhtml:link

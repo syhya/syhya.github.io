@@ -54,8 +54,18 @@
                 href="https://syhya.github.io/tags/deepseek/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/posts/2025-12-31-deepseekv3.2-/</loc>
+    <loc>https://syhya.github.io/posts/2025-12-31-deepseekv3.2/</loc>
     <lastmod>2025-12-31T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2025-12-31-deepseekv3.2/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2025-12-31-deepseekv3.2/"
+                />
   </url><url>
     <loc>https://syhya.github.io/tags/llm/</loc>
     <lastmod>2025-12-31T12:00:00+08:00</lastmod>

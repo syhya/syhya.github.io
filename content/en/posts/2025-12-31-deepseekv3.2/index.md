@@ -275,7 +275,7 @@ DeepSeekMath-V2 is also trained in this mode, enabling the model to actively ide
 
 {{< figure
     src="deepseek_math_v2_arch.png"
-    caption="Fig. 10. Self-verification architecture with proof generation, verifier-based evaluation, and meta-verification. (Image source: [Shao et al., 2025](https://arxiv.org/abs/2511.22570))"
+    caption="Fig. 10. Self-verification architecture with proof generation, verifier-based evaluation, and meta-verification."
     align="center"
     width="100%"
 >}}

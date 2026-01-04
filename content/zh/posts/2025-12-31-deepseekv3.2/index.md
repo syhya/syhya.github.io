@@ -280,7 +280,7 @@ DeepSeekMath-V2 模型也以此模式进行训练，使得模型生成推理过�
 ### 整体架构
 
 {{< figure
-    src="deepseekv3.2_math_arch.png"
+    src="deepseek_math_v2_arch.png"
     caption="Fig. 10. Self-verification architecture with proof generation, verifier-based evaluation, and meta-verification."
     align="center"
     width="100%"

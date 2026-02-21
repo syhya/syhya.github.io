@@ -129,11 +129,9 @@ languages:
       math: true
       env: production
       title: "Yue Shui Blog"
-      description: "ExampleSite description"
+      description: "Yue Shui's personal blog on LLM algorithms, Agentic RL, and AI engineering."
       keywords: [Blog, Portfolio, PaperMod]
       author: "Yue Shui"
-
-      images: ["<link or path of image for opengraph, twitter-cards>"]
 
       DateFormat: "2006-01-02"
       ShowLastMod: true
@@ -158,12 +156,6 @@ languages:
       hidemeta: false
       hideSummary: false
 
-      assets:
-        favicon: "<link / abs url>"
-        favicon16x16: "<link / abs url>"
-        favicon32x32: "<link / abs url>"
-        apple_touch_icon: "<link / abs url>"
-        safari_pinned_tab: "<link / abs url>"
 
       label:
         text: "Home"
@@ -248,11 +240,9 @@ languages:
       math: true
       env: production
       title: "Yue Shui 博客"
-      description: "示例网站描述"
+      description: "Yue Shui 的个人博客，分享 LLM 算法、Agentic RL 与 AI 工程实践。"
       keywords: [博客, 作品集, PaperMod]
       author: "Yue Shui"
-
-      images: ["<opengraph、twitter-cards 图片的链接或路径>"]
 
       DateFormat: "2006-01-02"
       ShowLastMod: true
@@ -277,12 +267,6 @@ languages:
       hidemeta: false
       hideSummary: false
 
-      assets:
-        favicon: "<链接 / 绝对URL>"
-        favicon16x16: "<链接 / 绝对URL>"
-        favicon32x32: "<链接 / 绝对URL>"
-        apple_touch_icon: "<链接 / 绝对URL>"
-        safari_pinned_tab: "<链接 / 绝对URL>"
 
       label:
         text: "首页"

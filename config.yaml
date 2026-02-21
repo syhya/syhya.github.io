@@ -129,7 +129,7 @@ languages:
       math: true
       env: production
       title: "Yue Shui Blog"
-      description: "Yue Shui 的个人博客，专注前沿 LLM 技术与研究论文解读，关注模型、算法与工程落地。"
+      description: "Yue Shui's personal blog on LLM algorithms, Agentic RL, and AI engineering."
       keywords: [Blog, Portfolio, PaperMod]
       author: "Yue Shui"
 
@@ -240,7 +240,7 @@ languages:
       math: true
       env: production
       title: "Yue Shui 博客"
-      description: "Yue Shui 的个人博客，专注前沿 LLM 技术与研究论文解读，关注模型、算法与工程落地。"
+      description: "Yue Shui 的个人博客，分享 LLM 算法、Agentic RL 与 AI 工程实践。"
       keywords: [博客, 作品集, PaperMod]
       author: "Yue Shui"
 

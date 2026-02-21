@@ -129,11 +129,11 @@ languages:
       math: true
       env: production
       title: "Yue Shui Blog"
-      description: "ExampleSite description"
+      description: "Yue Shui’s personal blog exploring cutting-edge LLM technologies and research papers, with a focus on models, algorithms, and engineering."
       keywords: [Blog, Portfolio, PaperMod]
       author: "Yue Shui"
 
-      images: ["<link or path of image for opengraph, twitter-cards>"]
+      images: []
 
       DateFormat: "2006-01-02"
       ShowLastMod: true
@@ -157,13 +157,6 @@ languages:
       comments: true
       hidemeta: false
       hideSummary: false
-
-      assets:
-        favicon: "<link / abs url>"
-        favicon16x16: "<link / abs url>"
-        favicon32x32: "<link / abs url>"
-        apple_touch_icon: "<link / abs url>"
-        safari_pinned_tab: "<link / abs url>"
 
       label:
         text: "Home"
@@ -248,11 +241,11 @@ languages:
       math: true
       env: production
       title: "Yue Shui 博客"
-      description: "示例网站描述"
+      description: "Yue Shui 的个人博客，专注前沿 LLM 技术与研究论文分享，关注模型、算法与工程。"
       keywords: [博客, 作品集, PaperMod]
       author: "Yue Shui"
 
-      images: ["<opengraph、twitter-cards 图片的链接或路径>"]
+      images: []
 
       DateFormat: "2006-01-02"
       ShowLastMod: true
@@ -276,13 +269,6 @@ languages:
       comments: true
       hidemeta: false
       hideSummary: false
-
-      assets:
-        favicon: "<链接 / 绝对URL>"
-        favicon16x16: "<链接 / 绝对URL>"
-        favicon32x32: "<链接 / 绝对URL>"
-        apple_touch_icon: "<链接 / 绝对URL>"
-        safari_pinned_tab: "<链接 / 绝对URL>"
 
       label:
         text: "首页"

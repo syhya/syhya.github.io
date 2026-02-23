@@ -2,7 +2,7 @@
 title: "LLMs Alignment: DPO"  
 date: 2025-02-08T12:00:00+08:00  
 author: "Yue Shui"  
-tags: ["AI", "NLP", "LLMs", "Post-training", "DPO", "RLHF", "Alignment", "Bradley–Terry Model"]  
+tags: ["AI", "NLP", "LLM", "Post-training", "DPO", "RLHF", "Alignment", "Bradley–Terry Model"]  
 categories: ["Technical Blog"]  
 readingTime: 25  
 toc: true  

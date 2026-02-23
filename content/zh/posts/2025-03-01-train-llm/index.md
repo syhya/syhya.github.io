@@ -4,7 +4,7 @@ date: 2025-03-01T12:00:00+08:00
 lastmod: 2025-03-01T12:00:00+08:00
 author: Yue Shui
 categories: ["技术博客"]
-tags: [LLMs, 预训练, 分布式训练, 内存优化, 数据并行, 模型并行, 流水线并行, 张量并行, 序列并行, 混合并行, 异构系统, MoE, ZeRO, LoRA, AI, 深度学习, AI Infrastructure]
+tags: [LLM, 预训练, 分布式训练, 内存优化, 数据并行, 模型并行, 流水线并行, 张量并行, 序列并行, 混合并行, 异构系统, MoE, ZeRO, LoRA, AI, 深度学习, AI Infrastructure]
 readingTime: 60
 toc: true
 ShowToc: true

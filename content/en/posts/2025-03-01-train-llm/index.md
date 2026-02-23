@@ -3,8 +3,8 @@ title: "Parallelism and Memory Optimization Techniques for Training Large Models
 date: 2025-03-01T12:00:00+08:00
 lastmod: 2025-03-01T12:00:00+08:00
 author: Yue Shui
-categories: ["Tech Blog"]
-tags: [LLMs, Pre-training, Distributed Training, Memory Optimization, Data Parallelism, Model Parallelism, Pipeline Parallelism, Tensor Parallelism, Sequence Parallelism, Hybrid Parallelism, Heterogeneous Systems, MoE, ZeRO, LoRA, AI, Deep Learning, AI Infrastructure]
+categories: ["Technical Blog"]
+tags: [LLM, Pre-training, Distributed Training, Memory Optimization, Data Parallelism, Model Parallelism, Pipeline Parallelism, Tensor Parallelism, Sequence Parallelism, Hybrid Parallelism, Heterogeneous Systems, MoE, ZeRO, LoRA, AI, Deep Learning, AI Infrastructure]
 readingTime: 60
 toc: true
 ShowToc: true

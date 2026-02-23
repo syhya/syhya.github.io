@@ -2,7 +2,7 @@
 title: "基于深度学习的股票价格预测和量化策略"
 date: 2021-04-21T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Deep learning", "AI", "RNN", "LSTM", "BiLSTM", "GRU", "LightGBM", "Neural Networks", "Stock Prediction", "Financial Modeling", "Machine Learning", "Quantitative Investment", "Portfolio Management", "Financial Engineering", "Algorithmic Trading", "Time Series"]
+tags: ["Deep Learning", "AI", "RNN", "LSTM", "BiLSTM", "GRU", "LightGBM", "Neural Networks", "Stock Prediction", "Financial Modeling", "Machine Learning", "Quantitative Investment", "Portfolio Management", "Financial Engineering", "Algorithmic Trading", "Time Series"]
 categories: ["技术博客"]
 toc: true
 ShowToc: true

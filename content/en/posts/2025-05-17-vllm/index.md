@@ -4,7 +4,7 @@ date: 2025-05-17T10:00:00+08:00
 lastmod: 2025-05-17T10:00:00+08:00
 author: "Yue Shui"
 categories: ["Technical Blog"]
-tags: ["vLLM", "PagedAttention", "LLM Serving", "Inference", "KV Cache", "Memory Optimization", "LLMs", "AI Infrastructure", "Deep Learning"]
+tags: ["vLLM", "PagedAttention", "LLM Serving", "Inference", "KV Cache", "Memory Optimization", "LLM", "AI Infrastructure", "Deep Learning"]
 ShowReadingTime: true
 toc: true
 ShowToc: true

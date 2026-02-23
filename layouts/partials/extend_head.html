@@ -1,12 +1,13 @@
-{{ if .Site.Params.fancybox }}
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+{{ $fancyboxEnabled := .Param "fancybox" }}
+{{ if and $fancyboxEnabled .IsPage }}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-  <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
 {{ end }}
 {{- /* Head custom content area start */ -}}
 {{- /*     Insert any custom code (web-analytics, resources, etc.) - it will appear in the <head></head> section of every page. */ -}}
 {{- /* Head custom content area end */ -}}
 
-{{ if or .Params.math .Site.Params.math }}
+{{ if or .Params.math (.Param "math") }}
 {{ partial "mathjax.html" . }}
 {{ end }}

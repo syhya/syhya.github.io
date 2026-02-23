@@ -3,7 +3,7 @@ title: "Building a Home Deep Learning Rig with Dual RTX 4090 GPUs"
 date: 2024-12-21T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "RTX 4090", "AI Hardware", "GPU"]
-categories: ["Tech Blog"]
+categories: ["Technical Blog"]
 # readingTime: 10
 ShowReadingTime: true
 toc: true

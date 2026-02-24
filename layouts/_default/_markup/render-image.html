@@ -1,9 +1,10 @@
-{{if .Page.Site.Params.fancybox }}
+{{ $fancyboxEnabled := .Page.Param "fancybox" }}
+{{ if $fancyboxEnabled }}
 <div class="post-img-view">
-<a data-fancybox="gallery" href="{{ .Destination | safeURL }}">
-<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} title="{{ . }}"{{ end }} />
-</a>
+  <a data-fancybox="gallery" href="{{ .Destination | safeURL }}">
+    <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async" {{ with .Title}} title="{{ . }}"{{ end }} />
+  </a>
 </div>
 {{ else }}
-<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} title="{{ . }}"{{ end }} />
+<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async" {{ with .Title}} title="{{ . }}"{{ end }} />
 {{ end }}

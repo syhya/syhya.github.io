@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://syhya.github.io/tags/agent-evolve/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/ai-for-science/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -29,7 +29,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/alphaevolve/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -42,7 +42,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -54,8 +54,21 @@
                 href="https://syhya.github.io/categories/"
                 />
   </url><url>
+    <loc>https://syhya.github.io/tags/harness-engineering/</loc>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/harness-engineering/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/harness-engineering/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/tags/openevolve/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -68,7 +81,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -81,7 +94,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/posts/2026-02-20-self-evolving-agents/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -94,7 +107,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -107,10 +120,10 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/</loc>
-    <lastmod>2026-02-20T12:00:00+08:00</lastmod>
+    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"

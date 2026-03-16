@@ -1,9 +1,9 @@
 ---
 title: "Self-Evolving Agents"
 date: 2026-02-20T12:00:00+08:00
-lastmod: 2026-02-20T12:00:00+08:00
+lastmod: 2026-03-16T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Agent Evolve", "AlphaEvolve", "OpenEvolve", "AI for Science"]
+tags: ["Agent Evolve", "AlphaEvolve", "OpenEvolve", "AI for Science", "Harness Engineering"]
 categories: ["Technical Blog"]
 ShowReadingTime: true
 toc: true
@@ -117,11 +117,47 @@ The achievements of AlphaEvolve span two dimensions: scientific/mathematical dis
 
 **Mathematical Discovery**: Systematic experiments were conducted on over 50 open mathematical problems. AlphaEvolve matched the best-known constructions in approximately 75% of cases and surpassed prior SOTA results in roughly 20%, discovering new, provably better constructions. A representative highlight is the $4 \times 4$ complex-valued matrix multiplication problem, where AlphaEvolve discovered a **48-scalar-multiplication algorithm**, improving upon the previous best-known 49-multiplication construction for this setting. This result sits within a long lineage of algebraic optimization research dating back to seminal breakthroughs such as [Strassen's algorithm](https://en.wikipedia.org/wiki/Strassen_algorithm), which fundamentally reshaped our understanding of matrix multiplication complexity, and it underscores how LLM-guided evolutionary search can meaningfully advance classical algorithmic frontiers.
 
-**Engineering Optimization**: Achieved multiple scalable performance improvements within Google's production-grade compute infrastructure. In data center scheduling, it discovered a new, interpretable heuristic function for the [Borg system](https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/), continuously recovering on average **0.7% of Google's fleet-wide stranded compute resources**. In Gemini's core training stack, by optimizing tiling heuristics for matrix multiplication kernels, it achieved an **average 23% kernel speedup**, directly leading to a **1% reduction in overall training time**. Furthermore, it reduced the optimization process from months of dedicated expert engineering to just days of automated experimentation.
+**Engineering Optimization**: Achieved multiple scalable performance improvements within Google's production-grade compute infrastructure. In data center scheduling, it discovered a new, interpretable heuristic function for the [Borg system](https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/), continuously recovering on average **0.7% of Google's fleet-wide stranded compute resources**. In Gemini's core training stack, by optimizing tiling heuristics for matrix multiplication kernels, it achieved an **average 23% kernel speedup**, directly leading to a **1% reduction in overall training time**. Furthermore, it reduced the optimization process from weeks of dedicated expert tuning to just days of automated experimentation.
+
+## Harness Engineering
+
+As coding agents like **OpenAI Codex** ([OpenAI, 2025](https://github.com/openai/codex)) and **Claude Code** ([Anthropic, 2025](https://github.com/anthropics/claude-code)) mature, the core work of software teams is undergoing a fundamental shift: from writing code directly to designing environments that enable agents to work reliably. OpenAI calls this emerging engineering paradigm **Harness Engineering** ([OpenAI, 2026](https://openai.com/index/harness-engineering/)). The central idea is to design constraints, build feedback mechanisms, and define evaluation criteria so that agents can continuously iterate and produce high-quality code in a safe, controlled environment, rather than relying on humans to write correct code in one pass.
+
+{{< figure
+    src="codex_local_observability_stack.png"
+    caption="Fig. 6. Codex operating with a local, ephemeral observability stack—querying logs, metrics, and traces to validate fixes and iterate in a closed feedback loop. (Image source: [OpenAI, 2026](https://openai.com/index/harness-engineering/))"
+    align="center"
+    width="100%"
+>}}
+
+In a five-month internal experiment, a three-person team at OpenAI built a production system almost entirely with Codex agents: generating approximately **1 million lines of code**, merging **1,500+ PRs**, with humans writing virtually no code themselves—instead focusing on designing the runtime environment and constraint mechanisms. The team estimates overall development efficiency was roughly **10x** that of traditional workflows. Key methods include:
+
+* **Context Engineering**: Using `AGENTS.md` as a lightweight entry-point index (~100 lines) pointing to a structured `docs/` directory as the single source of truth (SSOT). Agents retrieve deeper documentation on demand, avoiding context window exhaustion from redundant information.
+* **Architectural Constraints**: Enforcing dependency layering rules (Types → Config → Repo → Service → Runtime → UI) with structural tests that mechanically restrict agents' modification boundaries. Dependency violations are automatically rejected in CI, ensuring architectural stability through continuous automated iteration.
+* **Feedback Loops**: Providing each worktree with an ephemeral local observability stack (LogQL / PromQL / TraceQL + DevTools). Agents can reproduce issues, analyze feedback signals, implement fixes, and loop through verification—making the runtime environment itself the debugging interface.
+
+At its core, Harness Engineering shifts humans from hand-coding to designing environments and verification mechanisms—mirroring AlphaEvolve's division where humans define objectives and constraints while agents explore implementation paths.
 
 ## AI for Science
 
 Recent research indicates that as LLMs' foundational capabilities, long chain-of-thought reasoning, and agentic abilities continue to scale, they are showing unprecedented potential in scientific discovery. Advanced models represented by **Gemini 3 Deep Think** ([DeepMind, 2026](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/)) and **GPT‑5.2** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-5-2/)) have significantly improved research efficiency across disciplines like mathematics, physics, and biology, accelerating the exploration of critical problems.
+
+### Autoresearch
+
+**Autoresearch** ([Karpathy, 2026](https://github.com/karpathy/autoresearch)) is a small proof-of-concept project that uses an AI agent to autonomously optimize LLM training code.
+
+The system comprises just three key files: `prepare.py` (data preparation and runtime tools, not modifiable by the agent), `train.py` (a single file containing the full GPT model definition, optimizer, and training loop—the agent's sole modification target), and `program.md` (natural-language research instructions, written and iterated by humans).
+
+In each iteration, the agent modifies `train.py` → runs a fixed 5-minute training experiment → evaluates results using `val_bpb` (validation bits per byte—a measure of model compression efficiency independent of vocabulary size, enabling fair comparison across architectural changes) → accepts improvements or discards changes → proceeds to the next round. The fixed time budget allows roughly 12 experiments per hour and ~100 overnight. The researcher's role shifts from directly modifying code to iterating on `program.md`—humans define the What, agents explore the How.
+
+{{< figure
+    src="autoresearch-progress.png"
+    caption="Fig. 7. Autoresearch progress on H100: 83 experiments with 15 kept improvements (green dots). Gray dots represent discarded attempts; the staircase line tracks the running best val_bpb. (Image source: [Karpathy, 2026](https://github.com/karpathy/autoresearch))"
+    align="center"
+    width="100%"
+>}}
+
+Empirical results on H100 validate the framework's effectiveness: out of 83 autonomous experiments, 15 improvements were retained, reducing val_bpb from a baseline of ~0.998 to ~0.977, spanning learning rate scheduling, model architecture, hyperparameter tuning, and positional encoding.
 
 ### Aletheia
 
@@ -129,7 +165,7 @@ Recent research indicates that as LLMs' foundational capabilities, long chain-of
 
 {{< figure
     src="aletheia_overview.png"
-    caption="Fig. 6. Overview of Aletheia, a math research agent powered by Deep Think. It iteratively generates, verifies, and revises solutions. (Image source: [Luong & Mirrokni, 2026](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/))"
+    caption="Fig. 8. Overview of Aletheia, a math research agent powered by Deep Think. It iteratively generates, verifies, and revises solutions. (Image source: [Luong & Mirrokni, 2026](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/))"
     align="center"
     width="100%"
 >}}
@@ -140,7 +176,7 @@ Recent research indicates that as LLMs' foundational capabilities, long chain-of
 
 {{< figure
     src="aletheia_eval_res.png"
-    caption="Fig. 7. The January 2026 Deep Think surpasses IMO-Gold on Olympiad problems, scales to PhD-level tasks, and, with Aletheia, delivers stronger reasoning at lower compute. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
+    caption="Fig. 9. The January 2026 Deep Think surpasses IMO-Gold on Olympiad problems, scales to PhD-level tasks, and, with Aletheia, delivers stronger reasoning at lower compute. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
     align="center"
     width="100%"
 >}}
@@ -149,7 +185,7 @@ As compute resources increase during the inference phase, Gemini Deep Think achi
 
 {{< figure
     src="aletheia_research_output.png"
-    caption="Fig. 8. The work proposes a taxonomy for AI-assisted mathematics based on research significance and AI contribution, reports several Level 0–2 results with Level 2 papers submitted to journals, and currently claims no Level 3 or 4 breakthroughs. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
+    caption="Fig. 10. The work proposes a taxonomy for AI-assisted mathematics based on research significance and AI contribution, reports several Level 0–2 results with Level 2 papers submitted to journals, and currently claims no Level 3 or 4 breakthroughs. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
     align="center"
     width="100%"
 >}}
@@ -167,7 +203,7 @@ Taken together, these cases indicate that frontier LLMs are increasingly embedde
 
 {{< figure
     src="gpt5_driven_auto_lab.png"
-    caption="Fig. 9. GPT-5-driven autonomous laboratory workflow. (Image source: [Smith et al., 2026](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1))"
+    caption="Fig. 11. GPT-5-driven autonomous laboratory workflow. (Image source: [Smith et al., 2026](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1))"
     align="center"
     width="100%"
 >}}
@@ -190,9 +226,7 @@ Overall, *AI for Science* appears to be shifting from assistive intelligence to 
 
 ## Conclusion
 
-Self-evolving agents—exemplified by FunSearch, AlphaEvolve, and Aletheia—demonstrate that embedding large language models into iterative loops of **generation, verification, and revision** can effectively break the ceiling of one-shot reasoning. In complex search spaces such as mathematical discovery and engineering optimization, these closed-loop systems can explore and produce results that go beyond existing best-known solutions.
-
-As long-horizon reasoning increasingly integrates with agentic toolchains (e.g., autonomous laboratories), **Self-Evolving Agents** are evolving from passive assistants into active scientific collaborators. Such closed-loop systems with high autonomy not only reshape the division of labor between humans and AI, but may also become a key driver of disruptive breakthroughs in AI for Science.
+From algorithm discovery to software engineering, from training optimization to scientific experimentation, **Self-Evolving Agents** are forming a unified paradigm across domains: humans define objectives and evaluation criteria, while agents autonomously explore implementation paths through closed-loop feedback.
 
 
 ## References
@@ -207,19 +241,27 @@ As long-horizon reasoning increasingly integrates with agentic toolchains (e.g.,
 
 [5] Verma, Abhishek, et al. ["Large-scale cluster management at Google with Borg."](https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/) Proceedings of the tenth european conference on computer systems. 2015.
 
-[6] DeepMind. ["Gemini 3 Deep Think: Advancing science, research and engineering"](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/) Google Blog (2026).
+[6] OpenAI. ["Codex CLI."](https://github.com/openai/codex) GitHub, 2025.
 
-[7] OpenAI. ["Introducing GPT-5.2."](https://openai.com/index/introducing-gpt-5-2/) OpenAI Blog (2025).
+[7] Anthropic. ["Claude Code."](https://github.com/anthropics/claude-code) GitHub, 2025.
 
-[8] Feng, Tony, et al. ["Towards Autonomous Mathematics Research."](https://arxiv.org/abs/2602.10177) arXiv preprint arXiv:2602.10177 (2026).
+[8] OpenAI. ["Harness engineering: leveraging Codex in an agent-first world."](https://openai.com/index/harness-engineering/) OpenAI, 2026.
 
-[9] Luong, Thang, and Vahab Mirrokni. ["Accelerating mathematical and scientific discovery with Gemini Deep Think."](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/) Google DeepMind Blog (2026).
+[9] DeepMind. ["Gemini 3 Deep Think: Advancing science, research and engineering."](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/) Google Blog (2026).
 
-[10] Bubeck, Sébastien, et al. ["Early science acceleration experiments with GPT-5."](https://arxiv.org/abs/2511.16072) arXiv preprint arXiv:2511.16072 (2025).
+[10] OpenAI. ["Introducing GPT-5.2."](https://openai.com/index/introducing-gpt-5-2/) OpenAI Blog (2025).
 
-[11] Woodruff, David P., et al. ["Accelerating Scientific Research with Gemini: Case Studies and Common Techniques."](https://arxiv.org/abs/2602.03837) arXiv preprint arXiv:2602.03837 (2026).
+[11] Karpathy, Andrej. ["Autoresearch."](https://github.com/karpathy/autoresearch) GitHub, 2026.
 
-[12] Smith, Alexus A., et al. ["Using a GPT-5-driven autonomous lab to optimize the cost and titer of cell-free protein synthesis."](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1) bioRxiv (2026): 2026-02.
+[12] Feng, Tony, et al. ["Towards Autonomous Mathematics Research."](https://arxiv.org/abs/2602.10177) arXiv preprint arXiv:2602.10177 (2026).
+
+[13] Luong, Thang, and Vahab Mirrokni. ["Accelerating mathematical and scientific discovery with Gemini Deep Think."](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/) Google DeepMind Blog (2026).
+
+[14] Bubeck, Sébastien, et al. ["Early science acceleration experiments with GPT-5."](https://arxiv.org/abs/2511.16072) arXiv preprint arXiv:2511.16072 (2025).
+
+[15] Woodruff, David P., et al. ["Accelerating Scientific Research with Gemini: Case Studies and Common Techniques."](https://arxiv.org/abs/2602.03837) arXiv preprint arXiv:2602.03837 (2026).
+
+[16] Smith, Alexus A., et al. ["Using a GPT-5-driven autonomous lab to optimize the cost and titer of cell-free protein synthesis."](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1) bioRxiv (2026): 2026-02.
 
 ## Citation
 
@@ -242,3 +284,4 @@ Or
   month   = "Feb",
   url     = "https://syhya.github.io/posts/2026-02-20-self-evolving-agents"
 }
+```

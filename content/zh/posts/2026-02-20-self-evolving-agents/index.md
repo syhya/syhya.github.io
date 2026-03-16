@@ -1,9 +1,9 @@
 ---
 title: "Self-Evolving Agents"
 date: 2026-02-20T12:00:00+08:00
-lastmod: 2026-02-20T12:00:00+08:00
+lastmod: 2026-03-16T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Agent Evolve", "AlphaEvolve", "OpenEvolve", "AI for Science"]
+tags: ["Agent Evolve", "AlphaEvolve", "OpenEvolve", "AI for Science", "Harness Engineering"]
 categories: ["技术博客"]
 ShowReadingTime: true
 toc: true
@@ -13,7 +13,7 @@ draft: false
 math: true
 ---
 
-最近，AI 领域正在经历一次关键的结构性转变：Agent 的核心竞争力，正从一次性生成正确答案，转向在闭环系统中持续产生可验证、可进化的新结果。这一转变的标志性事件是 DeepMind 发布的 [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) 通过 LLM 驱动的进化编码代理，在数学、算法与工程优化领域取得了多项突破，在部分任务上超越了人类已知最优解。在这一框架下，人类与 Agent 的分工发生了明确重构：
+最近，AI 领域正在经历一次关键的结构性转变：Agent 的核心竞争力，正从一次性生成正确答案，转向在闭环系统中持续产生可验证、可进化的新结果。这一转变的标志性事件是 DeepMind 发布的 [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/)，它通过 LLM 驱动的进化编码，在数学、算法与工程优化领域取得了多项突破，在部分任务上超越了人类已知最优解。在这一框架下，人类与 Agent 的分工发生了明确重构：
 
 - 人类负责定义 **What** —— 设计评估标准、提供初始候选方案，并将必要的背景知识以 context 形式注入模型。
 - Agents 负责探索 **How** —— 通过生成代码并调用外部工具，自主搜索并发现更优的结构与算法实现路径。  
@@ -72,7 +72,7 @@ $$\text{Specification} \rightarrow \text{Program Generation} \rightarrow \text{E
 
 ### OpenEvolve
 
-[OpenEvolve](https://github.com/codelion/openevolve) 提供了 AlphaEvolve 的高质量开源工程实现，完整的实现了四个核心模块：
+[OpenEvolve](https://github.com/codelion/openevolve) 提供了 AlphaEvolve 的高质量开源工程实现，完整地实现了四个核心模块：
 
 {{< figure
     src="openevolve-architecture.png"
@@ -119,17 +119,53 @@ AlphaEvolve 的成果横跨数学发现和工程优化两个维度：
 
 **工程优化**：在 Google 生产级计算基础设施中实现了多项可规模化放大的性能提升。数据中心调度方面，为 [Borg 系统](https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/)发现了新的可解释启发式函数，持续回收约 **0.7% 的全球数据中心闲置算力资源**。Gemini 训练核心方面，通过改进矩阵乘法分解策略，使关键 kernel 获得 **平均 23% 计算加速**，并直接带来约 **1% 的整体训练时间下降**，同时将传统需要数周专家调优的优化流程缩短至数天自动实验周期。
 
+## Harness Engineering
+
+随着 **OpenAI Codex**([OpenAI, 2025](https://github.com/openai/codex)) 和 **Claude Code**([Anthropic, 2025](https://github.com/anthropics/claude-code)) 等编码智能体的成熟，软件团队的核心工作发生了根本性转变：从直接编写代码，转向设计让 Agent 可靠工作的环境。OpenAI 将这一新兴工程范式称为 **Harness Engineering**([OpenAI, 2026](https://openai.com/index/harness-engineering/))。Harness Engineering 的核心理念是：通过设计约束、构建反馈机制和定义评估标准，让 Agent 在一个安全、可控的环境中持续迭代生成高质量代码，而不是依赖人类一次性编写正确的代码。
+
+{{< figure
+    src="codex_local_observability_stack.png"
+    caption="Fig. 6. Codex operating with a local, ephemeral observability stack—querying logs, metrics, and traces to validate fixes and iterate in a closed feedback loop. (Image source: [OpenAI, 2026](https://openai.com/index/harness-engineering/))"
+    align="center"
+    width="100%"
+>}}
+
+在一项为期五个月的内部实验中，OpenAI 的一个三人团队几乎完全依赖 Codex Agent 构建生产系统：累计生成约 **100 万行代码**、合并 **1500+ 个 PR**，人类几乎不直接编写代码，而是专注于设计运行环境与约束机制。团队估计整体开发效率约为传统模式的 **10 倍**。其关键方法包括：
+
+* **上下文工程**：将 `AGENTS.md` 作为轻量入口索引（约 100 行），指向结构化的 `docs/` 作为唯一真相来源（SSOT）。Agent 按需检索深层文档，避免上下文窗口被冗余信息耗尽。
+* **架构约束**：通过依赖分层规则（Types → Config → Repo → Service → Runtime → UI）与结构性测试，机械化限制 Agent 的修改边界；违规依赖在 CI 中自动拒绝，确保系统在持续自动迭代中保持架构稳定。
+* **反馈闭环**：为每个工作树提供临时本地可观测性栈（LogQL / PromQL / TraceQL + DevTools）。Agent 可复现问题、分析反馈信号、实施修复并循环验证，使运行环境本身成为调试接口。
+
+Harness Engineering 的核心是让人类从手工编码转向设计环境与验证机制，类似 AlphaEvolve 中人类定义目标与约束，Agent 探索实现路径的分工模式。
+
 ## AI for Science
 
 近期研究表明，随着 LLM 基础能力、长思维链推理能力以及 Agentic 能力的持续提升，其在科学发现领域正展现出前所未有的潜力。以 **Gemini 3 Deep Think**([DeepMind, 2026](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/)) 和 **GPT‑5.2**([OpenAI, 2025](https://openai.com/index/introducing-gpt-5-2/)) 为代表的先进模型，已在数学、物理、生物等学科中显著提升科研效率，加速了关键问题的探索与突破。
 
+### Autoresearch
+
+**Autoresearch**([Karpathy, 2026](https://github.com/karpathy/autoresearch)) 是一个用 AI Agent 自主优化 LLM 训练代码的小型概念验证项目。
+
+系统仅包含三个关键文件：`prepare.py`（数据准备与运行时工具，Agent 不可修改）、`train.py`（包含完整 GPT 模型、优化器与训练循环，是 Agent 唯一的修改对象）和 `program.md`（自然语言研究指令，由人类编写和迭代）。
+
+每轮迭代中，Agent 修改 `train.py` → 运行固定 5 分钟训练 → 根据 `val_bpb`（validation bits per byte，衡量模型压缩效率，与词表大小无关，使不同架构变更可公平比较）评估结果 → 接受改进或丢弃变更 → 进入下一轮。固定时间预算使系统每小时完成约 12 次、一夜约 100 次实验。研究者的角色从直接修改代码转变为迭代 `program.md`——人类定义 What，Agent 探索 How。
+
+{{< figure
+    src="autoresearch-progress.png"
+    caption="Fig. 7. Autoresearch progress on H100: 83 experiments with 15 kept improvements (green dots). Gray dots represent discarded attempts; the staircase line tracks the running best val_bpb. (Image source: [Karpathy, 2026](https://github.com/karpathy/autoresearch))"
+    align="center"
+    width="100%"
+>}}
+
+H100 上的实测验证了这一框架的有效性：83 次自主实验中 15 次改进被保留，val_bpb 从基线 ~0.998 降至 ~0.977，涵盖学习率调度、模型架构、超参数调优和位置编码等多个维度。
+
 ### Aletheia
 
-**Aletheia**([Feng et al., 2026](https://arxiv.org/abs/2602.10177)) 是一个用于数学研究智能体，它模拟了数学家的真实研究流程。其核心是一个 **生成-验证-修复** 的迭代闭环机制，在循环推理与形式化校验中不断优化解题路径与结论可靠性。
+**Aletheia**([Feng et al., 2026](https://arxiv.org/abs/2602.10177)) 是一个用于数学研究的智能体，它模拟了数学家的真实研究流程。其核心是一个 **生成-验证-修复** 的迭代闭环机制，在循环推理与形式化校验中不断优化解题路径与结论可靠性。
 
 {{< figure
     src="aletheia_overview.png"
-    caption="Fig. 6. Overview of Aletheia, a math research agent powered by Deep Think. It iteratively generates, verifies, and revises solutions. (Image source: [Luong & Mirrokni, 2026](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/))"
+    caption="Fig. 8. Overview of Aletheia, a math research agent powered by Deep Think. It iteratively generates, verifies, and revises solutions. (Image source: [Luong & Mirrokni, 2026](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/))"
     align="center"
     width="100%"
 >}}
@@ -140,16 +176,16 @@ AlphaEvolve 的成果横跨数学发现和工程优化两个维度：
 
 {{< figure
     src="aletheia_eval_res.png"
-    caption="Fig. 7. The January 2026 Deep Think surpasses IMO-Gold on Olympiad problems, scales to PhD-level tasks, and, with Aletheia, delivers stronger reasoning at lower compute. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
+    caption="Fig. 9. The January 2026 Deep Think surpasses IMO-Gold on Olympiad problems, scales to PhD-level tasks, and, with Aletheia, delivers stronger reasoning at lower compute. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
     align="center"
     width="100%"
 >}}
 
-随着推理阶段计算资源的增加，Gemini Deep Think 在 [IMO-ProofBench](https://imobench.github.io/) 基准测试上的得分最高达到 90% ，充分验证了 [inference-time scaling law](https://syhya.github.io/zh/posts/2025-11-19-scaling-law/#test-time-scaling) 的有效性。定律不仅适用于奥赛级问题，也可迁移至博士级难度的 FutureMath Basic 基准测试。Aletheia 在更低的推理计算开销下实现了更高的推理质量。
+随着推理阶段计算资源的增加，Gemini Deep Think 在 [IMO-ProofBench](https://imobench.github.io/) 基准测试上的得分最高达到 90%，充分验证了 [inference-time scaling law](https://syhya.github.io/zh/posts/2025-11-19-scaling-law/#test-time-scaling) 的有效性。定律不仅适用于奥赛级问题，也可迁移至博士级难度的 FutureMath Basic 基准测试。Aletheia 在更低的推理计算开销下实现了更高的推理质量。
 
 {{< figure
     src="aletheia_research_output.png"
-    caption="Fig. 8. The work proposes a taxonomy for AI-assisted mathematics based on research significance and AI contribution, reports several Level 0–2 results with Level 2 papers submitted to journals, and currently claims no Level 3 or 4 breakthroughs. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
+    caption="Fig. 10. The work proposes a taxonomy for AI-assisted mathematics based on research significance and AI contribution, reports several Level 0–2 results with Level 2 papers submitted to journals, and currently claims no Level 3 or 4 breakthroughs. (Image source: [Feng et al., 2026](https://arxiv.org/abs/2602.10177))"
     align="center"
     width="100%"
 >}}
@@ -166,7 +202,7 @@ OpenAI 在 **Early Science Acceleration Experiments with GPT-5**（[Bubeck et al
 
 {{< figure
     src="gpt5_driven_auto_lab.png"
-    caption="Fig. 9. GPT-5-driven autonomous laboratory workflow. (Image source: [Smith et al., 2026](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1))"
+    caption="Fig. 11. GPT-5-driven autonomous laboratory workflow. (Image source: [Smith et al., 2026](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1))"
     align="center"
     width="100%"
 >}}
@@ -189,9 +225,8 @@ OpenAI 在 **Early Science Acceleration Experiments with GPT-5**（[Bubeck et al
 
 ## 总结
 
-以 FunSearch、AlphaEvolve 和 Aletheia 为代表的自我进化智能体证明：将大语言模型嵌入**生成、验证与修正**的迭代闭环中，能够有效打破模型单次推理的能力天花板，在数学发现与工程优化等复杂解空间内，探索出超越已有认知的新结果。
+从算法发现到软件工程，从训练优化到科学实验，**Self-Evolving Agents** 正在跨领域形成统一范式：人类定义目标与评估标准，Agent 在闭环反馈中自主探索实现路径。
 
-随着模型长逻辑推理能力与 Agentic 工具链（如自动化实验室）的深度融合，**Self-Evolving Agents** 正在从被动的辅助工具进化为主动的科学合作者。这种具备高度自主探索能力的闭环系统，不仅重塑了人类与 AI 的协作分工，也将成为未来推动 AI for Science 产生颠覆性突破的核心驱动力。
 
 ## 参考文献
 
@@ -205,19 +240,27 @@ OpenAI 在 **Early Science Acceleration Experiments with GPT-5**（[Bubeck et al
 
 [5] Verma, Abhishek, et al. ["Large-scale cluster management at Google with Borg."](https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/) Proceedings of the tenth european conference on computer systems. 2015.
 
-[6] DeepMind. ["Gemini 3 Deep Think: Advancing science, research and engineering"](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/) Google Blog (2026).
+[6] OpenAI. ["Codex CLI."](https://github.com/openai/codex) GitHub, 2025.
 
-[7] OpenAI. ["Introducing GPT-5.2."](https://openai.com/index/introducing-gpt-5-2/) OpenAI Blog (2025).
+[7] Anthropic. ["Claude Code."](https://github.com/anthropics/claude-code) GitHub, 2025.
 
-[8] Feng, Tony, et al. ["Towards Autonomous Mathematics Research."](https://arxiv.org/abs/2602.10177) arXiv preprint arXiv:2602.10177 (2026).
+[8] OpenAI. ["Harness engineering: leveraging Codex in an agent-first world."](https://openai.com/index/harness-engineering/) OpenAI, 2026.
 
-[9] Luong, Thang, and Vahab Mirrokni. ["Accelerating mathematical and scientific discovery with Gemini Deep Think."](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/) Google DeepMind Blog (2026).
+[9] DeepMind. ["Gemini 3 Deep Think: Advancing science, research and engineering."](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/) Google Blog (2026).
 
-[10] Bubeck, Sébastien, et al. ["Early science acceleration experiments with GPT-5."](https://arxiv.org/abs/2511.16072) arXiv preprint arXiv:2511.16072 (2025).
+[10] OpenAI. ["Introducing GPT-5.2."](https://openai.com/index/introducing-gpt-5-2/) OpenAI Blog (2025).
 
-[11] Woodruff, David P., et al. ["Accelerating Scientific Research with Gemini: Case Studies and Common Techniques."](https://arxiv.org/abs/2602.03837) arXiv preprint arXiv:2602.03837 (2026).
+[11] Karpathy, Andrej. ["Autoresearch."](https://github.com/karpathy/autoresearch) GitHub, 2026.
 
-[12] Smith, Alexus A., et al. ["Using a GPT-5-driven autonomous lab to optimize the cost and titer of cell-free protein synthesis."](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1) bioRxiv (2026): 2026-02.
+[12] Feng, Tony, et al. ["Towards Autonomous Mathematics Research."](https://arxiv.org/abs/2602.10177) arXiv preprint arXiv:2602.10177 (2026).
+
+[13] Luong, Thang, and Vahab Mirrokni. ["Accelerating mathematical and scientific discovery with Gemini Deep Think."](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/) Google DeepMind Blog (2026).
+
+[14] Bubeck, Sébastien, et al. ["Early science acceleration experiments with GPT-5."](https://arxiv.org/abs/2511.16072) arXiv preprint arXiv:2511.16072 (2025).
+
+[15] Woodruff, David P., et al. ["Accelerating Scientific Research with Gemini: Case Studies and Common Techniques."](https://arxiv.org/abs/2602.03837) arXiv preprint arXiv:2602.03837 (2026).
+
+[16] Smith, Alexus A., et al. ["Using a GPT-5-driven autonomous lab to optimize the cost and titer of cell-free protein synthesis."](https://www.biorxiv.org/content/10.64898/2026.02.05.703998v1) bioRxiv (2026): 2026-02.
 
 ## 引用
 

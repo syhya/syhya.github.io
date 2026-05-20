@@ -1,7 +1,7 @@
 ---
-title: "Coding Agent 生成 GPU Kernel"
+title: "代码智能体生成 GPU Kernel"
 date: 2026-05-18T00:00:00+08:00
-lastmod: 2026-05-18T00:00:00+08:00
+lastmod: 2026-05-21T00:00:00+08:00
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["LLM", "GPU Kernel", "CUDA", "Triton", "FlashInfer", "MLSys", "Agent"]
@@ -32,14 +32,14 @@ math: true
 
 - **Grounding inputs**：算子定义、参考实现和 workload JSON 等必要上下文输入。
 - **Shape discovery**：从 workload 中根据 batch size 和 sequence length 等参数进行分组，并从每组抽取代表性维度，使 agent 可以快速评估和迭代候选，而不需要每次都做全量验证。
-- **Closed-loop optimization**：在 *baseline → profile → diagnose → generate → evaluate → archive* 这条循环里生成候选，验证代码能否编译、结果是否正确，并评估性能；同时利用 Profiler 和 NCU 等工具分析算子瓶颈。
+- **Closed-loop optimization**：在 *baseline → profile → diagnose → generate → evaluate → archive* 这条循环里生成候选，验证代码能否编译、结果是否正确，并评估性能；同时利用 Torch Profiler 和 NVIDIA Nsight Compute (NCU) 等工具分析算子瓶颈。
 - **Outputs**：归档相关代码和性能指标等文件，后续提供给 agent 继续迭代。
 
 人类编写优化 [skills](https://github.com/syhya/mlsys26-flashinfer-contest/tree/main/agent-assisted/skills)、构建[评测脚手架](https://github.com/syhya/mlsys26-flashinfer-contest/tree/main/agent-assisted/scripts)。这些做法类似 **Codex Skills**（[OpenAI, 2026](https://developers.openai.com/codex/skills)）和 **Codex Subagents**（[OpenAI, 2026](https://developers.openai.com/codex/concepts/subagents)）的思路：通过复用上下文、工具和并行探索来提升 agent 的搜索效率，避免陷入局部最优。
 
 ## 实验结果
 
-下面的数据来自 Modal 平台 B200 GPU 上的本地评测，并不是公开 leaderboard 结果；评测协议参考 **FlashInfer**（[Ye et al., 2025](https://arxiv.org/abs/2501.01005)）和 **FlashInfer-Bench**（[Xing et al., 2026](https://arxiv.org/abs/2601.00227)）的 correctness-gated kernel benchmark 设定，这里的加速比指标统一使用平均延迟之比：
+下面的数据来自 Modal 平台 B200 GPU 上的本地评测，并不是公开 leaderboard 结果；评测方法参考 **FlashInfer**（[Ye et al., 2025](https://arxiv.org/abs/2501.01005)）和 **FlashInfer-Bench**（[Xing et al., 2026](https://arxiv.org/abs/2601.00227)）的 correctness-gated kernel benchmark 设定。下表为了便于阅读使用平均延迟之比作为汇总口径，并不是官方逐算子或逐赛道 contest score：
 
 | 算子定义 | 方法 | 平均延迟 (ms) | 相对 PyTorch 加速 | 相对 FlashInfer 加速 |
 | --- | --- | ---: | ---: | ---: |
@@ -61,12 +61,12 @@ math: true
 
 {{< figure
     src="flashinfer_speedup.png"
-    caption="Fig. 2. Final retained mean-latency speedup over the supplied FlashInfer baseline. Agent-Assisted retained artifacts improve all five definitions under the reporting normalization. (Image source: [Shui, 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 2. Final retained speedups over the supplied FlashInfer baseline, measured using mean latency. Agent-Assisted artifacts improve all five definitions under the reporting normalization. (Image source: [Shui, 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
     align="center"
     width="60%"
 >}}
 
-从结果可以看到，Agent-Assisted 在五个算子上全部优于 FlashInfer baseline，加速比从 `1.12×`（GDN Decode）到 `29.68×`（DSA Attention）；Full-Agent 则在 MoE FP8 与 GDN Decode 上反而比 baseline 更慢。
+在这些本地评估的结果中，Agent-Assisted 在五个算子上全部优于 FlashInfer baseline，加速比从 `1.12×`（GDN Decode）到 `29.68×`（DSA Attention）；Full-Agent 则在 MoE FP8 与 GDN Decode 上反而比 baseline 更慢。
 
 
 ### Agent-Assisted 优化轨迹
@@ -118,14 +118,14 @@ Full-Agent 轨迹来自 **LoongFlow**（[Wan et al., 2025](https://arxiv.org/abs
 
 **Cited as:**
 
-> Yue Shui. (May 2026). Coding Agent 生成 GPU Kernel.  
+> Yue Shui. (May 2026). 代码智能体生成 GPU Kernel.  
 https://syhya.github.io/zh/posts/2026-05-18-flashinfer-contest
 
 Or
 
 ```bibtex
 @article{syhya2026-mlsys26-flashinfer-contest,
-  title   = "Coding Agent 生成 GPU Kernel",
+  title   = "代码智能体生成 GPU Kernel",
   author  = "Yue Shui",
   journal = "syhya.github.io",
   year    = "2026",

@@ -2,6 +2,165 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://syhya.github.io/tags/agent/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/agent/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/agent/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/categories/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/2026-05-18-flashinfer-contest/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/2026-05-18-flashinfer-contest/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/2026-05-18-flashinfer-contest/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/cuda/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/cuda/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/cuda/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/flashinfer/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/flashinfer/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/flashinfer/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/gpu-kernel/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/gpu-kernel/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/gpu-kernel/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/llm/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/llm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/llm/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/mlsys/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/mlsys/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/mlsys/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/posts/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/tags/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/categories/technical-blog/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://syhya.github.io/tags/triton/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/tags/triton/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/tags/triton/"
+                />
+  </url><url>
+    <loc>https://syhya.github.io/</loc>
+    <lastmod>2026-05-21T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://syhya.github.io/zh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://syhya.github.io/"
+                />
+  </url><url>
     <loc>https://syhya.github.io/tags/agent-evolve/</loc>
     <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -41,19 +200,6 @@
                 href="https://syhya.github.io/tags/alphaevolve/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/categories/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/tags/harness-engineering/</loc>
     <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -80,19 +226,6 @@
                 href="https://syhya.github.io/tags/openevolve/"
                 />
   </url><url>
-    <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/posts/"
-                />
-  </url><url>
     <loc>https://syhya.github.io/posts/2026-02-20-self-evolving-agents/</loc>
     <lastmod>2026-03-16T12:00:00+08:00</lastmod>
     <xhtml:link
@@ -104,48 +237,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/posts/2026-02-20-self-evolving-agents/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://syhya.github.io/</loc>
-    <lastmod>2026-03-16T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/agent/</loc>
-    <lastmod>2025-12-31T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/agent/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/agent/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/deep-learning/</loc>
@@ -185,19 +276,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://syhya.github.io/posts/2025-12-31-deepseekv3.2/"
-                />
-  </url><url>
-    <loc>https://syhya.github.io/tags/llm/</loc>
-    <lastmod>2025-12-31T12:00:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://syhya.github.io/zh/tags/llm/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://syhya.github.io/tags/llm/"
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/reasoning/</loc>

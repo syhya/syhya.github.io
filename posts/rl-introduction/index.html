@@ -3,122 +3,122 @@ Note: This article is currently being updated. The content is in draft version a
 
 Notations
 
-  
-      
-          Symbol
-          Meaning
-      
-  
-  
-      
-          \(s, s', S_t, S_{t+1}\)
-          State, next state, state at time \(t\), state at time \(t+1\)
-      
-      
-          \(o, o_t\)
-          Observation, observation at time \(t\)
-      
-      
-          \(a, a', A_t, A_{t+1}\)
-          Action, next action, action at time \(t\), action at time \(t+1\)
-      
-      
-          \(r, r_t\)
-          Immediate reward, reward at time \(t\)
-      
-      
-          \(G_t\)
-          Return at time \(t\)
-      
-      
-          \(R(\tau)\)
-          Return of a trajectory \(\tau\)
-      
-      
-          \(\mathcal{S}\)
-          Set of all possible states
-      
-      
-          \(\mathcal{A}\)
-          Set of all possible actions
-      
-      
-          \(\mathcal{R}\)
-          Set of all possible rewards
-      
-      
-          \(\pi(a\mid s), \pi_\theta(a\mid s)\)
-          Policy (stochastic), parameterized policy
-      
-      
-          \(\mu(s), \mu_\theta(s)\)
-          Policy (deterministic), parameterized policy
-      
-      
-          \(\theta, \phi, w\)
-          Policy or value function parameters
-      
-      
-          \(\gamma\)
-          Discount factor
-      
-      
-          \(J(\pi)\)
-          Expected return of policy \(\pi\)
-      
-      
-          \(V_\pi(s)\)
-          State-value function for policy \(\pi\)
-      
-      
-          \(Q_\pi(s,a)\)
-          Action-value function for policy \(\pi\)
-      
-      
-          \(V_*(s)\)
-          Optimal state-value function
-      
-      
-          \(Q_*(s,a)\)
-          Optimal action-value function
-      
-      
-          \(A_\pi(s,a)\)
-          Advantage function for policy \(\pi\)
-      
-      
-          \(P(s'\mid s,a)\)
-          Transition probability function
-      
-      
-          \(R(s,a,s')\)
-          Reward function
-      
-      
-          \(\rho_0(s)\)
-          Start-state distribution
-      
-      
-          \(\tau\)
-          Trajectory
-      
-      
-          \(D\)
-          Replay memory
-      
-      
-          \(\alpha\)
-          Learning rate, temperature parameter (in SAC)
-      
-      
-          \(\lambda\)
-          Eligibility trace parameter
-      
-      
-          \(\epsilon\)
-          Exploration parameter (e.g., in \(\epsilon\)-greedy), clipping parameter (in PPO)
-      
-  
+	
+			
+					Symbol
+					Meaning
+			
+	
+	
+			
+					\(s, s', S_t, S_{t+1}\)
+					State, next state, state at time \(t\), state at time \(t+1\)
+			
+			
+					\(o, o_t\)
+					Observation, observation at time \(t\)
+			
+			
+					\(a, a', A_t, A_{t+1}\)
+					Action, next action, action at time \(t\), action at time \(t+1\)
+			
+			
+					\(r, r_t\)
+					Immediate reward, reward at time \(t\)
+			
+			
+					\(G_t\)
+					Return at time \(t\)
+			
+			
+					\(R(\tau)\)
+					Return of a trajectory \(\tau\)
+			
+			
+					\(\mathcal{S}\)
+					Set of all possible states
+			
+			
+					\(\mathcal{A}\)
+					Set of all possible actions
+			
+			
+					\(\mathcal{R}\)
+					Set of all possible rewards
+			
+			
+					\(\pi(a\mid s), \pi_\theta(a\mid s)\)
+					Policy (stochastic), parameterized policy
+			
+			
+					\(\mu(s), \mu_\theta(s)\)
+					Policy (deterministic), parameterized policy
+			
+			
+					\(\theta, \phi, w\)
+					Policy or value function parameters
+			
+			
+					\(\gamma\)
+					Discount factor
+			
+			
+					\(J(\pi)\)
+					Expected return of policy \(\pi\)
+			
+			
+					\(V_\pi(s)\)
+					State-value function for policy \(\pi\)
+			
+			
+					\(Q_\pi(s,a)\)
+					Action-value function for policy \(\pi\)
+			
+			
+					\(V_*(s)\)
+					Optimal state-value function
+			
+			
+					\(Q_*(s,a)\)
+					Optimal action-value function
+			
+			
+					\(A_\pi(s,a)\)
+					Advantage function for policy \(\pi\)
+			
+			
+					\(P(s'\mid s,a)\)
+					Transition probability function
+			
+			
+					\(R(s,a,s')\)
+					Reward function
+			
+			
+					\(\rho_0(s)\)
+					Start-state distribution
+			
+			
+					\(\tau\)
+					Trajectory
+			
+			
+					\(D\)
+					Replay memory
+			
+			
+					\(\alpha\)
+					Learning rate, temperature parameter (in SAC)
+			
+			
+					\(\lambda\)
+					Eligibility trace parameter
+			
+			
+					\(\epsilon\)
+					Exploration parameter (e.g., in \(\epsilon\)-greedy), clipping parameter (in PPO)
+			
+	
 
 What is Reinforcement Learning?
 Definition
@@ -136,122 +136,122 @@ Note: This article is currently being updated. The content is in draft version a
 
 Notations
 
-  
-      
-          Symbol
-          Meaning
-      
-  
-  
-      
-          \(s, s', S_t, S_{t+1}\)
-          State, next state, state at time \(t\), state at time \(t+1\)
-      
-      
-          \(o, o_t\)
-          Observation, observation at time \(t\)
-      
-      
-          \(a, a', A_t, A_{t+1}\)
-          Action, next action, action at time \(t\), action at time \(t+1\)
-      
-      
-          \(r, r_t\)
-          Immediate reward, reward at time \(t\)
-      
-      
-          \(G_t\)
-          Return at time \(t\)
-      
-      
-          \(R(\tau)\)
-          Return of a trajectory \(\tau\)
-      
-      
-          \(\mathcal{S}\)
-          Set of all possible states
-      
-      
-          \(\mathcal{A}\)
-          Set of all possible actions
-      
-      
-          \(\mathcal{R}\)
-          Set of all possible rewards
-      
-      
-          \(\pi(a\mid s), \pi_\theta(a\mid s)\)
-          Policy (stochastic), parameterized policy
-      
-      
-          \(\mu(s), \mu_\theta(s)\)
-          Policy (deterministic), parameterized policy
-      
-      
-          \(\theta, \phi, w\)
-          Policy or value function parameters
-      
-      
-          \(\gamma\)
-          Discount factor
-      
-      
-          \(J(\pi)\)
-          Expected return of policy \(\pi\)
-      
-      
-          \(V_\pi(s)\)
-          State-value function for policy \(\pi\)
-      
-      
-          \(Q_\pi(s,a)\)
-          Action-value function for policy \(\pi\)
-      
-      
-          \(V_*(s)\)
-          Optimal state-value function
-      
-      
-          \(Q_*(s,a)\)
-          Optimal action-value function
-      
-      
-          \(A_\pi(s,a)\)
-          Advantage function for policy \(\pi\)
-      
-      
-          \(P(s'\mid s,a)\)
-          Transition probability function
-      
-      
-          \(R(s,a,s')\)
-          Reward function
-      
-      
-          \(\rho_0(s)\)
-          Start-state distribution
-      
-      
-          \(\tau\)
-          Trajectory
-      
-      
-          \(D\)
-          Replay memory
-      
-      
-          \(\alpha\)
-          Learning rate, temperature parameter (in SAC)
-      
-      
-          \(\lambda\)
-          Eligibility trace parameter
-      
-      
-          \(\epsilon\)
-          Exploration parameter (e.g., in \(\epsilon\)-greedy), clipping parameter (in PPO)
-      
-  
+	
+			
+					Symbol
+					Meaning
+			
+	
+	
+			
+					\(s, s', S_t, S_{t+1}\)
+					State, next state, state at time \(t\), state at time \(t+1\)
+			
+			
+					\(o, o_t\)
+					Observation, observation at time \(t\)
+			
+			
+					\(a, a', A_t, A_{t+1}\)
+					Action, next action, action at time \(t\), action at time \(t+1\)
+			
+			
+					\(r, r_t\)
+					Immediate reward, reward at time \(t\)
+			
+			
+					\(G_t\)
+					Return at time \(t\)
+			
+			
+					\(R(\tau)\)
+					Return of a trajectory \(\tau\)
+			
+			
+					\(\mathcal{S}\)
+					Set of all possible states
+			
+			
+					\(\mathcal{A}\)
+					Set of all possible actions
+			
+			
+					\(\mathcal{R}\)
+					Set of all possible rewards
+			
+			
+					\(\pi(a\mid s), \pi_\theta(a\mid s)\)
+					Policy (stochastic), parameterized policy
+			
+			
+					\(\mu(s), \mu_\theta(s)\)
+					Policy (deterministic), parameterized policy
+			
+			
+					\(\theta, \phi, w\)
+					Policy or value function parameters
+			
+			
+					\(\gamma\)
+					Discount factor
+			
+			
+					\(J(\pi)\)
+					Expected return of policy \(\pi\)
+			
+			
+					\(V_\pi(s)\)
+					State-value function for policy \(\pi\)
+			
+			
+					\(Q_\pi(s,a)\)
+					Action-value function for policy \(\pi\)
+			
+			
+					\(V_*(s)\)
+					Optimal state-value function
+			
+			
+					\(Q_*(s,a)\)
+					Optimal action-value function
+			
+			
+					\(A_\pi(s,a)\)
+					Advantage function for policy \(\pi\)
+			
+			
+					\(P(s'\mid s,a)\)
+					Transition probability function
+			
+			
+					\(R(s,a,s')\)
+					Reward function
+			
+			
+					\(\rho_0(s)\)
+					Start-state distribution
+			
+			
+					\(\tau\)
+					Trajectory
+			
+			
+					\(D\)
+					Replay memory
+			
+			
+					\(\alpha\)
+					Learning rate, temperature parameter (in SAC)
+			
+			
+					\(\lambda\)
+					Eligibility trace parameter
+			
+			
+					\(\epsilon\)
+					Exploration parameter (e.g., in \(\epsilon\)-greedy), clipping parameter (in PPO)
+			
+	
 
 What is Reinforcement Learning?
 Definition

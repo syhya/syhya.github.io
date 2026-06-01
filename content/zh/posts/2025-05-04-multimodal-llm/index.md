@@ -93,16 +93,18 @@ math: true
 
 | 任务名称 | 说明 |
 | :------------------------------------- | :--------------------------------------------------------- |
-| [视觉问答 (VQA)](https://paperswithcode.com/task/visual-question-answering) | 根据图像和相关问题生成文本答案。 |
-| [图像/视频描述生成 (Image/Video Captioning)](https://paperswithcode.com/task/image-captioning) | 为图像或视频生成自然语言文字描述。 |
-| [文本到多模态生成 (Text-to-X Generation)](https://paperswithcode.com/task/text-to-image-generation) | 根据文本描述生成相应的图像、视频或音频内容。 |
-| [跨模态检索 (Cross-Modal Retrieval)](https://paperswithcode.com/task/cross-modal-retrieval) | 使用一种模态（如文本）查询另一种模态（如图像）的相关数据。 |
-| [多模态情感分析 (Multimodal Sentiment)](https://paperswithcode.com/task/multimodal-sentiment-analysis) | 结合文本、音频、视频等多种信息判断情感倾向。 |
-| [视觉推理 (Visual Reasoning)](https://paperswithcode.com/task/visual-reasoning) | 基于图像或视频内容进行逻辑判断与关系推理。 |
-| [视觉语言导航 (VLN)](https://paperswithcode.com/task/vision-language-navigation) | 根据自然语言指令在视觉环境中指导智能体导航。 |
-| [多模态机器翻译 (MMT)](https://paperswithcode.com/task/multimodal-machine-translation) | 利用相关图像信息辅助文本翻译以消除歧义。 |
-| [音视频语音识别 (AVSR)](https://paperswithcode.com/task/audio-visual-speech-recognition) | 结合音频信号和说话者唇动视觉信息进行语音识别。 |
-| [视觉定位 (Visual Grounding)](https://paperswithcode.com/task/visual-grounding) | 将文本中的词语或短语与图像或视频中的对应区域或物体关联起来。 |
+| [视觉问答 (VQA)](https://huggingface.co/tasks/visual-question-answering) | 根据图像和相关问题生成文本答案。 |
+| [图像描述生成 (Image-to-Text)](https://huggingface.co/tasks/image-to-text) | 为图像生成自然语言描述，或从图像中抽取文字。 |
+| [视频描述/问答 (Video-Text-to-Text)](https://huggingface.co/tasks/video-text-to-text) | 结合视频和文本提示输出文本，可用于视频描述和视频问答。 |
+| [文本到图像生成 (Text-to-Image)](https://huggingface.co/tasks/text-to-image) | 根据文本描述生成图像。 |
+| [文本到视频生成 (Text-to-Video)](https://huggingface.co/tasks/text-to-video) | 根据文本描述生成视频序列。 |
+| [跨模态检索 (Cross-Modal Retrieval)](https://en.wikipedia.org/wiki/Cross-modal_retrieval) | 使用一种模态（如文本）查询另一种模态（如图像）的相关数据。 |
+| [多模态情感分析 (Multimodal Sentiment)](https://en.wikipedia.org/wiki/Multimodal_sentiment_analysis) | 结合文本、音频、视频等多种信息判断情感倾向。 |
+| [视觉推理 (Visual Reasoning)](https://openai.com/index/thinking-with-images/) | 结合图像内容、文本问题和工具操作进行多步推理，例如解题、图表分析、空间关系判断等。 |
+| [视觉语言动作模型 (VLA)](https://en.wikipedia.org/wiki/Vision-language-action_model) | 根据视觉观测和自然语言指令输出可执行的机器人动作。 |
+| [多媒体翻译 (Multimedia Translation)](https://en.wikipedia.org/wiki/Multimedia_translation) | 翻译包含语言、图像、声音等多种符号资源的多媒体内容。 |
+| [音视频语音识别 (AVSR)](https://en.wikipedia.org/wiki/Audio-visual_speech_recognition) | 结合音频信号和说话者唇动视觉信息进行语音识别。 |
+| [视觉定位 (Visual Grounding)](https://en.wikipedia.org/wiki/Vision-language_model#Visual_grounding) | 将文本中的词语或短语与图像中的对应区域或物体关联起来。 |
 
 
 ## 关键技术
@@ -782,7 +784,7 @@ Qwen2.5-VL 在 Qwen2-VL 的基础上进行了多项优化，主要包括：
 
 ### o3 & o4-mini
 
-OpenAI 的 **o3** 和 **o4-mini** ([OpenAI, 2025](https://openai.com/index/introducing-openai-o3-and-o4-mini/)) 是其 o 系列推理模型的最新迭代，核心特点是 **更长的思考时间 (Longer Thinking Time)** 和 **全面的工具接入 (Full Tool Access)**。
+OpenAI 的 **o3** 和 **o4-mini** ([OpenAI, 2025](https://openai.com/index/introducing-o3-and-o4-mini/)) 是其 o 系列推理模型的最新迭代，核心特点是 **更长的思考时间 (Longer Thinking Time)** 和 **全面的工具接入 (Full Tool Access)**。
 
 **核心贡献:**
 1.  **增强推理:** 模型被训练成在响应前进行更长时间、更深入的思考（类似于 CoT 或更复杂的推理过程），显著提升了在编码、数学、科学、视觉感知等复杂任务上的性能。o3 在 Codeforces, SWE-bench, MMMU 等基准上达到 SOTA。

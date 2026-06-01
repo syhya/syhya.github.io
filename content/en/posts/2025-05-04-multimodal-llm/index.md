@@ -93,16 +93,18 @@ The following table lists some common multimodal tasks, which typically require 
 
 | Task Name                       | Description                                                              |
 | :------------------------------ | :----------------------------------------------------------------------- |
-| [Visual Question Answering (VQA)](https://paperswithcode.com/task/visual-question-answering) | Generate text answers based on an image and a related question.          |
-| [Image/Video Captioning](https://paperswithcode.com/task/image-captioning)          | Generate natural language descriptions for images or videos.             |
-| [Text-to-X Generation](https://paperswithcode.com/task/text-to-image-generation)            | Generate corresponding image, video, or audio content from text descriptions. |
-| [Cross-Modal Retrieval](https://paperswithcode.com/task/cross-modal-retrieval)           | Use one modality (e.g., text) to query relevant data in another modality (e.g., image). |
-| [Multimodal Sentiment Analysis](https://paperswithcode.com/task/multimodal-sentiment-analysis)   | Determine sentiment by combining information from text, audio, video, etc. |
-| [Visual Reasoning](https://paperswithcode.com/task/visual-reasoning)                | Perform logical judgment and relationship inference based on image or video content. |
-| [Visual Language Navigation (VLN)](https://paperswithcode.com/task/vision-language-navigation)| Guide an agent to navigate in a visual environment based on natural language instructions. |
-| [Multimodal Machine Translation (MMT)](https://paperswithcode.com/task/multimodal-machine-translation) | Utilize relevant image information to assist text translation and resolve ambiguity. |
-| [Audio-Visual Speech Recognition (AVSR)](https://paperswithcode.com/task/audio-visual-speech-recognition) | Perform speech recognition by combining audio signals and visual information of the speaker's lip movements. |
-| [Visual Grounding](https://paperswithcode.com/task/visual-grounding)                | Associate words or phrases in text with corresponding regions or objects in images or videos. |
+| [Visual Question Answering (VQA)](https://huggingface.co/tasks/visual-question-answering) | Generate text answers based on an image and a related question.          |
+| [Image-to-Text](https://huggingface.co/tasks/image-to-text) | Generate natural language descriptions for images, or extract text from images. |
+| [Video Description/QA (Video-Text-to-Text)](https://huggingface.co/tasks/video-text-to-text) | Combine video and text prompts to produce text outputs for video description and video question answering. |
+| [Text-to-Image Generation](https://huggingface.co/tasks/text-to-image) | Generate images from text descriptions. |
+| [Text-to-Video Generation](https://huggingface.co/tasks/text-to-video) | Generate video sequences from text descriptions. |
+| [Cross-Modal Retrieval](https://en.wikipedia.org/wiki/Cross-modal_retrieval) | Use one modality (e.g., text) to query relevant data in another modality (e.g., image). |
+| [Multimodal Sentiment Analysis](https://en.wikipedia.org/wiki/Multimodal_sentiment_analysis) | Determine sentiment by combining information from text, audio, video, etc. |
+| [Visual Reasoning](https://openai.com/index/thinking-with-images/) | Perform multi-step reasoning over image content, text questions, and tool operations, such as problem solving, chart analysis, and spatial reasoning. |
+| [Vision-Language-Action Models (VLA)](https://en.wikipedia.org/wiki/Vision-language-action_model) | Produce executable robot actions from visual observations and natural language instructions. |
+| [Multimedia Translation](https://en.wikipedia.org/wiki/Multimedia_translation) | Translate multimedia content that combines language, images, sound, and other semiotic resources. |
+| [Audio-Visual Speech Recognition (AVSR)](https://en.wikipedia.org/wiki/Audio-visual_speech_recognition) | Perform speech recognition by combining audio signals and visual information of the speaker's lip movements. |
+| [Visual Grounding](https://en.wikipedia.org/wiki/Vision-language_model#Visual_grounding) | Associate words or phrases in text with corresponding regions or objects in images. |
 
 ## Key Technologies
 
@@ -763,7 +765,7 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
 
 ### o3 & o4-mini
 
-OpenAI's **o3** and **o4-mini** ([OpenAI, 2025](https://openai.com/index/introducing-openai-o3-and-o4-mini/)) are the latest iterations of its o-series reasoning models, characterized by **Longer Thinking Time** and **Full Tool Access**.
+OpenAI's **o3** and **o4-mini** ([OpenAI, 2025](https://openai.com/index/introducing-o3-and-o4-mini/)) are the latest iterations of its o-series reasoning models, characterized by **Longer Thinking Time** and **Full Tool Access**.
 
 **Core Contributions:**
 1.  **Enhanced Reasoning:** Models are trained to think longer and deeper (akin to CoT or more complex reasoning processes) before responding, significantly improving performance on complex tasks like coding, math, science, and visual perception. o3 achieves SOTA on benchmarks like Codeforces, SWE-bench, and MMMU.

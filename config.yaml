@@ -105,9 +105,9 @@ markup:
       wrapStandAloneImageWithinParagraph: true
     renderHooks:
       image:
-        enableDefault: false
+        useEmbedded: never
       link:
-        enableDefault: false
+        useEmbedded: never
     renderer:
       hardWraps: false
       unsafe: false

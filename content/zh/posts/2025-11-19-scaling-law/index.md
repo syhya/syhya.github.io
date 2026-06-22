@@ -1,9 +1,9 @@
 ---
 title: "Scaling Laws"
 date: 2025-11-19T12:00:00+08:00
-lastmod: "2025-12-03T10:00:00+00:00"
+lastmod: "2026-06-22T12:00:00+08:00"
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "LLM", "Scaling Laws", "Test-Time Compute", "Reinforcement Learning", "Reward Model", "Compute-Optimal"]
+tags: ["Deep Learning", "AI", "LLM", "Scaling Laws", "Test-Time Compute", "Reinforcement Learning", "Reward Model", "Compute-Optimal", "Agent", "Multi-Agent"]
 categories: ["技术博客"]
 ShowReadingTime: true
 toc: true
@@ -268,6 +268,32 @@ $$
     width="90%"
 >}}
 
+## Agent Scaling Laws
+
+前面几节的扩展维度——预训练算力、测试时算力与 RL 算力——都围绕**单个模型**展开。而当系统从单模型走向多个 Agent 协同时，**Agent 数量**本身也成为一个新的扩展维度：是不是 Agent 越多越好？**Towards a Science of Scaling Agent Systems**（[Kim et al., 2025](https://arxiv.org/abs/2512.08296)）评测了 260 个实验配置，覆盖 6 个 agentic benchmark（BrowseComp-Plus、Finance-Agent、Plancraft、WorkBench、SWE-bench Verified、Terminal-Bench）、5 种架构（单 agent 加 Independent / Centralized / Decentralized / Hybrid 四类多 agent）和 3 个 LLM 家族（OpenAI、Google、Anthropic）。核心结论是：**增加 Agent 数量并非普遍有益，是否有帮助取决于任务结构，尤其是任务的可并行性 vs 顺序性、工具密度和可分解性**。
+
+{{< figure
+    src="agent-archs.png"
+    caption="Fig. 14. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    align="center"
+    width="100%"
+>}}
+
+几个关键发现：
+- **可并行 → 受益；顺序推理 → 受损**：多 agent 协调在可并行任务上带来增益，但在需要逐步推理的顺序任务上反而损害性能。相对单 agent 基线，性能变化的范围从可分解的金融推理任务上 **+80.8%**（集中式协调），到顺序规划任务上 **−70.0%**（独立式协调），因为通信开销割裂了推理过程。
+
+{{< figure
+    src="agent-scaling.png"
+    caption="Fig. 15. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    align="center"
+    width="100%"
+>}}
+
+- **能力饱和效应（capability-saturation effect）**：当单 agent 基线准确率已超过约 **45%** 阈值时，再加 agent 会带来负收益。换句话说，**模型越强，多 agent 的相对价值越低。**
+- **架构决定错误传播**：没有集中验证的独立式（Independent）系统会**放大 trace-level（轨迹级）错误达 17.2×**，而集中式（Centralized）orchestrator 通过充当"验证瓶颈"把放大控制在 **4.4×**（去中心式 7.8×、混合式 5.1×、单 agent 基线 1.0×）。不过论文给出了一个重要的补充：在控制协调效率与开销等因素后，这一错误放大效应在统计上并不显著；架构间的性能差异更多源于协调开销，而非纯粹的错误传播。
+
+与预训练、测试时和 RL 各自相对干净的幂律或 S 型曲线不同，**Agent 扩展并不存在普适的"越多越好"定律**——收益取决于任务结构，并被基座模型自身的能力增长不断侵蚀。关于 Agent Skills、Subagents、Multi-Agent Systems 与 Dynamic Workflows 之间应如何取舍，可进一步参考 [如何选择合适的 Agent 架构？](/zh/posts/2026-06-21-agent-architecture-design/)。
+
 ## 参考文献
 
 [1] Kaplan, Jared, et al. ["Scaling laws for neural language models."](https://arxiv.org/abs/2001.08361) arXiv preprint arXiv:2001.08361 (2020).
@@ -287,6 +313,8 @@ $$
 [8] Muennighoff, Niklas, et al. ["s1: Simple test-time scaling."](https://arxiv.org/abs/2501.19393) Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. 2025.
 
 [9] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for llms."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
+
+[10] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
 
 ## 引用
 

@@ -1,9 +1,9 @@
 ---
 title: "Scaling Laws"
 date: 2025-11-19T12:00:00+08:00
-lastmod: "2025-12-03T10:00:00+00:00"
+lastmod: "2026-06-22T12:00:00+08:00"
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "LLM", "Scaling Laws", "Test-Time Compute", "Reinforcement Learning", "Reward Model", "Compute-Optimal"]
+tags: ["Deep Learning", "AI", "LLM", "Scaling Laws", "Test-Time Compute", "Reinforcement Learning", "Reward Model", "Compute-Optimal", "Agent", "Multi-Agent"]
 categories: ["Technical Blog"]
 ShowReadingTime: true
 toc: true
@@ -263,6 +263,32 @@ Through large-scale ablation experiments on various RL design choices (such as l
     width="90%"
 >}}
 
+## Agent Scaling Laws
+
+The scaling axes in the previous sections—pretraining compute, test-time compute, and RL compute—all revolve around a **single model**. As systems move from one model to multiple coordinating Agents, **the number of agents** becomes a new scaling axis: is more Agents always better? **Towards a Science of Scaling Agent Systems** ([Kim et al., 2025](https://arxiv.org/abs/2512.08296)) evaluates 260 experimental configurations, covering 6 agentic benchmarks (BrowseComp-Plus, Finance-Agent, Plancraft, WorkBench, SWE-bench Verified, Terminal-Bench), 5 architectures (single-agent plus four multi-agent types: Independent / Centralized / Decentralized / Hybrid), and 3 LLM families (OpenAI, Google, Anthropic). The core conclusion is: **adding more Agents is not universally beneficial; whether it helps depends on task structure, especially the task's parallelism vs. sequentiality, tool density, and decomposability.**
+
+{{< figure
+    src="agent-archs.png"
+    caption="Fig. 14. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    align="center"
+    width="100%"
+>}}
+
+Several key findings:
+- **Parallelizable → benefits; sequential reasoning → harmed**: multi-agent coordination brings gains on parallelizable tasks, but harms performance on sequential tasks that require step-by-step reasoning. Relative to the single-agent baseline, the range of performance change spans from **+80.8%** on a decomposable financial reasoning task (centralized coordination) to **−70.0%** on a sequential planning task (independent coordination), because communication overhead fragments the reasoning process.
+
+{{< figure
+    src="agent-scaling.png"
+    caption="Fig. 15. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    align="center"
+    width="100%"
+>}}
+
+- **Capability-saturation effect**: once the single-agent baseline accuracy exceeds a threshold of about **45%**, adding more agents yields negative returns. In other words, **the stronger the model, the lower the relative value of multi-agent.**
+- **Architecture determines error propagation**: an Independent system without centralized verification **amplifies trace-level errors by up to 17.2×**, whereas a Centralized orchestrator, by acting as a "verification bottleneck," keeps the amplification at **4.4×** (decentralized 7.8×, hybrid 5.1×, single-agent baseline 1.0×). The paper adds an important caveat. After controlling for coordination efficiency and overhead, the error-amplification effect is not statistically significant; the differences across architectures stem more from coordination overhead than from pure error propagation.
+
+Unlike pretraining, test-time, and RL scaling—each following a relatively clean power-law or sigmoidal curve—**Agent scaling has no universal "more is better" law**: the benefit depends on task structure and is steadily eroded by the rising capability of the base model itself. For how to choose among Agent Skills, Subagents, Multi-Agent Systems, and Dynamic Workflows, see [How to Choose the Right Agent Architecture?](/posts/2026-06-21-agent-architecture-design/).
+
 ## References
 
 [1] Kaplan, Jared, et al. ["Scaling laws for neural language models."](https://arxiv.org/abs/2001.08361) arXiv preprint arXiv:2001.08361 (2020).
@@ -282,6 +308,8 @@ Through large-scale ablation experiments on various RL design choices (such as l
 [8] Muennighoff, Niklas, et al. ["s1: Simple test-time scaling."](https://arxiv.org/abs/2501.19393) Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. 2025.
 
 [9] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for llms."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
+
+[10] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
 
 ## Citation
 

@@ -39,7 +39,7 @@ math: true
 
 ### 1.2 研究综述
 
-[White（1988）](https://pages.cs.wisc.edu/~dyer/cs540/handouts/deep-learning-nature2015.pdf)$^{[1]}$ 使用 BP 神经网络来预测 IBM 股票的日收益率。然而，由于 BP 神经网络模型易受梯度爆炸的影响，导致模型无法收敛到全局最小值，从而无法实现准确的预测。
+[White（1988）](https://machine-learning.martinsewell.com/ann/White1988.pdf)$^{[1]}$ 使用 BP 神经网络来预测 IBM 股票的日收益率。然而，由于 BP 神经网络模型易受梯度爆炸的影响，导致模型无法收敛到全局最小值，从而无法实现准确的预测。
 
 [Kimoto（1990）](https://web.ist.utl.pt/adriano.simoes/tese/referencias/Papers%20-%20Adriano/NN.pdf)$^{[2]}$ 使用模块化神经网络技术开发了一个用于东证股价指数（Tokyo Stock Exchange Prices Indexes，TOPIX）预测的系统。该系统不仅成功预测了东京证券交易所的 TOPIX，还通过基于预测结果的股票交易模拟，实现了一定程度的盈利。
 
@@ -494,7 +494,7 @@ $$
 | 1990-01-12 | 24.6563 | 24.8125 | 24.4063 | 24.4688 | 6.582347  | 5390800 |
 | 1990-01-15 | 24.4063 | 24.5938 | 24.3125 | 24.5313 | 6.599163  | 4035600 |
 
-**数据来源**：[雅虎财经](https://finance.yahoo.com/quote/IBM/history/)
+**数据来源**：[雅虎财经](https://finance.yahoo.com/quote/IBM/)
 
 ### 3.2 实验数据预处理
 
@@ -1078,7 +1078,7 @@ $$
 其中，\( L \) 是损失函数，\( y_i \) 是真实值，\( \hat{y}_{i}^{(m-1)} \) 是第 \( m-1 \) 次迭代后的预测值。
 
 #### 4.4.2 LightGBM
-[轻量级梯度提升机（Light Gradient Boosting Machine，LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[21]}$ 是一个高效实现 GBDT 算法的框架，最初由 Microsoft 开发，作为一个免费开源的分布式梯度提升框架。LightGBM 基于决策树算法，广泛应用于排名、分类及其他机器学习任务，开发重点在于性能和可伸缩性。其主要优势包括高效率的并行训练、更快的训练速度、更低的内存消耗、更好的准确率，以及支持分布式计算和快速处理海量数据$^{[22]}$。
+[轻量级梯度提升机（Light Gradient Boosting Machine，LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[22]}$ 是一个高效实现 GBDT 算法的框架，最初由 Microsoft 开发，作为一个免费开源的分布式梯度提升框架。LightGBM 基于决策树算法，广泛应用于排名、分类及其他机器学习任务，开发重点在于性能和可伸缩性。其主要优势包括高效率的并行训练、更快的训练速度、更低的内存消耗、更好的准确率，以及支持分布式计算和快速处理海量数据$^{[22]}$。
 
 LightGBM 的核心算法基于以下优化目标：
 
@@ -1226,7 +1226,7 @@ def feature_choice(
 | dense_1 (Dense)               | (None, 256)  | 25856  |
 | dropout_2 (Dropout)           | (None, 256)  | 0      |
 | dense_2 (Dense)               | (None, 64)   | 16448  |
-| dense_3 (Dense)               | (None, 1)    | 0      |
+| dense_3 (Dense)               | (None, 1)    | 65     |
 
 **Total params**：66,769  
 **Trainable params**：66,769  
@@ -1421,7 +1421,7 @@ commison：手续费
 
 ## 参考文献
 
-[1] White, H. [“Economic prediction using neural networks: The case of IBM daily stock returns.”](https://pages.cs.wisc.edu/~dyer/cs540/handouts/deep-learning-nature2015.pdf) *Proc. of ICNN*. 1988, 2: 451-458.  
+[1] White, H. [“Economic prediction using neural networks: The case of IBM daily stock returns.”](https://machine-learning.martinsewell.com/ann/White1988.pdf) *Proc. of ICNN*. 1988, 2: 451-458.  
 
 [2] Kimoto, T., Asakawa, K., Yoda, M., et al. [“Stock market prediction system with modular neural networks.”](https://web.ist.utl.pt/adriano.simoes/tese/referencias/Papers%20-%20Adriano/NN.pdf) *Proc. of 1990 IJCNN International Joint Conference on Neural Networks*. IEEE, 1990: 1-6.  
 

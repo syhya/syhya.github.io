@@ -22,7 +22,7 @@ In deep learning, the design of network architectures significantly impacts mode
 
 {{< figure
     src="residual_connection.png"
-    caption="Fig. 1. Residual learning: a building block. (Image source: [He, et al., 2015](https://arxiv.org/abs/1502.03167))"
+    caption="Fig. 1. Residual learning: a building block. (Image source: [He, et al., 2015](https://arxiv.org/abs/1512.03385))"
     align="center"
     width="70%"
 >}}
@@ -90,7 +90,7 @@ The differences between Pre-Norm and Post-Norm in model training can be understo
 
 - **Post-Norm**: Normalization operation is performed last, helping to maintain the stability of each layer's output, but in deep models, gradients may decay layer by layer, leading to training difficulties.
 
-The **DeepNet** ([Wang, et al., 2022](https://arxiv.org/abs/2203.00555)) paper indicates that Pre-Norm is effective for training extremely deep Transformer models, while Post-Norm is difficult to scale to such depths.
+The **DeepNet** ([Wang, et al., 2022](https://arxiv.org/abs/2203.00555)) paper proposes DeepNorm (a variant of Post-LN), which stably trains Transformers up to 1000 layers in depth.
 
 ## Normalization Methods
 
@@ -327,3 +327,4 @@ Or
   month   = "Feb",
   url     = "https://syhya.github.io/posts/2025-02-01-normalization"
 }
+```

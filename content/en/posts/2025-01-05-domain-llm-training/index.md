@@ -550,7 +550,7 @@ Ultimately, through a systematic process and technical measures, it is possible 
 **Cited as:**
 
 > Yue Shui. (Jan 2025). Building Domain-Specific LLMs.  
-[https://syhya.github.io/posts/2025-01-05-build-domain-llm](https://syhya.github.io/posts/2025-01-05-build-domain-llm)
+[https://syhya.github.io/posts/2025-01-05-domain-llm-training](https://syhya.github.io/posts/2025-01-05-domain-llm-training)
 
 Or
 
@@ -561,5 +561,5 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Jan",
-  url     = "https://syhya.github.io/posts/2025-01-05-build-domain-llm/"
+  url     = "https://syhya.github.io/posts/2025-01-05-domain-llm-training/"
 }

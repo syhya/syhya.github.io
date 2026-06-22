@@ -686,7 +686,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [12] Xu, Fangyuan, et al. ["RECOMP: Improving retrieval-augmented LMs with compression and selective augmentation."](https://arxiv.org/abs/2310.04408) ICLR 2024.
 
-[13] Chen, Jianlv, et al. ["Dense X Retrieval: What retrieval granularity should we use?"](https://arxiv.org/abs/2312.06648) arXiv preprint (2023).
+[13] Chen, Tong, et al. ["Dense X Retrieval: What retrieval granularity should we use?"](https://arxiv.org/abs/2312.06648) arXiv preprint (2023).
 
 [14] Cheng, Daixuan, et al. ["UPRISE: Universal prompt retrieval for improving zero-shot evaluation."](https://aclanthology.org/2023.emnlp-main.758/) EMNLP 2023.
 
@@ -776,7 +776,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [57] Ding, Yujian, et al. ["RA-BLIP: Multimodal Adaptive Retrieval-Augmented Bootstrapping Language-Image Pre-training."](https://arxiv.org/abs/2410.14154) arXiv preprint (2024).
 
-[58] Luo, Junyu, et al. ["VideoRAG: Retrieval-augmented generation over video corpus."](https://arxiv.org/abs/2411.13093) arXiv preprint (2024).
+[58] Luo, Yongdong, et al. ["Video-RAG: Visually-aligned Retrieval-Augmented Long Video Comprehension."](https://arxiv.org/abs/2411.13093) arXiv preprint (2024).
 
 [59] Wang, Qiuchen, et al. ["ViDoRAG: Visual document retrieval-augmented generation via dynamic iterative reasoning agents."](https://arxiv.org/abs/2502.18017) arXiv preprint (2025).
 
@@ -842,7 +842,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [90] Wang, Dongsheng, et al. ["DocLLM: A layout-aware generative language model for multimodal document understanding."](https://arxiv.org/abs/2401.00908) arXiv preprint (2024).
 
-[91] Yuan, Zhiqiu, et al. ["RAMM: Retrieval-augmented multi-modal model."](https://arxiv.org/abs/2303.00534) arXiv preprint (2023).
+[91] Yuan, Zheng, et al. ["RAMM: Retrieval-augmented Biomedical Visual Question Answering with Multi-modal Pre-training."](https://arxiv.org/abs/2303.00534) arXiv preprint (2023).
 
 [92] Zhai, Yuanhang. ["SAM-RAG: Multimodal retrieval augmented generation via self-adaptive multimodal retrieval."](https://arxiv.org/abs/2410.11321) arXiv preprint (2024).
 

@@ -290,7 +290,7 @@ DeepSeekMath-V2 constructs a three-tier verification architecture achieving cont
 
 The team constructed initial training data through the following process:
 
-1. **Problem Collection**: Crawled problems from [Art of Problem Solving (AoPS)](https://artofproblemsolving.com/?srsltid=AfmBOoqcstCRpzZaf7rDkaLdkuHkR_SUAaTVBUHDrPo-nctXiCEuobst), prioritizing mathematical olympiads, team selection tests, and post-2010 problems explicitly requiring proofs, totaling **17,503 problems**, denoted as $\mathcal{D}_p$
+1. **Problem Collection**: Crawled problems from [Art of Problem Solving (AoPS)](https://artofproblemsolving.com/), prioritizing mathematical olympiads, team selection tests, and post-2010 problems explicitly requiring proofs, totaling **17,503 problems**, denoted as $\mathcal{D}_p$
 
 2. **Candidate Proof Generation**: Used a variant of DeepSeek-V3.2-Exp-Thinking to generate candidate proofs. Since this model wasn't optimized for theorem proving and tended to produce concise but error-prone outputs, it was prompted to iteratively refine proofs over multiple rounds to improve comprehensiveness and rigor
 

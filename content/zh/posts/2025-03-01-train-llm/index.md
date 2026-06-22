@@ -1066,7 +1066,7 @@ $$
 
 #### SM3
 
-**SM3(Sparse Momentum for Massive Models)**([Anil et al. 2019](https://arxiv.org/abs/1905.11286)) 通过稀疏更新和状态共享，提供了一种同样内存高效的自适应优化方案。
+**SM3(Sparse Momentum for Massive Models)**([Anil et al. 2019](https://arxiv.org/abs/1901.11150)) 通过稀疏更新和状态共享，提供了一种同样内存高效的自适应优化方案。
 
 - **稀疏 Momentum：** 只对梯度非零的参数更新 Momentum，从而减少计算和存储开销；
 - **状态共享：** 在一定程度上允许不同参数共享状态变量，进一步降低内存消耗；
@@ -1221,7 +1221,7 @@ $$
 
 [26] Shazeer, Noam, and Mitchell Stern. ["Adafactor: Adaptive learning rates with sublinear memory cost."](https://arxiv.org/abs/1804.04235) International Conference on Machine Learning, PMLR, 2018.
 
-[27] Ginsburg, Boris, et al. ["Stochastic gradient methods with layer-wise adaptive moments for training of deep networks."](https://arxiv.org/abs/1905.11286) arXiv preprint, 2019.
+[27] Anil, Rohan, et al. ["Memory-efficient adaptive optimization."](https://arxiv.org/abs/1901.11150) Advances in Neural Information Processing Systems 32, 2019.
 
 [28] Hu, Edward J., et al. ["LoRA: Low-rank adaptation of large language models."](https://arxiv.org/abs/2106.09685) ICLR, 2022: 3.
 

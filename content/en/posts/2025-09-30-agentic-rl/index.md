@@ -375,11 +375,11 @@ Experiments show that on the Qwen2.5-7B and Qwen2.5-3B models, Search-R1 achieve
 
 ### ReTool
 
-**ReTool** ([Luo et al., 2025](https://arxiv.org/abs/2504.11536)) is a case study on training a model to decide when and how to call a **Code Interpreter (CI)** to solve math problems, based on the verl framework.
+**ReTool** ([Feng et al., 2025](https://arxiv.org/abs/2504.11536)) is a case study on training a model to decide when and how to call a **Code Interpreter (CI)** to solve math problems, based on the verl framework.
 
 {{< figure
     src="ReTool_arch.png"
-    caption="Fig. 18. The architecture of ReTool. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
+    caption="Fig. 18. The architecture of ReTool. (Image source: [Feng et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
     width="100%"
 >}}
@@ -391,7 +391,7 @@ ReTool adopts a two-stage process: "**Cold-start SFT → Tool-augmented RL**":
 
 {{< figure
     src="ReTool_self_correction.png"
-    caption="Fig. 19. The case of an “aha moment” about code self-correction. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
+    caption="Fig. 19. The case of an “aha moment” about code self-correction. (Image source: [Feng et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
     width="100%"
 >}}
@@ -410,7 +410,7 @@ Training is based on the PPO algorithm. Similar to Search-R1, it applies **full 
 
 {{< figure
     src="ReTool_aime.png"
-    caption="Fig. 20. AIME 2024 & 2025 scores of ReTool and text-based RL baseline on the Qwen2.5-32B-Instruct model. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
+    caption="Fig. 20. AIME 2024 & 2025 scores of ReTool and text-based RL baseline on the Qwen2.5-32B-Instruct model. (Image source: [Feng et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
     width="100%"
 >}}

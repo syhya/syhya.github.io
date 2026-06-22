@@ -1038,7 +1038,7 @@ Adafactor ([Shazeer et al. 2018](https://arxiv.org/abs/1804.04235)) is a memory-
 
 #### SM3
 
-SM3 (Sparse Momentum for Massive Models) ([Anil et al. 2019](https://arxiv.org/abs/1905.11286)) provides a memory-efficient adaptive optimization scheme through sparse updates and state sharing.
+SM3 (Sparse Momentum for Massive Models) ([Anil et al. 2019](https://arxiv.org/abs/1901.11150)) provides a memory-efficient adaptive optimization scheme through sparse updates and state sharing.
 
 - **Sparse Momentum:** Only update Momentum for parameters with non-zero gradients, thereby reducing computation and storage overhead;
 - **State Sharing:** To a certain extent, allow different parameters to share state variables, further reducing memory consumption;
@@ -1193,7 +1193,7 @@ Parallelism techniques and memory optimization strategies need to be weighed and
 
 [26] Shazeer, Noam, and Mitchell Stern. ["Adafactor: Adaptive learning rates with sublinear memory cost."](https://arxiv.org/abs/1804.04235) International Conference on Machine Learning, PMLR, 2018.
 
-[27] Ginsburg, Boris, et al. ["Stochastic gradient methods with layer-wise adaptive moments for training of deep networks."](https://arxiv.org/abs/1905.11286) arXiv preprint, 2019.
+[27] Anil, Rohan, et al. ["Memory-efficient adaptive optimization."](https://arxiv.org/abs/1901.11150) Advances in Neural Information Processing Systems 32, 2019.
 
 [28] Hu, Edward J., et al. ["LoRA: Low-rank adaptation of large language models."](https://arxiv.org/abs/2106.09685) ICLR, 2022: 3.
 

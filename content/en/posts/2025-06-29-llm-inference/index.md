@@ -552,7 +552,7 @@ To enforce N:M structured sparsity, we divide the columns of a matrix into segme
 
 {{< figure
     src="greedy_permulation_search.png"
-    caption="Fig. 23. Algorithm for finding the best permutation for N:M sparsity greedily and iteratively. (Image source: [Pool & Yu, 2021](https://proceedings.neurips.cc/paper/2021/hash/1415fe9c182320c8d536c9493793334d-Abstract.html))"
+    caption="Fig. 23. Algorithm for finding the best permutation for N:M sparsity greedily and iteratively. (Image source: [Pool & Yu, 2021](https://proceedings.neurips.cc/paper/2021/hash/6e8404c3b93a9527c8db241a1846599a-Abstract.html))"
     align="center"
 >}}
 
@@ -599,7 +599,7 @@ Training is divided into two phases, and the additional coordinates in the set $
 
 {{< figure
     src="top_kast.png"
-    caption="Fig. 25. The pruning mask of Top-KAST stabilizes in time. (Image source: [Jayakumar et al. 2021](https://proceedings.neurips.cc/paper/2020/hash/47d1e990583c9c67424d369f3414728e-Abstract.html))"
+    caption="Fig. 25. The pruning mask of Top-KAST stabilizes in time. (Image source: [Jayakumar et al. 2021](https://arxiv.org/abs/2106.03517))"
     align="center"
     width="100%"
 >}}
@@ -750,7 +750,6 @@ The survey paper **Efficient Transformers** ([Tay et al. 2020](https://arxiv.org
 [3] Big Hummingbird Blogs. (2024). [“A Visual Explanation of LLM Hyperparameters.”](https://www.bighummingbird.com/blogs/llm-hyperparameter) Blog post.
 
 [4] Fan, Angela, Mike Lewis, and Yann Dauphin. [“Hierarchical neural story generation.”](https://arxiv.org/abs/1805.04833) arXiv preprint arXiv:1805.04833 (2018).
-int arXiv:1805.04832.
 
 [5] Holtzman, Ari, et al. [“The curious case of neural text degeneration.”](https://arxiv.org/abs/1904.09751) arXiv preprint arXiv:1904.09751 (2019).
 

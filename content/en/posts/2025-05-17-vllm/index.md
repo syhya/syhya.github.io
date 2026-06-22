@@ -59,7 +59,7 @@ Since its initial release in June 2023, vLLM, equipped with PagedAttention, has 
 
 {{< figure
     src="vllm_v0_throughput1.png"
-    caption="Fig. 1. Throughput comparison (single output completion) on LLaMA models. vLLM vs. HF and TGI. (Image source: [vLLM Blog, 2023](https://vllm.ai/blog/2023/06/20/vllm.html))"
+    caption="Fig. 1. Throughput comparison (single output completion) on LLaMA models. vLLM vs. HF and TGI. (Image source: [vLLM Blog, 2023](https://blog.vllm.ai/2023/06/20/vllm.html))"
     align="center"
     width="80%"
 >}}
@@ -68,7 +68,7 @@ Since its initial release in June 2023, vLLM, equipped with PagedAttention, has 
 
 {{< figure
     src="vllm_v0_throughput2.png"
-    caption="Fig. 2. Throughput comparison (three parallel output completions) on LLaMA models. vLLM vs. HF and TGI. (Image source: [vLLM Blog, 2023](https://vllm.ai/blog/2023/06/20/vllm.html))"
+    caption="Fig. 2. Throughput comparison (three parallel output completions) on LLaMA models. vLLM vs. HF and TGI. (Image source: [vLLM Blog, 2023](https://blog.vllm.ai/2023/06/20/vllm.html))"
     align="center"
     width="80%"
 >}}
@@ -211,7 +211,7 @@ vLLM achieves sharing via the block table:
 2.  **Reference Counting:** Each physical block maintains a reference count.
 3.  **Copy-on-Write (CoW):** When a shared block (reference count > 1) needs to be written to, vLLM allocates a new physical block, copies the content of the original block, updates the block table mapping for the writing sequence, and decrements the reference count of the original physical block. Subsequent writes to this physical block (when its reference count is 1) are performed directly.
 
-This mechanism significantly reduces memory overhead for **Parallel Sampling**, with experiments showing memory savings of up to 55%.
+This mechanism significantly reduces memory overhead for **Parallel Sampling**, with experiments showing memory savings of roughly 6.1%-9.8% (Alpaca) to 16.2%-30.5% (ShareGPT).
 
 #### Beam Search
 
@@ -224,7 +224,7 @@ During **Beam Search**, different candidate sequences (beams) not only share the
     width="70%"
 >}}
 
-vLLM efficiently manages this dynamic sharing using reference counting and the CoW mechanism, avoiding the frequent and costly memory copy operations found in traditional implementations. Most blocks can be shared; CoW is only needed when newly generated tokens fall into an old shared block (requiring only a single block copy).
+vLLM efficiently manages this dynamic sharing using reference counting and the CoW mechanism, avoiding the frequent and costly memory copy operations found in traditional implementations. Most blocks can be shared; CoW is only needed when newly generated tokens fall into an old shared block (requiring only a single block copy). Experiments in the paper show memory savings of up to 37.6%-55.2% in beam search scenarios.
 
 #### Shared Prefix
 
@@ -431,7 +431,7 @@ Building on V0, vLLM V1 comprehensively refactors and optimizes the core archite
 
 [1] Kwon, Woosuk, et al. ["Efficient memory management for large language model serving with pagedattention."](https://arxiv.org/abs/2309.06180) Proceedings of the 29th Symposium on Operating Systems Principles. 2023.
 
-[2] vLLM Team. ["vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention."](https://vllm.ai/blog/2023/06/20/vllm.html) vLLM Blog, June 20, 2023.
+[2] vLLM Team. ["vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention."](https://blog.vllm.ai/2023/06/20/vllm.html) vLLM Blog, June 20, 2023.
 
 [3] vLLM Team. ["vLLM V1: A Major Upgrade to vLLM's Core Architecture."](https://blog.vllm.ai/2025/01/27/v1-alpha-release.html) vLLM Blog, Jan 27, 2025.
 

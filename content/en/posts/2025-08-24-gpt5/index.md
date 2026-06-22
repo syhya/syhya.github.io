@@ -158,7 +158,7 @@ The router continuously learns from real user signals (such as user model-switch
 
 The traditional safety training paradigm is **Hard Refusals**, where the model decides whether to answer fully or refuse directly based on a binary classification of user intent (safe or unsafe). This approach is effective for clearly malicious prompts but is very brittle when dealing with ambiguous intent or topics involving **dual-use** (e.g., biology, cybersecurity), often leading to over-refusals.
 
-**Safe Completions** ([Baker et al., 2025](https://openai.com/index/gpt-5-safe-completions/)) moves away from binary classification of user intent and instead focuses on maximizing the model's helpfulness while adhering to safety policies.
+**Safe Completions** ([Yuan et al., 2025](https://openai.com/index/gpt-5-safe-completions/)) moves away from binary classification of user intent and instead focuses on maximizing the model's helpfulness while adhering to safety policies.
 
 *   **For clearly harmful requests**: The model will still refuse.
 *   **For dual-use requests** (e.g., in biology, chemistry, cybersecurity): The model provides safe, high-level answers without directly executable details, rather than refusing entirely.

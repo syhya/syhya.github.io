@@ -312,7 +312,7 @@ DPO simplifies the RLHF process into a direct supervised learning task, saving r
 
 [2] Ouyang, Long, et al. ["Training language models to follow instructions with human feedback."](https://arxiv.org/abs/2203.02155) Advances in neural information processing systems 35 (2022): 27730-27744.
 
-[3] Rafailov, Rafael, et al. ["Direct preference optimization: Your language model is secretly a reward model."](https://arxiv.org/abs/1706.03741) Advances in Neural Information Processing Systems 36 (2024).
+[3] Rafailov, Rafael, et al. ["Direct preference optimization: Your language model is secretly a reward model."](https://arxiv.org/abs/2305.18290) Advances in Neural Information Processing Systems 36 (2024).
 
 
 ## Citation

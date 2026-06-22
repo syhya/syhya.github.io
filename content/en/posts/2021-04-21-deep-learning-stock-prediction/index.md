@@ -39,7 +39,7 @@ In summary, considering China's current development status, this paper's selecti
 
 ### 1.2 Literature Review
 
-[White (1988)](https://pages.cs.wisc.edu/~dyer/cs540/handouts/deep-learning-nature2015.pdf)$^{[1]}$ used a Backpropagation (BP) neural network to predict the daily returns of IBM stock. However, due to the BP neural network model's susceptibility to gradient explosion, the model could not converge to a global minimum, thus failing to achieve accurate predictions.
+[White (1988)](https://machine-learning.martinsewell.com/ann/White1988.pdf)$^{[1]}$ used a Backpropagation (BP) neural network to predict the daily returns of IBM stock. However, due to the BP neural network model's susceptibility to gradient explosion, the model could not converge to a global minimum, thus failing to achieve accurate predictions.
 
 [Kimoto (1990)](https://web.ist.utl.pt/adriano.simoes/tese/referencias/Papers%20-%20Adriano/NN.pdf)$^{[2]}$ developed a system for predicting the Tokyo Stock Exchange Prices Index (TOPIX) using modular neural network technology. This system not only successfully predicted TOPIX but also achieved a certain level of profitability through stock trading simulations based on the prediction results.
 
@@ -494,7 +494,7 @@ Many scholars, both domestically and internationally, focus their research on th
 | 1990-01-12 | 24.6563 | 24.8125 | 24.4063 | 24.4688 | 6.582347  | 5390800 |
 | 1990-01-15 | 24.4063 | 24.5938 | 24.3125 | 24.5313 | 6.599163  | 4035600 |
 
-**Data Source**: [Yahoo Finance](https://finance.yahoo.com/quote/IBM/history/)
+**Data Source**: [Yahoo Finance](https://finance.yahoo.com/quote/IBM/)
 
 ### 3.2 Experimental Data Preprocessing
 
@@ -1072,7 +1072,7 @@ $$
 Where, \( L \) is the loss function, \( y_i \) is the true value, and \( \hat{y}_{i}^{(m-1)} \) is the predicted value after the \( (m-1) \)-th iteration.
 
 #### 4.4.2 LightGBM
-[Light Gradient Boosting Machine (LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[21]}$ is an efficient framework for implementing the GBDT algorithm, initially developed by Microsoft as a free and open-source distributed gradient boosting framework. LightGBM is based on decision tree algorithms and is widely used in ranking, classification, and other machine learning tasks. Its development focuses on performance and scalability. Its main advantages include high-efficiency parallel training, faster training speed, lower memory consumption, better accuracy, and support for distributed computing and fast processing of massive data$^{[22]}$.
+[Light Gradient Boosting Machine (LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[22]}$ is an efficient framework for implementing the GBDT algorithm, initially developed by Microsoft as a free and open-source distributed gradient boosting framework. LightGBM is based on decision tree algorithms and is widely used in ranking, classification, and other machine learning tasks. Its development focuses on performance and scalability. Its main advantages include high-efficiency parallel training, faster training speed, lower memory consumption, better accuracy, and support for distributed computing and fast processing of massive data$^{[22]}$.
 
 The core algorithm of LightGBM is based on the following optimization objective:
 
@@ -1220,7 +1220,7 @@ This section uses BiLSTM for factor combination. The specific principle of BiLST
 | dense_1 (Dense)               | (None, 256)  | 25856  |
 | dropout_2 (Dropout)           | (None, 256)  | 0      |
 | dense_2 (Dense)               | (None, 64)   | 16448  |
-| dense_3 (Dense)               | (None, 1)    | 0      |
+| dense_3 (Dense)               | (None, 1)    | 65     |
 
 **Total params**: 66,769  
 **Trainable params**: 66,769  
@@ -1414,7 +1414,7 @@ Although this paper compares the effects of LSTM, GRU, and BiLSTM models in pred
 
 ## References
 
-[1] White, H. [“Economic prediction using neural networks: The case of IBM daily stock returns.”](https://pages.cs.wisc.edu/~dyer/cs540/handouts/deep-learning-nature2015.pdf) *Proc. of ICNN*. 1988, 2: 451-458.
+[1] White, H. [“Economic prediction using neural networks: The case of IBM daily stock returns.”](https://machine-learning.martinsewell.com/ann/White1988.pdf) *Proc. of ICNN*. 1988, 2: 451-458.
 
 [2] Kimoto, T., Asakawa, K., Yoda, M., et al. [“Stock market prediction system with modular neural networks.”](https://web.ist.utl.pt/adriano.simoes/tese/referencias/Papers%20-%20Adriano/NN.pdf) *Proc. of 1990 IJCNN International Joint Conference on Neural Networks*. IEEE, 1990: 1-6.
 

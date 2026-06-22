@@ -170,7 +170,7 @@ Llama Guard 3 Vision 采用了 ML Commons 定义的安全风险分类标准 ([Vi
 
 *   **LLaMA 3 (初版, 2024/04):** 首先发布了 8B 和 70B 两种规模的预训练和指令微调模型。
 *   **LLaMA 3.1 (2024/07):** ([Meta AI, 2024](https://ai.meta.com/blog/meta-llama-3-1/)) 推出了 **405B** 参数的旗舰模型，其性能在多项基准上接近 GPT-4 水平，同时更新了 8B 和 70B 版本。
-*   **LLaMA 3.2 (2024/10):** 引入了**轻量化模型**（如 1B, 3B, 11B, 13B），专为边缘设备（如手机、手表、智能家居）优化，并发布了**多模态视觉模型**（如 Llama-3.2-11B-Vision 和 Llama-3.2-90B-Vision）。
+*   **LLaMA 3.2 (2024/10):** 引入了**轻量化模型**（如 1B, 3B），专为边缘设备（如手机、手表、智能家居）优化，并发布了**多模态视觉模型**（如 Llama-3.2-11B-Vision 和 Llama-3.2-90B-Vision）。
 
 {{< figure
     src="llama3_key_hyperparameters.png"
@@ -211,7 +211,7 @@ Llama Guard 3 Vision 采用了 ML Commons 定义的安全风险分类标准 ([Vi
 从上图可以看出，LLaMA 3 的后训练（指令微调）流程是一个精心设计的多阶段迭代过程：
 
 1.  **数据准备 (Data Preparation):** 收集大量人类偏好数据。这些数据通常包含一个提示（prompt）以及模型生成的多个回答，标注员会对这些回答进行排序（例如，选出最好的 "chosen" 回答和较差的 "rejected" 回答）。同时也会收集高质量的 SFT 数据（prompt-response 对）。
-2.  **奖励模型训练 (Reward Modeling, RM):** 利用收集到的人类偏好数据 (prompt, chosen, rejected) 三元组训练一个或多个奖励模型。奖励模型的目标是学习预测人类对模型生成回答的偏好程度，为后续的优化提供量化信号。LLaMA 3 训练了两个独立的奖励模型，分别侧重于有用性（Helpfulness）和安全性（Safety）。
+2.  **奖励模型训练 (Reward Modeling, RM):** 利用收集到的人类偏好数据 (prompt, chosen, rejected) 三元组训练一个或多个奖励模型。奖励模型的目标是学习预测人类对模型生成回答的偏好程度，为后续的优化提供量化信号。LLaMA 3 训练了一个覆盖不同能力（包括有用性 Helpfulness 和安全性 Safety）的统一奖励模型。
 3.  **拒绝采样 (Rejection Sampling):** 使用训练好的奖励模型对模型生成的候选回答进行打分。选择得分最高的回答作为高质量样本，用于后续的微调阶段。这有助于筛选出比 SFT 数据质量更高的样本。
 4.  **监督微调 (Supervised Finetuning, SFT):** 结合初始的人工标注 SFT 数据和通过拒绝采样筛选出的高质量数据，对预训练的基础模型进行微调。此阶段旨在让模型学习遵循指令的格式、风格，并初步掌握所需的知识和能力。LLaMA 3 在此阶段混合使用了多种来源的数据。
 5.  **偏好优化:** 在 SFT 模型的基础上，使用偏好数据 (prompt, chosen, rejected) 通过**直接偏好优化 (Direct Preference Optimization, DPO)** 算法进一步对齐模型。DPO 直接优化模型以提高其对 "chosen" 回答的似然，同时降低对 "rejected" 回答的似然，相比基于 RL 的 PPO 方法，实现更简单且训练更稳定。LLaMA 3 对 DPO 进行了改进，例如在训练 DPO 时屏蔽了回答中的特殊格式化 token，并引入了归一化的负对数似然（NLL）损失作为正则项，以提升训练稳定性和生成质量。其损失函数形式大致可以参考 **RPO**([Pang et al., 2024](https://arxiv.org/abs/2404.19733)) 中的损失，LLaMA3 的具体实现可能略有不同：
@@ -233,7 +233,7 @@ Llama Guard 3 Vision 采用了 ML Commons 定义的安全风险分类标准 ([Vi
     *   $|y^w|$ 是 winning 回答的长度，用于归一化 NLL 损失。
     该损失函数鼓励模型 $\pi_\theta$ 相对于参考模型 $\pi_{\mathrm{ref}}$ 更倾向于生成 $y^w$ 而非 $y^l$，同时通过 NLL 正则项保持生成文本的流畅性和语言质量。
 
-6.  **迭代循环 (Iterative Loop):** 上述的 SFT 和 DPO（或 RLHF 变体）过程会重复进行多轮（LLaMA 3 进行了五轮）。每一轮都会使用上一轮优化后的模型来生成新的数据，收集新的人类反馈，训练新的奖励模型，并进行下一轮的 SFT 和 DPO 优化。这种迭代的方式使得模型能够持续学习和改进。
+6.  **迭代循环 (Iterative Loop):** 上述的 SFT 和 DPO（或 RLHF 变体）过程会重复进行多轮（LLaMA 3 进行了六轮）。每一轮都会使用上一轮优化后的模型来生成新的数据，收集新的人类反馈，训练新的奖励模型，并进行下一轮的 SFT 和 DPO 优化。这种迭代的方式使得模型能够持续学习和改进。
 7.  **模型权重平均 (Model Weight Averaging):** 在某些阶段，可能会对使用不同数据子集或超参数训练得到的多个模型检查点进行权重平均，以获得更鲁棒、性能更均衡的最终模型。
 
 ### LLaMA 4
@@ -313,7 +313,7 @@ LLaMA 4 采用了新的三阶段后训练流程，旨在平衡指令遵循、智
 | **模型规模**        | 7B - 65B             | 7B, 13B, 70B         | 7B - 70B             | 7B / 8B (+Vision)    | 1B - 405B (+Vision)  | 109B, 400B, ~2T (MoE)|
 | **训练数据量**      | 1T - 1.4T tokens     | 2T+ tokens           | + 0.5T/1T Code       | ~40k 安全分类    | 15T+ tokens          | 30T+ tokens (多模态) |
 | **上下文长度**      | 2k tokens            | 4k tokens            | 100k | 4k / 8k+             | 8k / 128k tokens     | 10M |
-| **Tokenizer**      | SentencePiece (32k)  | SentencePiece (32k)  | SentencePiece (32k)  | 基于 LLaMA 2/3       | tiktoken (128k)      | tiktoken (256k)      |
+| **Tokenizer**      | SentencePiece (32k)  | SentencePiece (32k)  | SentencePiece (32k)  | 基于 LLaMA 2/3       | tiktoken (128k)      | tiktoken (~200k)      |
 | **位置编码**        | RoPE                 | RoPE                 | RoPE (基数调整)      | RoPE                 | RoPE                 | iRoPE   |
 | **注意力** | MHA       | MHA / GQA (34B, 70B) | MHA / GQA (>13B)     | 基于 LLaMA 2/3       | GQA   | GQA                  |
 | **归一化**          | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)    | RMSNorm (PreNorm)        |
@@ -349,7 +349,7 @@ $$
 
 ### FFN_SwiGLU
 
-**Swish-Gated Linear Unit** ([Shazeer, 2020](#ref-16)) 是 LLaMA 中用于增强前馈网络（Feed-Forward Network, FFN）非线性表达能力的关键技术。SwiGLU 结合了 Swish 激活函数和门控机制，显著提升了模型的表现力和性能。此外，与 PaLM ([Chowdhery, 2022](#ref-6)) 中使用的$4 d$隐藏维度不同，LLaMA 采用了 $\frac{2}{3}d$ 的隐藏维度，从而在保持参数量和计算量不变的情况下，实现了更高的参数效率。
+**Swish-Gated Linear Unit** ([Shazeer, 2020](https://arxiv.org/abs/2002.05202)) 是 LLaMA 中用于增强前馈网络（Feed-Forward Network, FFN）非线性表达能力的关键技术。SwiGLU 结合了 Swish 激活函数和门控机制，显著提升了模型的表现力和性能。此外，与 PaLM ([Chowdhery, 2022](https://arxiv.org/abs/2204.02311)) 中使用的$4 d$隐藏维度不同，LLaMA 采用了 $\frac{2}{3} \times 4d$ 的隐藏维度，从而在保持参数量和计算量不变的情况下，实现了更高的参数效率。
 
 数学表达式：
 $$
@@ -367,7 +367,7 @@ $$
 - **性能提升**：在多项基准测试中，FFN_SwiGLU 显著提升了模型的性能，尤其在处理复杂任务和长文本时表现尤为出色。例如，在文本生成和理解任务中，SwiGLU 帮助模型更好地理解上下文和长距离依赖关系。
 
 **实现细节**：
-- **权重矩阵调整**：为了保持与传统 FFN 层相同的参数量和计算量，SwiGLU 通过减少隐藏层的维度（例如，将隐藏层大小从 4d 调整为 $\frac{2}{3}d$），在引入额外的线性变换矩阵的同时，确保整体模型的效率不受影响。
+- **权重矩阵调整**：为了保持与传统 FFN 层相同的参数量和计算量，SwiGLU 通过减少隐藏层的维度（例如，将隐藏层大小从 4d 调整为 $\frac{2}{3} \times 4d$），在引入额外的线性变换矩阵的同时，确保整体模型的效率不受影响。
 - **兼容性**：SwiGLU 作为 GLU 家族的一员，能够无缝集成到现有的 Transformer 架构中，替代传统的 ReLU 或 GELU 激活函数，提升模型的整体性能。
 
 > 实现代码可以参考这个文件：[swiglu.py](https://github.com/syhya/syhya.github.io/blob/main/content/zh/posts/2025-04-06-llama/swiglu.py)。
@@ -525,11 +525,11 @@ $$
 
 [19] Zhang, Biao, and Rico Sennrich. ["Root mean square layer normalization."](https://arxiv.org/abs/1910.07467) Advances in Neural Information Processing Systems 32 (2019).
 
-[20] Shazeer, Noam. ["Glu variants improve transformer."]((https://arxiv.org/abs/2002.05202v1)) arXiv preprint arXiv:2002.05202 (2020).
+[20] Shazeer, Noam. ["Glu variants improve transformer."](https://arxiv.org/abs/2002.05202v1) arXiv preprint arXiv:2002.05202 (2020).
 
 [21] Ainslie, Joshua, et al. ["Gqa: Training generalized multi-query transformer models from multi-head checkpoints."](https://arxiv.org/abs/2305.13245) arXiv preprint arXiv:2305.13245 (2023).
 
-[22] Su, Jianlin, et al. ["Roformer: Enhanced transformer with rotary position embedding."]((https://arxiv.org/abs/2104.09864)) Neurocomputing 568 (2024): 127063.
+[22] Su, Jianlin, et al. ["Roformer: Enhanced transformer with rotary position embedding."](https://arxiv.org/abs/2104.09864) Neurocomputing 568 (2024): 127063.
 
 ## 引用
 

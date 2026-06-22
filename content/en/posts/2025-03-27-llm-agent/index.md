@@ -88,7 +88,7 @@ The core components of an LLM Agent include **planning**, **memory**, and **tool
 
 {{< figure
     src="llm_agent_overview.png"
-    caption="Fig. 3. Overview of a LLM-powered autonomous agent system. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 3. Overview of a LLM-powered autonomous agent system. (Image source: [Weng, 2023](https://lilianweng.github.io/posts/2023-06-23-agent/))"
     align="center"
     width="100%"
 >}}
@@ -422,7 +422,7 @@ A typical "aha moment" also emerged during the training of DeepSeek-R1-Zero. At 
 
 {{< figure
     src="category_human_memory.png"
-    caption="Fig. 26. Categorization of human memory. (Image source: [Weng, 2017](https://lilianweng.github.io/posts/2023-06-23-agent/))"
+    caption="Fig. 26. Categorization of human memory. (Image source: [Weng, 2023](https://lilianweng.github.io/posts/2023-06-23-agent/))"
     align="center"
     width="100%"
 >}}
@@ -578,7 +578,7 @@ The entire system uses a long-term memory module to record all observed events, 
 
 {{< figure
     src="generative_agent_architecture.png"
-    caption="Fig. 25. The generative agent architecture. ([Park, et al. 2023](https://arxiv.org/abs/2304.03442))"
+    caption="Fig. 33. The generative agent architecture. (Image source: [Park, et al. 2023](https://arxiv.org/abs/2304.03442))"
     align="center"
     width="100%"
 >}}
@@ -589,7 +589,7 @@ The entire system uses a long-term memory module to record all observed events, 
 
 {{< figure
     src="WebVoyager.png"
-    caption="Fig. 33. The overall workflow of WebVoyager. (Image source: [He et al. 2024](https://arxiv.org/abs/2401.13919))"
+    caption="Fig. 34. The overall workflow of WebVoyager. (Image source: [He et al. 2024](https://arxiv.org/abs/2401.13919))"
     align="center"
     width="100%"
 >}}
@@ -600,7 +600,7 @@ The entire system uses a long-term memory module to record all observed events, 
 
 {{< figure
     src="cua_overview.png"
-    caption="Fig. 34. Overview of OpenAI CUA. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
+    caption="Fig. 35. Overview of OpenAI CUA. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
     align="center"
     width="100%"
 >}}
@@ -617,7 +617,7 @@ CUA differs from the pre-existing WebVoyager in that it is an agent specifically
 
 {{< figure
     src="cua_benchmark.png"
-    caption="Fig. 35. OpenAI CUA Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
+    caption="Fig. 36. OpenAI CUA Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/computer-using-agent/))"
     align="center"
     width="100%"
 >}}
@@ -638,7 +638,7 @@ The [LangGraph](https://langchain-ai.github.io/langgraph/) framework can be used
 
 {{< figure
     src="langgraph_workflow.png"
-    caption="Fig. 36. A workflow of the LangGraph. (Image source: [LangGraph, 2025](https://langchain-ai.github.io/langgraph/tutorials/workflows/?h=workflow))"
+    caption="Fig. 37. A workflow of the LangGraph. (Image source: [LangGraph, 2025](https://langchain-ai.github.io/langgraph/tutorials/workflows/?h=workflow))"
     align="center"
     width="100%"
 >}}
@@ -658,7 +658,7 @@ Currently, there are several open-source projects on GitHub that have implemente
 
 {{< figure
     src="open_deep_research.png"
-    caption="Fig. 37. An overview of the open deep research. (Image source: [LangChain, 2025](https://github.com/langchain-ai/open_deep_research))"
+    caption="Fig. 38. An overview of the open deep research. (Image source: [LangChain, 2025](https://github.com/langchain-ai/open_deep_research))"
     align="center"
     width="100%"
 >}}
@@ -710,7 +710,7 @@ The model achieved state-of-the-art results on **Humanity's Last Exam** ([Phan, 
 
 {{< figure
     src="human_last_exam.png"
-    caption="Fig. 38. Humanity's Last Exam Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
+    caption="Fig. 39. Humanity's Last Exam Benchmark Results. (Image source: [OpenAI, 2025](https://openai.com/index/introducing-deep-research/))"
     align="center"
     width="80%"
 >}}

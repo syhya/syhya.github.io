@@ -525,7 +525,7 @@ $$
 \end{aligned}
 $$
 
-The optimization problem defines a matrix $A$ where the element at row $i$, column $j$ indicates whether expert $i$ selected token $j$ (value 0 or 1). Since solving this optimization problem is complex, the paper uses [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) (obtaining an approximate solution through multiple iterations).
+The optimization problem defines a matrix $A$ where the element at row $i$, column $j$ indicates whether expert $i$ selected token $j$ (value 0 or 1). Since solving this optimization problem is complex, the paper uses [Dykstra's algorithm](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full) (obtaining an approximate solution through multiple iterations).
 
 The parameter $b$ is typically determined by the total number of tokens $n$ in the batch and a capacity factor, which represents the average number of experts used per token. Most experiments use a high capacity factor. Experimental results show that even with reduced capacity, EC generally outperforms traditional top-1 token choice routing, although capped expert choice slightly degrades fine-tuning performance.
 
@@ -761,7 +761,7 @@ To achieve efficient training, Deepseek performed meticulous engineering optimiz
 
 {{< figure
     src="forward_backward_chucks.png"
-    caption="Fig. 17. Overlapping strategy for a pair of forward and backward chunks with misaligned transformer block boundaries. Orange: forward, green: backward for input, blue: backward for weights, purple: PP communication, red: barriers. Both all-to-all and PP communications are fully hidden. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 14. Overlapping strategy for a pair of forward and backward chunks with misaligned transformer block boundaries. Orange: forward, green: backward for input, blue: backward for weights, purple: PP communication, red: barriers. Both all-to-all and PP communications are fully hidden. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -771,7 +771,7 @@ To achieve efficient training, Deepseek performed meticulous engineering optimiz
 
 {{< figure
     src="dualpipe.png"
-    caption="Fig. 18. Example DualPipe scheduling with 8 PP ranks and 20 micro-batches in both directions. The reverse-direction micro-batches mirror the forward ones, so their batch IDs are omitted for simplicity. Two cells within a shared black border represent mutually overlapped computation and communication. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 15. Example DualPipe scheduling with 8 PP ranks and 20 micro-batches in both directions. The reverse-direction micro-batches mirror the forward ones, so their batch IDs are omitted for simplicity. Two cells within a shared black border represent mutually overlapped computation and communication. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -824,7 +824,7 @@ To accelerate training and reduce GPU memory usage, DeepSeek-V3 employs an **FP8
 
 {{< figure
     src="fp8_framework.png"
-    caption="Fig. 14. The overall mixed precision framework with FP8 data format. For clarification, only the Linear operator is illustrated. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 16. The overall mixed precision framework with FP8 data format. For clarification, only the Linear operator is illustrated. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -841,7 +841,7 @@ To accelerate training and reduce GPU memory usage, DeepSeek-V3 employs an **FP8
 
 {{< figure
     src="fp8_quantization_enhancement.png"
-    caption="Fig. 15. (a) Fine-grained quantization method to mitigate quantization errors. (b) Improved FP8 GEMM precision by promoting to CUDA Cores for high-precision accumulation. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 17. (a) Fine-grained quantization method to mitigate quantization errors. (b) Improved FP8 GEMM precision by promoting to CUDA Cores for high-precision accumulation. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -856,7 +856,7 @@ The figure below shows experiments demonstrating that the relative error of FP8 
 
 {{< figure
     src="fp8_vs_bf16_loss_curves.png"
-    caption="Fig. 16. Loss curves comparison between BF16 and FP8 training. Results are smoothed by Exponential Moving Average (EMA) with a coefficient of 0.9 [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 18. Loss curves comparison between BF16 and FP8 training. Results are smoothed by Exponential Moving Average (EMA) with a coefficient of 0.9 [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -887,7 +887,7 @@ DeepSeek-V3 is deployed on an H800 cluster (NVLink intra-node, fully connected I
 *   **Parallelism Strategy:**
     *   Attention part: **TP4 + SP** combined with **DP80**.
     *   MoE part: **EP320**. Each GPU hosts only one expert, with 64 GPUs responsible for hosting redundant and shared experts.
-*   **All-to-All Communication:** Dispatch and Combine parts use **direct IB point-to-point transmission** for low latency. Utilize **IBGDA** ([NVIDIA, 2022](https://developer.nvidia.com/blog/gpudirect-storage/)) technology to further minimize latency and enhance communication efficiency.
+*   **All-to-All Communication:** Dispatch and Combine parts use **direct IB point-to-point transmission** for low latency. Utilize **IBGDA** ([NVIDIA, 2022](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/)) technology to further minimize latency and enhance communication efficiency.
 *   **Load Balancing:** Similar to Prefilling, periodically determine the redundant expert set based on online service's statistical expert load. However, since each GPU hosts only one expert, reshuffling is not needed.
 *   **Exploration Directions:**
     *   **Dynamic redundancy strategy:** Requires more careful optimization of the algorithm for computing the globally optimal routing scheme and fusion with the Dispatch Kernel to reduce overhead.
@@ -1202,9 +1202,9 @@ DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE lang
 
 [14] Leviathan, Yaniv, Matan Kalman, and Yossi Matias. ["Fast inference from transformers via speculative decoding."](https://arxiv.org/abs/2211.17192) Proceedings of the 40th International Conference on Machine Learning. PMLR 202:19274-19286 (2023).
 
-[15] Xia, Yichao, et al. ["Accelerating large language model decoding with speculative sampling."](https://arxiv.org/abs/2302.01318) arXiv preprint arXiv:2302.01318 (2023).
+[15] Xia, Heming, et al. ["Speculative Decoding: Exploiting Speculative Execution for Accelerating Seq2seq Generation."](https://arxiv.org/abs/2203.16487) Findings of the Association for Computational Linguistics: EMNLP 2023. pp. 3909-3925 (2023).
 
-[16] Qi, Hai, et al. ["ZeroBubble: A High-Performance Framework for Training Mixture-of-Experts Models."](https://arxiv.org/abs/2401.10241) arXiv preprint arXiv:2401.10241 (2024).
+[16] Qi, Penghui, et al. ["Zero Bubble Pipeline Parallelism."](https://arxiv.org/abs/2401.10241) arXiv preprint arXiv:2401.10241 (2024).
 
 [17] Rajbhandari, Samyam, et al. ["Zero: Memory optimizations toward training trillion parameter models."](https://arxiv.org/abs/1910.02054) SC20: International Conference for High Performance Computing, Networking, Storage and Analysis. IEEE (2020).
 
@@ -1232,11 +1232,11 @@ DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE lang
 
 [29] Loshchilov, Ilya, and Frank Hutter. ["Decoupled weight decay regularization."](https://arxiv.org/abs/1711.05101) arXiv preprint arXiv:1711.05101 (2017).
 
-[30] NVIDIA. ["GPUDirect Storage: A Direct Path Between Storage and GPU Memory."](https://developer.nvidia.com/blog/gpudirect-storage/) NVIDIA Developer Blog (2022).
+[30] NVIDIA. ["Improving Network Performance of HPC Systems Using NVIDIA Magnum IO NVSHMEM and GPUDirect Async."](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/) NVIDIA Developer Blog (2022).
 
 [31] Graham, Richard L., et al. ["Scalable hierarchical aggregation protocol (SHArP): A hardware architecture for efficient data reduction."](https://network.nvidia.com/pdf/solutions/hpc/paperieee_copyright.pdf) 2016 First International Workshop on Communication Optimizations in HPC (COMHPC). IEEE, 2016.
 
-[32] Ding, Yiran, et al. ["Longrope: Extending llm context window beyond 2 million tokens."](https://arxiv.org/abs/2402.13753) arXiv preprint arXiv:2402.13753 (2024).
+[32] Ding, Hantian, et al. ["Fewer Truncations Improve Language Modeling."](https://arxiv.org/abs/2404.10830) Proceedings of the 41st International Conference on Machine Learning. PMLR 235 (2024).
 
 [33] Zhu, Qihao, et al. ["DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence."](https://arxiv.org/abs/2406.11931) arXiv preprint arXiv:2406.11931 (2024).
 

@@ -22,7 +22,7 @@ type: "posts"
 
 {{< figure 
     src="residual_connection.png" 
-    caption="Fig. 1. Residual learning: a building block. (Image source: [He, et al., 2015](https://arxiv.org/abs/1502.03167))"
+    caption="Fig. 1. Residual learning: a building block. (Image source: [He, et al., 2015](https://arxiv.org/abs/1512.03385))"
     align="center" 
     width="70%"
 >}}
@@ -88,7 +88,7 @@ Pre-Norm 和 Post-Norm 在模型训练中的差异可以从梯度反向传播的
 
 - **Post-Norm**：归一化操作在后，有助于保持每一层的输出稳定，但在深层模型中，梯度可能会逐层衰减，导致训练困难。
 
-**DeepNet** ([Wang, et al., 2022](https://arxiv.org/abs/2203.00555)) 论文表明 Pre-Norm 在极深的 Transformer 模型中能够有效训练，而 Post-Norm 难以扩展到如此深度。
+**DeepNet** ([Wang, et al., 2022](https://arxiv.org/abs/2203.00555)) 论文提出 DeepNorm（Post-LN 的变体），将 Transformer 稳定训练到 1000 层的深度。
 
 ## 归一化方法
 
@@ -325,3 +325,4 @@ Or
   month   = "Feb",
   url     = "https://syhya.github.io/posts/2025-02-01-normalization"
 }
+```

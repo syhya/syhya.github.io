@@ -378,11 +378,11 @@ $$
 
 ### ReTool
 
-**ReTool** ([Luo et al., 2025](https://arxiv.org/abs/2504.11536)) 是一个基于 verl 框架训练模型何时以及如何调用**代码解释器 (Code Interpreter, CI)** 来解决数学问题案例。
+**ReTool** ([Feng et al., 2025](https://arxiv.org/abs/2504.11536)) 是一个基于 verl 框架训练模型何时以及如何调用**代码解释器 (Code Interpreter, CI)** 来解决数学问题案例。
 
 {{< figure
     src="ReTool_arch.png"
-    caption="Fig. 18. The architecture of ReTool. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
+    caption="Fig. 18. The architecture of ReTool. (Image source: [Feng et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
     width="100%"
 >}}
@@ -394,7 +394,7 @@ ReTool 采用“**冷启动 SFT → 工具增强 RL**”两阶段流程：
 
 {{< figure
     src="ReTool_self_correction.png"
-    caption="Fig. 19. The case of “aha moment” about code self-correction. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
+    caption="Fig. 19. The case of “aha moment” about code self-correction. (Image source: [Feng et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
     width="100%"
 >}}
@@ -413,7 +413,7 @@ $$
 
 {{< figure
     src="ReTool_aime.png"
-    caption="Fig. 20. AIME 2024 & 2025 scores of ReTool and text-based RL baseline on the Qwen2.5-32B-Instruct model. (Image source: [Luo et al., 2025](https://arxiv.org/abs/2504.11536))"
+    caption="Fig. 20. AIME 2024 & 2025 scores of ReTool and text-based RL baseline on the Qwen2.5-32B-Instruct model. (Image source: [Feng et al., 2025](https://arxiv.org/abs/2504.11536))"
     align="center"
     width="100%"
 >}}

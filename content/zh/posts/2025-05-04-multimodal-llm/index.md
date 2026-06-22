@@ -722,7 +722,7 @@ Qwen2.5-VL 在 Qwen2-VL 的基础上进行了多项优化，主要包括：
 
 {{< figure
     src="kimi_vl_pretrain.png"
-    caption="Fig. 22. Model architecture of Kimi-VL and Kimi-VL-Thinking, consisting of a MoonViT that allows native-resolution images, an MLP projector, and a Mixture-of-Experts (MoE) language decoder. (Image source: [Kimi Team, 2025](https://arxiv.org/abs/2504.07491))"
+    caption="Fig. 22. The pre-training stages of Kimi-VL and Kimi-VL-Thinking, including ViT pre-training, joint pre-training, joint cooling, and joint long-context activation. (Image source: [Kimi Team, 2025](https://arxiv.org/abs/2504.07491))"
     align="center"
     width="100%"
 >}}

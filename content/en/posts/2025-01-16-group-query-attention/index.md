@@ -962,7 +962,7 @@ Figure 11 shows how performance varies with uptraining proportion for T5 XXL wit
     width="80%"
 >}}
 
-Figure 12 demonstrates that as the number of groups increases, inference time slightly rises, but it still maintains a significant speed advantage over MHA. Choosing an appropriate number of groups, such as 8, can achieve a good balance between speed and performance. Figure 3 also shows that models ranging from 7B to 405B parameters in Llama3 adopt 8 as the number of groups (key/value heads = 8).
+Figure 12 demonstrates that as the number of groups increases, inference time slightly rises, but it still maintains a significant speed advantage over MHA. Choosing an appropriate number of groups, such as 8, can achieve a good balance between speed and performance. Figure 5 also shows that models ranging from 8B to 405B parameters in Llama3 adopt 8 as the number of groups (key/value heads = 8).
 
 ## Other Optimization Methods
 

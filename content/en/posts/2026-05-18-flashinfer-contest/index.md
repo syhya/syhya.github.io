@@ -151,7 +151,7 @@ This table is for local analysis only, not the official per-operator or per-trac
 
 {{< figure
     src="flashinfer-speedup.png"
-    caption="Fig. 8. Final speedups over the supplied FlashInfer baseline, measured using mean latency on local Modal B200 runs. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 8. Final retained speedups over the supplied FlashInfer baseline, measured using mean latency on local Modal B200 runs. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
     align="center"
     width="65%"
 >}}

@@ -57,7 +57,7 @@ $$
     width="50%"
 >}}
 
-从上图我可以直观看到，Post-Norm 和 Pre-Norm 的主要区别在于归一化层的位置：
+从上图我们可以直观看到，Post-Norm 和 Pre-Norm 的主要区别在于归一化层的位置：
 
 - **Post-Norm**：传统的 Transformer 架构中，归一化层（如 LayerNorm）通常位于残差连接之后。
 

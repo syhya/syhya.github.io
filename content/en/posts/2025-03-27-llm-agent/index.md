@@ -683,7 +683,7 @@ The table below summarizes the main differences between these two approaches:
 
 ### OpenAI Deep Research
 
-**OpenAI Deep Research** ([OpenAI, 2025](https://openai.com/index/introducing-deep-research/)) is an intelligent agent officially released by OpenAI in February 2025. Designed for complex scenarios, it can automatically search, filter, analyze, and integrate multi-source information to ultimately generate high-quality comprehensive reports. The system is built on [o3](https://openai.com/index/openai-o3-mini/) as its core base model and incorporates reinforcement learning methods, significantly improving the accuracy and robustness of its multi-round iterative search and reasoning processes.
+**OpenAI Deep Research** ([OpenAI, 2025](https://openai.com/index/introducing-deep-research/)) is an intelligent agent officially released by OpenAI in February 2025. Designed for complex scenarios, it can automatically search, filter, analyze, and integrate multi-source information to ultimately generate high-quality comprehensive reports. The system is built on [o3](https://openai.com/index/introducing-o3-and-o4-mini/) as its core base model and incorporates reinforcement learning methods, significantly improving the accuracy and robustness of its multi-round iterative search and reasoning processes.
 
 Compared to traditional ChatGPT plugin-based search or conventional RAG techniques, OpenAI Deep Research has the following outstanding advantages:
 

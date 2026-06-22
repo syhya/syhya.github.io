@@ -58,7 +58,7 @@ draft: false
 | **显卡**       | RTX 4090 \* 2                            | 25098         |
 | **主板 + CPU** | AMD R9 7900X + 微星 MPG X670E CARBON       | 5157.55       |
 | **内存**       | 美商海盗船(USCORSAIR) 48GB\*2 (DDR5 5600)  | 2399          |
-| **SSD**        | SOLIDIGM 944 PRO 2TB \*2 + 三星 990PRO 4TB | 4587          |
+| **SSD**        | SOLIDIGM P44 Pro 2TB \*2 + 三星 990PRO 4TB | 4587          |
 | **电源**       | 美商海盗船 AX1600i                        | 2699          |
 | **风扇**       | 追风者 T30 12cm P \* 6                     | 1066.76       |
 | **散热**       | 利民 Thermalright FC140 BLACK             | 419           |
@@ -244,7 +244,7 @@ RTX 4090 体型巨大，且双卡堆叠时需要充足的内部空间和散热�
 
 1. [Tim Dettmers: Which GPU for Deep Learning? (2023)](https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/)  
 2. [Intel 14900K PCIe 通道规格](https://www.intel.com/content/www/us/en/products/sku/236773/intel-core-i9-processor-14900k-36m-cache-up-to-6-00-ghz/specifications.html)  
-3. [AMD R5 7600X PCIe 通道规格](https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600.html)  
+3. [AMD R5 7600 PCIe 通道规格](https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600.html)  
 4. [MSI MPG X670E CARBON 规格](https://www.msi.com/Motherboard/MPG-X670E-CARBON-WIFI/Specification)  
 5. [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-container-toolkit)  
 6. [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)  
@@ -277,3 +277,5 @@ Or
   year    = "2024",
   month   = "Dec",
   url     = "https://syhya.github.io/posts/2024-12-21-build-gpu-server/"
+}
+```

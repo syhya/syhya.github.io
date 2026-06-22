@@ -92,7 +92,7 @@ Taking the [Llama 3 series](https://arxiv.org/pdf/2407.21783) as an example, it 
   The Llama 3 series includes models ranging from 1B to 405B parameters, widely supporting multilingual processing, code generation, reasoning, as well as visual and textual tasks. Smaller models (1B and 3B) are specially optimized for edge and mobile devices, supporting up to 128K context windows, efficiently handling local tasks such as summary generation, instruction execution, and text rewriting.
 
 - **Multimodal Capabilities**  
-  Llama 3's visual models (11B and 90B parameters) outperform many closed models in image understanding tasks and support multimodal processing of images, videos, and audio. All models support fine-tuning, facilitating customized development for specific domains.
+  Llama 3's visual models (11B and 90B parameters) focus on image understanding and outperform many closed models on image understanding tasks; the Llama 3 paper also conducts research-oriented multimodal experiments on video and speech (these are not capabilities of the two vision weights themselves). All models support fine-tuning, facilitating customized development for specific domains.
 
 - **Open Source and Community Support**  
   Llama 3 series models and their weights are released in open-source form and can be accessed via [llama.com](https://llama.com) and the [Hugging Face platform](https://huggingface.co/meta-llama), providing convenient access and application support for developers.
@@ -114,7 +114,7 @@ Training large language models requires robust computational resources and effic
 
 - **Parallel Strategies**  
   - **Data Parallelism (DP)**: Suitable when the model fits on a single GPU, implemented via DeepSpeed's ZeRO Stage 0.  
-  - **Model Parallelism (MP), Pipeline Parallelism (PP), and Tensor Parallelism (TP)**: When the model cannot fit on a single GPU, optimize using ZeRO Stage 1, 2, or 3, or employ ZeRO-Infinity to offload parts of parameters and optimizer states to CPU or NVMe.
+  - **Sharded Data Parallelism and Model Parallelism**: When the model cannot fit on a single GPU, first use ZeRO Stage 1, 2, or 3 for sharded data parallelism (ZeRO-DP) to reduce memory usage, and layer on Tensor Parallelism (TP) and Pipeline Parallelism (PP) when necessary; note that ZeRO operates on a different axis from TP/PP and is not equivalent to them. ZeRO-Infinity can also be used to offload parts of parameters and optimizer states to CPU or NVMe.
 
 ## DeepSpeed ZeRO Sharding Strategies Comparison
 
@@ -555,7 +555,7 @@ Ultimately, through a systematic process and technical measures, it is possible 
 Or
 
 ```bibtex
-@article{syhya2024domainllm,
+@article{syhya2025domainllm,
   title   = "Building Domain-Specific LLMs",
   author  = "Yue Shui",
   journal = "syhya.github.io",
@@ -563,3 +563,4 @@ Or
   month   = "Jan",
   url     = "https://syhya.github.io/posts/2025-01-05-domain-llm-training/"
 }
+```

@@ -251,7 +251,7 @@ While the Summary strategy successfully extends average steps from 140 to 364, i
 
 ## DeepSeekMath-V2
 
-Developed on [DeepSeek-V3.2-Exp-Base](https://huggingface.co/deepseek-ai/DeepSeek-V3.2-Exp-Base), **DeepSeekMath-V2** ([Shao et al., 2025](https://arxiv.org/abs/2511.22570)) focuses on formal mathematical reasoning and theorem proving. Unlike traditional final-answer-based reinforcement learning, DeepSeekMath-V2 introduces a **Self-Verification** mechanism that enables rigorous self-examination of reasoning processes during proof generation through collaborative training of an independent proof verifier and meta-verifier. This approach achieves gold-medal level performance on challenging mathematical competition benchmarks like [IMO-Proof Bench](https://imobench.github.io/) and [Putnam](https://maa.org/putnam/).
+Developed on [DeepSeek-V3.2-Exp-Base](https://huggingface.co/deepseek-ai/DeepSeek-V3.2-Exp-Base), **DeepSeekMath-V2** ([Shao et al., 2025](https://arxiv.org/abs/2511.22570)) focuses on formal mathematical reasoning and theorem proving. Unlike traditional final-answer-based reinforcement learning, DeepSeekMath-V2 introduces a **Self-Verification** mechanism that enables rigorous self-examination of reasoning processes during proof generation through collaborative training of an independent proof verifier and meta-verifier. This approach achieves gold-medal level performance on challenging mathematical competition benchmarks like [IMO-Proof Bench](https://imobench.github.io/) ([Luong et al., 2025](https://arxiv.org/abs/2511.01846)) and [Putnam](https://maa.org/putnam/).
 
 ### Process Reward Models
 

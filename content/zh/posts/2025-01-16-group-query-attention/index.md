@@ -14,7 +14,7 @@ math: true
 
 ## 背景
 
-Transformer ([Vaswani et al., 2017](https://arxiv.org/abs/1706.03762)）是一种基于编码器-解码器架构的模型。此模型在自然处理领域中展示了卓越的性能，随后一系列模型在此基础上进行了优化，例如仅使用编码器的 BERT ([Devlin et al., 2018](https://arxiv.org/abs/1810.04805)）或仅使用解码器的 GPT ([Radford et al., 2018](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)）系列，以及后续的大型语言模型如 LLaMA ([Touvron et al., 2023](https://arxiv.org/abs/2302.13971)）和 GPT-4 ([OpenAI al., 2024](https://arxiv.org/abs/2303.08774)）系列，这些模型大多采用了仅解码器的结构。
+Transformer ([Vaswani et al., 2017](https://arxiv.org/abs/1706.03762)）是一种基于编码器-解码器架构的模型。此模型在自然语言处理领域中展示了卓越的性能，随后一系列模型在此基础上进行了优化，例如仅使用编码器的 BERT ([Devlin et al., 2018](https://arxiv.org/abs/1810.04805)）或仅使用解码器的 GPT ([Radford et al., 2018](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)）系列，以及后续的大型语言模型如 LLaMA ([Touvron et al., 2023](https://arxiv.org/abs/2302.13971)）和 GPT-4 ([OpenAI et al., 2024](https://arxiv.org/abs/2303.08774)）系列，这些模型大多采用了仅解码器的结构。
 
 ## 符号
 | 符号                                                         | 含义                                                                                                                         |
@@ -142,7 +142,7 @@ y_i = \frac{\exp(z_i)}{\sum_{j=1}^{n} \exp(z_j)}
 
 ### 多查询注意力（MQA）
 
-多查询注意力（MQA）([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) 通过让所有查询头（Query Heads）共享同一组键（Key）\(\mathbf{K}\) 和值（Value）\(\mathbf{V}\)，从而显著减少了显存带宽的需求。具体地，如果我们将传统多头注意力（MHA）中的所有 \(\mathbf{K}_h\) 和 \(\mathbf{V}_h\) 做如下平均：
+多查询注意力（MQA）([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) 通过让所有查询头（Query Heads）共享同一组键（Key）\(\mathbf{K}\) 和值（Value）\(\mathbf{V}\)，从而显著减少了显存带宽的需求。在最初的定义中，MQA 在训练时直接为单一 \(\mathbf{K}\)/\(\mathbf{V}\) 头学习独立的投影。另一种由已有 MHA 检查点（checkpoint）转换得到 MQA 的方式（参见 GQA 论文 ([Ainslie et al., 2023](https://arxiv.org/abs/2305.13245))）是将传统多头注意力（MHA）中的所有 \(\mathbf{K}_h\) 和 \(\mathbf{V}_h\) 做如下均值池化：
 
 \[
 \mathbf{K}^* = \frac{1}{H} \sum_{h=1}^{H} \mathbf{K}_h,
@@ -844,6 +844,8 @@ $$
 | **向上训练需求**    | 无需                                 | 高，需要更多的稳定性和调整              | 较低，GQA模型在少量数据进行向上训练后即可稳定运行      |
 | **适用场景**        | 高性能需求但推理速度不敏感的应用      | 推理速度要求极高，且对模型性能要求较低的场景 | 需要在推理速度和模型性能之间取得平衡的应用          |
 
+总的来说，从**理论**角度看，MHA、MQA、GQA 三种注意力机制在完整前向计算中都具有 **\(\mathcal{O}(B \times S^2 \times d)\)** 的复杂度，在增量解码的每一步中都具有 **\(\mathcal{O}(B \times S_{\text{past}} \times d)\)** 的复杂度。
+
 
 ## 实验结果
 
@@ -967,7 +969,7 @@ $$
 
 除了注意力机制的优化，研究者们还提出了多种方法以提升Transformer模型的推理和训练效率：
 
-- **LoRA** ([HU et al., 2021](https://arxiv.org/abs/2106.09685)): 通过在预训练模型的权重矩阵上添加低秩矩阵来实现高效的参数微调。
+- **LoRA** ([Hu et al., 2021](https://arxiv.org/abs/2106.09685)): 通过在预训练模型的权重矩阵上添加低秩矩阵来实现高效的参数微调。
 - **Flash Attention**（[Dao et al., 2022](https://arxiv.org/abs/2205.14135)）：通过优化注意力计算，减少内存和计算开销。
 - **量化技术** LLM.int8（[Dettmers et al., 2022](https://arxiv.org/pdf/2208.07339))和 GPTQ ([Frantar et al., 2022](https://arxiv.org/abs/2210.17323))：通过降低模型权重和激活的精度，减少显存占用和计算成本。
 - **模型蒸馏**（[Hinton et al., 2015](https://arxiv.org/abs/1503.02531)）：通过训练小模型模仿大模型的行为，减小模型规模。

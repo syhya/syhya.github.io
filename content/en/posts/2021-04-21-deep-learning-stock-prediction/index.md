@@ -361,7 +361,7 @@ $$
 
 #### 2.2.4 Fama-French Three-Factor Model and Five-Factor Model
 
-[Fama (1992) and French (1992)](https://www.bauer.uh.edu/rsusmel/phd/Fama-French_JFE93.pdf)$^{[17]}$ used a combination of cross-sectional regression and time series methods and found that the $\beta$ value of the stock market could not explain the differences in returns of different stocks, while market capitalization, book-to-market ratio, and price-to-earnings ratio of listed companies could significantly explain the differences in stock returns. They argued that excess returns are compensation for risk factors not reflected by $\beta$ in CAPM, and thus proposed the Fama-French Three-Factor Model. The three factors are:
+[Fama (1993) and French (1993)](https://www.bauer.uh.edu/rsusmel/phd/Fama-French_JFE93.pdf)$^{[17]}$ used a combination of cross-sectional regression and time series methods and found that the $\beta$ value of the stock market could not explain the differences in returns of different stocks, while market capitalization, book-to-market ratio, and price-to-earnings ratio of listed companies could significantly explain the differences in stock returns. They argued that excess returns are compensation for risk factors not reflected by $\beta$ in CAPM, and thus proposed the Fama-French Three-Factor Model. The three factors are:
 
 -   **Market Risk Premium Factor** (Market Risk Premium)
     -   Represents the overall systematic risk of the market, i.e., the difference between the expected return of the market portfolio and the risk-free rate.
@@ -468,7 +468,7 @@ Many scholars, both domestically and internationally, focus their research on th
 |------------|-------|-------|-------|-------|-------------|--------|
 | 2008-01-02 | 9.007 | 9.101 | 9.356 | 8.805 | 131583.90   | 600000 |
 | 2008-01-03 | 9.007 | 8.645 | 9.101 | 8.426 | 211346.56   | 600000 |
-| 2008-01-04 | 8659  | 9.009 | 9.111 | 8.501 | 139249.67   | 600000 |
+| 2008-01-04 | 8.659 | 9.009 | 9.111 | 8.501 | 139249.67   | 600000 |
 | 2008-01-07 | 8.970 | 9.515 | 9.593 | 8.953 | 228043.01   | 600000 |
 | 2008-01-08 | 9.551 | 9.583 | 9.719 | 9.517 | 161255.31   | 600000 |
 | 2008-01-09 | 9.583 | 9.663 | 9.772 | 9.432 | 102510.92   | 600000 |
@@ -1386,11 +1386,11 @@ The quantitative trading strategy in this paper adopts position switching every 
 
 {{< figure
     src="res.png"
-    caption="Fig. 22. Net Profit Curve"
+    caption="Fig. 13. Net Profit Curve"
     align="center"
 >}}
 
-The backtesting results are shown in the table and Fig. 22 above. My strategy adopts the LightGBM-BiLSTM quantitative strategy introduced in this chapter. The benchmark uses the CSI All Share (000985). From the results above, it can be seen that the cumulative return of this strategy is 701.00%, which is much higher than the benchmark's 110.40%; the annualized return is 29.18%, which is much higher than the benchmark's 9.70%; and the Sharpe ratio is 0.77, which is higher than the benchmark's 0.24. These three backtesting indicators show that the LightGBM-BiLSTM quantitative strategy can indeed bring greater returns to investors. The annualized volatility of this strategy is 33.44%, which is greater than the benchmark's 26.01%, and the maximum drawdown is 51.10%, which is less than the benchmark's 58.49%. These two backtesting indicators show that the LightGBM-BiLSTM quantitative strategy has certain risks, especially it is difficult to resist the impact of systemic risks. The annualized turnover rate is 11.35%, and the annualized transaction cost rate is 2.29%, indicating that our strategy is not a high-frequency trading strategy and the transaction cost is small. It can be seen from the return curve chart that the return rate of the LightGBM-BiLSTM quantitative strategy in the first two years is not much different from the benchmark, and there is no special advantage. However, from around April 2015, the return rate of the LightGBM-BiLSTM quantitative strategy is significantly better than the benchmark's return rate. Overall, the return rate of this LightGBM-BiLSTM quantitative strategy is very considerable, but there are still certain risks.
+The backtesting results are shown in the table and Fig. 13 above. My strategy adopts the LightGBM-BiLSTM quantitative strategy introduced in this chapter. The benchmark uses the CSI All Share (000985). From the results above, it can be seen that the cumulative return of this strategy is 701.00%, which is much higher than the benchmark's 110.40%; the annualized return is 29.18%, which is much higher than the benchmark's 9.70%; and the Sharpe ratio is 0.77, which is higher than the benchmark's 0.24. These three backtesting indicators show that the LightGBM-BiLSTM quantitative strategy can indeed bring greater returns to investors. The annualized volatility of this strategy is 33.44%, which is greater than the benchmark's 26.01%, and the maximum drawdown is 51.10%, which is less than the benchmark's 58.49%. These two backtesting indicators show that the LightGBM-BiLSTM quantitative strategy has certain risks, especially it is difficult to resist the impact of systemic risks. The annualized turnover rate is 11.35%, and the annualized transaction cost rate is 2.29%, indicating that our strategy is not a high-frequency trading strategy and the transaction cost is small. It can be seen from the return curve chart that the return rate of the LightGBM-BiLSTM quantitative strategy in the first two years is not much different from the benchmark, and there is no special advantage. However, from around April 2015, the return rate of the LightGBM-BiLSTM quantitative strategy is significantly better than the benchmark's return rate. Overall, the return rate of this LightGBM-BiLSTM quantitative strategy is very considerable, but there are still certain risks.
 
 ## Chapter 5 Conclusion and Future Directions
 

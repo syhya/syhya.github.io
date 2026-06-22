@@ -221,7 +221,7 @@ def generate_with_sampling(model, idx, max_new_tokens, temperature=1.0, top_k=No
 
 {{< figure
     src="online_speculative_decoding.png"
-    caption="Fig. 8. Overview of online speculative decoding (OSD) framework: For each prompt, the draft model suggests multiple tokens and the target model performs the verification. (Image source: [Liu et al., 2024](https://arxiv.org/abs/2310.07177))"
+    caption="Fig. 8. Overview of online speculative decoding (OSD) framework: For each prompt, the draft model suggests multiple tokens and the target model performs the verification. (Image source: [Liu et al., 2023](https://arxiv.org/abs/2310.07177))"
     align="center"
     width="100%"
 >}}
@@ -401,7 +401,7 @@ $$
 从另一个角度看，量化问题是一个优化问题。给定权重矩阵 $\mathbf{W}$ 和输入矩阵 $\mathbf{X}$，我们希望找到一个量化后的权重矩阵 $\hat{\mathbf{W}}$ 来最小化均方误差 (MSE)：
 
 $$
-\hat{\mathbf{W}}^* = \arg \min_{\hat{\mathbf{W}}} |\mathbf{W}\mathbf{X} - \hat{\mathbf{W}}\mathbf{X}|
+\hat{\mathbf{W}}^* = \arg \min_{\hat{\mathbf{W}}} \|\mathbf{W}\mathbf{X} - \hat{\mathbf{W}}\mathbf{X}\|_F^2
 $$
 
 [**GPTQ**](https://github.com/IST-DASLab/gptq) ([Frantar et al. 2022](https://arxiv.org/abs/2210.17323)) 在 **OBC (Optimal Brain Compression)** ([Frantar et al. 2022](https://arxiv.org/abs/2208.11580)) 方法基础上进行优化，将权重矩阵 $\mathbf{W}$ 视为行向量 $\mathbf{w}$ 的集合，并独立地对每一行进行量化。GPTQ 迭代地量化更多的权重，这些权重是贪婪选择的，以最小化量化误差。对所选权重的更新有一个利用 Hessian 矩阵的闭式解公式。

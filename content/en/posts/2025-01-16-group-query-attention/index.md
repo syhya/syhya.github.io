@@ -142,7 +142,7 @@ Thus, the scaled dot product \(\tfrac{\mathbf{q} \cdot \mathbf{k}}{\sqrt{d_{\tex
 
 ### Multi-Query Attention (MQA)
 
-Multi-Query Attention (MQA) ([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) significantly reduces memory bandwidth requirements by allowing all query heads to share the same set of keys (\(\mathbf{K}\)) and values (\(\mathbf{V}\)). Specifically, if we average all \(\mathbf{K}_h\) and \(\mathbf{V}_h\) from traditional MHA as follows:
+Multi-Query Attention (MQA) ([Shazeer, 2019](https://arxiv.org/abs/1911.02150)) significantly reduces memory bandwidth requirements by allowing all query heads to share the same set of keys (\(\mathbf{K}\)) and values (\(\mathbf{V}\)). In the original formulation, MQA directly learns dedicated single-head \(\mathbf{K}\)/\(\mathbf{V}\) projections during training. Alternatively, one way to convert an existing MHA checkpoint into MQA (as described in the GQA paper ([Ainslie et al., 2023](https://arxiv.org/abs/2305.13245))) is to mean-pool all \(\mathbf{K}_h\) and \(\mathbf{V}_h\) from traditional MHA as follows:
 
 \[
 \mathbf{K}^* = \frac{1}{H} \sum_{h=1}^{H} \mathbf{K}_h,
@@ -192,7 +192,7 @@ By adjusting the number of groups \(G\), GQA allows flexible switching between M
 
 ### Implementation Code Snippet
 
-Below is a simple PyTorch implementation of  **MHA** 、**MQA**和 **GQA**. For GQA, two approaches are demonstrated: broadcasting and repeating.
+Below is a simple PyTorch implementation of **MHA**, **MQA**, and **GQA**. For GQA, two approaches are demonstrated: broadcasting and repeating.
 
 Additionally, note that in the actual implementation of LLaMA3, GQA incorporates KV Cache for optimization. To keep the example concise, this part is omitted in the code below. For more comprehensive details, you can refer to the official source code in [model.py](https://github.com/meta-llama/llama3/blob/main/llama/model.py).
 

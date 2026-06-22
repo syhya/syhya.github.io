@@ -16,7 +16,7 @@ This blog post introduces a streamlined alternative to RLHF called DPO. Like RLH
 
 ## Notations
 
-|Symbol                             |                                                                                                       |
+|Symbol                             | Meaning                                                                                               |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | \( x \)                          | User input (Prompt): the question the model needs to answer                                             |
 | \( y \)                          | Model-generated response (Response / Completion): the text output by the model                           |
@@ -335,4 +335,5 @@ Or
   month   = "Feb",
   url     = "https://syhya.github.io/posts/2025-02-08-dpo"
 }
+```
 

@@ -106,10 +106,10 @@ $$
 **Parameter Definitions:**
 
 * $C$: Training compute.
-* $L(C)$：Model loss under compute $C$.
-* $a$：**Scale Coefficient**, controls the overall magnitude of loss reduction as compute increases.
-* $b$：**Scaling Exponent**, determines the rate of loss reduction; a larger exponent means faster reduction.
-* $c$：**Irreducible Loss**, reflecting the inherent entropy of the data, i.e., the lower bound of error that cannot be reduced regardless of compute investment.
+* $L(C)$: Model loss under compute $C$.
+* $a$: **Scale Coefficient**, controls the overall magnitude of loss reduction as compute increases.
+* $b$: **Scaling Exponent**, determines the rate of loss reduction; a larger exponent means faster reduction.
+* $c$: **Irreducible Loss**, reflecting the inherent entropy of the data, i.e., the lower bound of error that cannot be reduced regardless of compute investment.
 
 {{< figure
 src="gpt4_loss.png"

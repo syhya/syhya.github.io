@@ -77,7 +77,7 @@ Before diving into specific technologies, let's understand some basic concepts o
 *   **Image:** Static visual information, containing rich details of scenes, objects, and textures.
 *   **Video:** Dynamic visual information, composed of sequential image frames, often accompanied by audio. Video contains not only spatial information but also temporal information.
 *   **Audio:** Sound information, including speech, music, and environmental sounds.
-*   **Others:** Tabular data, [3D point clouds](https://zh.wikipedia.org/wiki/%E9%BB%9E%E9%9B%B2), sensor data (e.g., radar, LiDAR), biological signals (e.g., [EEG](https://en.wikipedia.org/wiki/Electroencephalography), [ECG](https://en.wikipedia.org/wiki/Electrocardiography)), etc.
+*   **Others:** Tabular data, [3D point clouds](https://en.wikipedia.org/wiki/Point_cloud), sensor data (e.g., radar, LiDAR), biological signals (e.g., [EEG](https://en.wikipedia.org/wiki/Electroencephalography), [ECG](https://en.wikipedia.org/wiki/Electrocardiography)), etc.
 
 ### Why Do We Need Multimodal AI?
 
@@ -200,8 +200,8 @@ As research progresses, ViT itself is continuously being optimized to meet the d
     The total loss is:
     \[ \mathcal{L}_{CLIP} = \frac{1}{2} (\mathcal{L}_{\text{image}} + \mathcal{L}_{\text{text}}) \]
     where,
-    \[ \mathcal{L}_{\text{image}} = -\frac{1}{N} \sum_{i=1}^N \log \frac{\exp(\text{sim}(I_{e,i}, T_{e,i}) / \tau)}{\sum_{j=1}^N \exp(\text{sim}(I_{e,i}, T_{e,j}) / \tau)} \]
-    \[ \mathcal{L}_{\text{text}} = -\frac{1}{N} \sum_{j=1}^N \log \frac{\exp(\text{sim}(I_{e,j}, T_{e,j}) / \tau)}{\sum_{i=1}^N \exp(\text{sim}(I_{e,i}, T_{e,j}) / \tau)} \]
+    \[ \mathcal{L}_{\text{image}} = -\frac{1}{N} \sum_{i=1}^N \log \frac{\exp(\text{sim}(I_{e,i}, T_{e,i}) \cdot \exp(\tau))}{\sum_{j=1}^N \exp(\text{sim}(I_{e,i}, T_{e,j}) \cdot \exp(\tau))} \]
+    \[ \mathcal{L}_{\text{text}} = -\frac{1}{N} \sum_{j=1}^N \log \frac{\exp(\text{sim}(I_{e,j}, T_{e,j}) \cdot \exp(\tau))}{\sum_{i=1}^N \exp(\text{sim}(I_{e,i}, T_{e,j}) \cdot \exp(\tau))} \]
     This loss function encourages the similarity of positive pairs (matching image-text) to be higher than that of negative pairs (mismatched image-text).
 
 {{< collapse summary="**CLIP Core Pseudocode**" openByDefault=false >}}
@@ -558,7 +558,7 @@ Qwen-VL adopts a "three-stage" progressive training strategy to inject visual pe
 
 As seen in the figure above, Qwen2-VL can accurately identify and understand content within images of varying resolutions and aspect ratios. It primarily employs the following techniques:
 
-*   **Native Dynamic Resolution:** Inspired by **NaViT** ([Dehghani et al., 2023](https://arxiv.org/abs/2307.06304)), the model can process images of arbitrary resolutions and dynamically convert them into variable-length visual token sequences.
+*   **Naive Dynamic Resolution:** Inspired by **NaViT** ([Dehghani et al., 2023](https://arxiv.org/abs/2307.06304)), the model can process images of arbitrary resolutions and dynamically convert them into variable-length visual token sequences.
     *   Removes absolute position embeddings from ViT and introduces **2D Rotary Position Embedding (2D-RoPE)** ([Su et al., 2024](https://arxiv.org/abs/2104.09864); [Su, 2021](https://spaces.ac.cn/archives/8397)) to encode 2D spatial information.
     *   During inference, variable-resolution images are processed in packed batches, limiting the total token length to manage memory usage.
     *   After ViT output, an MLP compresses adjacent \( 2 \times 2 \) tokens into one, reducing the sequence length input to the LLM. Visual tokens are wrapped with `<|vision_start|>` and `<|vision_end|>`.

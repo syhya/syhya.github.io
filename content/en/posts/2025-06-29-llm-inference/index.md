@@ -220,7 +220,7 @@ It uses a small, fast Draft Model to generate multiple (e.g., $k$) candidate tok
 
 {{< figure
     src="online_speculative_decoding.png"
-    caption="Fig. 8. Overview of online speculative decoding (OSD) framework: For each prompt, the draft model suggests multiple tokens and the target model performs the verification. (Image source: [Liu et al., 2024](https://arxiv.org/abs/2310.07177))"
+    caption="Fig. 8. Overview of online speculative decoding (OSD) framework: For each prompt, the draft model suggests multiple tokens and the target model performs the verification. (Image source: [Liu et al., 2023](https://arxiv.org/abs/2310.07177))"
     align="center"
     width="100%"
 >}}
@@ -395,7 +395,7 @@ Simply quantizing the entire weight matrix of a layer ("per-tensor" or "per-laye
 From another perspective, the quantization problem is an optimization problem. Given a weight matrix $\mathbf{W}$ and an input matrix $\mathbf{X}$, we want to find a quantized weight matrix $\hat{\mathbf{W}}$ that minimizes the mean squared error (MSE):
 
 $$
-\hat{\mathbf{W}}^* = \arg \min_{\hat{\mathbf{W}}} |\mathbf{W}\mathbf{X} - \hat{\mathbf{W}}\mathbf{X}|
+\hat{\mathbf{W}}^* = \arg \min_{\hat{\mathbf{W}}} \|\mathbf{W}\mathbf{X} - \hat{\mathbf{W}}\mathbf{X}\|_F^2
 $$
 
 [**GPTQ**](https://github.com/IST-DASLab/gptq) ([Frantar et al. 2022](https://arxiv.org/abs/2210.17323)) builds on the **OBC (Optimal Brain Compression)** ([Frantar et al. 2022](https://arxiv.org/abs/2208.11580)) method, treating the weight matrix $\mathbf{W}$ as a set of row vectors $\mathbf{w}$ and quantizing each row independently. GPTQ iteratively quantizes more weights, which are chosen greedily to minimize the quantization error. The update for the selected weights has a closed-form solution that utilizes the Hessian matrix.

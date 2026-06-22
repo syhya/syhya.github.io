@@ -299,7 +299,7 @@ MoE 设计灵感来源于[集成学习(Ensemble learning)](https://en.wikipedia.
 
 {{< figure
     src="moe.png"
-    caption="Fig. 6. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of experts are selected and activated by the gating network. (Image source: [Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))"
+    caption="Fig. 6. Illustration of a mixture-of-experts(MoE) layer. Only 2 out of n experts are selected and activated by the gating network. (Image source: [Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))"
     align="center"
     width="100%"
 >}}  
@@ -871,7 +871,7 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
 
 {{< figure
     src="fp8_vs_bf16_loss_curves.png"
-    caption="Fig. 18. Loss curves comparison between BF16 and FP8 training. Results are smoothed by Exponential Moving Average (EMA) with a coefficient of 0.9 [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
+    caption="Fig. 18. Loss curves comparison between BF16 and FP8 training. Results are smoothed by Exponential Moving Average (EMA) with a coefficient of 0.9. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"
 >}}
@@ -1145,7 +1145,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 | Code | HumanEval-Mul (Pass@1) | 77.4 | 77.3 | 77.2 | 81.7 | 80.5 | **82.6** |
 |  | LiveCodeBench ([Jain et al., 2024](https://arxiv.org/abs/2403.07974)) (Pass@1-COT) | 29.2 | 31.1 | 28.4 | 36.3 | 33.4 | **40.5** |
 |  | SWE Verified ([OpenAI, 2024d](https://openai.com/index/introducing-swe-bench-verified/)) (Resolved) | 22.6 | 23.8 | 24.5 | **50.8** | 38.8 | 42.0 |
-| Math | AIME 2024 ([MAA, 2024](https://artofproblemsolving.com/wiki/index.php/2024_AIME_I?srsltid=AfmBOooril84-FGuAUnzl8I-zXl8XG7P00X-BAkMG9x9RIzEWcXHlwWm) (Pass@1) | 16.7 | 23.3 | 23.3 | 16.0 | 9.3 | **39.2** |
+| Math | AIME 2024 ([MAA, 2024](https://artofproblemsolving.com/wiki/index.php/2024_AIME_I)) (Pass@1) | 16.7 | 23.3 | 23.3 | 16.0 | 9.3 | **39.2** |
 |  | MATH-500 ([Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)) (ЕМ) | 74.7 | 80.0 | 73.8 | 78.3 | 74.6 | **90.2** |
 | Chinese | C-Eval ([Huang et al., 2023](https://arxiv.org/abs/2305.08322)) (EM) | 79.5 | 86.1 | 61.5 | 76.7 | 76.0 | **86.5** |
 |  | C-SimpleQA ([He et al., 2024](https://arxiv.org/abs/2411.07140)) (Correct) | 54.1 | 48.4 | 50.4 | 51.3 | 59.3 | **64.8** |
@@ -1216,7 +1216,7 @@ DeepSeek-V2 和 DeepSeek-V3 是两款强大、经济且高效的 MoE 语言模�
 
 [12] Fedus, William, Barret Zoph, and Noam Shazeer. ["Switch transformers: Scaling to trillion parameter models with simple and efficient sparsity."](https://arxiv.org/abs/2101.03961) The Journal of Machine Learning Research 23.1: 5232-5270 (2022).
 
-[13] Zhou, Zexuan, et al. ["Mixture-of-experts with expert choice routing."](https://arxiv.org/abs/2202.09368) Advances in Neural Information Processing Systems 35: 7103-7114 (2022).
+[13] Zhou, Yanqi, et al. ["Mixture-of-experts with expert choice routing."](https://arxiv.org/abs/2202.09368) Advances in Neural Information Processing Systems 35: 7103-7114 (2022).
 
 [14] Leviathan, Yaniv, Matan Kalman, and Yossi Matias. ["Fast inference from transformers via speculative decoding."](https://arxiv.org/abs/2211.17192) Proceedings of the 40th International Conference on Machine Learning. PMLR 202:19274-19286 (2023).
 
@@ -1230,7 +1230,7 @@ DeepSeek-V2 和 DeepSeek-V3 是两款强大、经济且高效的 MoE 语言模�
 
 [19] Li, Shigang, and Torsten Hoefler. ["Chimera: Efficiently training large-scale neural networks with bidirectional pipelines."](https://arxiv.org/abs/2107.06925) Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis. 2021.
 
-[20] Bauer, Michael, Sean Treichler, and Alex Aiken. ["Singe: Leveraging warp specialization for high performance on gpus."](https://dl.acm.org/doi/10.1145/2692916.2555258) Proceedings of the 19th ACM SIGPLAN symposium on Principles and practice of parallel programming. 2014.
+[20] Bauer, Michael, Sean Treichler, and Alex Aiken. ["Singe: Leveraging warp specialization for high performance on gpus."](https://dl.acm.org/doi/10.1145/2555243.2555258) Proceedings of the 19th ACM SIGPLAN symposium on Principles and practice of parallel programming. 2014.
 
 [21] Dettmers, Tim, et al. ["Llm. int8 (): 8-bit matrix multiplication for transformers at scale."](https://arxiv.org/abs/2208.07339) Advances in Neural Information Processing Systems 35: 34138-34151 (2022).
 

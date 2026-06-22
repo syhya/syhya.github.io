@@ -94,7 +94,7 @@ type: "posts"
   Llama 3 系列涵盖从 1B 到 405B 参数的模型，广泛支持多语言处理、代码生成、推理，以及视觉和文本任务。小型模型（1B 和 3B）经过专门优化，适合边缘和移动设备，支持最大 128K 的上下文窗口，可高效处理本地任务，例如摘要生成、指令执行和文本重写。
 
 - **多模态能力**  
-  Llama 3 的视觉模型（11B 和 90B 参数）在图像理解任务上的表现优于许多封闭模型，同时支持图像、视频和语音的多模态处理。所有模型均支持微调，便于针对特定领域进行定制化开发。
+  Llama 3 的视觉模型（11B 和 90B 参数）聚焦图像理解，在图像理解任务上的表现优于许多封闭模型；Llama 3 论文另就视频与语音做了研究性的多模态实验（并非这两个视觉权重本身的能力）。所有模型均支持微调，便于针对特定领域进行定制化开发。
 
 - **开源与社区支持**  
   Llama 3 系列模型及其权重以开源形式发布，可通过 [llama.com](https://llama.com) 和 [Hugging Face 平台](https://huggingface.co/meta-llama) 获取，为开发者提供便捷的访问和应用支持。
@@ -116,7 +116,7 @@ type: "posts"
 
 - **并行策略**  
   - **数据并行**：适用于单卡可容纳模型的情况，通过 DeepSpeed 的 ZeRO Stage 0 实现。
-  - **模型并行、流水线并行和张量并行**：单卡无法容纳时，采用 ZeRO Stage 1、2、3 进行优化，或使用 ZeRO-Infinity 将参数和优化器状态部分卸载到 CPU 或 NVMe。
+  - **分片数据并行与模型并行**：单卡无法容纳时，可先用 ZeRO Stage 1、2、3 做分片数据并行（ZeRO-DP）降低显存占用，必要时再叠加张量并行（TP）和流水线并行（PP）；注意 ZeRO 与 TP/PP 属于不同维度，不能等同。也可使用 ZeRO-Infinity 将参数和优化器状态部分卸载到 CPU 或 NVMe。
 
 ## DeepSpeed ZeRO 分片策略对比
 
@@ -156,7 +156,7 @@ type: "posts"
   - 在 **ZeRO-3** 的基础上进一步卸载至 NVMe，突破 CPU 内存限制以支持超大规模模型。
   - 性能强烈依赖 **NVMe I/O 带宽** 和并行度，若 NVMe 速度足够高，通常优于 CPU Offload；但在 I/O 性能较弱或高延迟场景下，效果可能不佳。
 
-## 硬件与配置影响
+### 硬件与配置影响
 
 - **硬件限制**
   - **PCIe 带宽**、**网络带宽**、**NVMe I/O** 等对 Offload 性能有显著影响，需根据硬件环境选择最佳策略。
@@ -561,7 +561,7 @@ https://syhya.github.io/posts/2025-01-05-domain-llm-training
 Or
 
 ```bibtex
-@article{syhya2024domainllm,
+@article{syhya2025domainllm,
   title   = "构建特定领域的大语言模型",
   author  = "Yue Shui",
   journal = "syhya.github.io",
@@ -569,3 +569,4 @@ Or
   month   = "Jan",
   url     = "https://syhya.github.io/posts/2025-01-05-domain-llm-training/"
 }
+```

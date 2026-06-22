@@ -257,7 +257,7 @@ DeepSeek-V3.2 也参照实现精细的上下文管理：
 
 ## DeepSeekMath-V2
 
-基于[DeepSeek-V3.2-Exp-Base](https://huggingface.co/deepseek-ai/DeepSeek-V3.2-Exp-Base) 开发的 **DeepSeekMath-V2**([Shao et al., 2025](https://arxiv.org/abs/2511.22570))专注于形式化数学推理与定理证明。与传统基于最终答案的强化学习不同，DeepSeekMath-V2 引入了一套**自验证（Self-Verification）** 机制，通过独立的证明验证器和元验证器的协同训练，使模型能够在生成证明的同时对推理过程进行严格的自我检查。这种方法在 [IMO-Proof Bench](https://imobench.github.io/) 和 [Putnam](https://maa.org/putnam/) 等高难度数学竞赛基准上取得了金牌级别的表现。
+基于[DeepSeek-V3.2-Exp-Base](https://huggingface.co/deepseek-ai/DeepSeek-V3.2-Exp-Base) 开发的 **DeepSeekMath-V2**([Shao et al., 2025](https://arxiv.org/abs/2511.22570))专注于形式化数学推理与定理证明。与传统基于最终答案的强化学习不同，DeepSeekMath-V2 引入了一套**自验证（Self-Verification）** 机制，通过独立的证明验证器和元验证器的协同训练，使模型能够在生成证明的同时对推理过程进行严格的自我检查。这种方法在 [IMO-Proof Bench](https://imobench.github.io/) ([Luong et al., 2025](https://arxiv.org/abs/2511.01846)) 和 [Putnam](https://maa.org/putnam/) 等高难度数学竞赛基准上取得了金牌级别的表现。
 
 ### 过程奖励模型
 

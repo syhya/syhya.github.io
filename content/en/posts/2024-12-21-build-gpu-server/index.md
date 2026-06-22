@@ -4,7 +4,7 @@ date: 2024-12-21T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "RTX 4090", "AI Hardware", "GPU"]
 categories: ["Technical Blog"]
-# readingTime: 10
+readingTime: 25
 ShowReadingTime: true
 toc: true
 ShowToc: true
@@ -61,7 +61,7 @@ The total budget is around **40,000 RMB (~6,000 USD)**. The final build list is 
 | **GPU**              | RTX 4090 \* 2                                | 25098        |
 | **Motherboard + CPU**| AMD R9 7900X + MSI MPG X670E CARBON          | 5157.55      |
 | **Memory**           | Corsair 48GB \* 2 (DDR5 5600)                | 2399         |
-| **SSD**              | SOLIDIGM 944 PRO 2TB \*2 + Samsung 990PRO 4TB| 4587         |
+| **SSD**              | SOLIDIGM P44 Pro 2TB \*2 + Samsung 990PRO 4TB| 4587         |
 | **PSU**              | Corsair AX1600i                              | 2699         |
 | **Fans**             | Phanteks T30 120mm P \* 6                     | 1066.76      |
 | **CPU Cooler**       | Thermalright FC140 BLACK                     | 419          |
@@ -248,7 +248,7 @@ From personal experience, dual 4090 GPUs provide sufficient performance within a
 
 1. [Tim Dettmers: Which GPU for Deep Learning? (2023)](https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/)  
 2. [Intel 14900K PCIe lane specs](https://www.intel.com/content/www/us/en/products/sku/236773/intel-core-i9-processor-14900k-36m-cache-up-to-6-00-ghz/specifications.html)  
-3. [AMD R5 7600X PCIe lane specs](https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600.html)  
+3. [AMD R5 7600 PCIe lane specs](https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600.html)  
 4. [MSI MPG X670E CARBON Specifications](https://www.msi.com/Motherboard/MPG-X670E-CARBON-WIFI/Specification)  
 5. [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-container-toolkit)  
 6. [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)  
@@ -282,4 +282,5 @@ Or
   year    = "2024",
   month   = "Dec",
   url     = "https://syhya.github.io/posts/2024-12-21-build-gpu-server/"
-  
+}
+```

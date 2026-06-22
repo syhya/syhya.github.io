@@ -312,7 +312,7 @@ LLaMA 4 采用了新的三阶段后训练流程，旨在平衡指令遵循、智
 | **基础模型**        | -                    | -                    | LLaMA 2              | LLaMA 2 / LLaMA 3    | -                    | -                        |
 | **模型规模**        | 7B - 65B             | 7B, 13B, 70B         | 7B - 70B             | 7B / 8B (+Vision)    | 1B - 405B (+Vision)  | 109B, 400B, ~2T (MoE)|
 | **训练数据量**      | 1T - 1.4T tokens     | 2T+ tokens           | + 0.5T/1T Code       | ~40k 安全分类    | 15T+ tokens          | 30T+ tokens (多模态) |
-| **上下文长度**      | 2k tokens            | 4k tokens            | 100k | 4k / 8k+             | 8k / 128k tokens     | 10M |
+| **上下文长度**      | 2k tokens            | 4k tokens            | 100k | 4k / 8k+             | 8k / 128k tokens     | 1M / 10M tokens |
 | **Tokenizer**      | SentencePiece (32k)  | SentencePiece (32k)  | SentencePiece (32k)  | 基于 LLaMA 2/3       | tiktoken (128k)      | tiktoken (~200k)      |
 | **位置编码**        | RoPE                 | RoPE                 | RoPE (基数调整)      | RoPE                 | RoPE                 | iRoPE   |
 | **注意力** | MHA       | MHA / GQA (34B, 70B) | MHA / GQA (>13B)     | 基于 LLaMA 2/3       | GQA   | GQA                  |

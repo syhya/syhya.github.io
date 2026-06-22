@@ -449,15 +449,15 @@ Building on V0, vLLM V1 comprehensively refactors and optimizes the core archite
 
 [10] InternLM Team. ["LMDeploy."](https://github.com/InternLM/lmdeploy) GitHub Repository, 2025.
 
-[12] Shah, Jay, et al. ["Flashattention-3: Fast and accurate attention with asynchrony and low-precision."](https://arxiv.org/abs/2407.08608) Advances in Neural Information Processing Systems 37 (2024): 68658-68685.
+[11] Shah, Jay, et al. ["Flashattention-3: Fast and accurate attention with asynchrony and low-precision."](https://arxiv.org/abs/2407.08608) Advances in Neural Information Processing Systems 37 (2024): 68658-68685.
 
-[13] ModelTC. ["LightLLM."](https://github.com/ModelTC/lightllm) GitHub Repository, 2025.
+[12] ModelTC. ["LightLLM."](https://github.com/ModelTC/lightllm) GitHub Repository, 2025.
 
-[14] Zheng, Lianmin, et al. ["Sglang: Efficient execution of structured language model programs."](https://arxiv.org/abs/2312.07104) Advances in Neural Information Processing Systems 37 (2024): 62557-62583.
+[13] Zheng, Lianmin, et al. ["Sglang: Efficient execution of structured language model programs."](https://arxiv.org/abs/2312.07104) Advances in Neural Information Processing Systems 37 (2024): 62557-62583.
 
-[15] NVIDIA. ["TensorRT-LLM."](https://github.com/NVIDIA/TensorRT-LLM) GitHub Repository, 2025.
+[14] NVIDIA. ["TensorRT-LLM."](https://github.com/NVIDIA/TensorRT-LLM) GitHub Repository, 2025.
 
-[16] vLLM Team. ["NYC vLLM Meetup Presentation."](https://docs.google.com/presentation/d/1_q_aW_ioMJWUImf1s1YM-ZhjXz8cUeL0IJvaquOYBeA/edit?slide=id.g31441846c39_0_0#slide=id.g31441846c39_0_0) Google Slides, 2025.
+[15] vLLM Team. ["NYC vLLM Meetup Presentation."](https://docs.google.com/presentation/d/1_q_aW_ioMJWUImf1s1YM-ZhjXz8cUeL0IJvaquOYBeA/edit?slide=id.g31441846c39_0_0#slide=id.g31441846c39_0_0) Google Slides, 2025.
 
 ## Citation
 

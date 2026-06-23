@@ -651,7 +651,7 @@ $$
 \end{aligned}
 $$
 
-In the optimization problem considered, a matrix $A$ is defined, and the element in the $i$-th row and $j$-th column indicates whether the $i$-th expert has selected the $j$-th token (value 0 or 1). Since this optimization problem is complex to solve, the paper uses the [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) (to obtain an approximate solution through multiple iterations) to solve it.
+In the optimization problem considered, a matrix $A$ is defined, and the element in the $i$-th row and $j$-th column indicates whether the $i$-th expert has selected the $j$-th token (value 0 or 1). Since this optimization problem is complex to solve, the paper uses [Dykstra's algorithm](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full) (to obtain an approximate solution through multiple iterations) to solve it.
 
 The parameter $b$ is usually determined by the total number of tokens $n$ in the batch and the capacity factor, where the capacity factor represents the average number of experts used by each token. Most experiments use a higher capacity factor. The experimental results show that even when the capacity is reduced, EC (Expert Choice) still performs better than traditional top-1 token choice routing, although capped expert choice slightly reduces fine-tuning performance.
 
@@ -1038,13 +1038,8 @@ Adafactor ([Shazeer et al. 2018](https://arxiv.org/abs/1804.04235)) is a memory-
 
 #### SM3
 
-SM3 (Sparse Momentum for Massive Models) ([Anil et al. 2019](https://arxiv.org/abs/1901.11150)) provides a memory-efficient adaptive optimization scheme through sparse updates and state sharing.
+SM3 (Square-root of Minima of Sums of Maxima of Squared-gradients Method) ([Anil et al. 2019](https://arxiv.org/abs/1901.11150)) provides another memory-efficient adaptive optimization method, greatly reducing the memory footprint of optimizer states through a low-overhead approximation of AdaGrad's second-order moment.
 
-- **Sparse Momentum:** Only update Momentum for parameters with non-zero gradients, thereby reducing computation and storage overhead;
-- **State Sharing:** To a certain extent, allow different parameters to share state variables, further reducing memory consumption;
-- **Adaptive Learning Rate:** Dynamically adjust the learning rate according to the gradients of each parameter, improving the stability and convergence speed of model training.
-
-Okay, here is the English translation of the provided text about LoRA:
 
 ### LoRA
 

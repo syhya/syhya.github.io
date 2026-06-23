@@ -670,7 +670,7 @@ $$
 \end{aligned}
 $$
 
-考虑的优化问题中定义了一个矩阵 $A$，其第 $i$ 行第 $j$ 列的元素表示第 $i$ 个专家是否选择了第 $j$ 个 token(取值 0 或 1)。由于该优化问题求解较为复杂，论文中采用 [Dijkstra 算法](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)(通过多次迭代获得近似解)来解决。
+考虑的优化问题中定义了一个矩阵 $A$，其第 $i$ 行第 $j$ 列的元素表示第 $i$ 个专家是否选择了第 $j$ 个 token(取值 0 或 1)。由于该优化问题求解较为复杂，论文中采用 [Dykstra 算法](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full)(通过多次迭代获得近似解)来解决。
 
 参数 $b$ 通常由批量中 token 总数 $n$ 与容量因子决定，其中容量因子表示每个 token 平均使用的专家数量。大多数实验采用较高的容量因子，实验结果表明，即使在容量降低的情况下，EC 整体表现仍优于传统的 top-1 token 选择路由，尽管 capped expert choice 略微降低了微调性能。
 
@@ -1066,11 +1066,7 @@ $$
 
 #### SM3
 
-**SM3(Sparse Momentum for Massive Models)**([Anil et al. 2019](https://arxiv.org/abs/1901.11150)) 通过稀疏更新和状态共享，提供了一种同样内存高效的自适应优化方案。
-
-- **稀疏 Momentum：** 只对梯度非零的参数更新 Momentum，从而减少计算和存储开销；
-- **状态共享：** 在一定程度上允许不同参数共享状态变量，进一步降低内存消耗；
-- **自适应学习率：** 根据各参数梯度动态调整学习率，提高了模型训练的稳定性和收敛速度。
+**SM3(Square-root of Minima of Sums of Maxima of Squared-gradients Method)**([Anil et al. 2019](https://arxiv.org/abs/1901.11150)) 提供了另一种内存高效的自适应优化方法，通过对 AdaGrad 二阶矩的低开销近似，大幅降低优化器状态的显存占用。
 
 
 ### LoRA

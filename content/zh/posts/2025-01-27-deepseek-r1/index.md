@@ -866,7 +866,7 @@ DeepSeek-R1 的成功展示了 RL 提升 LLM 推理能力的巨大潜力。DeepS
 **Cited as:**
 
 > Yue Shui. (Jan 2025). OpenAI o1复现进展：DeepSeek-R1.
-https://syhya.github.io/posts/2025-01-27-deepseek-r1
+https://syhya.github.io/zh/posts/2025-01-27-deepseek-r1
 
 Or
 
@@ -877,5 +877,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Jan",
-  url     = "https://syhya.github.io/posts/2025-01-27-deepseek-r1"
+  url     = "https://syhya.github.io/zh/posts/2025-01-27-deepseek-r1"
 }
+```

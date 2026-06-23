@@ -345,7 +345,7 @@ $$
 *   **性能相当：** 实践证明，RMSNorm 在 Transformer 等架构中通常能达到与 LayerNorm 相当甚至更好的性能，同时保持训练稳定性。
 *   **实现简单：** 其计算逻辑相对简单，易于在各种硬件上高效实现。
 
-> 关于各种 Norm 的对比和代码实现，可参考博客：[Normalization in Deep Learning](https://syhya.github.io/posts/2025-02-01-normalization/)。
+> 关于各种 Norm 的对比和代码实现，可参考博客：[Normalization in Deep Learning](https://syhya.github.io/zh/posts/2025-02-01-normalization/)。
 
 ### FFN_SwiGLU
 
@@ -406,7 +406,7 @@ GQA 是 MHA 和多查询注意力（Multi-Query Attention, MQA）之间的一种
 *   **平衡性能与效率：** GQA 在大幅减少 KV Cache（是 MHA 的 $G/H$）的同时，通常能保持比 MQA 更接近 MHA 的模型质量。
 *   **加速推理：** 减少内存带宽需求可以显著加速大模型的推理速度，尤其是在长序列生成场景下。
 
-> 更多关于注意力机制在 **MHA**、**MQA** 和 **GQA** 之间的详细对比及代码示例，可参考博客：[Attention Mechanisms in Transformers: Comparing MHA, MQA, and GQA](https://syhya.github.io/posts/2025-01-16-group-query-attention/#grouped-query-attention-gqa)。
+> 更多关于注意力机制在 **MHA**、**MQA** 和 **GQA** 之间的详细对比及代码示例，可参考博客：[Attention Mechanisms in Transformers: Comparing MHA, MQA, and GQA](https://syhya.github.io/zh/posts/2025-01-16-group-query-attention/#分组查询注意力gqa)。
 
 ### Rotary Positional Embeddings (RoPE)
 
@@ -482,7 +482,7 @@ $$
 *   **训练稳定性：** MoE 模型的训练可能比密集模型更不稳定，需要仔细调整超参数和训练策略。
 *   **内存占用：** 虽然计算量是稀疏的，但模型总参数量巨大，需要大量内存来存储所有专家权重。
 
-> 关于 MoE 更详细的说明，可参考博客：[Parallelism and Memory Optimization Techniques for Training Large Models](https://syhya.github.io/posts/2025-03-01-train-llm/#mixture-of-experts-model)的混合专家模型部分。
+> 关于 MoE 更详细的说明，可参考博客：[Parallelism and Memory Optimization Techniques for Training Large Models](https://syhya.github.io/zh/posts/2025-03-01-train-llm/#混合专家模型)的混合专家模型部分。
 
 
 ## 参考文献

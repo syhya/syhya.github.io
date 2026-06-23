@@ -444,7 +444,7 @@ $$
 
 [12] Tao, Zhengwei, et al. ["Webshaper: Agentically data synthesizing via information-seeking formalization."](https://arxiv.org/abs/2507.15061) arXiv preprint arXiv:2507.15061 (2025).
 
-[13] Zheng, Lianmin, et al. [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena."](https://arxiv.org/abs/2306.05685) Advances in neural information processing systems 36 (2023): 46595-46623.
+[13] Zheng, Lianmin, et al. ["Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena."](https://arxiv.org/abs/2306.05685) Advances in neural information processing systems 36 (2023): 46595-46623.
 
 [14] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
 

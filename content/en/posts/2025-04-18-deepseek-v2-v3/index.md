@@ -1220,7 +1220,7 @@ DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE lang
 
 [23] Peng, Houwen, et al. ["FP8-LM: Training FP8 Large Language Models."](https://arxiv.org/abs/2310.18313) arXiv preprint arXiv:2310.18313 (2023).
 
-[24] Fishman, Maxim, et al. ["Scaling FP8 training to trillion-token LLMs."](https://arxiv.org/abs/2409.12517)) arXiv preprint arXiv:2409.12517 (2024).
+[24] Fishman, Maxim, et al. ["Scaling FP8 training to trillion-token LLMs."](https://arxiv.org/abs/2409.12517) arXiv preprint arXiv:2409.12517 (2024).
 
 [25] He, Bobby, et al. ["Understanding and minimising outlier features in neural network training."](https://arxiv.org/abs/2405.19279) arXiv preprint arXiv:2405.19279 (2024).
 

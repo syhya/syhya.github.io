@@ -1489,7 +1489,7 @@ commison：手续费
 **Cited as:**
 
 > Yue Shui. (Apr 2021). 基于深度学习的股票价格预测和量化策略.  
-https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/
+https://syhya.github.io/zh/posts/2021-04-21-deep-learning-stock-prediction/
 
 Or
 
@@ -1500,5 +1500,6 @@ Or
   journal = "syhya.github.io",
   year    = "2021",
   month   = "Apr",
-  url     = "https://syhya.github.io/posts/2021-04-21-deep-learning-stock-prediction/"
+  url     = "https://syhya.github.io/zh/posts/2021-04-21-deep-learning-stock-prediction/"
 }
+```

@@ -312,7 +312,7 @@ $$
 **Cited as:**
 
 > Yue Shui. (Feb 2025). 深度学习中的归一化.  
-https://syhya.github.io/posts/2025-02-01-normalization
+https://syhya.github.io/zh/posts/2025-02-01-normalization
 
 Or
 
@@ -323,6 +323,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Feb",
-  url     = "https://syhya.github.io/posts/2025-02-01-normalization"
+  url     = "https://syhya.github.io/zh/posts/2025-02-01-normalization"
 }
 ```

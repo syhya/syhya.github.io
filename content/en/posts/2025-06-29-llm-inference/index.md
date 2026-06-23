@@ -741,7 +741,7 @@ The survey paper **Efficient Transformers** ([Tay et al. 2020](https://arxiv.org
     width="100%"
 >}}
 
-### References
+## References
 
 [1] Zhou, Zixuan, et al. [“A survey on efficient inference for large language models.”](https://arxiv.org/abs/2404.14294) arXiv preprint arXiv:2404.14294 (2024).
 

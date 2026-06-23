@@ -613,7 +613,7 @@ CUA operates in an iterative loop consisting of three stages:
 
 - **Act**: CUA interacts with the browser by simulating mouse and keyboard operations (such as clicking, typing, and scrolling). This allows it to perform various web tasks without needing specific API integrations.
 
-CUA differs from the pre-existing WebVoyager in that it is an agent specifically trained with reinforcement learning, rather than a fixed-flow workflow built by directly calling GPT-4o. Although CUA is still in its early stages and has certain limitations, it has achieved state-of-the-art results on the following benchmarks.
+CUA differs from the pre-existing WebVoyager in that it is an agent specifically trained with reinforcement learning, rather than a fixed-flow workflow built by directly calling GPT-4o. Although CUA is still in its early stages and has certain limitations, it has already achieved state-of-the-art results on multiple benchmarks, as shown below.
 
 {{< figure
     src="cua_benchmark.png"

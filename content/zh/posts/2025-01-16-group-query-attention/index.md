@@ -1014,7 +1014,7 @@ $$
 **Cited as:**
 
 > Yue Shui. (Jan 2025). Transformer注意力机制：MHA、MQA与GQA的对比.  
-https://syhya.github.io/posts/2025-01-16-group-query-attention/
+https://syhya.github.io/zh/posts/2025-01-16-group-query-attention/
 
 Or
 
@@ -1025,5 +1025,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Jan",
-  url     = "https://syhya.github.io/posts/2025-01-16-group-query-attention/"
+  url     = "https://syhya.github.io/zh/posts/2025-01-16-group-query-attention/"
 }
+```

@@ -303,7 +303,7 @@ These results indicate that GPT-5 has made significant improvements in complex t
 Or
 
 ```bibtex
-@article{yue_shui_gpt5_2025
+@article{yue_shui_gpt5_2025,
   title   = "gpt-oss & GPT-5",
   author  = "Yue Shui",
   journal = "syhya.github.io",

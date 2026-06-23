@@ -556,7 +556,7 @@ type: "posts"
 **Cited as:**
 
 > Yue Shui. (Jan 2025). 构建特定领域的大语言模型.  
-https://syhya.github.io/posts/2025-01-05-domain-llm-training
+https://syhya.github.io/zh/posts/2025-01-05-domain-llm-training
 
 Or
 
@@ -567,6 +567,6 @@ Or
   journal = "syhya.github.io",
   year    = "2025",
   month   = "Jan",
-  url     = "https://syhya.github.io/posts/2025-01-05-domain-llm-training/"
+  url     = "https://syhya.github.io/zh/posts/2025-01-05-domain-llm-training/"
 }
 ```

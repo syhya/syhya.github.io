@@ -58,7 +58,7 @@ To maintain high efficiency while supporting a 128k long context, gpt-oss employ
 
 *   **Grouped-Query Attention (GQA)**: gpt-oss has 64 query heads and 8 key/value heads, meaning every 8 query heads share a single K/V pair. This significantly reduces the size of the KV cache and memory bandwidth requirements, thereby substantially increasing inference throughput with almost no loss in model performance.
 
-*   **Sliding Window Attention**: To further reduce computational complexity, gpt-oss draws inspiration from **Longformer** ([Jiang et al., 2020](https://arxiv.org/abs/2004.05150)) and **Mistral** ([Jiang et al., 2023](https://arxiv.org/abs/2310.06825)) by adopting a **sliding window attention**. Its Transformer layers alternate between Dense Attention and Locally Banded Sparse Attention. The latter is **Sliding Window Attention**, which limits the attention scope of each token to a fixed-size local window.
+*   **Sliding Window Attention**: To further reduce computational complexity, gpt-oss draws inspiration from **Longformer** ([Beltagy et al., 2020](https://arxiv.org/abs/2004.05150)) and **Mistral** ([Jiang et al., 2023](https://arxiv.org/abs/2310.06825)) by adopting a **sliding window attention**. Its Transformer layers alternate between Dense Attention and Locally Banded Sparse Attention. The latter is **Sliding Window Attention**, which limits the attention scope of each token to a fixed-size local window.
 
 {{< figure
     src="sliding_window_attention.png"
@@ -277,7 +277,7 @@ These results indicate that GPT-5 has made significant improvements in complex t
 
 [6] Beltagy, Iz, Matthew E. Peters, and Arman Cohan. ["Longformer: The long-document transformer."](https://arxiv.org/abs/2004.05150) arXiv preprint arXiv:2004.05150 (2020).
 
-[7] Jiang, Dongsheng, et al. ["Mistral 7B."](https://arxiv.org/abs/2310.06825) arXiv preprint arXiv:2310.08825 (2023).
+[7] Jiang, Albert Q., et al. ["Mistral 7B."](https://arxiv.org/abs/2310.06825) arXiv preprint arXiv:2310.06825 (2023).
 
 [8] Xiao, G., et al. (2023). ["Efficient Streaming Language Models with Attention Sinks."](https://arxiv.org/abs/2309.17453) arXiv preprint arXiv:2309.17453.
 

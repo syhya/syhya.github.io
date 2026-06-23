@@ -254,7 +254,7 @@ Through the above comparison, it can be seen that the four normalization methods
 
 ## Why do current mainstream LLMs use Pre-Norm and RMSNorm?
 
-In recent years, with the rise of large-scale language models (LLMs) such as GPT, LLaMA, and the Qwen series, **RMSNorm** and **Pre-Norm** have become the standard choices for these models.
+In recent years, with the rise of large-scale language models (LLMs) such as LLaMA and the Qwen series, **RMSNorm** and **Pre-Norm** have become the standard choices for these models (the earlier GPT-2 and GPT-3 also adopted Pre-Norm, but with standard LayerNorm).
 
 ### Advantages of RMSNorm
 

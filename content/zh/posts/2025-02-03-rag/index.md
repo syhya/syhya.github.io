@@ -748,7 +748,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [43] Wu, Qingyun, et al. ["AutoGen: Enabling next-gen LLM applications via multi-agent conversation."](https://arxiv.org/abs/2308.08155) arXiv preprint (2023).
 
-[44] Yan, Shi-Qi, et al. ["Corrective retrieval augmented generation."](https://arxiv.org/abs/2401.15884) ICML 2024.
+[44] Yan, Shi-Qi, et al. ["Corrective retrieval augmented generation."](https://arxiv.org/abs/2401.15884) arXiv preprint arXiv:2401.15884 (2024).
 
 [45] Jin, Bowen, et al. ["Search-R1: Training LLMs to reason and leverage search engines with reinforcement learning."](https://arxiv.org/abs/2503.09516) arXiv preprint (2025).
 

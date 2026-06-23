@@ -16,7 +16,7 @@ math: true
 
 ## 智能体
 
-自 2022 年 10 月 OpenAI 发布 ChatGPT 以来，随着后续 [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) 和 [AgentGPT](https://github.com/reworkd/AgentGPT) 等项目的涌现，LLM 相关的智能体（Agent）逐渐成为近年来 AI 的研究热点和实际应用方向。本文将介绍智能体的基本概念、核心技术及其最新应用进展。
+自 2022 年 11 月 OpenAI 发布 ChatGPT 以来，随着后续 [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) 和 [AgentGPT](https://github.com/reworkd/AgentGPT) 等项目的涌现，LLM 相关的智能体（Agent）逐渐成为近年来 AI 的研究热点和实际应用方向。本文将介绍智能体的基本概念、核心技术及其最新应用进展。
 
 ### LLM Agent
 

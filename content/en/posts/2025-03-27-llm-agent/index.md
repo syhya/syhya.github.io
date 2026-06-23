@@ -16,7 +16,7 @@ math: true
 
 ## Agents
 
-Since the release of ChatGPT by OpenAI in October 2022, and with the subsequent emergence of projects like [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) and [AgentGPT](https://github.com/reworkd/AgentGPT), LLM-related agents have gradually become a research hotspot and a practical application direction in AI in recent years. This article will introduce the basic concepts, core technologies, and recent application progress of agents.
+Since the release of ChatGPT by OpenAI in November 2022, and with the subsequent emergence of projects like [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) and [AgentGPT](https://github.com/reworkd/AgentGPT), LLM-related agents have gradually become a research hotspot and a practical application direction in AI in recent years. This article will introduce the basic concepts, core technologies, and recent application progress of agents.
 
 ### LLM Agent
 

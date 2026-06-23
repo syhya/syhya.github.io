@@ -93,7 +93,7 @@ $$\text{Specification} \rightarrow \text{Program Generation} \rightarrow \text{E
 
 ### 消融实验
 
-下图消融实验清晰地揭示了各组件的贡献。在矩阵乘法张量分解和空间球堆积两个任务上，移除任何一个组件都会导致性能下降：
+下图消融实验清晰地揭示了各组件的贡献。在矩阵乘法张量分解和接触数（Kissing Number）下界两个任务上，移除任何一个组件都会导致性能下降：
 
 {{< figure
     src="alpha-evolve-ablations.png"

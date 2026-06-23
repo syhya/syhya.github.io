@@ -52,11 +52,11 @@ Scientific, comprehensive, and realistic evaluation benchmarks are crucial for m
 6.  **Accurate and Reliable Grading**: The automated grading script must be extremely robust and correct. If researchers find that their model's correct output is graded incorrectly, they will quickly write off the eval.
 7.  **Avoids Premature Saturation**: The eval should be difficult enough to ensure that model performance has room to grow over time. Benchmarks like **GLUE** ([Wang et al., 2018](https://arxiv.org/abs/1804.07461)) and **SuperGLUE** ([Wang et al., 2019](https://arxiv.org/abs/1905.00537)) became saturated too quickly, losing their utility as a measure of progress.
 
-The concept of **Asymmetry of verification** ([Wei, 2024](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law)) points out that for many tasks, **it is much easier to verify a solution than to solve it from scratch**.
+The concept of **Asymmetry of verification** ([Wei, 2025](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law)) points out that for many tasks, **it is much easier to verify a solution than to solve it from scratch**.
 
 {{< figure
     src="asymmetry_verification.png"
-    caption="Fig. 2. Improving Verification with Privileged Information. (Image source: [Wei, 2024](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law))"
+    caption="Fig. 2. Improving Verification with Privileged Information. (Image source: [Wei, 2025](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law))"
     align="center"
     width="100%"
 >}}

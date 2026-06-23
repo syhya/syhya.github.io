@@ -746,7 +746,7 @@ $$
      - $\mathbf{K}$, $\mathbf{V}$: $B \times H \times S \times d_{\text{head}}$
    - **MQA（多查询注意力）**  
      - $\mathbf{Q}$: $B \times H \times S \times d_{\text{head}}$  
-     - $\mathbf{K}$, $\mathbf{V}$（共享）: $B \times S \times d$
+     - $\mathbf{K}$, $\mathbf{V}$（共享）: $B \times S \times d_{\text{head}}$
    - **GQA（分组注意力）**  
      - $\mathbf{Q}$: $B \times H \times S \times d_{\text{head}}$  
      - $\mathbf{K}$, $\mathbf{V}$（分组共享）: $B \times G \times S \times d_{\text{head}}$, 其中 $G \times d_{\text{head}} = d$

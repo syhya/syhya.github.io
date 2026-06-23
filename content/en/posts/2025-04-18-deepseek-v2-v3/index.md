@@ -1182,7 +1182,7 @@ DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE lang
 
 [4] Wang, Lean, et al. ["Auxiliary-loss-free load balancing strategy for mixture-of-experts."](https://arxiv.org/abs/2408.15664) arXiv preprint arXiv:2408.15664 (2024).
 
-[5] Gloeckle, Fabian, et al. ["Better & faster large language models via multi-token prediction."](https://arxiv.org/abs/2404.19737) Proceedings of the 41st International Conference on Machine Learning. PMLR 235:16821-16841 (2024).
+[5] Gloeckle, Fabian, et al. ["Better & faster large language models via multi-token prediction."](https://arxiv.org/abs/2404.19737) Proceedings of the 41st International Conference on Machine Learning. PMLR 235:15706-15734 (2024).
 
 [6] Vaswani, Ashish, et al. ["Attention is all you need."](https://arxiv.org/abs/1706.03762) Advances in neural information processing systems 30 (2017).
 

@@ -52,11 +52,11 @@ Agentic RL 通过让模型与外部世界（如搜索引擎、代码解释器、
 6.  **评分机制准确可靠**：自动化评分脚本必须极其健壮和准确。如果研究者在调试时发现模型的正确输出被评分脚本误判，会迅速削弱他们对整个评测集的信心。
 7.  **避免在评测集上过拟合**：评测集的难度应具有前瞻性，确保在未来一段时间内，模型性能仍有足够的提升空间。像 **GLUE** ([Wang et al., 2018](https://arxiv.org/abs/1804.07461)) 和 **SuperGLUE** ([Wang et al., 2019](https://arxiv.org/abs/1905.00537))这样很快被模型性能刷满的评测集，会迅速失去作为衡量技术进步标尺的作用。
 
-**验证的不对称性**([Wei, 2024](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law))这个概念指出，许多任务**验证一个解的正确性远比从零开始找到这个解要容易得多**。
+**验证的不对称性**([Wei, 2025](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law))这个概念指出，许多任务**验证一个解的正确性远比从零开始找到这个解要容易得多**。
 
 {{< figure
     src="asymmetry_verification.png"
-    caption="Fig. 2. Improving Verification with Privileged Information. (Image source: [Wei, 2024](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law))"
+    caption="Fig. 2. Improving Verification with Privileged Information. (Image source: [Wei, 2025](https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law))"
     align="center"
     width="100%"
 >}}

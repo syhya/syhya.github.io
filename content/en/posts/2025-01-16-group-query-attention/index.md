@@ -746,7 +746,7 @@ During **training** or a **full forward** pass, the following key tensors often 
      - \(\mathbf{K}, \mathbf{V}\): \(B \times H \times S \times d_{\text{head}}\)  
    - **MQA (Multi-Query Attention)**  
      - \(\mathbf{Q}\): \(B \times H \times S \times d_{\text{head}}\)  
-     - \(\mathbf{K}, \mathbf{V}\) (shared): \(B \times S \times d\)  
+     - \(\mathbf{K}, \mathbf{V}\) (shared): \(B \times S \times d_{\text{head}}\)  
    - **GQA (Grouped Query Attention)**  
      - \(\mathbf{Q}\): \(B \times H \times S \times d_{\text{head}}\)  
      - \(\mathbf{K}, \mathbf{V}\) (shared by group): \(B \times G \times S \times d_{\text{head}}\), where \(G \times d_{\text{head}} = d\).

@@ -405,7 +405,7 @@ $$L_{BLIP} = L_{ITC} + L_{ITM} + L_{LM}$$
 
 **GPT-Assisted Visual Instruction Data Generation:**
 
-The key challenge LLaVA addressed was the lack of large-scale, high-quality visual instruction-following data. The researchers proposed a method using existing multimodal large models like GPT-4 to generate such data based on existing image-text pairs, essentially a form of **knowledge distillation** from the closed-source GPT-4 model.
+The key challenge LLaVA addressed was the lack of large-scale, high-quality visual instruction-following data. The researchers proposed a method using the language-only GPT-4 (feeding image content as text, e.g., captions and bounding boxes) to generate such data based on existing image-text pairs, essentially a form of **knowledge distillation** from the closed-source GPT-4 model.
 
 1.  **Challenge Faced:** Simply extending image-caption pairs into the format (Instruction: Describe the image, Image -> Answer: Caption) is cheap but lacks diversity in instructions and responses, as well as deep reasoning.
 2.  **Solution:** Use GPT-4 as a "teacher model". Since these models only accept text input, the researchers conveyed image content through **Symbolic Representations**:

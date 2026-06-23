@@ -252,7 +252,7 @@ $$
 
 ## 为什么当前主流 LLM 都使用 Pre-Norm 和 RMSNorm？
 
-近年来，随着大规模语言模型（LLM）如 GPT、LLaMA 和 Qwen 系列等的兴起，**RMSNorm** 和 **Pre-Norm** 已成为这些模型的标准选择。
+近年来，随着大规模语言模型（LLM）如 LLaMA 和 Qwen 系列等的兴起，**RMSNorm** 和 **Pre-Norm** 已成为这些模型的标准选择（早期的 GPT-2、GPT-3 同样采用 Pre-Norm，但使用的是标准 LayerNorm）。
 
 ### RMSNorm 的优势
 

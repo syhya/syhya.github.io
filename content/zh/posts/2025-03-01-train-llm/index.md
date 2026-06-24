@@ -87,7 +87,7 @@ math: true
   
 {{< figure
     src="data_parallelism.png"
-    caption="Fig. 2. Data Parallelism. (Image source: [Clolossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
+    caption="Fig. 2. Data Parallelism. (Image source: [Colossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
     align="center"
     width="60%"
 >}}
@@ -254,7 +254,7 @@ $$
 
 {{< figure
     src="pipeline_parallelism.png"
-    caption="Fig. 5. Pipeline Parallelism. (Image source: [Clolossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
+    caption="Fig. 5. Pipeline Parallelism. (Image source: [Colossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
     align="center"
     width="60%"
 >}}
@@ -615,7 +615,7 @@ Switch Transformers 论文中使用下图直观的展示了使用不同的并行
 
 {{< figure
     src="switch_transformer_parallelism.png"
-    caption="Fig. 16. An illustration of various parallelism strategies on how(Top) model weights and(Bottom) data are split over multiple GPU cores. In the top row, each color denotes a unique weight matrix. In the bottom row, different colors indicate different sets of tokens. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
+    caption="Fig. 16. An illustration of various parallelism strategies showing how (top) model weights and (bottom) data are split over multiple GPU cores. In the top row, each color denotes a unique weight matrix. In the bottom row, different colors indicate different sets of tokens. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
     align="center"
     width="100%"
 >}}  
@@ -917,11 +917,11 @@ ZeRO 分为三个阶段，每个阶段在前一阶段基础上进一步减少内
 
 ZeRO-Offload 和 ZeRO-Infinity 是 DeepSpeed 库中实现的基于 CPU 卸载的内存优化技术。ZeRO-Offload 将优化器状态卸载到 CPU 内存，ZeRO-Infinity 更进一步，将模型参数也卸载到 CPU 内存甚至 NVMe 磁盘，突破 GPU 内存墙，支持训练更大规模的模型。
 
-下图直观的展示了**异构系统(Heterogenous system)** 内存优化技术：
+下图直观展示了**异构系统 (Heterogeneous system)** 的内存优化技术：
 
 {{< figure
     src="heterogenous_system.png"
-    caption="Fig. 27. Heterogenous system illustration. (Image source: [Clolossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
+    caption="Fig. 27. Heterogeneous system illustration. (Image source: [Colossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
     align="center"
     width="100%"
 >}}
@@ -982,13 +982,13 @@ $$
 
 ### 混合精度训练
 
-**混合精度训练(Mixed Precision Training)**([Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))是一种在模型训练过程中同时利用低精度浮点数(如 FP16 或 BF16)与高精度浮点数(如 FP32)的技术，其核心目标是在**减少显存占用**、**加速训练**的同时，尽可能保持与全精度训练相当的模型精度。
+**混合精度训练(Mixed Precision Training)**([Micikevicius et al., 2017](https://arxiv.org/abs/1710.03740))是一种在模型训练过程中同时利用低精度浮点数(如 FP16 或 BF16)与高精度浮点数(如 FP32)的技术，其核心目标是在**减少显存占用**、**加速训练**的同时，尽可能保持与全精度训练相当的模型精度。
 
 现代 GPU 在低精度计算上具有更高的吞吐量和更低的显存占用，从而降低访存开销与内存带宽需求，使混合精度训练能显著提升训练速度。下图展示了一个网络层中混合精度训练的基本流程：前向和反向传播主要采用半精度(FP16)运算，而在梯度累积与参数更新时使用全精度(FP32)，以规避低精度计算可能带来的数值精度问题。
 
 {{< figure
     src="mixed_precision.png"
-    caption="Fig. 29. Mixed precision training iteration for a layer. (Image source: [Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))"
+    caption="Fig. 29. Mixed precision training iteration for a layer. (Image source: [Micikevicius et al., 2017](https://arxiv.org/abs/1710.03740))"
     align="center"
     width="100%"
 >}}
@@ -1015,7 +1015,7 @@ $$
 
 {{< figure
     src="mixed_precision_fp16.png"
-    caption="Fig. 30. The histogram of gradients in full precision. The left part up to $2^{-24}$ will be zero-ed off once the model switches to FP16. (Image source: [Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))"
+    caption="Fig. 30. The histogram of gradients in full precision. The left part up to $2^{-24}$ will be zero-ed off once the model switches to FP16. (Image source: [Micikevicius et al., 2017](https://arxiv.org/abs/1710.03740))"
     align="center"
     width="100%"
 >}}

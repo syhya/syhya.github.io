@@ -930,7 +930,7 @@ $$
   - MQA-XXL 在推理速度上具有优势，平均分仅略低于 MHA-XXL。
   - GQA-8-XXL 在推理速度上接近 MQA-XXL，但在性能上几乎与 MHA-XXL 持平，显示出 GQA 的高效性和优越性。
 
-#### CheckPoint 转化
+#### Checkpoint 转换
 
 {{< figure 
     src="checkpoint_conversion.png" 

@@ -82,7 +82,7 @@ Below, I will elaborate on various parallel methods.
 
 {{< figure
     src="data_parallelism.png"
-    caption="Fig. 2. Data Parallelism. (Image source: [Clolossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
+    caption="Fig. 2. Data Parallelism. (Image source: [Colossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
     align="center"
     width="60%"
 >}}
@@ -247,7 +247,7 @@ Where $F_i$ represents the forward propagation of Stage $i$, and $B_i$ represent
 
 {{< figure
     src="pipeline_parallelism.png"
-    caption="Fig. 5. Pipeline Parallelism. (Image source: [Clolossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
+    caption="Fig. 5. Pipeline Parallelism. (Image source: [Colossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
     align="center"
     width="60%"
 >}}
@@ -596,7 +596,7 @@ The Switch Transformers paper uses the following figure to intuitively show how 
 
 {{< figure
     src="switch_transformer_parallelism.png"
-    caption="Fig. 16. An illustration of various parallelism strategies on how(Top) model weights and(Bottom) data are split over multiple GPU cores. In the top row, each color denotes a unique weight matrix. In the bottom row, different colors indicate different sets of tokens. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
+    caption="Fig. 16. An illustration of various parallelism strategies showing how (top) model weights and (bottom) data are split over multiple GPU cores. In the top row, each color denotes a unique weight matrix. In the bottom row, different colors indicate different sets of tokens. (Image source: [Fedus et al. 2021](https://arxiv.org/abs/2101.03961))"
     align="center"
     width="100%"
 >}}
@@ -896,7 +896,7 @@ The following figure intuitively shows the memory optimization technology of **H
 
 {{< figure
     src="heterogenous_system.png"
-    caption="Fig. 27. Heterogenous system illustration. (Image source: [Clolossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
+    caption="Fig. 27. Heterogeneous system illustration. (Image source: [Colossal-AI Documentation](https://colossalai.org/docs/concepts/paradigms_of_parallelism))"
     align="center"
     width="100%"
 >}}
@@ -955,13 +955,13 @@ It should be noted that activation recomputation requires additional forward rec
 
 ### Mixed Precision Training
 
-Mixed Precision Training ([Micikevicius al. 2017](https://arxiv.org/abs/1710.03740)) is a technology that simultaneously uses low-precision floating-point numbers (such as FP16 or BF16) and high-precision floating-point numbers (such as FP32) during model training. Its core goal is to **reduce memory footprint** and **accelerate training** while maintaining model accuracy comparable to full-precision training as much as possible.
+Mixed Precision Training ([Micikevicius et al., 2017](https://arxiv.org/abs/1710.03740)) is a technology that simultaneously uses low-precision floating-point numbers (such as FP16 or BF16) and high-precision floating-point numbers (such as FP32) during model training. Its core goal is to **reduce memory footprint** and **accelerate training** while maintaining model accuracy comparable to full-precision training as much as possible.
 
 Modern GPUs have higher throughput and lower memory footprint in low-precision computing, thereby reducing memory access overhead and memory bandwidth requirements. Mixed-precision training can significantly improve training speed. The following figure shows the basic process of mixed-precision training in a network layer: forward and backward propagation mainly use half-precision (FP16) operations, while gradient accumulation and parameter updates use full-precision (FP32) to avoid numerical precision problems that may be caused by low-precision computing.
 
 {{< figure
     src="mixed_precision.png"
-    caption="Fig. 29. Mixed precision training iteration for a layer. (Image source: [Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))"
+    caption="Fig. 29. Mixed precision training iteration for a layer. (Image source: [Micikevicius et al., 2017](https://arxiv.org/abs/1710.03740))"
     align="center"
     width="100%"
 >}}
@@ -988,7 +988,7 @@ As shown in the figure below, amplifying the loss makes the gradient distributio
 
 {{< figure
     src="mixed_precision_fp16.png"
-    caption="Fig. 30. The histogram of gradients in full precision. The left part up to $2^{-24}$ will be zero-ed off once the model switches to FP16. (Image source: [Micikevicius al. 2017](https://arxiv.org/abs/1710.03740))"
+    caption="Fig. 30. The histogram of gradients in full precision. The left part up to $2^{-24}$ will be zero-ed off once the model switches to FP16. (Image source: [Micikevicius et al., 2017](https://arxiv.org/abs/1710.03740))"
     align="center"
     width="100%"
 >}}

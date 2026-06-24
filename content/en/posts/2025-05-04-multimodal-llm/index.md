@@ -551,7 +551,7 @@ Qwen-VL adopts a "three-stage" progressive training strategy to inject visual pe
 
 {{< figure
     src="qwen2_vl.jpg"
-    caption="Fig. 15. Qwen2-VL is capable of accurately identifying and comprehending the content within images, regardless of their clarity, resolution, or extreme aspect ratios.: ([Wang et al., 2024](https://arxiv.org/abs/2409.12191))"
+    caption="Fig. 15. Qwen2-VL is capable of accurately identifying and comprehending the content within images, regardless of their clarity, resolution, or extreme aspect ratios. (Image source: [Wang et al., 2024](https://arxiv.org/abs/2409.12191))"
     align="center"
     width="100%"
 >}}

@@ -103,7 +103,7 @@ OpenAI 主要利用**人类反馈强化学习(Reinforcement Learning from Human 
 
 ### RLHF 目标与最优策略分布
 
-在大规模语言模型对齐中，我们希望利用人类反馈强化学习（RLHF）来优化模型输出。设输入 \( x \) 来自数据集 \(\mathcal{D}\)，模型生成回答 \( y \)；待训练的 模型记为 \(\pi_\theta(y \mid x)\)，而参考模型记为 \(\pi_{\mathrm{ref}}(y \mid x)\)（通常为SFT模型），同时引入奖励函数 \( r(x,y) \) 衡量回答质量。RLHF 的目标可写为
+在大规模语言模型对齐中，我们希望利用人类反馈强化学习（RLHF）来优化模型输出。设输入 \( x \) 来自数据集 \(\mathcal{D}\)，模型生成回答 \( y \)；待训练的模型记为 \(\pi_\theta(y \mid x)\)，而参考模型记为 \(\pi_{\mathrm{ref}}(y \mid x)\)（通常为SFT模型），同时引入奖励函数 \( r(x,y) \) 衡量回答质量。RLHF 的目标可写为
 
 \[
 \max_{\pi} \; \mathbb{E}_{x \sim \mathcal{D},\, y \sim \pi(y \mid x)} \Big[ r(x,y) \Big] \;-\; \beta\, \mathbb{D}_{\mathrm{KL}}\Big[ \pi(y \mid x) \,\|\, \pi_{\mathrm{ref}}(y \mid x) \Big],
@@ -247,7 +247,7 @@ r_\theta(x,y_w)-r_\theta(x,y_l)
 
 该损失函数针对待训练 Actor 模型 \(\pi_\theta\) 而设，通过比较其在高质量回答 \(y_w\) 与低质量回答 \(y_l\) 上、相对于参考模型 \(\pi_{\mathrm{ref}}\) 的对数概率比来区分好坏回答：当 \(\pi_\theta\) 在 \(y_w\) 上的相对概率比远大于 \(y_l\) 时，Sigmoid 输出更接近 1，损失更小；反之，若 \(\pi_\theta\) 对 \(y_l\) 的相对概率过大，则损失增加。参数 \(\beta\) 用于放大或缩小这些对数比的差值，从而调节模型对好坏答案的区分强度。
 
-##  训练流程
+## 训练流程
 
 ### 数据准备
 

@@ -656,7 +656,7 @@ To better handle long sequences, Scaling Transformer is further equipped with LS
 
 ### Mixture of Experts
 
-[**Mixture-of-Experts (MoE)**](https://syhya.github.io/posts/2025-04-18-deepseek-v2-v3/#mixture-of-experts-model) models consist of multiple "expert" networks, where each input sample activates only a subset of these experts for computation.
+[**Mixture-of-Experts (MoE)**](https://syhya.github.io/posts/2025-04-18-deepseek-v2-v3/#mixture-of-experts-models) models consist of multiple "expert" networks, where each input sample activates only a subset of these experts for computation.
 
 {{< figure
     src="dense_sparse_model.png"

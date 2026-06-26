@@ -807,7 +807,7 @@ To better understand DeepSpeed's ZeRO strategy, the following compares each stag
 | **ZeRO-1 + CPU Offload**         | On the basis of ZeRO-1, optimizer states are offloaded to CPU memory, reducing GPU memory footprint, but relying on PCIe bandwidth and occupying CPU memory. | Medium-Low | Slower than ZeRO-1 |
 | **ZeRO-2 + CPU Offload**         | On the basis of ZeRO-2, optimizer states are offloaded to CPU memory, further reducing GPU memory footprint for large models, but increasing CPU-GPU data transfer. | Low | Slower than ZeRO-2 |
 | **ZeRO-3 + CPU Offload**         | On the basis of ZeRO-3, optimizer states and model parameters are offloaded to CPU, GPU memory footprint is the lowest, but CPU-GPU communication overhead is extremely large. | **Extremely Low** | **Very Slow** |
-| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, states are offloaded to NVMe devices, breaking through CPU memory limits, suitable for ultra-large models; performance is highly dependent on NVMe parallel read and write speed. | **Extremely Low**<br/>NVMe support required | Slower than ZeRO-3, but usually better than CPU Offload scheme |
+| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, states are offloaded to NVMe devices, breaking through CPU memory limits, suitable for ultra-large models; performance is highly dependent on NVMe parallel read and write speed. | **Extremely Low**; NVMe support required | Slower than ZeRO-3, but usually better than CPU Offload scheme |
 
 ### Communication Volume and Performance Impact
 

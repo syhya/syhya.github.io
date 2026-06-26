@@ -134,7 +134,7 @@ Training large language models requires robust computational resources and effic
 | **ZeRO-1 + CPU Offload**        | Extends ZeRO-1 by offloading optimizer states to CPU memory, further reducing GPU memory usage but necessitating CPU-GPU data transfer, relying on PCIe bandwidth, and occupying CPU memory.              | Medium-low                 | Slower than ZeRO-1, affected by CPU performance and PCIe bandwidth                                                     |
 | **ZeRO-2 + CPU Offload**        | Extends ZeRO-2 by offloading optimizer states to CPU memory, further reducing GPU memory usage for larger models but increasing CPU-GPU data transfer overhead.                                         | Lower                      | Slower than ZeRO-2, affected by CPU performance and PCIe bandwidth                                                     |
 | **ZeRO-3 + CPU Offload**        | Extends ZeRO-3 by offloading optimizer states and model parameters to CPU, achieving minimal GPU memory usage but with extremely high CPU-GPU communication volume and CPU bandwidth significantly lower than GPU-GPU communication. | Extremely Low             | Very Slow                                                                                                               |
-| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, offloads optimizer states, gradients, and parameters to NVMe, breaking CPU memory limits and suitable for ultra-large-scale models; performance highly depends on NVMe parallel read/write speeds. | Extremely Low<br>Requires NVMe support | Slower than ZeRO-3 but generally faster than ZeRO-3 + CPU Offload, can achieve better throughput if NVMe bandwidth is sufficient |
+| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, offloads optimizer states, gradients, and parameters to NVMe, breaking CPU memory limits and suitable for ultra-large-scale models; performance highly depends on NVMe parallel read/write speeds. | Extremely low; requires NVMe support | Slower than ZeRO-3 but generally faster than ZeRO-3 + CPU Offload, can achieve better throughput if NVMe bandwidth is sufficient |
 
 ---
 
@@ -148,7 +148,7 @@ Training large language models requires robust computational resources and effic
 
 - **CPU Offload** (ZeRO-1/2/3 + CPU):  
   - Offloads optimizer states or parameters to CPU, reducing GPU memory usage.  
-  - Communication volume mainly arises from **CPU <-> GPU** data transfers, which have much lower bandwidth compared to GPU-GPU communication, easily causing performance bottlenecks, especially in **ZeRO-3** scenarios.
+  - Communication volume mainly arises from **CPU-to-GPU** data transfers, which have much lower bandwidth compared to GPU-GPU communication, easily causing performance bottlenecks, especially in **ZeRO-3** scenarios.
 
 - **NVMe Offload** (ZeRO-Infinity):  
   - Further offloads to NVMe based on **ZeRO-3**, overcoming CPU memory limitations to support ultra-large-scale models.  
@@ -280,7 +280,7 @@ A complete training process for a domain-specific large language model typically
 |---------------------------|---------------------------------------------------------------------------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
 | **Continued Pre-Training (CPT)** | Continue pre-training on large-scale unsupervised corpora to inject new domain knowledge | Large amounts of unlabeled text (at least hundreds of millions to billions of tokens) | Supplementing domain knowledge, such as specialized texts in law, medicine, finance, etc. |
 | **Supervised Fine-Tuning (SFT)**   | Fine-tune on supervised labeled data to strengthen specific tasks and instruction execution capabilities | Customized labeled data (instruction/dialog pairs), ranging from thousands to hundreds of thousands | Various specific tasks, such as code generation, Q&A, text rewriting, complex instruction execution, etc. |
-| **Direct Preference Optimization (DPO)** | Optimize model outputs to align with human preferences using preference data (chosen vs. rejected) | Preference data: [prompt, chosen, rejected]<br>(relatively smaller scale) | Aligning with human feedback, such as response style, compliance, safety, etc. |
+| **Direct Preference Optimization (DPO)** | Optimize model outputs to align with human preferences using preference data (chosen vs. rejected) | Preference data: [prompt, chosen, rejected] (relatively smaller scale) | Aligning with human feedback, such as response style, compliance, safety, etc. |
 
 #### Advantages and Challenges
 

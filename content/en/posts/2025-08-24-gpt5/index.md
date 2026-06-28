@@ -47,7 +47,7 @@ The table below provides a direct comparison of the differences between the GPT-
 | **MoE Architecture** | **32 experts, 4 activated** | None |
 | **Normalization Method** | **RMSNorm** (2 locations) | LayerNorm (2 locations) |
 | **Dropout** | **None** | Yes |
-| **Sliding Window Attention** | **Used in every other layer**<br>(window of 128 tokens) | None |
+| **Sliding Window Attention** | **Used in every other layer** (window of 128 tokens) | None |
 | **Training Features** | **Includes Supervised Fine-Tuning + Reinforcement Learning** | Pre-training only |
 | **Quantization Support** | **MXFP4** (Can run on a single GPU) | No special quantization |
 | **License** | Apache 2.0 | MIT |

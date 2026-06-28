@@ -675,9 +675,9 @@ The key difference between auxiliary-loss-free load balancing and sequence-level
 | **Affinity Calculation \(s_{i,t}\)** | \(\operatorname{Softmax}_{i}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})\)                                                                                                         | \(\operatorname{Sigmoid}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})\)                                                                                                                                           |
 | **TopK Selection Basis**    | Original affinity \(s_{i,t}\)                                                                                                                                             | Bias-adjusted affinity \(s_{i,t} + b_i\)                                                                                                                                                                |
 | **Gating Value Calc. \(g_{i,t}\)** | For selected experts, \(g_{i,t} = s_{i,t}\) (Usually no extra normalization)                                                                                             | For selected experts, normalize based on original affinity \(s_{i,t}\): \(g_{i, t} = \frac{s_{i, t}}{\sum_{j \in \text{Selected}} s_{j, t}}\)                                                                     |
-| **Primary Load Balancing**  | **Auxiliary Losses:** <br> - \(\mathcal{L}_{\text{ExpBal}}\) (Expert-level) <br> - \(\mathcal{L}_{\text{DevBal}}\) (Device-level) <br> - \(\mathcal{L}_{\text{CommBal}}\) (Comm-level) | **Auxiliary-Loss-Free:** <br> - Dynamic adjustment of learnable bias \(b_i\) (step \(\gamma\)) for batch-level balancing                                                                                    |
+| **Primary Load Balancing**  | **Auxiliary Losses:** \(\mathcal{L}_{\text{ExpBal}}\) (Expert-level); \(\mathcal{L}_{\text{DevBal}}\) (Device-level); \(\mathcal{L}_{\text{CommBal}}\) (Comm-level) | **Auxiliary-Loss-Free:** Dynamic adjustment of learnable bias \(b_i\) (step \(\gamma\)) for batch-level balancing                                                                                    |
 | **Supplementary Balancing** | No explicit supplementary strategy                                                                                                                                       | **Sequence-Level Aux Loss** \(\mathcal{L}_{\text{Bal}}\) (Weight \(\alpha\) minimal, e.g., 0.0001), prevents extreme imbalance within single sequences                                                     |
-| **Routing Restriction**     | **Device Limit:** <br> Each token routes to experts on at most \(M=3\) devices                                                                                             | **Node Limit:** <br> Each token routes to experts on at most \(M=4\) nodes                                                                                                                             |
+| **Routing Restriction**     | **Device Limit:** Each token routes to experts on at most \(M=3\) devices                                                                                             | **Node Limit:** Each token routes to experts on at most \(M=4\) nodes                                                                                                                             |
 | **Token Dropping**          | **Yes:** During training, tokens exceeding device capacity with lowest affinity are dropped (preserving ~10% sequences) to mitigate bottlenecks                               | **No:** No tokens dropped during training or inference                                                                                                                                                  |
 | **Balancing Granularity**   | Primarily enforced at sequence/batch level via auxiliary losses                                                                                                            | Primarily balanced dynamically at batch level via bias adjustment, looser constraints                                                                                                                   |
 | **Impact on Performance**   | Auxiliary losses might negatively impact model performance                                                                                                               | Designed to minimize negative impact of balancing strategy on performance, allowing better expert specialization                                                                                        |
@@ -930,14 +930,14 @@ Based on the implementation of **All-to-all communication** and the **FP8 traini
 ### Training Cost and Efficiency
 
 *   **DeepSeek-V2:** Compared to DeepSeek 67B (Dense), achieved 42.5% savings in training cost, 93.3% reduction in KV cache, and a 5.76x increase in maximum throughput.
-*   **DeepSeek-V3:** Extremely high training efficiency, requiring only 180K H800 GPU hours per 1T tokens trained. The total training cost (pre-training + context extension + post-training) was only 2.788M H800 GPU hours (approx. $5.58 million, assuming $2/hour). Pre-training took less than 2 months on the 2048 H800 GPU cluster.
+*   **DeepSeek-V3:** Extremely high training efficiency, requiring only 180K H800 GPU hours per 1T tokens trained. The total training cost (pre-training + context extension + post-training) was only 2.788M H800 GPU hours (approx. \$5.58 million, assuming \$2/hour). Pre-training took less than 2 months on the 2048 H800 GPU cluster.
 
 | Training Stage     | H800 GPU Hours | Estimated Cost (USD) |
 | :----------------- | :------------: | :------------------: |
-| Pre-training       | 2664 K         | $5.328 M             |
-| Context Extension  | 119 K          | $0.238 M             |
-| Post-training      | 5 K            | $0.01 M              |
-| **Total**          | **2788 K**     | **$5.576 M**         |
+| Pre-training       | 2664 K         | \$5.328 M             |
+| Context Extension  | 119 K          | \$0.238 M             |
+| Post-training      | 5 K            | \$0.01 M              |
+| **Total**          | **2788 K**     | **\$5.576 M**         |
 
 ## Pre-training
 

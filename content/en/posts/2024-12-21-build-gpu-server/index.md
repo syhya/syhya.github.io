@@ -35,7 +35,7 @@ Before setting up a deep learning environment, consider **usage duration**, **bu
 
 ## Background
 
-In September 2023, to continue my exploration and research on Large Language Models (LLMs) outside of work, I assembled a **dual RTX 4090** personal AI server. It has been running for nearly a year, and here are some observations:
+In September 2023, to continue my exploration and research on Large Language Models (LLMs) outside of work, I assembled a **dual RTX 4090** personal AI server. It has been running for over a year, and here are some observations:
 
 - **Noise**: Placed under my desk, the fans can get quite loud under full load. However, noise levels are acceptable during inference or moderate loads.  
 - **Inference Performance**: With a total of 48GB of VRAM, and by using 4-bit quantization, it can handle 70B-level models (e.g., Llama 70B, Qwen 72B).  

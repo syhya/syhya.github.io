@@ -830,7 +830,7 @@ ZeRO 分为三个阶段，每个阶段在前一阶段基础上进一步减少内
 | **ZeRO-1 + CPU Offload**         | 在 ZeRO-1 基础上，将优化器状态卸载到 CPU 内存，降低 GPU 显存占用，但依赖 PCIe 带宽且占用 CPU 内存。 | 中偏低 | 慢于 ZeRO-1 |
 | **ZeRO-2 + CPU Offload**         | 在 ZeRO-2 基础上，将优化器状态卸载到 CPU 内存，对大模型进一步降低 GPU 显存，但增加 CPU–GPU 数据传输。 | 较低 | 慢于 ZeRO-2 |
 | **ZeRO-3 + CPU Offload**         | 在 ZeRO-3 基础上，将优化器状态和模型参数卸载到 CPU，GPU 显存占用最低，但 CPU–GPU 通信开销极大。 | **极低** | **非常慢** |
-| **ZeRO-Infinity(NVMe Offload)** | 基于 ZeRO-3，将状态卸载到 NVMe 设备，突破 CPU 内存限制，适合超大模型；性能高度依赖 NVMe 并行读写速度。 | **极低**<br/>需 NVMe 支持 | 慢于 ZeRO-3，但通常优于 CPU Offload 方案 |
+| **ZeRO-Infinity(NVMe Offload)** | 基于 ZeRO-3，将状态卸载到 NVMe 设备，突破 CPU 内存限制，适合超大模型；性能高度依赖 NVMe 并行读写速度。 | **极低**；需 NVMe 支持 | 慢于 ZeRO-3，但通常优于 CPU Offload 方案 |
 
 ### 通信量与性能影响
 

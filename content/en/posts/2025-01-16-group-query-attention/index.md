@@ -989,7 +989,7 @@ In addition to optimizing the attention mechanism, researchers have proposed var
 
 [4] Touvron H, Lavril T, Izacard G, et al. [Llama: Open and efficient foundation language models](https://arxiv.org/abs/2302.13971) [J]. *arXiv preprint arXiv:2302.13971*, 2023.
 
-[5] Achiam J, Adler S, Agarwal S, et al. [Gpt-4 technical report](https://arxiv.org/abs/2303.08774) [J]. *arXiv preprint arXiv:2303.08774*, 2023.
+[5] Achiam J, Adler S, Agarwal S, et al. [GPT-4 technical report](https://arxiv.org/abs/2303.08774) [J]. *arXiv preprint arXiv:2303.08774*, 2023.
 
 [6] Shazeer N. [Fast transformer decoding: One write-head is all you need](https://arxiv.org/pdf/1911.02150) [J]. *arXiv preprint arXiv:1911.02150*, 2019.
 
@@ -997,7 +997,7 @@ In addition to optimizing the attention mechanism, researchers have proposed var
 
 [8] Hu E J, Shen Y, Wallis P, et al. [Lora: Low-rank adaptation of large language models](https://arxiv.org/pdf/2106.09685) [J]. *arXiv preprint arXiv:2106.09685*, 2021.
 
-[9] Dettmers T, Lewis M, Belkada Y, et al. [Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale](https://arxiv.org/pdf/2208.07339) [J]. *Advances in Neural Information Processing Systems*, 2022, 35: 30318-30332.
+[9] Dettmers T, Lewis M, Belkada Y, et al. [LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale](https://arxiv.org/pdf/2208.07339) [J]. *Advances in Neural Information Processing Systems*, 2022, 35: 30318-30332.
 
 [10] Frantar E, Ashkboos S, Hoefler T, et al. [Gptq: Accurate post-training quantization for generative pre-trained transformers](https://arxiv.org/abs/2210.17323) [J]. *arXiv preprint arXiv:2210.17323*, 2022.
 

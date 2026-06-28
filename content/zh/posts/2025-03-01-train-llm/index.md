@@ -201,7 +201,7 @@ $$
 
 {{< figure
     src="pytorch_ddp.png"
-    caption="Fig. 3. Pseudo code for Pytorch DDP. (Image source: [Li et al. 2020](https://arxiv.org/pdf/2006.15704))"
+    caption="Fig. 3. Pseudo code for PyTorch DDP. (Image source: [Li et al. 2020](https://arxiv.org/pdf/2006.15704))"
     align="center"
     width="80%"
 >}}
@@ -1169,7 +1169,7 @@ $$
 
 [2] Shenggui Li, Siqi Mai. ["Paradigms of Parallelism."](https://colossalai.org/docs/concepts/paradigms_of_parallelism/) Colossal-AI Documentation, 2024.
 
-[3] Li, Shen, et al. ["Pytorch distributed: Experiences on accelerating data parallel training."](https://arxiv.org/abs/2006.15704) arXiv preprint, 2020.
+[3] Li, Shen, et al. ["PyTorch distributed: Experiences on accelerating data parallel training."](https://arxiv.org/abs/2006.15704) arXiv preprint, 2020.
 
 [4] Li, Mu, et al. ["Communication efficient distributed machine learning with the parameter server."](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf) Advances in Neural Information Processing Systems 27, 2014.
 
@@ -1221,7 +1221,7 @@ $$
 
 [28] Hu, Edward J., et al. ["LoRA: Low-rank adaptation of large language models."](https://arxiv.org/abs/2106.09685) ICLR, 2022: 3.
 
-[29] Dettmers, Tim, et al. ["Qlora: Efficient finetuning of quantized llms."](https://arxiv.org/abs/2305.14314) Advances in Neural Information Processing Systems 36, 2023: 10088–10115.
+[29] Dettmers, Tim, et al. ["QLoRA: Efficient Finetuning of Quantized LLMs."](https://arxiv.org/abs/2305.14314) Advances in Neural Information Processing Systems 36, 2023: 10088–10115.
 
 [30] Weng, Lilian. ["How to Train Really Large Models on Many GPUs?"](https://lilianweng.github.io/posts/2021-09-25-train-large/) Lil'blog, 2021.
 

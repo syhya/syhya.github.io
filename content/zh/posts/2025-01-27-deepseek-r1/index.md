@@ -820,17 +820,17 @@ DeepSeek-R1 的成功展示了 RL 提升 LLM 推理能力的巨大潜力。DeepS
 
 ## 参考文献
 
-[1] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
+[1] Guo, Daya, et al. ["DeepSeek-R1: Incentivizing reasoning capability in LLMs via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
 
 [2] OpenAI. ["Introducing OpenAI o1"](https://openai.com/o1/) OpenAI, 2024.
 
 [3] Jaech, Aaron, et al. ["OpenAI o1 system card."](https://arxiv.org/abs/2412.16720) arXiv preprint arXiv:2412.16720 (2024).
 
-[4] [Open-r1](https://github.com/huggingface/open-r1). HuggingFace, 2024.
+[4] [Open-R1](https://github.com/huggingface/open-r1). Hugging Face, 2024.
 
 [5] Sutton, Richard. ["The bitter lesson."](http://incompleteideas.net/IncIdeas/BitterLesson.html) Incomplete Ideas (blog) 13.1 (2019): 38.
 
-[6] Liu A, et al. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
+[6] Liu A, et al. ["DeepSeek-V3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
 
 [7] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
 
@@ -838,7 +838,7 @@ DeepSeek-R1 的成功展示了 RL 提升 LLM 推理能力的巨大潜力。DeepS
 
 [9] Schulman, John, et al. ["High-dimensional continuous control using generalized advantage estimation."](https://arxiv.org/abs/1506.02438) arXiv preprint arXiv:1506.02438 (2015).
 
-[10] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[10] Shao, Zhihong, et al. ["DeepSeekMath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
 [11] J. Schulman. [Approximating kl divergence](http://joschu.net/blog/kl-approx.html), 2020.
 

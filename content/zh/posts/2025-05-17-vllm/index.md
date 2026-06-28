@@ -56,7 +56,7 @@ $$
 
 ## vLLM V0
 
-自 2023 年 6 月首次发布以来，配备 PagedAttention 的 vLLM 显著提升了 LLM 服务的性能标杆，相较于 [HuggingFace Transformers (HF)](https://huggingface.co/docs/transformers/main_classes/text_generation) 和 [Text Generation Inference (TGI)](https://github.com/huggingface/text-generation-inference) 具有显著的吞吐量优势, 且无需修改任何模型架构。
+自 2023 年 6 月首次发布以来，配备 PagedAttention 的 vLLM 显著提升了 LLM 服务的性能标杆，相较于 [Hugging Face Transformers (HF)](https://huggingface.co/docs/transformers/main_classes/text_generation) 和 [Text Generation Inference (TGI)](https://github.com/huggingface/text-generation-inference) 具有显著的吞吐量优势, 且无需修改任何模型架构。
 
 {{< figure
     src="vllm_v0_throughput1.png"

@@ -730,7 +730,7 @@ As shown in the figure below, Qwen2.5-Omni adopts the **Thinker-Talker** archite
 *   **Post-Training:**
     1.  **Joint SFT:** Use ChatML format, fine-tune on mixed text and multimodal instruction data (first 32K then 128K context).
     2.  **Long CoT SFT:** Perform SFT using a small amount of high-quality long CoT data to activate long-chain reasoning capabilities.
-    3.  **Reinforcement Learning:** Employ the same Online Policy Mirror Descent algorithm used for the **KIMI K1.5** model ([Kimi Team, 2025](https://arxiv.org/abs/2501.12599)) for training. This stage aims to further enhance the model's complex reasoning and planning abilities (e.g., error identification, backtracking, solution optimization) through reinforcement learning, enabling it to utilize long Chain-of-Thought (long CoT) context for implicit search, thereby approximating the effectiveness of explicit planning algorithms while maintaining the simplicity of autoregressive generation.
+    3.  **Reinforcement Learning:** Employ the same Online Policy Mirror Descent algorithm used for the **Kimi k1.5** model ([Kimi Team, 2025](https://arxiv.org/abs/2501.12599)) for training. This stage aims to further enhance the model's complex reasoning and planning abilities (e.g., error identification, backtracking, solution optimization) through reinforcement learning, enabling it to utilize long Chain-of-Thought (long CoT) context for implicit search, thereby approximating the effectiveness of explicit planning algorithms while maintaining the simplicity of autoregressive generation.
         *   **Core Objective:** Optimize the policy model $\pi_{\theta}$ such that for a question $x \in \mathcal{D}$, the generated chain-of-thought $z$ and final answer $y$ maximize the expected reward based on the ground truth answer $y^*$:
             $$
             \max _{\theta} \mathbb{E}_{\left(x, y^{*}\right) \sim \mathcal{D},(y, z) \sim \pi_{\theta}}\left[r\left(x, y, y^{*}\right)\right]
@@ -819,7 +819,7 @@ Multimodal Large Language Models are advancing towards being more comprehensive,
 
 [3] OpenAI. ["Introducing OpenAI o3 and o4-mini."](https://openai.com/index/introducing-o3-and-o4-mini/) OpenAI Blog (2025).
 
-[4] Zhang, Duzhen, et al. ["Mm-llms: Recent advances in multimodal large language models."](https://arxiv.org/abs/2401.13601) arXiv preprint arXiv:2401.13601 (2024).
+[4] Zhang, Duzhen, et al. ["MM-LLMs: Recent advances in multimodal large language models."](https://arxiv.org/abs/2401.13601) arXiv preprint arXiv:2401.13601 (2024).
 
 [5] Dosovitskiy, Alexey, et al. ["An image is worth 16x16 words: Transformers for image recognition at scale."](https://arxiv.org/abs/2010.11929) arXiv preprint arXiv:2010.11929 (2020).
 
@@ -855,7 +855,7 @@ Multimodal Large Language Models are advancing towards being more comprehensive,
 
 [21] Zhai, Xiaohua, et al. ["Sigmoid loss for language image pre-training."](https://arxiv.org/abs/2303.15343) Proceedings of the IEEE/CVF international conference on computer vision. 2023.
 
-[22] Kimi Team. ["Kimi k1. 5: Scaling reinforcement learning with llms."](https://arxiv.org/abs/2501.12599) arXiv preprint arXiv:2501.12599 (2025).
+[22] Kimi Team. ["Kimi k1.5: Scaling reinforcement learning with LLMs."](https://arxiv.org/abs/2501.12599) arXiv preprint arXiv:2501.12599 (2025).
 
 [23] Snell, Charlie, et al. ["Scaling llm test-time compute optimally can be more effective than scaling model parameters."](https://arxiv.org/abs/2408.03314) arXiv preprint arXiv:2408.03314 (2024).
 

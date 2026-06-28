@@ -310,7 +310,7 @@ verl 的核心是**异步架构**，它将 Rollout、奖励计算和模型优化
 
 {{< figure
     src="verl_agent_loop_worker.png"
-    caption="Fig. 13. The agent loop worker of verl based on React. (Image source: [ByteDance Seed, 2025](https://verl.readthedocs.io/en/latest/start/agentic_rl.html))"
+    caption="Fig. 13. The agent loop worker of verl based on ReAct. (Image source: [ByteDance Seed, 2025](https://verl.readthedocs.io/en/latest/start/agentic_rl.html))"
     align="center"
     width="100%"
 >}}
@@ -420,7 +420,7 @@ $$
 
 ## 参考文献
 
-[1] Zhang, Guibin, et al. ["The landscape of agentic reinforcement learning for llms: A survey."](https://arxiv.org/abs/2509.02547) arXiv preprint arXiv:2509.02547 (2025).
+[1] Zhang, Guibin, et al. ["The landscape of agentic reinforcement learning for LLMs: A survey."](https://arxiv.org/abs/2509.02547) arXiv preprint arXiv:2509.02547 (2025).
 
 [2] Wei, Jason. ["Successful language model evals."](https://www.jasonwei.net/blog/evals) Blog post, 2024.
 
@@ -448,7 +448,7 @@ $$
 
 [14] Schulman, John, et al. ["Proximal policy optimization algorithms."](https://arxiv.org/abs/1707.06347) arXiv preprint arXiv:1707.06347 (2017).
 
-[15] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[15] Shao, Zhihong, et al. ["DeepSeekMath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
 [16] Zheng, Chujie, et al. ["Group sequence policy optimization."](https://arxiv.org/abs/2507.18071) arXiv preprint arXiv:2507.18071 (2025).
 
@@ -456,9 +456,9 @@ $$
  
 [18] Zhong, Yinmin, et al. ["StreamRL: Scalable, Heterogeneous, and Elastic RL for LLMs with Disaggregated Stream Generation."](https://arxiv.org/abs/2504.15930) arXiv preprint arXiv:2504.15930 (2025).
 
-[19] Jin, Bowen, et al. ["Search-r1: Training llms to reason and leverage search engines with reinforcement learning."](https://arxiv.org/abs/2503.09516) arXiv preprint arXiv:2503.09516 (2025).
+[19] Jin, Bowen, et al. ["Search-R1: Training LLMs to reason and leverage search engines with reinforcement learning."](https://arxiv.org/abs/2503.09516) arXiv preprint arXiv:2503.09516 (2025).
 
-[20] Feng, Jiazhan, et al. ["Retool: Reinforcement learning for strategic tool use in llms."](https://arxiv.org/abs/2504.11536) arXiv preprint arXiv:2504.11536 (2025).
+[20] Feng, Jiazhan, et al. ["ReTool: Reinforcement learning for strategic tool use in LLMs."](https://arxiv.org/abs/2504.11536) arXiv preprint arXiv:2504.11536 (2025).
 
 ## 引用
 

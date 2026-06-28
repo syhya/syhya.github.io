@@ -302,7 +302,7 @@ $$
 
 [3] Hoffmann, Jordan, et al. ["Training compute-optimal large language models."](https://arxiv.org/abs/2203.15556) arXiv preprint arXiv:2203.15556 (2022).
 
-[4] Achiam, Josh, et al. ["Gpt-4 technical report."](https://arxiv.org/abs/2303.08774) arXiv preprint arXiv:2303.08774 (2023).
+[4] Achiam, Josh, et al. ["GPT-4 technical report."](https://arxiv.org/abs/2303.08774) arXiv preprint arXiv:2303.08774 (2023).
 
 [5] Gao, Leo, John Schulman, and Jacob Hilton. ["Scaling laws for reward model overoptimization."](https://arxiv.org/abs/2210.10760) International Conference on Machine Learning. PMLR, 2023.
 
@@ -312,7 +312,7 @@ $$
 
 [8] Muennighoff, Niklas, et al. ["s1: Simple test-time scaling."](https://arxiv.org/abs/2501.19393) Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. 2025.
 
-[9] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for llms."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
+[9] Khatri, Devvrit, et al. ["The art of scaling reinforcement learning compute for LLMs."](https://arxiv.org/abs/2510.13786) arXiv preprint arXiv:2510.13786 (2025).
 
 [10] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
 

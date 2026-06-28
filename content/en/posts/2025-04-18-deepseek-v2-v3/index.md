@@ -750,7 +750,7 @@ DeepSeek-V3 training is based on the self-developed, efficient, and lightweight 
 *   **64-way Expert Parallelism (EP)** (across 8 nodes) ([Lepikhin et al., 2021](https://arxiv.org/abs/2006.16668))
 *   **ZeRO-1 Data Parallelism (DP)** ([Rajbhandari et al., 2020](https://arxiv.org/pdf/1910.02054))
 
-To achieve efficient training, Deepseek performed meticulous engineering optimizations:
+To achieve efficient training, DeepSeek performed meticulous engineering optimizations:
 1.  Designed the **DualPipe** algorithm for efficient pipeline parallelism, reducing bubbles and overlapping computation with communication, addressing the heavy communication overhead introduced by cross-node expert parallelism.
 2.  Developed efficient **cross-node All-to-all communication Kernels** that fully utilize IB and NVLink bandwidth while saving SM resources for communication.
 3.  Carefully optimized **memory usage** during training, enabling DeepSeek-V3 to be trained **without using Tensor Parallelism (TP)**.
@@ -786,7 +786,7 @@ To achieve efficient training, Deepseek performed meticulous engineering optimiz
 | :---------------- | :--------------------------------------------------------------- | :--------------- | :---------------- |
 | 1F1B              | \((PP-1)(F+B)\)                                                  | \(1 \times\)     | \(PP\)            |
 | ZB1P              | \((PP-1)(F+B-2W)\)                                               | \(1 \times\)     | \(PP\)            |
-| **DualPipe (Deepseek V3)** | \(\left(\frac{PP}{2}-1\right)(F\&B+B-3W)\)                        | \(2 \times\)     | \(PP+1\)          |
+| **DualPipe (DeepSeek V3)** | \(\left(\frac{PP}{2}-1\right)(F\&B+B-3W)\)                        | \(2 \times\)     | \(PP+1\)          |
 
 The table above compares pipeline bubble and memory usage for different pipeline parallelism methods. \(F\): Forward chunk execution time; \(B\): Full backward chunk execution time; \(W\): "Backward for weights" chunk execution time; \(F\&B\): Execution time of two mutually overlapped forward and backward chunks.
 
@@ -1130,7 +1130,7 @@ Comparison of DeepSeek-V3 Chat with representative open-source and closed-source
 |         | LiveCodeBench ([Jain et al., 2024](https://arxiv.org/abs/2403.07974)) (Pass@1-COT) | 29.2               | 31.1              | 28.4                 | 36.3                    | 33.4        | **40.5**    |
 |         | SWE Verified ([OpenAI, 2024d](https://openai.com/index/introducing-swe-bench-verified/)) (Resolved) | 22.6               | 23.8              | 24.5                 | **50.8**                | 38.8        | 42.0        |
 | Math    | AIME 2024 ([MAA, 2024](https://artofproblemsolving.com/wiki/index.php/2024_AIME_I)) (Pass@1) | 16.7               | 23.3              | 23.3                 | 16.0                    | 9.3         | **39.2**    |
-|         | MATH-500 ([Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)) (ЕМ)    | 74.7               | 80.0              | 73.8                 | 78.3                    | 74.6        | **90.2**    |
+|         | MATH-500 ([Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)) (EM)    | 74.7               | 80.0              | 73.8                 | 78.3                    | 74.6        | **90.2**    |
 | Chinese | C-Eval ([Huang et al., 2023](https://arxiv.org/abs/2305.08322)) (EM)        | 79.5               | 86.1              | 61.5                 | 76.7                    | 76.0        | **86.5**    |
 |         | C-SimpleQA ([He et al., 2024](https://arxiv.org/abs/2411.07140)) (Correct)   | 54.1               | 48.4              | 50.4                 | 51.3                    | 59.3        | **64.8**    |
 | Open-Ended| Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939))           | 76.2               | 81.2              | 69.3                 | 85.2                    | 80.4        | **85.5**    |
@@ -1174,11 +1174,11 @@ DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE lang
 
 ## References
 
-[1] Liu, Aixin, et al. ["Deepseek-v2: A strong, economical, and efficient mixture-of-experts language model."](https://arxiv.org/abs/2405.04434) arXiv preprint arXiv:2405.04434 (2024).
+[1] Liu, Aixin, et al. ["DeepSeek-V2: A strong, economical, and efficient mixture-of-experts language model."](https://arxiv.org/abs/2405.04434) arXiv preprint arXiv:2405.04434 (2024).
 
-[2] Liu, Aixin, et al. ["Deepseek-v3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
+[2] Liu, Aixin, et al. ["DeepSeek-V3 technical report."](https://arxiv.org/abs/2412.19437) arXiv preprint arXiv:2412.19437 (2024).
 
-[3] Dai, Damai, et al. ["Deepseekmoe: Towards ultimate expert specialization in mixture-of-experts language models."](https://arxiv.org/abs/2401.06066) arXiv preprint arXiv:2401.06066 (2024).
+[3] Dai, Damai, et al. ["DeepSeekMoE: Towards ultimate expert specialization in mixture-of-experts language models."](https://arxiv.org/abs/2401.06066) arXiv preprint arXiv:2401.06066 (2024).
 
 [4] Wang, Lean, et al. ["Auxiliary-loss-free load balancing strategy for mixture-of-experts."](https://arxiv.org/abs/2408.15664) arXiv preprint arXiv:2408.15664 (2024).
 
@@ -1260,9 +1260,9 @@ DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE lang
 
 [43] OpenAI. ["MMMLU Dataset."](https://huggingface.co/datasets/openai/MMMLU) Hugging Face Datasets (Accessed 2024).
 
-[44] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
+[44] Guo, Daya, et al. ["DeepSeek-R1: Incentivizing reasoning capability in LLMs via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
 
-[45] Shao, Zhihong, et al. ["Deepseekmath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
+[45] Shao, Zhihong, et al. ["DeepSeekMath: Pushing the limits of mathematical reasoning in open language models."](https://arxiv.org/abs/2402.03300) arXiv preprint arXiv:2402.03300 (2024).
 
 [46] Bai, Yuntao, et al. ["Constitutional ai: Harmlessness from ai feedback."](https://arxiv.org/abs/2212.08073) arXiv preprint arXiv:2212.08073 (2022).
 

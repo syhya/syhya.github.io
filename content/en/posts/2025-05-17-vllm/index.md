@@ -55,7 +55,7 @@ These metrics reflect the inference engine's response speed, processing efficien
 
 ## vLLM V0
 
-Since its initial release in June 2023, vLLM, equipped with PagedAttention, has significantly raised the performance benchmark for LLM serving. It demonstrates a notable throughput advantage over [HuggingFace Transformers (HF)](https://huggingface.co/docs/transformers/main_classes/text_generation) and [Text Generation Inference (TGI)](https://github.com/huggingface/text-generation-inference), without requiring any modifications to the model architecture.
+Since its initial release in June 2023, vLLM, equipped with PagedAttention, has significantly raised the performance benchmark for LLM serving. It demonstrates a notable throughput advantage over [Hugging Face Transformers (HF)](https://huggingface.co/docs/transformers/main_classes/text_generation) and [Text Generation Inference (TGI)](https://github.com/huggingface/text-generation-inference), without requiring any modifications to the model architecture.
 
 {{< figure
     src="vllm_v0_throughput1.png"

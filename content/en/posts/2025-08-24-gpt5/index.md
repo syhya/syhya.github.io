@@ -168,7 +168,7 @@ This approach significantly improves the model's safety and utility in dual-use 
 
 {{< figure
     src="safe_completions.png"
-    caption="Fig. 8. Left: Overall structure of the safe-completion training stack. Right: Details of the safecompletion reward design. (Image source: [OpenAI, 2025](https://openai.com/index/gpt-5-safe-completions/))"
+    caption="Fig. 8. Left: Overall structure of the safe-completion training stack. Right: Details of the safe-completion reward design. (Image source: [OpenAI, 2025](https://openai.com/index/gpt-5-safe-completions/))"
     align="center"
     width="100%"
 >}}
@@ -281,7 +281,7 @@ These results indicate that GPT-5 has made significant improvements in complex t
 
 [8] Xiao, G., et al. (2023). ["Efficient Streaming Language Models with Attention Sinks."](https://arxiv.org/abs/2309.17453) arXiv preprint arXiv:2309.17453.
 
-[9] Tseng, Albert, Tao Yu, and Youngsuk Park. ["Training llms with mxfp4."](https://arxiv.org/abs/2502.20586) arXiv preprint arXiv:2502.20586 (2025).
+[9] Tseng, Albert, Tao Yu, and Youngsuk Park. ["Training LLMs with MXFP4."](https://arxiv.org/abs/2502.20586) arXiv preprint arXiv:2502.20586 (2025).
 
 [10] Yuan, Yuan, et al. ["From Hard Refusals to Safe-Completions: Toward Output-Centric Safety Training."](https://www.arxiv.org/abs/2508.09224) arXiv preprint arXiv:2508.09224 (2025).
 

@@ -545,7 +545,7 @@ Currently, various LLM applications based on tool calling have emerged, utilizin
 
 ### HuggingGPT
 
-**HuggingGPT** ([Shen, et al. 2023](https://arxiv.org/abs/2303.17580)) is a framework that uses ChatGPT as a task planner. It selects available models from [HuggingFace](https://huggingface.co/) by reading their descriptions to complete user tasks and summarizes the results based on their execution.
+**HuggingGPT** ([Shen, et al. 2023](https://arxiv.org/abs/2303.17580)) is a framework that uses ChatGPT as a task planner. It selects available models from [Hugging Face](https://huggingface.co/) by reading their descriptions to complete user tasks and summarizes the results based on their execution.
 
 {{< figure
     src="HuggingGPT.png"
@@ -765,11 +765,11 @@ Agents show great promise, but to achieve reliable and widespread application, t
 
 [16] Diao, Shizhe, et al. ["Active prompting with chain-of-thought for large language models."](https://arxiv.org/abs/2302.12246) arXiv preprint arXiv:2302.12246 (2023).
 
-[17] Yao, Shunyu, et al. ["React: Synergizing reasoning and acting in language models."](https://arxiv.org/abs/2210.03629) International Conference on Learning Representations (ICLR). 2023.
+[17] Yao, Shunyu, et al. ["ReAct: Synergizing reasoning and acting in language models."](https://arxiv.org/abs/2210.03629) International Conference on Learning Representations (ICLR). 2023.
 
 [18] Shinn, Noah, et al. ["Reflexion: Language agents with verbal reinforcement learning."](https://arxiv.org/abs/2303.11366) Advances in Neural Information Processing Systems 36 (2023): 8634-8652.
 
-[19] Guo, Daya, et al. ["Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
+[19] Guo, Daya, et al. ["DeepSeek-R1: Incentivizing reasoning capability in LLMs via reinforcement learning."](https://arxiv.org/abs/2501.12948) arXiv preprint arXiv:2501.12948 (2025).
 
 [20] OpenAI. ["Introducing OpenAI o1"](https://openai.com/o1/) OpenAI, 2024.
 

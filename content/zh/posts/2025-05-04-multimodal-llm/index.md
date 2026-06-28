@@ -648,7 +648,7 @@ Qwen2.5-VL 在 Qwen2-VL 的基础上进行了多项优化，主要包括：
 从下图可以看出，Qwen2.5-Omni 采用了**Thinker-Talker**架构，其主要特点包括：
 
 {{< figure
-    src="qwen2.5_omini_arc.png"
+    src="qwen2.5_omni_arch.png"
     caption="Fig. 19. Qwen2.5-Omni Overview. Adopts Thinker-Talker architecture. Thinker is tasked with text generation while Talker focuses on generating streaming speech tokens by receiving high-level representations directly from Thinker. (Image source: [Qwen Team, 2025](https://arxiv.org/abs/2503.20215))"
     align="center"
     width="100%"

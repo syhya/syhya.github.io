@@ -760,7 +760,7 @@ To achieve efficient training, Deepseek performed meticulous engineering optimiz
 *   **Challenge:** Cross-node expert parallelism leads to a computation-to-communication ratio close to 1:1, which is inefficient.
 
 {{< figure
-    src="forward_backward_chucks.png"
+    src="forward_backward_chunks.png"
     caption="Fig. 14. Overlapping strategy for a pair of forward and backward chunks with misaligned transformer block boundaries. Orange: forward, green: backward for input, blue: backward for weights, purple: PP communication, red: barriers. Both all-to-all and PP communications are fully hidden. (Image source: [DeepSeek-AI, 2024](https://arxiv.org/abs/2412.19437))"
     align="center"
     width="100%"

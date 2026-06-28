@@ -369,7 +369,7 @@ The core loop and algorithm of Reflexion are described as follows:
 Below are examples of Reflexion applied to decision-making, programming, and reasoning tasks:
 
 {{< figure
-    src="reflextion_examples.png"
+    src="reflexion_examples.png"
     caption="Fig. 22. Reflexion works on decision-making, programming, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
@@ -378,7 +378,7 @@ Below are examples of Reflexion applied to decision-making, programming, and rea
 In an experiment with 100 HotPotQA questions, a comparison between the CoT method and a method with episodic memory showed that adding a self-reflection step at the end with the Reflexion method significantly improved search, information retrieval, and reasoning capabilities.
 
 {{< figure
-    src="reflextion_result.png"
+    src="reflexion_result.png"
     caption="Fig. 23. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"

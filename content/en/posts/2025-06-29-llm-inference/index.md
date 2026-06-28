@@ -336,7 +336,7 @@ Many studies on Transformer model quantization share a common finding: simple lo
 As model sizes grow to billions of parameters, **large-magnitude outlier features** begin to appear in all Transformer layers, causing simple low-bit quantization to fail. Researchers observed this phenomenon in the **OPT** ([Zhang et al. 2022](https://arxiv.org/abs/2205.01068)) model, which is larger than 6.7B parameters. Larger models have more layers with extreme outliers, and these outlier features have a significant impact on model performance. In a few dimensions, the magnitude of activation outliers can be about 100 times larger than most other values.
 
 {{< figure
-    src="int8_outliner.png"
+    src="int8_outlier.png"
     caption="Fig. 13. The mean zero-shot accuracy over a set of language tasks (WinoGrande, HellaSwag, PIQA, LAMBADA) of OPT models of increasing sizes. (Image source: [Dettmers et al. 2022](https://arxiv.org/abs/2208.07339))"
     align="center"
     width="80%"
@@ -551,7 +551,7 @@ To enforce N:M structured sparsity, we divide the columns of a matrix into segme
 2.  **Narrow, deep search**: Select multiple stripes and optimize them simultaneously.
 
 {{< figure
-    src="greedy_permulation_search.png"
+    src="greedy_permutation_search.png"
     caption="Fig. 23. Algorithm for finding the best permutation for N:M sparsity greedily and iteratively. (Image source: [Pool & Yu, 2021](https://proceedings.neurips.cc/paper/2021/hash/6e8404c3b93a9527c8db241a1846599a-Abstract.html))"
     align="center"
 >}}

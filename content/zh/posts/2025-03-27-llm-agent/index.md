@@ -383,7 +383,7 @@ Reflexion 的核心循环与算法描述如下：
 下面分别展示了 Reflexion 在决策制定、编程和推理任务中的应用示例：
 
 {{< figure
-    src="reflextion_examples.png"
+    src="reflexion_examples.png"
     caption="Fig. 22. Reflexion works on decision-making, programming, and reasoning tasks. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"
@@ -392,7 +392,7 @@ Reflexion 的核心循环与算法描述如下：
 在 100 个 HotPotQA 问题的实验中，通过对比 CoT 方法和加入 episodic memory 的方式，结果显示采用 Reflexion 方法在最后增加自我反思步骤后，其搜索、信息检索和推理能力提升明显。
 
 {{< figure
-    src="reflextion_result.png"
+    src="reflexion_result.png"
     caption="Fig. 23. Comparative Analysis of Chain-of-Thought (CoT) and ReAct on the HotPotQA Benchmark. (Image source: [Shinn et al. 2023](https://arxiv.org/abs/2303.11366))"
     align="center"
     width="100%"

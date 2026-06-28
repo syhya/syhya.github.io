@@ -32,8 +32,10 @@ To evaluate the performance of LLM inference and serving engines, we primarily f
 **Latency** is the total time required for the model to generate a complete response for the user. It can be calculated from TTFT and TPOT using the following formula:
 
 $$
-\text{Latency} = \text{TTFT} + \text{TPOT} \times (\text{Number of Output Tokens})
+\text{Latency} = \text{TTFT} + \text{TPOT} \times (\text{Number of Output Tokens} - 1)
 $$
+
+This is because TTFT already includes the time to generate the first output token, while TPOT measures the average time for each subsequent output token.
 
 ### Throughput
 

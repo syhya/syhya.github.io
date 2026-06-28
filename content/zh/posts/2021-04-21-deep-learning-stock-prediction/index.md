@@ -1078,7 +1078,7 @@ $$
 其中，\( L \) 是损失函数，\( y_i \) 是真实值，\( \hat{y}_{i}^{(m-1)} \) 是第 \( m-1 \) 次迭代后的预测值。
 
 #### 4.4.2 LightGBM
-[轻量级梯度提升机（Light Gradient Boosting Machine，LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[22]}$ 是一个高效实现 GBDT 算法的框架，最初由 Microsoft 开发，作为一个免费开源的分布式梯度提升框架。LightGBM 基于决策树算法，广泛应用于排名、分类及其他机器学习任务，开发重点在于性能和可伸缩性。其主要优势包括高效率的并行训练、更快的训练速度、更低的内存消耗、更好的准确率，以及支持分布式计算和快速处理海量数据$^{[22]}$。
+[轻量级梯度提升机（Light Gradient Boosting Machine，LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[21]}$ 是一个高效实现 GBDT 算法的框架，最初由 Microsoft 开发，作为一个免费开源的分布式梯度提升框架。LightGBM 基于决策树算法，广泛应用于排名、分类及其他机器学习任务，开发重点在于性能和可伸缩性。其主要优势包括高效率的并行训练、更快的训练速度、更低的内存消耗、更好的准确率，以及支持分布式计算和快速处理海量数据$^{[21]}$。
 
 LightGBM 的核心算法基于以下优化目标：
 
@@ -1232,7 +1232,7 @@ def feature_choice(
 **Trainable params**：66,769  
 **Non-trainable params**：0
 
-因为本次实验使用数据的数据量较大，因此选用 `epochs=400`，`batch_size=1024`。模型的损失函数采用均方误差（Mean Square Error，MSE）。其中优化器采用随机梯度下降（Stochastic Gradient Descent，SGD）。随机梯度下降相对于梯度下降（Gradient Descent，GD）有在信息冗余的情况下更能有效地利用信息，前期迭代效果卓越，适合处理大样本的数据这三个优势 $^{[23]}$。由于本实验训练数据量较大，使用 SGD 的话每次仅用一个样本来迭代，训练的速度很快，可以大大减少我们训练所花费的时间。使用其 `keras` 包中的默认值，即 `lr=0.01`、`momentum=0.0`、`decay=0.0` 和 `nesterov=False`。
+因为本次实验使用数据的数据量较大，因此选用 `epochs=400`，`batch_size=1024`。模型的损失函数采用均方误差（Mean Square Error，MSE）。其中优化器采用随机梯度下降（Stochastic Gradient Descent，SGD）。随机梯度下降相对于梯度下降（Gradient Descent，GD）有在信息冗余的情况下更能有效地利用信息，前期迭代效果卓越，适合处理大样本的数据这三个优势 $^{[22]}$。由于本实验训练数据量较大，使用 SGD 的话每次仅用一个样本来迭代，训练的速度很快，可以大大减少我们训练所花费的时间。使用其 `keras` 包中的默认值，即 `lr=0.01`、`momentum=0.0`、`decay=0.0` 和 `nesterov=False`。
 
 **参数解释：**
 
@@ -1339,7 +1339,7 @@ $r_{d_{i}}$ ：第 $i$ 天日收益率
 $\bar{r}_{d}$ ：日平均收益率  
 $t$ ：投资策略执行的天数
 
-4. **夏普比率（Sharpe ratio）**：是由 [Sharpe（1966）](https://doi.org/10.2307/2328485)$^{[24]}$ 提出的。它代表投资者额外承受一单位风险，所获得的超额收益$^{[25]}$。这里给出年化的夏普比率计算公式：
+4. **夏普比率（Sharpe ratio）**：是由 [Sharpe（1966）](https://doi.org/10.2307/2328485)$^{[23]}$ 提出的。它代表投资者额外承受一单位风险，所获得的超额收益$^{[24]}$。这里给出年化的夏普比率计算公式：
 
 $$
 S = \frac{R_{p} - R_{f}}{\sigma_{p}}
@@ -1413,7 +1413,7 @@ commison：手续费
 
 本文虽然分别对比 LSTM，GRU，BiLSTM 这三个模型预测股票收盘价的效果和基于 LightGBM－BiLSTM 量化投资策略取得了一定的成果，但本文研究仍有一些不足之处。结合本文的研究成果，可以进一步进行以下研究和改进：
 
-1. **预测目标多样化**：本文在预测股票价格方面，选取的股票收盘价作为预测目标，虽然这一结果最直观，但 [Bachelier（1900）](http://www.numdam.org/item/ASENS_1900_3_17__21_0/)$^{[26]}$ 提出的随机游走假说（Random Walk Hypothesis，RWH）认为股票的价格服从随机漫步，是不可预测的。虽然之后有许多行为经济学家证明这一观点不完全正确，但这也同时说明单纯预测股票的收盘价难度和可解释性不那么强 $^{[27][28]}$。因此可以选择股票波动率预测，股票涨跌判断和股票收益率预测等作为未来的研究的方向。
+1. **预测目标多样化**：本文在预测股票价格方面，选取的股票收盘价作为预测目标，虽然这一结果最直观，但 [Bachelier（1900）](http://www.numdam.org/item/ASENS_1900_3_17__21_0/)$^{[25]}$ 提出的随机游走假说（Random Walk Hypothesis，RWH）认为股票的价格服从随机漫步，是不可预测的。虽然之后有许多行为经济学家证明这一观点不完全正确，但这也同时说明单纯预测股票的收盘价难度和可解释性不那么强 $^{[26][27]}$。因此可以选择股票波动率预测，股票涨跌判断和股票收益率预测等作为未来的研究的方向。
 2. **模型多样化对比**：本文在预测股票价格方面，对比了 LSTM，GRU 和 BiLSTM 这三种循环神经网络模型并且说明了 BiLSTM 预测效果比较好，但仍然缺少和其他更多不同模型的对比研究。因此未来可以深入研究与 Autoregressive Integrated Moving Average (ARIMA)，卷积神经网络（Convolutional Neural Networks，CNN），深度神经网络（Deep Neural Networks，DNN）, CNN－LSTM, Transformer 和 TimeGPT 等单一或复合模型之间的对比。
 3. **因子多样化**：本文在构建量化投资策略方面使用的因子都是技术面的价量因子，因子的种类单一。未来可以选择财务因子，情绪因子，成长因子等不同种类的因子，从而提高策略的性能。同时未来研究还可以适当的加入择时策略，在预测大盘上涨时增加仓位，在预测大盘下跌时减少仓位，赚取贝塔（beta，$\beta$）的钱。
 4. **投资组合优化**：本文的因子组合过程仍然不完善，未来可以利用二次规划的方法对投资组合进行优化。
@@ -1461,21 +1461,19 @@ commison：手续费
 
 [20] Friedman, J. H. [“Greedy function approximation: A gradient boosting machine.”](https://www.jstor.org/stable/2699986) *Annals of Statistics*. 2001: 1189-1232.  
 
-[21] Kopitar, L., Kocbek, P., Cilar, L., et al. [“Early detection of type 2 diabetes mellitus using machine learning-based prediction models.”](https://www.nature.com/articles/s41598-020-68771-z) *Scientific Reports*. 2020, 10(1): 1-12.  
+[21] Ke, G., Meng, Q., Finley, T., et al. [“LightGBM: A highly efficient gradient boosting decision tree.”](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf) *Advances in Neural Information Processing Systems*. 2017, 30: 3146-3154.
 
-[22] Ke, G., Meng, Q., Finley, T., et al. [“Lightgbm: A highly efficient gradient boosting decision tree.”](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf) *Advances in Neural Information Processing Systems*. 2017, 30: 3146-3154.  
+[22] Bottou, L., Curtis, F. E., Nocedal, J. [“Optimization methods for large-scale machine learning.”](https://coral.ise.lehigh.edu/frankecurtis/files/papers/BottCurtNoce18.pdf) *SIAM Review*. 2018, 60(2): 223-311.
 
-[23] Bottou, L., Curtis, F. E., Nocedal, J. [“Optimization methods for large-scale machine learning.”](https://coral.ise.lehigh.edu/frankecurtis/files/papers/BottCurtNoce18.pdf) *SIAM Review*. 2018, 60(2): 223-311.  
+[23] Sharpe, W. F. [“Mutual fund performance.”](https://finance.martinsewell.com/fund-performance/Sharpe1966.pdf) *The Journal of Business*. 1966, 39(1): 119-138.
 
-[24] Sharpe, W. F. [“Mutual fund performance.”](https://finance.martinsewell.com/fund-performance/Sharpe1966.pdf) *The Journal of Business*. 1966, 39(1): 119-138.  
+[24] Sharpe, W. F. [“The sharpe ratio.”](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm) *Journal of Portfolio Management*. 1994, 21(1): 49-58.
 
-[25] Sharpe, W. F. [“The sharpe ratio.”](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm) *Journal of Portfolio Management*. 1994, 21(1): 49-58.  
+[25] Bachelier, L. [“Théorie de la spéculation.”](http://www.numdam.org/item/ASENS_1900_3_17__21_0/) *Annales Scientifiques de l'École Normale Supérieure*. 1900, 17: 21-86.
 
-[26] Bachelier, L. [“Théorie de la spéculation.”](http://www.numdam.org/item/ASENS_1900_3_17__21_0/) *Annales Scientifiques de l'École Normale Supérieure*. 1900, 17: 21-86.  
+[26] Fromlet, H. [“Behavioral finance-theory and practical application: Systematic analysis of departures from the homo oeconomicus paradigm are essential for realistic financial research and analysis.”](https://www.jstor.org/stable/23488166) *Business Economics*. 2001: 63-69.
 
-[27] Fromlet, H. [“Behavioral finance-theory and practical application: Systematic analysis of departures from the homo oeconomicus paradigm are essential for realistic financial research and analysis.”](https://www.jstor.org/stable/23488166) *Business Economics*. 2001: 63-69.  
-
-[28] Lo, A. W. [“The adaptive markets hypothesis.”](https://www.pm-research.com/content/iijpormgmt/30/5/15) *The Journal of Portfolio Management*. 2004, 30(5): 15-29.  
+[27] Lo, A. W. [“The adaptive markets hypothesis.”](https://www.pm-research.com/content/iijpormgmt/30/5/15) *The Journal of Portfolio Management*. 2004, 30(5): 15-29.
 
 ### 参考博客
 

@@ -1072,7 +1072,7 @@ $$
 Where, \( L \) is the loss function, \( y_i \) is the true value, and \( \hat{y}_{i}^{(m-1)} \) is the predicted value after the \( (m-1) \)-th iteration.
 
 #### 4.4.2 LightGBM
-[Light Gradient Boosting Machine (LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[22]}$ is an efficient framework for implementing the GBDT algorithm, initially developed by Microsoft as a free and open-source distributed gradient boosting framework. LightGBM is based on decision tree algorithms and is widely used in ranking, classification, and other machine learning tasks. Its development focuses on performance and scalability. Its main advantages include high-efficiency parallel training, faster training speed, lower memory consumption, better accuracy, and support for distributed computing and fast processing of massive data$^{[22]}$.
+[Light Gradient Boosting Machine (LightGBM)](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)$^{[21]}$ is an efficient framework for implementing the GBDT algorithm, initially developed by Microsoft as a free and open-source distributed gradient boosting framework. LightGBM is based on decision tree algorithms and is widely used in ranking, classification, and other machine learning tasks. Its development focuses on performance and scalability. Its main advantages include high-efficiency parallel training, faster training speed, lower memory consumption, better accuracy, and support for distributed computing and fast processing of massive data$^{[21]}$.
 
 The core algorithm of LightGBM is based on the following optimization objective:
 
@@ -1226,7 +1226,7 @@ This section uses BiLSTM for factor combination. The specific principle of BiLST
 **Trainable params**: 66,769  
 **Non-trainable params**: 0
 
-Because the amount of data used in this experiment is large, `epochs=400` and `batch_size=1024` are selected. The loss function of the model is Mean Squared Error (MSE). The optimizer used is Stochastic Gradient Descent (SGD). Stochastic gradient descent has three advantages over gradient descent (GD): it can more effectively use information when information is redundant, and the early iteration effect is excellent, which is suitable for processing large-sample data $^{[23]}$. Since the amount of training data in this experiment is large, if SGD is used, only one sample is used for iteration each time, and the training speed is very fast, which can greatly reduce the time spent on training. The default values in its `keras` package are used, i.e., `lr=0.01`, `momentum=0.0`, `decay=0.0`, and `nesterov=False`.
+Because the amount of data used in this experiment is large, `epochs=400` and `batch_size=1024` are selected. The loss function of the model is Mean Squared Error (MSE). The optimizer used is Stochastic Gradient Descent (SGD). Stochastic gradient descent has three advantages over gradient descent (GD): it can more effectively use information when information is redundant, and the early iteration effect is excellent, which is suitable for processing large-sample data $^{[22]}$. Since the amount of training data in this experiment is large, if SGD is used, only one sample is used for iteration each time, and the training speed is very fast, which can greatly reduce the time spent on training. The default values in its `keras` package are used, i.e., `lr=0.01`, `momentum=0.0`, `decay=0.0`, and `nesterov=False`.
 
 **Parameter Explanation:**
 
@@ -1332,7 +1332,7 @@ $r_{d_{i}}$: Daily return rate on the $i$-th day
 $\bar{r}_{d}$: Average daily return rate  
 $t$: Number of days the investment strategy is executed
 
-4.  **Sharpe ratio**: Proposed by [Sharpe (1966)](https://doi.org/10.2307/2328485)$^{[24]}$. It represents the excess return obtained by investors for bearing an extra unit of risk$^{[25]}$. Here is the calculation formula for the annualized Sharpe ratio:
+4.  **Sharpe ratio**: Proposed by [Sharpe (1966)](https://doi.org/10.2307/2328485)$^{[23]}$. It represents the excess return obtained by investors for bearing an extra unit of risk$^{[24]}$. Here is the calculation formula for the annualized Sharpe ratio:
 
 $$
 S = \frac{R_{p} - R_{f}}{\sigma_{p}}
@@ -1406,7 +1406,7 @@ Finally, in order to further illustrate the application value of BiLSTM in finan
 
 Although this paper compares the effects of LSTM, GRU, and BiLSTM models in predicting stock closing prices and achieves certain results based on the LightGBM-BiLSTM quantitative investment strategy, there are still some shortcomings in this paper's research. Combining the research results of this paper, the following research and improvements can be further carried out:
 
-1.  **Diversification of Prediction Targets**: In terms of predicting stock prices, this paper selects the stock closing price as the prediction target. Although this result is the most intuitive, the Random Walk Hypothesis (RWH) proposed by [Bachelier (1900)](http://www.numdam.org/item/ASENS_1900_3_17__21_0/)$^{[26]}$ believes that stock prices follow a random walk and are unpredictable. Although many behavioral economists have since proved that this view is not entirely correct, it also shows that simply predicting stock closing prices is not so strong in terms of difficulty and interpretability $^{[27][28]}$. Therefore, stock volatility prediction, stock price increase/decrease judgment, and stock return rate prediction can be selected as future research directions.
+1.  **Diversification of Prediction Targets**: In terms of predicting stock prices, this paper selects the stock closing price as the prediction target. Although this result is the most intuitive, the Random Walk Hypothesis (RWH) proposed by [Bachelier (1900)](http://www.numdam.org/item/ASENS_1900_3_17__21_0/)$^{[25]}$ believes that stock prices follow a random walk and are unpredictable. Although many behavioral economists have since proved that this view is not entirely correct, it also shows that simply predicting stock closing prices is not so strong in terms of difficulty and interpretability $^{[26][27]}$. Therefore, stock volatility prediction, stock price increase/decrease judgment, and stock return rate prediction can be selected as future research directions.
 2.  **Diversified Model Comparison**: In terms of predicting stock prices, this paper compares the three recurrent neural network models LSTM, GRU, and BiLSTM and shows that BiLSTM has better prediction effect, but there is still a lack of comparative research with more different models. Therefore, future in-depth research can be conducted on comparisons with Autoregressive Integrated Moving Average (ARIMA), Convolutional Neural Networks (CNNs), Deep Neural Networks (DNNs), CNN-LSTM, Transformer, TimeGPT, and other single or composite models.
 3.  **Factor Diversification**: The factors used in this paper to construct quantitative investment strategies are all technical price-volume factors, and the types of factors are single. In the future, different types of factors such as financial factors, sentiment factors, and growth factors can be selected to improve the performance of the strategy. At the same time, future research can also appropriately add timing strategies to increase positions when predicting that the market will rise and reduce positions when predicting that the market will fall to earn beta (\(\beta\)) returns.
 4.  **Investment Portfolio Optimization**: The factor combination process in this paper is still imperfect. In the future, quadratic programming methods can be used to optimize the investment portfolio.
@@ -1454,21 +1454,19 @@ Although this paper compares the effects of LSTM, GRU, and BiLSTM models in pred
 
 [20] Friedman, J. H. [“Greedy function approximation: A gradient boosting machine.”](https://www.jstor.org/stable/2699986) *Annals of Statistics*. 2001: 1189-1232.
 
-[21] Kopitar, L., Kocbek, P., Cilar, L., et al. [“Early detection of type 2 diabetes mellitus using machine learning-based prediction models.”](https://www.nature.com/articles/s41598-020-68771-z) *Scientific Reports*. 2020, 10(1): 1-12.
+[21] Ke, G., Meng, Q., Finley, T., et al. [“LightGBM: A highly efficient gradient boosting decision tree.”](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf) *Advances in Neural Information Processing Systems*. 2017, 30: 3146-3154.
 
-[22] Ke, G., Meng, Q., Finley, T., et al. [“Lightgbm: A highly efficient gradient boosting decision tree.”](https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf) *Advances in Neural Information Processing Systems*. 2017, 30: 3146-3154.
+[22] Bottou, L., Curtis, F. E., Nocedal, J. [“Optimization methods for large-scale machine learning.”](https://coral.ise.lehigh.edu/frankecurtis/files/papers/BottCurtNoce18.pdf) *SIAM Review*. 2018, 60(2): 223-311.
 
-[23] Bottou, L., Curtis, F. E., Nocedal, J. [“Optimization methods for large-scale machine learning.”](https://coral.ise.lehigh.edu/frankecurtis/files/papers/BottCurtNoce18.pdf) *SIAM Review*. 2018, 60(2): 223-311.
+[23] Sharpe, W. F. [“Mutual fund performance.”](https://finance.martinsewell.com/fund-performance/Sharpe1966.pdf) *The Journal of Business*. 1966, 39(1): 119-138.
 
-[24] Sharpe, W. F. [“Mutual fund performance.”](https://finance.martinsewell.com/fund-performance/Sharpe1966.pdf) *The Journal of Business*. 1966, 39(1): 119-138.
+[24] Sharpe, W. F. [“The sharpe ratio.”](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm) *Journal of Portfolio Management*. 1994, 21(1): 49-58.
 
-[25] Sharpe, W. F. [“The sharpe ratio.”](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm) *Journal of Portfolio Management*. 1994, 21(1): 49-58.
+[25] Bachelier, L. [“Théorie de la spéculation.”](http://www.numdam.org/item/ASENS_1900_3_17__21_0/) *Annales Scientifiques de l'École Normale Supérieure*. 1900, 17: 21-86.
 
-[26] Bachelier, L. [“Théorie de la spéculation.”](http://www.numdam.org/item/ASENS_1900_3_17__21_0/) *Annales Scientifiques de l'École Normale Supérieure*. 1900, 17: 21-86.
+[26] Fromlet, H. [“Behavioral finance-theory and practical application: Systematic analysis of departures from the homo oeconomicus paradigm are essential for realistic financial research and analysis.”](https://www.jstor.org/stable/23488166) *Business Economics*. 2001: 63-69.
 
-[27] Fromlet, H. [“Behavioral finance-theory and practical application: Systematic analysis of departures from the homo oeconomicus paradigm are essential for realistic financial research and analysis.”](https://www.jstor.org/stable/23488166) *Business Economics*. 2001: 63-69.
-
-[28] Lo, A. W. [“The adaptive markets hypothesis.”](https://www.pm-research.com/content/iijpormgmt/30/5/15) *The Journal of Portfolio Management*. 2004, 30(5): 15-29.
+[27] Lo, A. W. [“The adaptive markets hypothesis.”](https://www.pm-research.com/content/iijpormgmt/30/5/15) *The Journal of Portfolio Management*. 2004, 30(5): 15-29.
 
 ### Reference Blog
 

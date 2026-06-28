@@ -33,8 +33,10 @@ math: true
 **总体延迟（Latency）** 指模型为用户生成完整响应所需的总时间。总体延迟可由 TTFT 和 TPOT 计算得出，公式如下：
 
 $$
-\text{Latency} = \text{TTFT} + \text{TPOT} \times (\text{Number of Output Tokens})
+\text{Latency} = \text{TTFT} + \text{TPOT} \times (\text{Number of Output Tokens} - 1)
 $$
+
+这是因为 TTFT 已经包含生成第一个输出 token 的时间，而 TPOT 衡量的是后续每个输出 token 的平均生成时间。
 
 ### 吞吐量
 

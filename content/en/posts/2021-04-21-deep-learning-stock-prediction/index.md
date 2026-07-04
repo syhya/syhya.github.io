@@ -883,24 +883,24 @@ In practical applications, we will give a backtesting period, score the candidat
 
 | Factor Name | Definition                                     |
 | :---------- | :--------------------------------------------- |
-| 0         | Max＿25(add(turnover_rate, vol))              |
-| 1         | Max＿30(vol)                                   |
-| 2         | Max＿25(turnover_rate)                         |
-| 3         | Max＿35(add(vol, close))                       |
-| 4         | Max＿30(turnover_rate)                         |
-| 5         | sub(Min＿20(neg(pre_close)), div(vol, adj_factor)) |
-| 6         | Max＿60(max(vol, adj_factor))                  |
-| 7         | Max＿50(amount)                                |
+| 0         | Max_25(add(turnover_rate, vol))              |
+| 1         | Max_30(vol)                                   |
+| 2         | Max_25(turnover_rate)                         |
+| 3         | Max_35(add(vol, close))                       |
+| 4         | Max_30(turnover_rate)                         |
+| 5         | sub(Min_20(neg(pre_close)), div(vol, adj_factor)) |
+| 6         | Max_60(max(vol, adj_factor))                  |
+| 7         | Max_50(amount)                                |
 | 8         | div(vol, neg(close))                            |
-| 9         | min(ArgSortMin＿25(pre_close), neg(vol))        |
+| 9         | min(ArgSortMin_25(pre_close), neg(vol))        |
 | 10        | neg(max(vol, turnover_rate))                  |
 | 11        | mul(amount, neg(turnover_rate))                |
-| 12        | inv(add(ArgSortMax＿40(change), inv(pct_chg)))  |
+| 12        | inv(add(ArgSortMax_40(change), inv(pct_chg)))  |
 | 13        | Std_40(inv(close)) |
 | 14        | div(log(total_mv),amount)                      |
-| 15        | div(neg(Max＿5(amount)), Min＿20(ArgSort＿60(high))) |
-| 16        | Corr＿30(inv(abs(sub(mul(total_mv, change), min(adj_factor, high)))), add(log(Max＿10(pre_close)), high)) |
-| 17        | ArgSort＿60(neg(turnover_rate))                |
+| 15        | div(neg(Max_5(amount)), Min_20(ArgSort_60(high))) |
+| 16        | Corr_30(inv(abs(sub(mul(total_mv, change), min(adj_factor, high)))), add(log(Max_10(pre_close)), high)) |
+| 17        | ArgSort_60(neg(turnover_rate))                |
 | ...       | ...                                            |
 
 These factors are all obtained by combining from the operator list (Table 4.2.8) and the basic field list (Table 4.2.7) through genetic programming and have different mathematical expressions.
@@ -1407,7 +1407,7 @@ This paper first introduced the research background and significance of stock pr
 
 Subsequently, this paper used the daily frequency data of SPD Bank and IBM, and preprocessed the data through a series of data processing processes and feature extraction. Then, the specific network structure and hyperparameter settings of the three models LSTM, GRU, and BiLSTM were introduced. Then, we used LSTM, GRU, and BiLSTM to predict the closing prices of the two stocks and compare the model evaluations. The experimental results show that for both stocks, the BiLSTM prediction effect is more accurate.
 
-Finally, in order to further illustrate the application value of BiLSTM in finance, this paper constructed a quantitative investment model based on LightGBM-BiLSTM. Stocks in the entire A-share market and multiple factors were selected for factor cleaning, factor selection based on LightGBM, and factor combination based on LSTM. Then, we constructed a certain investment strategy and compared it with the benchmark holding CSI All Share through evaluation indicators such as cumulative return rate, annualized return rate, annualized volatility, and Sharpe ratio. Through comparison, it was found that the LightGBM-BiLSTM quantitative investment model can bring better returns, indicating the effectiveness of using deep learning to build quantitative investment strategies.
+Finally, in order to further illustrate the application value of BiLSTM in finance, this paper constructed a quantitative investment model based on LightGBM-BiLSTM. Stocks in the entire A-share market and multiple factors were selected for factor cleaning, factor selection based on LightGBM, and factor combination based on BiLSTM. Then, we constructed a certain investment strategy and compared it with the benchmark holding CSI All Share through evaluation indicators such as cumulative return rate, annualized return rate, annualized volatility, and Sharpe ratio. Through comparison, it was found that the LightGBM-BiLSTM quantitative investment model can bring better returns, indicating the effectiveness of using deep learning to build quantitative investment strategies.
 
 ### 5.2 Future Directions
 

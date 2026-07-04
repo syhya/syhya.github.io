@@ -15,7 +15,7 @@ math: true
 
 股票市场是金融市场的重要组成部分，近些年来，股票市场蓬勃发展，股票价格预测和量化投资策略研究吸引了许多领域的研究学者。其中最近几年随着人工智能和机器学习的发展，学者们从传统的统计学模型迁移到了人工智能算法，尤其是在深度学习热潮掀起后，神经网络在股票价格预测和量化投资策略研究中取得了不错的效果。深度学习的目标是学习多层次的特征，通过组合低级特征构建抽象的高级特征，从而挖掘数据的分布式特征表示，基于此进行复杂的非线性建模，从而实现预测任务。其中 RNN 被人们广泛地应用在序列数据上面，如自然语言和语音。股票每天的股价，交易信息都是序列数据，因此之前有很多研究者，基于 RNN 来预测股票价格。由于基础的循环神经网络在层数过多的情况下，会出现梯度消失的问题，而 LSTM 的诞生，解决了此问题，之后出现了诸如 GRU，Peephole LSTM，BiLSTM 等 LSTM 的变体。但传统的股票预测模型有些并未考虑时间因素，有些仅考虑时间上的单向关系。因此，文中使用 BiLSTM 模型进行股票价格预测。从模型原理上来说，BiLSTM 模型充分利用了时间序列上向前，向后两个时间方向的上下文关系，并且避免了长时间序列上的梯度消失和梯度爆炸问题，能够更好地学习到对时间有长期依赖性的信息。
 
-本文实验第一部分通过利用国内浦发银行和国外 IBM 的股票数据，分别建立了 LSTM，GRU，BiLSTM 的股票预测模型，通过比较这三种深度学习模型最后预测的结果，发现对于两个数据集都是 BiLSTM 模型优于其他模型，有更好的预测准确率。第二部分通过使用 A 股全市场的股票数据，并先使用 LightGBM 模型进行对 50 个因子的篮选，选出重要程度最高的 10 个因子。之后再用 BiLSTM 模型选取进行因子组合，建立量化投资策略，最后对该策略进行实证与回测，发现该策略优于市场基准指数，说明了 BiLSTM 模型在股票价格预测和量化投资的实际应用价值。
+本文实验第一部分通过利用国内浦发银行和国外 IBM 的股票数据，分别建立了 LSTM，GRU，BiLSTM 的股票预测模型，通过比较这三种深度学习模型最后预测的结果，发现对于两个数据集都是 BiLSTM 模型优于其他模型，有更好的预测准确率。第二部分通过使用 A 股全市场的股票数据，并先使用 LightGBM 模型进行对 50 个因子的筛选，选出重要程度最高的 10 个因子。之后再用 BiLSTM 模型选取进行因子组合，建立量化投资策略，最后对该策略进行实证与回测，发现该策略优于市场基准指数，说明了 BiLSTM 模型在股票价格预测和量化投资的实际应用价值。
 
 **关键词**：量化投资；深度学习；神经网络模型；多因子选股；BiLSTM
 
@@ -889,24 +889,24 @@ F(x) \;=\; \mathrm{GP}\bigl(\{\text{operators}\}, \{\text{terminals}\}\bigr),
 
 | 因子名 | 定义 |
 | :------ | :---: |
-| 0       | Max＿25(add(turnover_rate, vol)) |
-| 1       | Max＿30(vol) |
-| 2       | Max＿25(turnover_rate) |
-| 3       | Max＿35(add(vol, close)) |
-| 4       | Max＿30(turnover_rate) |
-| 5       | sub(Min＿20(neg(pre_close)), div(vol, adj_factor)) |
-| 6       | Max＿60(max(vol, adj_factor)) |
-| 7       | Max＿50(amount) |
+| 0       | Max_25(add(turnover_rate, vol)) |
+| 1       | Max_30(vol) |
+| 2       | Max_25(turnover_rate) |
+| 3       | Max_35(add(vol, close)) |
+| 4       | Max_30(turnover_rate) |
+| 5       | sub(Min_20(neg(pre_close)), div(vol, adj_factor)) |
+| 6       | Max_60(max(vol, adj_factor)) |
+| 7       | Max_50(amount) |
 | 8       | div(vol, neg(close)) |
-| 9       | min(ArgSortMin＿25(pre_close), neg(vol)) |
+| 9       | min(ArgSortMin_25(pre_close), neg(vol)) |
 | 10      | neg(max(vol, turnover_rate)) |
 | 11      | mul(amount, neg(turnover_rate)) |
-| 12      | inv(add(ArgSortMax＿40(change), inv(pct_chg))) |
+| 12      | inv(add(ArgSortMax_40(change), inv(pct_chg))) |
 | 13      | Std_40(inv(close)) |
 | 14      | div(log(total_mv),amount) |
-| 15      | div(neg(Max＿5(amount)), Min＿20(ArgSort＿60(high))) |
-| 16      | Corr＿30(inv(abs(sub(mul(total_mv, change), min(adj_factor, high)))), add(log(Max＿10(pre_close)), high)) |
-| 17      | ArgSort＿60(neg(turnover_rate)) |
+| 15      | div(neg(Max_5(amount)), Min_20(ArgSort_60(high))) |
+| 16      | Corr_30(inv(abs(sub(mul(total_mv, change), min(adj_factor, high)))), add(log(Max_10(pre_close)), high)) |
+| 17      | ArgSort_60(neg(turnover_rate)) |
 | ...     | ... |
 
 这些因子均是通过遗传规划从算子列表（表4.2.8）与基础字段列表（表4.2.7）中组合而得，具有不同的数学表达形式。
@@ -931,7 +931,7 @@ $$
 - $r^{T+1}$ ：所选股票第 $T+1$ 期的收益率
 - $\overline{I C}: I C$ 的均值
 
-本文采用 IR 判断因子好坏，通过对大量不同的算子和基础数据的组合以及 IC 和 IR 的“篮选”，文章得到了本文所选用的 50 个价量因子。经过 IR 检测，按 IR 由高到低排序得到如下图所示的表格。从下表中我们可以看出来所选的 50 个价量因子的 IR 都大于 0.5 ，说明这些因子稳定获取超额收益能力较强。
+本文采用 IR 判断因子好坏，通过对大量不同的算子和基础数据的组合以及 IC 和 IR 的“筛选”，文章得到了本文所选用的 50 个价量因子。经过 IR 检测，按 IR 由高到低排序得到如下图所示的表格。从下表中我们可以看出来所选的 50 个价量因子的 IR 都大于 0.5 ，说明这些因子稳定获取超额收益能力较强。
 
 #### 4.2.11 因子 IR 检验表
 
@@ -1414,7 +1414,7 @@ commison：手续费
 
 随后，本文利用浦发银行和 IBM 的日频数据，通过一系列的数据处理过程和特征提取来对数据进行预处理。然后介绍了 LSTM，GRU，BiLSTM 这三个模型的具体网络结构以及超参数的设定。紧接着我们使用 LSTM，GRU，BiLSTM 分别进行两只股票收盘价的预测和模型评估比较。实验结果表明对于两只股票而言都是 BiLSTM 预测效果更加准确。
 
-最后，本论文为了进一步说明 BiLSTM 在金融上的运用价值，构建了基于 LightGBM－BiLSTM 的量化投资模型。选取 A 股全市场的股票和多个因子依次进行因子清洗，基于 LightGBM 的因子选择和基于 LSTM 的因子组合等过程。接着，我们构建一定的投资策略并通过累计收益率，年化收益率，年化波动率和夏普比率等评估指标与基准的持有中证全指进行对比。通过对比发现 LightGBM－BiLSTM 量化投资模型能带来更好的收益，说明了利用深度学习构建量化投资策略的有效性。
+最后，本论文为了进一步说明 BiLSTM 在金融上的运用价值，构建了基于 LightGBM－BiLSTM 的量化投资模型。选取 A 股全市场的股票和多个因子依次进行因子清洗，基于 LightGBM 的因子选择和基于 BiLSTM 的因子组合等过程。接着，我们构建一定的投资策略并通过累计收益率，年化收益率，年化波动率和夏普比率等评估指标与基准的持有中证全指进行对比。通过对比发现 LightGBM－BiLSTM 量化投资模型能带来更好的收益，说明了利用深度学习构建量化投资策略的有效性。
 
 ### 5.2 展望
 

@@ -679,22 +679,22 @@ The market data used in this paper comes from [Tushare](https://github.com/wadit
 | vol            | float | Volume (in hands)                               |
 | amount         | float | Turnover (in thousands of CNY)                  |
 
-The A-share market-wide daily dataset contains 5,872,309 rows of data, i.e., 5,872,309 samples. As shown in Table 4.2.1, the A-share market-wide daily dataset has the following 11 features, in order: stock code (ts_code), trading date (trade_date), open price (open), high price (high), low price (low), close price (close), previous close price (pre_close), change amount (change), turnover rate (turnover_rate), turnover amount (amount), total market value (total_mv), and adjustment factor (adj_factor).
+The A-share market-wide daily dataset contains 5,872,309 rows of data, i.e., 5,872,309 samples. As shown in Table 4.2.1, the dataset has the following 11 features: stock code (ts_code), trading date (trade_date), open price (open), high price (high), low price (low), close price (close), previous close price (pre_close), change amount (change), percentage change (pct_chg), volume (vol), and turnover amount (amount).
 
 #### 4.2.2 Partial Display of A-Share Market-Wide Daily Dataset
 
-| ts_code     | trade_date | open  | high  | low   | close | pre_close | change | vol      | amount      |
-| :------------ | :----------- | :---- | :---- | :---- | :---- | :---------- | :----- | :--------- | :------------ |
-| 600613.SH   | 20120104   | 8.20  | 8.20  | 7.84  | 7.86  | 8.16      | -0.30  | 4762.98  | 3854.1000   |
-| 600690.SH   | 20120104   | 9.00  | 9.17  | 8.78  | 8.78  | 8.93      | -0.15  | 142288.41| 127992.6050 |
-| 300277.SZ   | 20120104   | 22.90 | 22.98 | 20.81 | 20.88 | 22.68     | -1.80  | 12212.39 | 26797.1370  |
-| 002403.SZ   | 20120104   | 8.87  | 8.90  | 8.40  | 8.40  | 8.84      | -0.441 | 10331.97 | 9013.4317   |
-| 300179.SZ   | 20120104   | 19.99 | 20.32 | 19.20 | 19.50 | 19.96     | -0.46  | 1532.31  | 3008.0594   |
-| 600000.SH   | 20120104   | 8.54  | 8.56  | 8.39  | 8.41  | 8.49      | -0.08  | 342013.79| 290229.5510 |
-| 300282.SZ   | 20120104   | 22.90 | 23.33 | 21.02 | 21.02 | 23.35     | -2.33  | 38408.60 | 86216.2356  |
-| 002319.SZ   | 20120104   | 9.74  | 9.95  | 9.38  | 9.41  | 9.73      | -0.32  | 4809.74  | 4671.4803   |
-| 601991.SH   | 20120104   | 5.17  | 5.39  | 5.12  | 5.25  | 5.16      | 0.09   | 145268.38| 76547.7490  |
-| 000780.SZ   | 20120104   | 10.42 | 10.49 | 10.00 | 10.00 | 10.30     | -0.30  | 20362.30 | 20830.1761  |
+| ts_code     | trade_date | open  | high  | low   | close | pre_close | change | pct_chg | vol       | amount      |
+| :---------- | :--------- | :---- | :---- | :---- | :---- | :-------- | :----- | :------ | :-------- | :---------- |
+| 600613.SH   | 20120104   | 8.20  | 8.20  | 7.84  | 7.86  | 8.16      | -0.30  | -3.68   | 4762.98   | 3854.1000   |
+| 600690.SH   | 20120104   | 9.00  | 9.17  | 8.78  | 8.78  | 8.93      | -0.15  | -1.68   | 142288.41 | 127992.6050 |
+| 300277.SZ   | 20120104   | 22.90 | 22.98 | 20.81 | 20.88 | 22.68     | -1.80  | -7.94   | 12212.39  | 26797.1370  |
+| 002403.SZ   | 20120104   | 8.87  | 8.90  | 8.40  | 8.40  | 8.84      | -0.441 | -4.98   | 10331.97  | 9013.4317   |
+| 300179.SZ   | 20120104   | 19.99 | 20.32 | 19.20 | 19.50 | 19.96     | -0.46  | -2.30   | 1532.31   | 3008.0594   |
+| 600000.SH   | 20120104   | 8.54  | 8.56  | 8.39  | 8.41  | 8.49      | -0.08  | -0.94   | 342013.79 | 290229.5510 |
+| 300282.SZ   | 20120104   | 22.90 | 23.33 | 21.02 | 21.02 | 23.35     | -2.33  | -9.98   | 38408.60  | 86216.2356  |
+| 002319.SZ   | 20120104   | 9.74  | 9.95  | 9.38  | 9.41  | 9.73      | -0.32  | -3.29   | 4809.74   | 4671.4803   |
+| 601991.SH   | 20120104   | 5.17  | 5.39  | 5.12  | 5.25  | 5.16      | 0.09   | 1.74    | 145268.38 | 76547.7490  |
+| 000780.SZ   | 20120104   | 10.42 | 10.49 | 10.00 | 10.00 | 10.30     | -0.30  | -2.91   | 20362.30  | 20830.1761  |
 
 **[5872309 rows x 11 columns]**
 
@@ -705,7 +705,7 @@ The CSI All Share daily dataset contains 5,057 rows of data, i.e., 5,057 samples
 | trade_date | open      | high      | low       | close     | volume         | pre_close |
 | :----------- | :-------- | :-------- | :-------- | :-------- | :------------- | :-------- |
 | 2006-11-24 | 1564.3560 | 1579.3470 | 1549.9790 | 1576.1530 | 7.521819e+09   | 1567.0910 |
-| 2006-11-27 | 1574.1130 | 1598.7440 | 1574.1130 | 1598.7440 | 7.212786e+09   | 1581.1530 |
+| 2006-11-27 | 1574.1130 | 1598.7440 | 1574.1130 | 1598.7440 | 7.212786e+09   | 1576.1530 |
 | 2006-11-28 | 1597.7200 | 1604.7190 | 1585.3620 | 1596.8400 | 7.025637e+09   | 1598.7440 |
 | 2006-11-29 | 1575.3030 | 1620.2870 | 1575.3030 | 1617.9880 | 7.250354e+09   | 1596.8400 |
 | 2006-11-30 | 1621.4280 | 1657.3230 | 1621.4280 | 1657.3230 | 9.656888e+09   | 1617.9880 |
@@ -744,7 +744,7 @@ Table 4.2.4 below shows partial data of the original factors. After sequentially
 
 -   **Construction of Price-Volume Factors**
 
-This paper uses the following method to construct price-volume factors. There are two basic elements for constructing price-volume factors: first, **basic fields**, and second, **operators**. As shown in Table 4.2.1, basic fields include daily frequency high price, low price, open price, close price, previous day's close price, volume, change percentage, turnover rate, turnover amount, total market value, and adjustment factor.
+This paper uses the following method to construct price-volume factors. There are two basic elements for constructing price-volume factors: first, **basic fields**, and second, **operators**. As shown in the basic field table below, basic fields include daily frequency high price, low price, open price, close price, previous day's close price, volume, change percentage, turnover rate, turnover amount, total market value, and adjustment factor.
 
 #### 4.2.7 Basic Field Table
 
@@ -896,7 +896,7 @@ In practical applications, we will give a backtesting period, score the candidat
 | 10        | neg(max(vol, turnover_rate))                  |
 | 11        | mul(amount, neg(turnover_rate))                |
 | 12        | inv(add(ArgSortMax＿40(change), inv(pct_chg)))  |
-| 13        | Std＿40(inv(abs(sub(mul(total_mv, change), min(adj_factor, high)))) |
+| 13        | Std_40(inv(close)) |
 | 14        | div(log(total_mv),amount)                      |
 | 15        | div(neg(Max＿5(amount)), Min＿20(ArgSort＿60(high))) |
 | 16        | Corr＿30(inv(abs(sub(mul(total_mv, change), min(adj_factor, high)))), add(log(Max＿10(pre_close)), high)) |
@@ -1102,7 +1102,14 @@ Where, \( y \) is the true return rate, \( \hat{y} \) is the return rate predict
 The specific algorithm flow in this section is as follows:
 
 1.  **Data Preparation**: Use one year's worth of 50 factor data for each stock (A-share market-wide data) and historical future one-month returns as features.
-2.  **Model Training**: Use Grid Search to optimize the hyperparameters of the LightGBM model and train the model to predict the future one-month return rate. The model training flow is shown in Fig. 4.12.
+2.  **Model Training**: Use Grid Search to optimize the hyperparameters of the LightGBM model and train the model to predict the future one-month return rate. The model training flow is shown in the figure below.
+
+    {{< figure
+        src="LightGBM_pipeline.png"
+        caption="Fig. 12. LightGBM Model Training Flow."
+        align="center"
+        width="70%"
+    >}}
 
     $$
     \text{Parameter Optimization:} \quad \theta^* = \arg\min_\theta \sum_{i=1}^{N} L(y_i, \hat{y}_i(\theta))
@@ -1126,26 +1133,26 @@ The specific algorithm flow in this section is as follows:
 
     Where, \( \mathbb{I} \) is the indicator function, and \( \Delta L_{m,j} \) is the reduction in loss brought by factor \( f \) in the \( j \)-th split of the \( m \)-th tree.
 
-4.  **Factor Screening**: Sort according to the factor importance calculated by the model, and select the top ten factors with the highest importance as the factors used in this cross-sectional analysis. The importance of the selected factors is shown in Table 4.4.4.
+4.  **Factor Screening**: Sort according to the factor importance calculated by the model, and select the top ten factors with the highest importance as the factors used in this cross-sectional analysis. The importance of the selected factors is shown in the table below.
 
 #### 4.4.4 Partial Ranking of Selected Factor Importance
 
-| importance | feature_name | trade_date  |
-| :--------- | :----------- | :---------- |
-| 35         | factor_35    | 2010-08-11  |
-| 27         | factor_27    | 2010-08-11  |
-| 33         | factor_33    | 2010-08-11  |
-| 20         | factor_20    | 2010-08-11  |
-| 24         | factor_24    | 2010-08-11  |
-| 45         | factor_45    | 2010-08-11  |
-| 37         | factor_37    | 2010-08-11  |
-| 49         | factor_49    | 2010-08-11  |
-| 19         | factor_19    | 2010-08-11  |
-| 47         | factor_47    | 2010-08-11  |
-| 22         | factor_22    | 2010-09-09  |
-| 20         | factor_20    | 2010-09-09  |
-| 30         | factor_30    | 2010-09-09  |
-| 24         | factor_24    | 2010-09-09  |
+| index | importance | feature_name | trade_date  |
+| :---- | :--------- | :----------- | :---------- |
+| 35    | 86         | factor_35    | 2010-08-11  |
+| 27    | 97         | factor_27    | 2010-08-11  |
+| 33    | 101        | factor_33    | 2010-08-11  |
+| 20    | 102        | factor_20    | 2010-08-11  |
+| 24    | 121        | factor_24    | 2010-08-11  |
+| 45    | 143        | factor_45    | 2010-08-11  |
+| 37    | 154        | factor_37    | 2010-08-11  |
+| 49    | 154        | factor_49    | 2010-08-11  |
+| 19    | 189        | factor_19    | 2010-08-11  |
+| 47    | 261        | factor_47    | 2010-08-11  |
+| 22    | 86         | factor_22    | 2010-09-09  |
+| 20    | 88         | factor_20    | 2010-09-09  |
+| 30    | 90         | factor_30    | 2010-09-09  |
+| 24    | 114        | factor_24    | 2010-09-09  |
 
 #### 4.4.5 Code Implementation Snippet
 
@@ -1239,15 +1246,15 @@ Because the amount of data used in this experiment is large, `epochs=400` and `b
 The specific algorithm flow in this section is as follows:
 
 1.  Use A-share market-wide data of 10 factors (factors selected by LightGBM) and historical future one-month returns for each stock for one year as features.
-2.  Take the future one-month return rate of each stock per year as the prediction target, and use BiLSTM for training, as shown in Fig. 12.
+2.  Take the future one-month return rate of each stock per year as the prediction target, use BiLSTM for training, and generate out-of-sample predictions with a rolling window, as shown in Fig. 13.
 
 {{< figure
     src="Rolling_Window.png"
-    caption="Fig. 12. Rolling Window"
+    caption="Fig. 13. Rolling Window"
     align="center"
 >}}
 
-3.  The real-time factor data of out-of-sample data for one month is passed through the trained BiLSTM model to obtain the real-time expected return rate of each stock for the next month. The return rate is shown in Table 4.11.
+3.  The real-time factor data of out-of-sample data for one month is passed through the trained BiLSTM model to obtain the real-time expected return rate of each stock for the next month. Partial predicted returns are shown in the table below.
 
 #### 4.5.3 Partial Stock Predicted Return Rate Table
 
@@ -1379,18 +1386,18 @@ The quantitative trading strategy in this paper adopts position switching every 
 
 ##### 4.6.2.1 Strategy Backtesting Results
 
-|                 | Cumulative Return | Annualized Return | Annualized Volatility | Sharpe Ratio | Max Drawdown | Annualized Turnover Rate | Annualized Transaction Cost Rate |
-| :---------------- | :-------------- | :---------------- | :------------------ | :----------- | :----------- | :----------------------- | :----------------------------- |
-| **Strategy**      | 701.00%         | 29.18%            | 33.44%              | 0.77         | 51.10%       | 51.10%                   | 11.35%                         |
-| **Benchmark**     | 110.40%         | 9.70%             | 26.01%              | 0.24         | 58.49%       | 58.49%                   | 0.00%                          |
+|                 | Cumulative Return | Annualized Return | Annualized Volatility | Sharpe Ratio | Max Drawdown | Annualized Turnover Rate (x) | Annualized Transaction Cost Rate |
+| :-------------- | :---------------- | :---------------- | :-------------------- | :----------- | :----------- | :--------------------------- | :------------------------------- |
+| **Strategy**      | 701.00%         | 29.18%            | 33.44%              | 0.77         | 51.10%       | 11.35                        | 2.29%                          |
+| **Benchmark**     | 110.40%         | 9.70%             | 26.01%              | 0.24         | 58.49%       | 0.00                         | 0.00%                          |
 
 {{< figure
     src="res.png"
-    caption="Fig. 13. Net Profit Curve"
+    caption="Fig. 14. Net Profit Curve"
     align="center"
 >}}
 
-The backtesting results are shown in the table and Fig. 13 above. My strategy adopts the LightGBM-BiLSTM quantitative strategy introduced in this chapter. The benchmark uses the CSI All Share (000985). From the results above, it can be seen that the cumulative return of this strategy is 701.00%, which is much higher than the benchmark's 110.40%; the annualized return is 29.18%, which is much higher than the benchmark's 9.70%; and the Sharpe ratio is 0.77, which is higher than the benchmark's 0.24. These three backtesting indicators show that the LightGBM-BiLSTM quantitative strategy can indeed bring greater returns to investors. The annualized volatility of this strategy is 33.44%, which is greater than the benchmark's 26.01%, and the maximum drawdown is 51.10%, which is less than the benchmark's 58.49%. These two backtesting indicators show that the LightGBM-BiLSTM quantitative strategy has certain risks, especially it is difficult to resist the impact of systemic risks. The annualized turnover rate is 11.35%, and the annualized transaction cost rate is 2.29%, indicating that our strategy is not a high-frequency trading strategy and the transaction cost is small. It can be seen from the return curve chart that the return rate of the LightGBM-BiLSTM quantitative strategy in the first two years is not much different from the benchmark, and there is no special advantage. However, from around April 2015, the return rate of the LightGBM-BiLSTM quantitative strategy is significantly better than the benchmark's return rate. Overall, the return rate of this LightGBM-BiLSTM quantitative strategy is very considerable, but there are still certain risks.
+The backtesting results are shown in the table and Fig. 14 above. My strategy adopts the LightGBM-BiLSTM quantitative strategy introduced in this chapter. The benchmark uses the CSI All Share (000985). From the results above, it can be seen that the cumulative return of this strategy is 701.00%, which is much higher than the benchmark's 110.40%; the annualized return is 29.18%, which is much higher than the benchmark's 9.70%; and the Sharpe ratio is 0.77, which is higher than the benchmark's 0.24. These three backtesting indicators show that the LightGBM-BiLSTM quantitative strategy can indeed bring greater returns to investors. The annualized volatility of this strategy is 33.44%, which is greater than the benchmark's 26.01%, and the maximum drawdown is 51.10%, which is less than the benchmark's 58.49%. These two backtesting indicators show that the LightGBM-BiLSTM quantitative strategy has certain risks, especially it is difficult to resist the impact of systemic risks. The annualized turnover rate is 11.35, and the annualized transaction cost rate is 2.29%, indicating that our strategy is not a high-frequency trading strategy and the transaction cost is small. It can be seen from the return curve chart that the return rate of the LightGBM-BiLSTM quantitative strategy in the first two years is not much different from the benchmark, and there is no special advantage. However, from around April 2015, the return rate of the LightGBM-BiLSTM quantitative strategy is significantly better than the benchmark's return rate. Overall, the return rate of this LightGBM-BiLSTM quantitative strategy is very considerable, but there are still certain risks.
 
 ## Chapter 5 Conclusion and Future Directions
 

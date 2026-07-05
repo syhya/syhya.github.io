@@ -781,7 +781,7 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
     width="100%"
 >}}
 
-*   **核心思想:** 重叠一对独立的前向和反向 chunk 内的计算和通信。将每个 chunk 分解为 **Attention**、**All-to-all Dispatch**、**MLP**、**All-to-all Combine** 四个组件（反向的 Attention 和 MLP 进一步细分为 backward for input 和 backward for weights，类似 **ZeroBubble** ([Qi et al., 2023](https://arxiv.org/abs/2401.10241)）。通过重排这些组件并手动调整用于通信与计算的 GPU SM 比例，实现 All-to-all 和 PP 通信的完全隐藏。
+*   **核心思想:** 重叠一对独立的前向和反向 chunk 内的计算和通信。将每个 chunk 分解为 **Attention**、**All-to-all Dispatch**、**MLP**、**All-to-all Combine** 四个组件（反向的 Attention 和 MLP 进一步细分为 backward for input 和 backward for weights，类似 **ZeroBubble**（[Qi et al., 2023](https://arxiv.org/abs/2401.10241)））。通过重排这些组件并手动调整用于通信与计算的 GPU SM 比例，实现 All-to-all 和 PP 通信的完全隐藏。
 *   **调度:** 采用双向流水线调度，同时从流水线的两端输入微批次，大部分通信可以被完全重叠。
 
 {{< figure
@@ -1136,7 +1136,7 @@ DeepSeek-V2 Chat (SFT/RL) 与代表性开源 Chat 模型在开放式生成任务
 
 DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。V3 在多数基准上领先开源模型，并在代码、数学、中文及开放式生成任务上与顶尖闭源模型相当。
 
-|  | Benchmark (Metric) | DeepSeek V2.5-0905 | Qwen2.5 72B-Inst. | LLaMA-3.1 405B-Inst. | Claude-3.5- Sonnet-1022 | GPT-4o 0513 | DeepSeek V3 |
+|  | Benchmark (Metric) | DeepSeek V2.5-0905 | Qwen2.5 72B-Inst. | LLaMA-3.1 405B-Inst. | Claude-3.5-Sonnet-1022 | GPT-4o 0513 | DeepSeek V3 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | English | MMLU ([Hendrycks et al., 2020](https://arxiv.org/abs/2009.03300)) (EM) | 80.6 | 85.3 | 88.6 | 88.3 | 87.2 | **88.5** |
 |  | MMLU-Pro ([Wang et al., 2024](https://arxiv.org/abs/2406.01574)) (EM) | 66.2 | 71.6 | 73.3 | **78.0** | 72.6 | 75.9 |
@@ -1164,7 +1164,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 *   **MTP 的有效性:** V3 的实验证明，多 token 预测作为辅助训练目标，确实能提升模型在标准评估任务上的性能，同时为推理加速（推测解码）提供了可能。
 *   **R1 蒸馏:** V3 成功地将 DeepSeek-R1 的长链推理能力蒸馏到标准 LLM 中，显著提升了数学和代码能力。这是一个重要的技术方向，但也需要注意控制生成长度。
 *   **自奖励:** V3 强大的判断能力（**RewardBench**([Lambert et al., 2024](https://arxiv.org/abs/2403.13787))）结果使其能有效进行自反馈和自对齐，这对于减少对人类标注的依赖、实现模型持续自我提升至关重要。
-*   **SFT 数据量:** 虽然在**LIMA**([Zhou et al., 2024](https://arxiv.org/abs/2305.11206)）认为少量高质量 SFT 数据即可达到不错的效果，但对于特定技能（如指令遵循 IFEval），仍需足够数据量的高质量数据才能达到满意效果。
+*   **SFT 数据量:** 虽然在**LIMA**（[Zhou et al., 2024](https://arxiv.org/abs/2305.11206)）认为少量高质量 SFT 数据即可达到不错的效果，但对于特定技能（如指令遵循 IFEval），仍需足够数据量的高质量数据才能达到满意效果。
 *   **对齐税:** OpenAI 在**InstructGPT** ([Ouyang et al., 2022](https://arxiv.org/pdf/2203.02155))中指出 RL 对齐在提升开放式生成能力的同时，可能牺牲部分标准基准的性能。V2 和 V3 都努力在数据处理和训练策略上缓解此问题，以达到可接受的平衡。
 
 ## 结论、局限性与未来方向

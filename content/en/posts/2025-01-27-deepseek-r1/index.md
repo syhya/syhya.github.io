@@ -2,7 +2,7 @@
 title: "OpenAI o1 Replication Progress: DeepSeek-R1"
 date: 2025-01-27T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "Reinforcement Learning", "LLM", "Reasoning Model", "NLP", "Model Distillation", "DeepSeek-R1", "GRPO", "PPO", "SFT", "RFT", "o1", "Reject sampling"]
+tags: ["Deep Learning", "AI", "Reinforcement Learning", "LLM", "Reasoning Model", "NLP", "Model Distillation", "DeepSeek-R1", "GRPO", "PPO", "SFT", "RFT", "o1", "Rejection Sampling"]
 categories: ["Technical Blog"]
 ShowReadingTime: true
 toc: true

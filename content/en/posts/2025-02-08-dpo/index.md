@@ -1,5 +1,5 @@
 ---
-title: "LLMs Alignment: DPO"  
+title: "LLM Alignment: DPO"
 date: 2025-02-08T12:00:00+08:00  
 author: "Yue Shui"  
 tags: ["AI", "NLP", "LLM", "Post-training", "DPO", "RLHF", "Alignment", "Bradley–Terry Model"]  
@@ -321,14 +321,14 @@ DPO simplifies the RLHF process into a direct supervised learning task, saving r
 
 **Cited as:**
 
-> Yue Shui. (Feb 2025). LLMs Alignment: DPO.  
+> Yue Shui. (Feb 2025). LLM Alignment: DPO.
 > https://syhya.github.io/posts/2025-02-08-dpo
 
 Or
 
 ```bibtex
 @article{syhya2025dpo,
-  title   = "LLMs Alignment: DPO",
+  title   = "LLM Alignment: DPO",
   author  = "Yue Shui",
   journal = "syhya.github.io",
   year    = "2025",
@@ -336,4 +336,3 @@ Or
   url     = "https://syhya.github.io/posts/2025-02-08-dpo"
 }
 ```
-

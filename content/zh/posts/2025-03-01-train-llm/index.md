@@ -341,7 +341,7 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
 
 ### PipeDream-2BW
 
-***PipeDream-2BW(Double-Buffered Weights)** 维护两个版本的模型权重，即 "双缓冲权重"。它每 $k$ 个 micro-batch 更新一次模型版本，其中 $k$ 大于流水线深度 $d$($k > d$). 新更新的模型版本不会立即完全替换旧版本，因为可能还有一些剩余的反向传播操作仍然依赖于旧版本。通过双缓冲权重，PipeDream-2BW 可以将权重暂存的内存开销降低到只维护两个版本的模型权重，显著减少内存占用。
+**PipeDream-2BW (Double-Buffered Weights)** 维护两个版本的模型权重，即 "双缓冲权重"。它每 $k$ 个 micro-batch 更新一次模型版本，其中 $k$ 大于流水线深度 $d$($k > d$). 新更新的模型版本不会立即完全替换旧版本，因为可能还有一些剩余的反向传播操作仍然依赖于旧版本。通过双缓冲权重，PipeDream-2BW 可以将权重暂存的内存开销降低到只维护两个版本的模型权重，显著减少内存占用。
 
 {{< figure
     src="pipe_dream_2bw.png"

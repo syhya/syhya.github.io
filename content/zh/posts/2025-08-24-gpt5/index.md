@@ -13,11 +13,11 @@ draft: false
 math: true
 ---
 
-2025 年 8 月，AI 领域迎来了 OpenAI 的密集发布期。继 2019 年 **GPT-2** ([OpenAI, 2019](https://openai.com/index/better-language-models/)) 之后，OpenAI 再次向开源社区贡献了其首个开放权重的大型语言模型系列 **gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/))，包含 120B 和 20B 两种规模。紧随其后，备受瞩目的下一代旗舰模型 **GPT-5** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-5/)) 也正式发布。这一系列发布不仅标志着开源模型在推理和智能体能力上达到了新的高度，也揭示了 OpenAI 在模型架构、训练方法论以及安全对齐方面的最新进展。
+2025 年 8 月，AI 领域迎来了 OpenAI 的密集发布期。继 2019 年 **GPT-2** ([OpenAI, 2019](https://openai.com/index/better-language-models/)) 之后，OpenAI 再次为开放权重模型生态带来了其首个开放权重的大型语言模型系列 **gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/))，包含 120B 和 20B 两种规模。紧随其后，备受瞩目的下一代旗舰模型 **GPT-5** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-5/)) 也正式发布。这一系列发布不仅标志着开放权重模型在推理和智能体能力上达到了新的高度，也揭示了 OpenAI 在模型架构、训练方法论以及安全对齐方面的最新进展。
 
 ## gpt-oss
 
-**gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/)) 是 OpenAI 自 GPT-2 以来首次发布的开放权重语言模型，旨在为开源社区提供强大的推理和工具使用能力。该系列包含 `gpt-oss-120b` 和 `gpt-oss-20b` 两个版本，均在 Apache 2.0 许可下发布。
+**gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/)) 是 OpenAI 自 GPT-2 以来首次发布的开放权重语言模型，旨在为开放权重模型生态提供强大的推理和工具使用能力。该系列包含 `gpt-oss-120b` 和 `gpt-oss-20b` 两个版本，均在 Apache 2.0 许可下发布。
 
 ### 架构概览
 
@@ -36,8 +36,8 @@ gpt-oss 建立在 GPT 系列架构之上，并融合了近年来多项主流技�
 | **特性** | **GPT-OSS 20B (2025)** | **GPT-2 XL 1.5B (2019)** |
 |----------|------------------------|--------------------------|
 | **发布时间** | 2025年 | 2019年 |
-| **模型大小** | **20B 参数** | 1.5B 参数 |
-| **活跃参数** | **3.5B** (每次推理) | 1.5B (全部激活) |
+| **模型大小** | **21B 总参数** | 1.5B 参数 |
+| **活跃参数** | **3.6B**（每 token） | 1.5B（全部激活） |
 | **词汇表大小** | **200k tokens** | 50k tokens |
 | **嵌入维度** | **2,880** | 1,600 |
 | **Transformer层数** | 24层 | **48层** |

@@ -370,7 +370,7 @@ Where:
 - **Weight Matrix Adjustment**: To maintain the same parameter count and computational load as traditional FFN layers, SwiGLU reduces the hidden layer dimension (e.g., adjusting the hidden size from $4d$ to $\frac{2}{3} \times 4d$), ensuring the overall model efficiency is unaffected despite introducing an extra linear transformation matrix.
 - **Compatibility**: As a member of the GLU family, SwiGLU can be seamlessly integrated into existing Transformer architectures, replacing traditional ReLU or GELU activation functions to enhance overall model performance.
 
-> For implementation code, refer to this file: [swiglu.py](https://github.com/syhya/syhya.github.io/blob/main/content/zh/posts/2025-04-06-llama/swiglu.py).
+> For implementation code, refer to this file: [swiglu.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-04-06-llama/swiglu.py).
 
 ### Grouped Query Attention (GQA)
 

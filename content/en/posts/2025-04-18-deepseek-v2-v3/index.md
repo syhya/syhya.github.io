@@ -1120,7 +1120,7 @@ Comparison of DeepSeek-V2 Chat (SFT/RL) with representative open-source Chat mod
 
 Comparison of DeepSeek-V3 Chat with representative open-source and closed-source Chat models (partial results). V3 leads open-source models on most benchmarks and is comparable to top closed-source models in code, math, Chinese, and open-ended generation tasks.
 
-|         | Benchmark (Metric)                                       | DeepSeek V2.5-0905 | Qwen2.5 72B-Inst. | LLaMA-3.1 405B-Inst. | Claude-3.5- Sonnet-1022 | GPT-4o 0513 | DeepSeek V3 |
+|         | Benchmark (Metric)                                       | DeepSeek V2.5-0905 | Qwen2.5 72B-Inst. | LLaMA-3.1 405B-Inst. | Claude-3.5-Sonnet-1022 | GPT-4o 0513 | DeepSeek V3 |
 | :-----: | :-------------------------------------------------------: | :----------------: | :---------------: | :------------------: | :---------------------: | :---------: | :---------: |
 | English | MMLU ([Hendrycks et al., 2020](https://arxiv.org/abs/2009.03300)) (EM)         | 80.6               | 85.3              | 88.6                 | 88.3                    | 87.2        | **88.5**    |
 |         | MMLU-Pro ([Wang et al., 2024](https://arxiv.org/abs/2406.01574)) (EM)         | 66.2               | 71.6              | 73.3                 | **78.0**                | 72.6        | 75.9        |

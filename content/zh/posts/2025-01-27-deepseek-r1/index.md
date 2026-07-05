@@ -2,7 +2,7 @@
 title: "OpenAI o1复现进展：DeepSeek-R1"
 date: 2025-01-27T12:00:00+08:00
 author: "Yue Shui"
-tags: ["Deep Learning", "AI", "Reinforcement Learning", "LLM", "Reasoning Model", "NLP", "Model Distillation", "DeepSeek-R1", "GRPO", "PPO", "SFT", "RFT", "o1", "Reject sampling"]
+tags: ["Deep Learning", "AI", "Reinforcement Learning", "LLM", "Reasoning Model", "NLP", "Model Distillation", "DeepSeek-R1", "GRPO", "PPO", "SFT", "RFT", "o1", "Rejection Sampling"]
 categories: ["技术博客"]
 ShowReadingTime: true
 toc: true
@@ -243,7 +243,7 @@ $$
 
 为了评估三种 KL 散度估计器的性能，我们进行了数值实验，结果如下表所示。实验中，固定分布 \( q = \mathcal{N}(0, 1) \)，通过改变分布 \( p = \mathcal{N}(\mu, 1) \) 的均值 \(\mu\) 来控制真实的 KL 散度 \(\mathbb{D}_{KL}(p \| q)\)。使用5亿个样本进行 Monte Carlo 估计，并重复实验以获得稳定结果。
 
-实验代码可以参考 [unbiased_kl_divergence.py](https://github.com/syhya/syhya.github.io/blob/main/content/en/posts/2025-01-27-deepseek-r1/unbiased_kl_divergence.py)
+实验代码可以参考 [unbiased_kl_divergence.py](https://github.com/syhya/syhya.github.io/blob/main/content/zh/posts/2025-01-27-deepseek-r1/unbiased_kl_divergence.py)
 
 | 真实 KL 散度 | 估计器 | 平均估计值 | 标准差  | 相对偏差 (%) |
 |:------------:|:------:|:----------:|:-------:|:------------:|

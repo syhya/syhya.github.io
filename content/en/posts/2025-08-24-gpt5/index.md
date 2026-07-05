@@ -12,11 +12,11 @@ draft: false
 math: true
 ---
 
-In August 2025, the AI field witnessed a period of intensive releases from OpenAI. Following **GPT-2** ([OpenAI, 2019](https://openai.com/index/better-language-models/)) in 2019, OpenAI has once again contributed to the open-source community with its first open-weight large language model series, **gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/)), available in 120B and 20B sizes. Shortly after, the highly anticipated next-generation flagship model, **GPT-5** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-5/)), was also officially launched. This series of releases not only marks a new high for open-source models in reasoning and agent capabilities but also reveals OpenAI's latest advancements in model architecture, training methodologies, and safety alignment.
+In August 2025, the AI field witnessed a period of intensive releases from OpenAI. Following **GPT-2** ([OpenAI, 2019](https://openai.com/index/better-language-models/)) in 2019, OpenAI once again contributed to the open-weight model ecosystem with its first open-weight large language model series, **gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/)), available in 120B and 20B sizes. Shortly after, the highly anticipated next-generation flagship model, **GPT-5** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-5/)), was also officially launched. This series of releases not only marks a new high for open-weight models in reasoning and agent capabilities but also reveals OpenAI's latest advancements in model architecture, training methodologies, and safety alignment.
 
 ## gpt-oss
 
-**gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/)) is OpenAI's first open-weight language model series released since GPT-2, designed to provide the open-source community with powerful reasoning and tool-use capabilities. The series includes two versions, `gpt-oss-120b` and `gpt-oss-20b`, both released under the Apache 2.0 license.
+**gpt-oss** ([OpenAI, 2025](https://openai.com/index/introducing-gpt-oss/)) is OpenAI's first open-weight language model series released since GPT-2, designed to provide the open-weight model ecosystem with powerful reasoning and tool-use capabilities. The series includes two versions, `gpt-oss-120b` and `gpt-oss-20b`, both released under the Apache 2.0 license.
 
 ### Architecture Overview
 
@@ -34,8 +34,8 @@ The table below provides a direct comparison of the differences between the GPT-
 | **Feature** | **GPT-OSS 20B (2025)** | **GPT-2 XL 1.5B (2019)** |
 |---|---|---|
 | **Release Date** | 2025 | 2019 |
-| **Model Size** | **20B parameters** | 1.5B parameters |
-| **Active Parameters** | **3.5B** (per inference) | 1.5B (all activated) |
+| **Model Size** | **21B total parameters** | 1.5B parameters |
+| **Active Parameters** | **3.6B** (per token) | 1.5B (all activated) |
 | **Vocabulary Size** | **200k tokens** | 50k tokens |
 | **Embedding Dimension** | **2,880** | 1,600 |
 | **Number of Transformer Layers** | 24 layers | **48 layers** |

@@ -1,7 +1,7 @@
 ---
 title: "训练大模型并行和内存优化技术"
 date: 2025-03-01T12:00:00+08:00
-lastmod: 2025-03-01T12:00:00+08:00
+lastmod: 2026-07-13T12:00:00+08:00
 author: Yue Shui
 categories: ["技术博客"]
 tags: [LLM, 预训练, 分布式训练, 内存优化, 数据并行, 模型并行, 流水线并行, 张量并行, 序列并行, 混合并行, 异构系统, MoE, ZeRO, LoRA, AI, 深度学习, AI Infrastructure]
@@ -1091,7 +1091,7 @@ $$
 而引入 LoRA 后，输出变为
 
 $$
-h = W_0 x + \Delta W x = W_0 x + B A x.
+h = W_0 x + \Delta W x = W_0 x + \frac{\alpha}{r} B A x.
 $$
 
 其中：
@@ -1107,18 +1107,18 @@ $$
 LoRA 在其上添加低秩更新项，从而得到新的权重表示：
 
 $$
-\mathbf{W}' = \mathbf{W} + \alpha\, \mathbf{B}\mathbf{A},
+\mathbf{W}' = \mathbf{W} + \Delta \mathbf{W} = \mathbf{W} + \frac{\alpha}{r}\, \mathbf{B}\mathbf{A},
 $$
 
 其中：  
 - **$A \in \mathbb{R}^{r \times k}$（降维矩阵）**：将输入从 $k$ 维映射到更低的 $r$ 维；  
 - **$B \in \mathbb{R}^{d \times r}$（升维矩阵）**：将降维后的特征从 $r$ 维映射回原来的 $d$ 维；  
 - **$r \ll \min(d, k)$（低秩维度）**：通常取值为 $4$ 到 $16$，在保证模型表达能力的同时尽量减少新增参数；  
-- **$\alpha$（缩放因子）**：用于放大低秩更新参数 $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$，补偿低秩分解带来的数值幅度较小的问题（通常设置为 $\alpha = 2 \times r$，例如当 $r = 8$ 时，$\alpha = 16$）。
+- **$\alpha$（缩放因子）**：用于缩放低秩分支 $\mathbf{B}\mathbf{A}$，实际权重更新为 $\Delta \mathbf{W}=\frac{\alpha}{r}\mathbf{B}\mathbf{A}$（通常设置为 $\alpha = 2 \times r$，例如当 $r = 8$ 时，$\alpha = 16$；这是经验配置，并非公式要求）。
 
 在微调过程中，**原始权重 $\mathbf{W}$ 被冻结**，只更新 $\mathbf{A}$ 和 $\mathbf{B}$，因而大大减少了训练和存储的参数量。
 
-为了确保微调初期引入的更新项 $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$ 对原模型的影响尽量小，通常采用以下初始化策略：
+为了确保微调初期引入的更新项 $\Delta \mathbf{W}=\frac{\alpha}{r}\mathbf{B}\mathbf{A}$ 对原模型的影响尽量小，通常采用以下初始化策略：
 
 1. **降维矩阵 $\mathbf{A}$ 的初始化**  
    - **高斯初始化**：令 $\mathbf{A} \sim \mathcal{N}(0,\sigma^2)$（一般 $\sigma$ 取较小值，如 0.02），保证初始更新量足够小，从而不至于严重干扰模型输出。  
@@ -1131,32 +1131,30 @@ $$
 
 - **参数高效**：仅引入低秩适配器参数，减少了需要训练和存储的总参数量。  
 - **显存与计算效率**：冻结大部分预训练权重，微调过程中仅更新小规模参数，显著降低了显存占用与算力开销。  
-- **无额外推理时延**：训练完成后，可将更新项 $\Delta \mathbf{W}$ 合并回原始权重，从而在推理阶段不会增加额外计算量。  
+- **无额外推理时延**：训练完成后，可将更新项 $\Delta \mathbf{W}$ 合并回原始权重（$\mathbf{W}'=\mathbf{W}+\Delta\mathbf{W}=\mathbf{W}+\frac{\alpha}{r}\mathbf{B}\mathbf{A}$），从而在推理阶段不会增加额外计算量。
 - **模块选择灵活性**：通过 `--lora_target` 或 `--lora-target` 参数，可以指定仅在特定线性模块上应用 LoRA 更新。支持的目标模块包括： ```q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj```, 这种设计允许用户根据具体任务需求，针对性地选择关键模块进行调优，从而进一步提高微调效率和适应性。
 
 ### QLoRA
 
 **QLoRA**([Dettmers et al. 2023](https://arxiv.org/abs/2305.14314)) 是在 LoRA 基础上结合量化思想对大规模模型进行高效微调的一种方法。它通过以下三个关键改进，大幅降低显存占用，同时保持模型精度基本不变：
 
-1. **4 位标准浮点数(NF4) 量化**  
-   采用基于分块的分位量化策略，将原始模型权重量化为 4 位，从而在细微损失精度的情况下实现显著的存储压缩。
+1. **4-bit NormalFloat（NF4）量化**
+   采用基于分块的分位量化策略，将冻结的预训练基础模型权重以 4-bit NF4 存储；LoRA 适配器仍使用 BF16。计算时，基础模型权重会按需反量化到 BF16，再执行 16-bit 矩阵乘法。
 
 2. **双重量化(Double Quantization)**  
-   在对普通参数进行一次量化后，再对量化常数进行一次额外的量化，从而进一步减小缓存占用。
+   对第一次量化产生的量化常数再次量化，从而进一步降低量化元数据的存储开销。
 
 3. **分页优化器(Paged Optimizer)**  
-   当显存使用过高时，自动将部分优化过程转移到 CPU 内存，从而减轻 GPU 显存压力，提升可伸缩性。
-
-与传统的 LoRA 仅减少需微调参数数量不同，QLoRA 还通过 4 位量化来**压缩**所有权重，从而在保证接近原有精度的同时，最大限度减少显存占用和数据传输开销。
+   利用 NVIDIA Unified Memory 为优化器状态分配分页内存：显存不足时将相关页面自动换出到 CPU RAM，并在优化器更新需要时换回 GPU，优化器更新仍在 GPU 上执行。
 
 {{< figure
     src="qlora.png"
-    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the transformer model to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al. 2023](https://arxiv.org/abs/2305.14314))"
+    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the frozen transformer base-model weights to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al. 2023](https://arxiv.org/abs/2305.14314))"
     align="center"
     width="100%"
 >}}
 
-这种方法可以看作是对 LoRA 的进一步扩展：LoRA 通过减少需要微调的权重数量来提升效率，而 QLoRA 则在此基础上，将所有权重(包括未微调的部分)量化到 4 位精度，在总体上实现**存储与计算的双重压缩**，适合对 LLM 进行资源受限环境下的高效微调。
+这种方法可以看作是对 LoRA 的进一步扩展：LoRA 通过减少需要微调的权重数量来提升效率，而 QLoRA 通过 4-bit NF4 压缩冻结基础模型权重的存储，并结合双重量化和分页优化器进一步降低训练显存占用。
 
 
 ## 总结

@@ -1,7 +1,7 @@
 ---
 title: "Parallelism and Memory Optimization Techniques for Training Large Models"
 date: 2025-03-01T12:00:00+08:00
-lastmod: 2025-03-01T12:00:00+08:00
+lastmod: 2026-07-13T12:00:00+08:00
 author: Yue Shui
 categories: ["Technical Blog"]
 tags: [LLM, Pre-training, Distributed Training, Memory Optimization, Data Parallelism, Model Parallelism, Pipeline Parallelism, Tensor Parallelism, Sequence Parallelism, Hybrid Parallelism, Heterogeneous Systems, MoE, ZeRO, LoRA, AI, Deep Learning, AI Infrastructure]
@@ -1063,7 +1063,7 @@ $$
 With LoRA introduced, the output becomes
 
 $$
-h = W_0 x + \Delta W x = W_0 x + B A x.
+h = W_0 x + \Delta W x = W_0 x + \frac{\alpha}{r} B A x.
 $$
 
 Where:
@@ -1079,18 +1079,18 @@ $$
 LoRA adds a low-rank update term to it, resulting in the new weight representation:
 
 $$
-\mathbf{W}' = \mathbf{W} + \alpha\, \mathbf{B}\mathbf{A},
+\mathbf{W}' = \mathbf{W} + \Delta \mathbf{W} = \mathbf{W} + \frac{\alpha}{r}\, \mathbf{B}\mathbf{A},
 $$
 
 Where:
 - **$\mathbf{A} \in \mathbb{R}^{r \times k}$ (Down-projection matrix)**: Maps the input from $k$ dimensions to a lower $r$ dimension;
 - **$\mathbf{B} \in \mathbb{R}^{d \times r}$ (Up-projection matrix)**: Maps the reduced-dimension features from $r$ dimensions back to the original $d$ dimensions;
 - **$r \ll \min(d, k)$ (Low rank dimension)**: Typically chosen from $4$ to $16$, balancing model expressiveness with minimizing added parameters;
-- **$\alpha$ (Scaling factor)**: Used to scale the low-rank update $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$, compensating for the potentially small numerical magnitude resulting from the low-rank decomposition (often set to $\alpha = 2 \times r$, e.g., $\alpha = 16$ when $r = 8$).
+- **$\alpha$ (Scaling factor)**: Used to scale the low-rank branch $\mathbf{B}\mathbf{A}$, with the actual weight update $\Delta \mathbf{W}=\frac{\alpha}{r}\mathbf{B}\mathbf{A}$ (often set to $\alpha=2r$, e.g., $\alpha=16$ when $r=8$; this is a heuristic, not a requirement of the formula).
 
 During the fine-tuning process, the **original weights $\mathbf{W}$ are frozen**, and only $\mathbf{A}$ and $\mathbf{B}$ are updated. This significantly reduces the number of trainable and storable parameters.
 
-To ensure that the update term $\Delta \mathbf{W} = \mathbf{B}\mathbf{A}$ introduced at the beginning of fine-tuning has minimal impact on the original model, the following initialization strategies are commonly used:
+To ensure that the update term $\Delta \mathbf{W}=\frac{\alpha}{r}\mathbf{B}\mathbf{A}$ introduced at the beginning of fine-tuning has minimal impact on the original model, the following initialization strategies are commonly used:
 
 1.  **Initialization of the down-projection matrix $\mathbf{A}$**
     -   **Gaussian Initialization**: Set $\mathbf{A} \sim \mathcal{N}(0,\sigma^2)$ (typically with a small $\sigma$, e.g., 0.02) to ensure the initial update is small enough not to severely disrupt the model's output.
@@ -1103,32 +1103,30 @@ Training with LoRA offers the following advantages:
 
 -   **Parameter Efficiency**: Only introduces low-rank adapter parameters, reducing the total number of parameters that need to be trained and stored.
 -   **Memory and Computation Efficiency**: Freezes most pre-trained weights and updates only small-scale parameters during fine-tuning, significantly reducing memory footprint and computational overhead.
--   **No Additional Inference Latency**: After training, the update term $\Delta \mathbf{W}$ can be merged back into the original weights ($\mathbf{W}' = \mathbf{W} + \alpha \mathbf{B}\mathbf{A}$), so no extra computation is added during the inference phase.
+-   **No Additional Inference Latency**: After training, the update term $\Delta \mathbf{W}$ can be merged back into the original weights ($\mathbf{W}'=\mathbf{W}+\Delta\mathbf{W}=\mathbf{W}+\frac{\alpha}{r}\mathbf{B}\mathbf{A}$), so no extra computation is added during the inference phase.
 -   **Module Selection Flexibility**: Using parameters like `--lora_target` or `--lora-target`, users can specify applying LoRA updates only to specific linear modules. Supported target modules include: ```q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj```. This design allows users to selectively fine-tune key modules based on specific task requirements, further enhancing fine-tuning efficiency and adaptability.
 
 ### QLoRA
 
 QLoRA ([Dettmers et al. 2023](https://arxiv.org/abs/2305.14314)) is a method for efficient fine-tuning of large-scale models based on LoRA combined with quantization ideas. Through the following three key improvements, it greatly reduces memory footprint while maintaining basically unchanged model accuracy:
 
-1. **4-bit Normal Float (NF4) Quantization**
-   A block-based quantile quantization strategy is adopted to quantize the original model weights to 4 bits, thereby achieving significant storage compression with subtle loss of accuracy.
+1. **4-bit NormalFloat (NF4) Quantization**
+   A block-based quantile quantization strategy stores the frozen pretrained base-model weights in 4-bit NF4, while the LoRA adapters remain in BF16. For computation, the base weights are dequantized to BF16 on demand before a 16-bit matrix multiplication is performed.
 
 2. **Double Quantization**
-   After performing quantization once on ordinary parameters, perform an additional quantization on the quantization constants to further reduce cache footprint.
+   The quantization constants produced by the first quantization step are quantized again, further reducing the storage overhead of quantization metadata.
 
 3. **Paged Optimizer**
-   When memory usage is too high, automatically transfer part of the optimization process to CPU memory, thereby alleviating GPU memory pressure and improving scalability.
-
-Different from traditional LoRA, which only reduces the number of parameters to be fine-tuned, QLoRA also **compresses** all weights through 4-bit quantization, thereby maximizing the reduction of memory footprint and data transmission overhead while ensuring near-original accuracy.
+   NVIDIA Unified Memory is used to allocate paged memory for optimizer states: pages are automatically evicted to CPU RAM when GPU memory is exhausted and paged back to the GPU when needed, while optimizer updates remain on the GPU.
 
 {{< figure
     src="qlora.png"
-    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the transformer model to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al. 2023](https://arxiv.org/abs/2305.14314))"
+    caption="Fig. 32. Different finetuning methods and their memory requirements. QLoRA improves over LoRA by quantizing the frozen transformer base-model weights to 4-bit precision and using paged optimizers to handle memory spikes. (Image source: [Dettmers et al. 2023](https://arxiv.org/abs/2305.14314))"
     align="center"
     width="100%"
 >}}
 
-This method can be regarded as a further extension of LoRA: LoRA improves efficiency by reducing the number of weights that need to be fine-tuned, while QLoRA, on this basis, quantizes all weights (including the un-fine-tuned part) to 4-bit precision, achieving **dual compression of storage and computation** in general, which is suitable for efficient fine-tuning of LLMs in resource-constrained environments.
+QLoRA compresses the storage of frozen base-model weights with 4-bit NF4 and further reduces training memory usage through double quantization and paged optimizers.
 
 ## Summary
 

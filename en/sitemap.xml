@@ -29,7 +29,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -81,7 +81,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/llm/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -107,7 +107,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/posts/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -133,7 +133,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -146,10 +146,10 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/categories/technical-blog/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -318,7 +318,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/deep-learning/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -409,7 +409,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/ai/</loc>
-    <lastmod>2026-06-22T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -604,7 +604,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/moe/</loc>
-    <lastmod>2025-08-24T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -812,7 +812,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/ai-infrastructure/</loc>
-    <lastmod>2025-05-17T10:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -838,7 +838,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/memory-optimization/</loc>
-    <lastmod>2025-05-17T10:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -1163,7 +1163,7 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/pre-training/</loc>
-    <lastmod>2025-04-06T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -1305,19 +1305,19 @@
     <lastmod>2025-09-02T10:00:00+00:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/data-parallelism/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/distributed-training/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/heterogeneous-systems/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/hybrid-parallelism/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/lora/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -1330,10 +1330,10 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/model-parallelism/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/posts/2025-03-01-train-llm/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -1346,16 +1346,16 @@
                 />
   </url><url>
     <loc>https://syhya.github.io/tags/pipeline-parallelism/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/sequence-parallelism/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/tensor-parallelism/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
   </url><url>
     <loc>https://syhya.github.io/tags/zero/</loc>
-    <lastmod>2025-03-01T12:00:00+08:00</lastmod>
+    <lastmod>2026-07-13T12:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"

@@ -1,7 +1,7 @@
 ---
 title: "Parallelism and Memory Optimization Techniques for Training Large Models"
 date: 2025-03-01T12:00:00+08:00
-lastmod: 2026-07-13T12:00:00+08:00
+lastmod: 2026-07-14T12:00:00+08:00
 author: Yue Shui
 categories: ["Technical Blog"]
 tags: [LLM, Pre-training, Distributed Training, Memory Optimization, Data Parallelism, Model Parallelism, Pipeline Parallelism, Tensor Parallelism, Sequence Parallelism, Hybrid Parallelism, Heterogeneous Systems, MoE, ZeRO, LoRA, AI, Deep Learning, AI Infrastructure]
@@ -172,10 +172,10 @@ When the batch size is large or communication becomes the main bottleneck, **Gra
 - Continuously calculate the local gradients of multiple mini-batches and accumulate them in the local accumulation buffer;
 - When the number of accumulated mini-batches reaches $K$, trigger a global gradient synchronization and parameter update.
 
-Let $g_j$ be the gradient of the $j$-th mini-batch, then in an "accumulation cycle", we get
+If each equally sized mini-batch loss is a mean, let $g_j$ be the gradient of the $j$-th mini-batch. The equivalent large-batch gradient in an accumulation cycle is
 
 $$
-  G = \sum_{j=1}^{K} g_j.
+  G = \frac{1}{K}\sum_{j=1}^{K} g_j.
 $$
 
 Then update with learning rate $\eta$:
@@ -184,15 +184,15 @@ $$
   \theta \leftarrow \theta - \eta \cdot G.
 $$
 
-Since gradient synchronization is no longer performed for each mini-batch, but once every $K$ accumulated mini-batches, the communication overhead can be significantly reduced. However, the reduced parameter update frequency may also slow down the training convergence speed, and a trade-off between throughput and convergence performance is needed.
+In practice, the loss is usually divided by $K$ before each `backward()` call; unequal mini-batches should instead be weighted by their number of valid samples. Since gradient synchronization is performed once every $K$ mini-batches, communication overhead can be reduced. The parameter update frequency is reduced by the same factor, requiring a trade-off between throughput and convergence.
 
 ### Distributed Data Parallelism
 
 **Distributed Data Parallelism (DDP)** is a highly optimized implementation of BSP in PyTorch v1.5 ([Li et al. 2020](https://arxiv.org/pdf/2006.15704)), which facilitates data parallelism for single-machine multi-GPU and even multi-machine multi-GPU. Its main optimizations include:
 
 1. **Gradient Bucketing**: Divide model parameters into multiple "buckets"; when backpropagation is performed, once all gradients in a bucket are calculated, an **All-Reduce for that bucket** is immediately initiated, instead of waiting for all gradients to be calculated before synchronizing at once.
-2. **Communication and Computation Overlap**: DDP uses asynchronous communication and non-blocking operations to overlap gradient synchronization (communication) with forward propagation and backward propagation (computation) as much as possible, thereby reducing communication overhead. This overlap strategy improves overall parallel efficiency.
-3. **Gradient Accumulation**: DDP can also be easily combined with **gradient accumulation**. Combined use, by increasing the gradient update interval for each synchronization, reduces the synchronization frequency. In large-scale distributed training, this helps to further reduce communication overhead and improve training efficiency.
+2. **Communication and Computation Overlap**: Ready buckets execute All-Reduce asynchronously while the remaining backward gradients are still being computed.
+3. **Gradient Accumulation**: Wrap the first $K-1$ complete forward/backward passes in [`no_sync()`](https://docs.pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html#torch.nn.parallel.DistributedDataParallel.no_sync), then synchronize on the final forward/backward pass. The `no_sync()` context must include both forward and backward.
 
 {{< figure
     src="pytorch_ddp.png"
@@ -206,10 +206,10 @@ Since gradient synchronization is no longer performed for each mini-batch, but o
 In a multi-GPU (especially single-machine multi-GPU) environment, if there is high-speed interconnect (such as NVLink, PCIe switch, etc.), **Ring All-Reduce** can be used to significantly reduce communication overhead. The idea is:
 
 1. Organize $k$ nodes into a ring and divide the gradient vector into $k$ parts equally.
-2. In the "summation phase", each node sends a part of its local gradient to the next node and adds it to the received gradient; after several rounds of this process, each node will hold the complete "aggregated" gradient.
-3. In the "broadcast phase", the final result is distributed to all nodes along the ring.
+2. In the **Reduce-Scatter** phase, after $k-1$ rounds of sending, receiving, and reduction, each node holds one fully reduced shard.
+3. In the **All-Gather** phase, another $k-1$ rounds circulate the shards until every node holds the complete aggregated gradient.
 
-Ideally, the communication cost of Ring All-Reduce is approximately independent of the number of nodes (can be regarded as $\mathcal{O}(1)$), which is very suitable for gradient synchronization in a multi-GPU environment. It is a core communication mode widely used in libraries such as Horovod and NCCL.
+For a gradient vector of size $M$, ignoring protocol overhead, each node sends approximately $2\frac{k-1}{k}M$ data and receives the same amount, so the bandwidth term approaches a constant for fixed message size. The full operation still contains $2(k-1)$ communication rounds, giving an $O(k)$ latency term. See [NCCL Collective Operations](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html).
 
 ### Parameter Server
 
@@ -297,9 +297,9 @@ When the number of micro-batches $m$ is much larger than the pipeline depth $d$ 
     width="100%"
 >}}
 
-PipeDream ([Harlap et al. 2018](https://arxiv.org/abs/1806.03377)) is another efficient pipeline parallel training system. It adopts the 1F1B (1-Forward-1-Backward) scheduling strategy and introduces Weight Stashing technology to further reduce bubbles, improve pipeline efficiency, and solve the weight version inconsistency problem that may be caused by 1F1B scheduling.
+PipeDream ([Harlap et al. 2018](https://arxiv.org/abs/1806.03377)) is an efficient asynchronous pipeline-parallel training system. It adopts the 1F1B (1-Forward-1-Backward) scheduling strategy and introduces Weight Stashing to reduce bubbles and improve pipeline efficiency.
 
-The core idea of PipeDream's 1F1B scheduling strategy is that each GPU (Stage) alternately performs forward propagation and backward propagation, working in parallel as much as possible to reduce GPU idle time. The specific process is as follows:
+The core idea of PipeDream's 1F1B scheduling strategy is that each GPU (Stage) alternately performs forward propagation and backward propagation, working in parallel as much as possible to reduce GPU idle time. After a micro-batch finishes backward on a stage, that stage can apply its gradient and create a new weight version. The specific process is as follows:
 
 1. **Micro-batch Partitioning:** Divide a mini-batch into $m$ micro-batches.
 2. **Pipeline Stage Partitioning:** Divide the model layer by layer into $d$ stages, and assign each stage to a GPU.
@@ -307,13 +307,13 @@ The core idea of PipeDream's 1F1B scheduling strategy is that each GPU (Stage) a
 
 ### Weight Stashing
 
-Since forward propagation and backward propagation may use different versions of model weights in 1F1B scheduling, it will cause weight version inconsistency problems, affecting the correctness and convergence of training. PipeDream introduces Weight Stashing technology to solve this problem. The core idea of weight stashing is that each GPU maintains multiple versions of model weights and ensures that forward propagation and backward propagation use the same version of weights.
+PipeDream uses **Weight Stashing** to ensure that a micro-batch uses the same weight version for forward and backward on a given stage. The overall pipeline retains asynchronous stale-weight semantics.
 
 **Weight Stashing Implementation:**
 
 * **Version Management:** Each GPU maintains a weight version queue to store multiple versions of model weights.
 * **Version Selection:** When performing forward propagation, select the latest weight version. When performing backward propagation, select the same weight version as the corresponding forward propagation.
-* **Version Update:** After completing backward propagation of all micro-batches in a mini-batch, update the model weights and generate a new weight version.
+* **Version Update:** After a micro-batch finishes backward on a stage, that stage applies the gradient and generates a new version.
 
 > To further optimize the memory usage of PipeDream, especially in terms of weight stashing, PipeDream has derived two memory optimization variants: PipeDream-flush and PipeDream-2BW.
 
@@ -330,7 +330,7 @@ PipeDream-flush periodically performs global synchronous pipeline flushing on th
 
 ### PipeDream-2BW
 
-PipeDream-2BW (Double-Buffered Weights) maintains two versions of model weights, namely "double-buffered weights". It updates the model version every $k$ micro-batches, where $k$ is greater than the pipeline depth $d$ ($k > d$). The newly updated model version does not immediately completely replace the old version, because there may still be some remaining backward propagation operations that depend on the old version. With double-buffered weights, PipeDream-2BW can reduce the memory overhead of weight stashing to only maintaining two versions of model weights, significantly reducing memory footprint.
+PipeDream-2BW (Double-Buffered Weights) ([Narayanan et al. 2021](https://arxiv.org/abs/2006.09503)) combines gradient accumulation with double-buffered weights, limiting each stage to two weight versions. It accumulates gradients over $m$ micro-batches and requires $m \ge d$, where $d$ is the pipeline depth. Newly admitted micro-batches use the current version, while in-flight micro-batches finish backward with the shadow version. Parameter updates use gradients delayed by one weight version.
 
 {{< figure
     src="pipe_dream_2bw.png"
@@ -342,7 +342,7 @@ PipeDream-2BW (Double-Buffered Weights) maintains two versions of model weights,
 The PipeDream-2BW strategy has the following advantages:
 
 * **Lower Bubble Overhead:** The 1F1B scheduling strategy can further reduce bubbles compared to GPipe, improving GPU utilization and training efficiency.
-* **Weight Stashing Solves Version Consistency:** Weight stashing technology ensures that forward propagation and backward propagation use the same version of weights, solving the weight version inconsistency problem that may be caused by 1F1B scheduling.
+* **Weight Version Consistency:** A micro-batch uses the same weight version for forward and backward on a given stage, while updates retain a one-version gradient delay.
 * **Memory Optimization Variants:** PipeDream-flush and PipeDream-2BW further optimize memory usage, reduce the memory overhead of weight stashing, and make pipeline parallelism more suitable for memory-constrained scenarios.
 
 ## Tensor Parallelism
@@ -364,25 +364,25 @@ Megatron-LM ([Shoeybi et al. 2019](https://arxiv.org/abs/1909.08053)) is a syste
     width="100%"
 >}}
 
-The MLP layer of Transformer usually contains two linear layers. The calculation of the first linear layer can be expressed as $Y = \text{GeLU}(XA)$, where $X$ is the input matrix, $A$ is the weight matrix, and GeLU is the activation function. Megatron-LM splits the weight matrix $A$ along the column dimension into $P$ shards $[A_1, A_2, ..., A_P]$, where $P$ is the number of GPUs. Each GPU $i$ is responsible for storing and computing the weight shard $A_i$.
+The Transformer MLP contains two linear layers, written as $Z=\operatorname{GeLU}(XA)B$. Megatron-LM splits $A$ by columns as $[A_1,\ldots,A_P]$ and splits $B$ by the corresponding rows as $[B_1^\top,\ldots,B_P^\top]^\top$.
 
 **Tensor Parallelism Computation Process of MLP Layer:**
 
 $$
 \begin{aligned}
-\text { Split } A & =\left[A_1, A_2\right] \\
-Y & =\operatorname{GeLU}(X A) \\
-{\left[Y_1, Y_2\right] } & =\left[\operatorname{GeLU}\left(X A_1\right), \operatorname{GeLU}\left(X A_2\right)\right]
+Y_i &= \operatorname{GeLU}(XA_i), \\
+Z_i &= Y_iB_i, \\
+Z &= \sum_{i=1}^{P} Z_i.
 \end{aligned}
 $$
 
-1. **Weight Sharding:** Split the weight matrix $A$ along the column dimension into $P$ shards $[A_1, A_2, ..., A_P]$ and assign shard $A_i$ to GPU $i$.
-2. **Local Matrix Multiplication:** Each GPU $i$ uses the input matrix $X$ and weight shard $A_i$ to perform matrix multiplication to obtain the local output $Y_i = \text{GeLU}(XA_i)$.
-3. **Global Concatenation (All-Gather):** All GPUs use All-Gather operation to concatenate the local outputs $\{Y_1, Y_2, ..., Y_P\}$ into a complete output matrix $Y = [Y_1, Y_2, ..., Y_P]$.
+1. **Column-Parallel First Layer:** Each rank computes the local activation $Y_i=\operatorname{GeLU}(XA_i)$.
+2. **Row-Parallel Second Layer:** The sharded activation $Y_i$ is consumed directly by the corresponding second GEMM, producing $Z_i=Y_iB_i$.
+3. **Output Reduction:** After the second GEMM, one All-Reduce computes $Z=\sum_i Z_i$; activations remain sharded between the two GEMMs.
 
 **Tensor Parallelism of Self-Attention Layer**
 
-Megatron-LM also performs tensor parallel sharding on the Query ($Q$), Key ($K$), Value ($V$) weight matrices in the Transformer's self-attention layer, and performs corresponding local matrix multiplication and global concatenation operations to achieve tensor parallelism of the self-attention layer. The calculation formula of the self-attention layer is:
+Megatron-LM also partitions the Query ($Q$), Key ($K$), and Value ($V$) projections by attention head. Each GPU computes a subset of heads locally; the output projection is row-parallel and its partial outputs are combined with All-Reduce. The calculation formula of the self-attention layer is:
 
 $$
 \text{Attention}(X, Q, K, V) = \text{softmax}\left(\frac{(XQ)(XK)^T}{\sqrt{d_k}}\right)XV

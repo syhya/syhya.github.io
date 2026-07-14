@@ -1,7 +1,7 @@
 ---
 title: "训练大模型并行和内存优化技术"
 date: 2025-03-01T12:00:00+08:00
-lastmod: 2026-07-13T12:00:00+08:00
+lastmod: 2026-07-14T12:00:00+08:00
 author: Yue Shui
 categories: ["技术博客"]
 tags: [LLM, 预训练, 分布式训练, 内存优化, 数据并行, 模型并行, 流水线并行, 张量并行, 序列并行, 混合并行, 异构系统, MoE, ZeRO, LoRA, AI, 深度学习, AI Infrastructure]
@@ -177,10 +177,10 @@ math: true
 - 连续计算多个小批量(mini-batch)的局部梯度，并将它们累加到本地的累积缓冲区中；    
 - 当累积的 mini-batch 数量达到 $K$ 时，再触发一次全局梯度同步与参数更新。  
   
-设第 $j$ 个 mini-batch 的梯度为 $g_j$，则在一个「累积周期」内得到
+设每个等大小 mini-batch 的 loss 均取平均值，第 $j$ 个 mini-batch 的梯度为 $g_j$，则在一个「累积周期」内得到
 
 $$  
-  G = \sum_{j=1}^{K} g_j.  
+  G = \frac{1}{K}\sum_{j=1}^{K} g_j.
 $$  
 
 再用学习率 $\eta$ 更新：
@@ -189,15 +189,16 @@ $$
   \theta \leftarrow \theta - \eta \cdot G.  
 $$  
   
-由于梯度同步不再是每个 mini-batch 都进行，而是每累计 $K$ 个 mini-batch 执行一次，**通信开销可显著降低**。但参数更新频率降低也可能导致训练收敛速度放缓，需在吞吐量与收敛性能之间做权衡。  
+实现时通常在每次 `backward()` 前将 loss 除以 $K$；若 mini-batch 大小不同，则应按有效样本数加权。由于梯度同步不再是每个 mini-batch 都进行，而是每累计 $K$ 个 mini-batch 执行一次，**通信开销可显著降低**。但参数更新频率降低也可能导致训练收敛速度放缓，需在吞吐量与收敛性能之间做权衡。
   
+
 ### 分布式数据并行
-  
+
 **分布式数据并行(Distributed Data Parallel, DDP)** 是 PyTorch v1.5([Li et al. 2020](https://arxiv.org/pdf/2006.15704))在 BSP 思想下的高度优化实现，为单机多 GPU 乃至多机多 GPU 的数据并行提供便利。其主要优化包括：  
   
 1. **梯度 Bucketing(梯度桶化)**：将模型参数分为多个「桶」(bucket)；反向传播时一旦某个桶内所有梯度都已计算完，就立即启动一次针对**该桶的 All-Reduce**，而不是等到所有梯度都算完后再一次性同步。    
-2. **通信与计算重叠**：DDP 通过异步通信和非阻塞操作，尽可能地将梯度同步(通信)与前向传播、反向传播(计算)重叠，从而减少了通信开销。这种重叠策略提升了整体的并行效率。  
-3. **梯度累积**：DDP 也能方便地与**梯度累积**相结合，结合使用，通过增加每次同步的梯度更新间隔，从而减少同步频率。这在大规模分布式训练中有助于进一步降低通信开销，提高训练效率。
+2. **通信与计算重叠**：已经就绪的 bucket 异步执行 All-Reduce，同时继续计算后续尚未完成的反向梯度。
+3. **梯度累积**：前 $K-1$ 次完整的 forward/backward 使用 [`no_sync()`](https://docs.pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html#torch.nn.parallel.DistributedDataParallel.no_sync)，最后一次 forward/backward 执行同步。`no_sync()` 上下文需要同时包含 forward 和 backward。
 
 {{< figure
     src="pytorch_ddp.png"
@@ -211,10 +212,10 @@ $$
 在多 GPU(尤其是单机多 GPU)环境下，若有高速互联(如 NVLink、PCIe 交换机等)，可使用 **Ring All-Reduce** 来显著降低通信开销。其思路是：  
   
 1. 将 $k$ 个节点组织成一个环，并把梯度向量等分成 $k$ 份。    
-2. 在「加和阶段」，每个节点分别向下一个节点发送其本地的一部分梯度，并与收到的梯度相加；该过程循环若干次后，每个节点会持有完整的「聚合后」梯度。    
-3. 在「广播阶段」，再将最终结果沿环路分发给所有节点。  
+2. 在 **Reduce-Scatter** 阶段，经过 $k-1$ 轮发送、接收与归约，每个节点持有一个归约完成的分片。
+3. 在 **All-Gather** 阶段，再经过 $k-1$ 轮传递分片，使每个节点获得完整的聚合梯度。
   
-理想情况下，Ring All-Reduce 的通信代价与节点数量近似无关(可以视为 $\mathcal{O}(1)$)，非常适合多 GPU 环境下的梯度同步，是 Horovod、NCCL 等库中广泛使用的核心通信模式。  
+对于大小为 $M$ 的梯度向量，忽略协议开销时，每个节点的累计发送量约为 $2\frac{k-1}{k}M$，接收量相同，因此固定消息大小下的带宽项趋近常数。完整过程仍包含 $2(k-1)$ 轮通信，延迟项按 $O(k)$ 增长。详见 [NCCL Collective Operations](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html)。
   
 ### 参数服务器
   
@@ -306,9 +307,9 @@ $$
     width="100%"
 >}}
 
-**PipeDream**([Harlap et al. 2018](https://arxiv.org/abs/1806.03377))是另一种高效的流水线并行训练系统，它采用了 1F1B(1-Forward-1-Backward) 调度策略，并引入了权重暂存(Weight Stashing) 技术，进一步减少气泡，提高流水线效率，并解决 1F1B 调度可能导致的权重版本不一致问题。
+**PipeDream**([Harlap et al. 2018](https://arxiv.org/abs/1806.03377))是另一种高效的异步流水线并行训练系统，它采用了 1F1B(1-Forward-1-Backward) 调度策略，并引入了权重暂存(Weight Stashing) 技术，进一步减少气泡，提高流水线效率。
 
-PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执行前向传播和反向传播，尽可能地并行工作，减少 GPU 空闲时间。具体流程如下：
+PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执行前向传播和反向传播，尽可能地并行工作，减少 GPU 空闲时间。一个 micro-batch 在某个 stage 完成反向传播后，该 stage 即可应用其梯度并生成新的权重版本。具体流程如下：
 
 1. **Micro-batch 划分:**  将一个 mini-batch 划分为 $m$ 个 micro-batch。
 2. **流水线阶段划分:**  将模型按层划分为 $d$ 个阶段，每个阶段分配到一个 GPU 上。
@@ -316,13 +317,13 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
 
 ### 权重暂存
 
-由于 1F1B 调度中，前向传播和反向传播可能使用不同版本的模型权重，会导致权重版本不一致问题，影响训练的正确性和收敛性。PipeDream 引入了 **权重暂存(Weight Stashing)** 技术来解决这个问题。权重暂存的核心思想是，每个 GPU 维护多个版本的模型权重，并确保前向传播和反向传播使用同一版本的权重。
+PipeDream 引入 **权重暂存(Weight Stashing)**，保证同一 micro-batch 在同一 stage 的前向和反向使用相同版本；流水线整体仍具有异步训练的权重陈旧性。
 
 **权重暂存实现方式:**
 
 * **版本管理:**  每个 GPU 维护一个权重版本队列，存储多个版本的模型权重。
 * **版本选择:**  在进行前向传播时，选择当前最新的权重版本。在进行反向传播时，选择与对应前向传播相同的权重版本。
-* **版本更新:**  在完成一个 mini-batch 的所有 micro-batch 的反向传播后，更新模型权重，并生成新的权重版本。
+* **版本更新:**  一个 micro-batch 在该 stage 完成反向传播后，stage 应用梯度并生成新版本。
 
 
 为了进一步优化 PipeDream 的内存使用，尤其是在权重暂存方面，PipeDream 衍生出了 **PipeDream-flush** 和 **PipeDream-2BW** 两种内存优化变体。
@@ -341,7 +342,7 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
 
 ### PipeDream-2BW
 
-**PipeDream-2BW (Double-Buffered Weights)** 维护两个版本的模型权重，即 "双缓冲权重"。它每 $k$ 个 micro-batch 更新一次模型版本，其中 $k$ 大于流水线深度 $d$($k > d$). 新更新的模型版本不会立即完全替换旧版本，因为可能还有一些剩余的反向传播操作仍然依赖于旧版本。通过双缓冲权重，PipeDream-2BW 可以将权重暂存的内存开销降低到只维护两个版本的模型权重，显著减少内存占用。
+**PipeDream-2BW (Double-Buffered Weights)**([Narayanan et al. 2021](https://arxiv.org/abs/2006.09503)) 通过梯度合并和双缓冲权重，把每个 stage 保存的权重版本限制为两个。它累积 $m$ 个 micro-batch 的梯度后生成新版本，并要求 $m \ge d$($d$ 为流水线深度)；新进入流水线的 micro-batch 使用当前版本，已在途的 micro-batch 使用 shadow 版本完成反向传播。参数更新使用延迟一个权重版本的梯度。
 
 {{< figure
     src="pipe_dream_2bw.png"
@@ -353,7 +354,7 @@ PipeDream 的 1F1B 调度策略的核心思想是，每个 GPU(Stage) 交替执�
 PipeDream-2BW 策略有以下优点：
 
 * **更低的气泡开销:**  1F1B 调度策略相比 GPipe 可以进一步减少气泡，提高 GPU 利用率和训练效率。
-* **权重暂存解决版本一致性:**  权重暂存技术保证了前向传播和反向传播使用同一版本的权重，解决了 1F1B 调度可能导致的权重版本不一致问题。
+* **权重版本一致性:**  同一 micro-batch 在同一 stage 的前向传播和反向传播使用相同版本的权重，同时保留一个版本的梯度延迟。
 * **内存优化变体:**  PipeDream-flush 和 PipeDream-2BW 进一步优化了内存使用，降低了权重暂存的内存开销，使得流水线并行更适用于内存受限的场景。
 
 
@@ -376,25 +377,25 @@ PipeDream-2BW 策略有以下优点：
     width="100%"
 >}}  
 
-Transformer 的 MLP 层通常包含两个线性层，第一个线性层的计算可表示为 $Y = \text{GeLU}(XA)$，其中 $X$ 是输入矩阵，$A$ 是权重矩阵，GeLU 是激活函数。Megatron-LM 将权重矩阵 $A$ 沿着列维度切分为 $P$ 个分片 $[A_1, A_2, ..., A_P]$，其中 $P$ 是 GPU 的数量。每个 GPU $i$ 负责存储和计算权重分片 $A_i$。
+Transformer 的 MLP 层包含两个线性层，可写成 $Z=\operatorname{GeLU}(XA)B$。Megatron-LM 将 $A$ 按列切分为 $[A_1,\ldots,A_P]$，并将 $B$ 按对应的行切分为 $[B_1^\top,\ldots,B_P^\top]^\top$。
 
 **MLP 层张量并行计算流程:**
 
 $$
 \begin{aligned}
-\text { Split } A & =\left[A_1, A_2\right] \\
-Y & =\operatorname{GeLU}(X A) \\
-{\left[Y_1, Y_2\right] } & =\left[\operatorname{GeLU}\left(X A_1\right), \operatorname{GeLU}\left(X A_2\right)\right]
+Y_i &= \operatorname{GeLU}(XA_i), \\
+Z_i &= Y_iB_i, \\
+Z &= \sum_{i=1}^{P} Z_i.
 \end{aligned}
 $$
 
-1. **权重分片:**  将权重矩阵 $A$ 沿着列维度切分为 $P$ 个分片 $[A_1, A_2, ..., A_P]$，并将分片 $A_i$ 分配到 GPU $i$。
-2. **局部矩阵乘法:**  每个 GPU $i$ 使用输入矩阵 $X$ 和权重分片 $A_i$ 进行矩阵乘法计算，得到局部输出 $Y_i = \text{GeLU}(XA_i)$。
-3. **全局拼接(All-Gather):**  所有 GPU 通过 All-Gather 操作，将局部输出 $\{Y_1, Y_2, ..., Y_P\}$ 拼接成完整的输出矩阵 $Y = [Y_1, Y_2, ..., Y_P]$。
+1. **第一层列并行(Column Parallel)**：每个 rank 计算局部激活 $Y_i=\operatorname{GeLU}(XA_i)$。
+2. **第二层行并行(Row Parallel)**：分片激活 $Y_i$ 直接进入对应的第二个 GEMM，得到局部结果 $Z_i=Y_iB_i$。
+3. **输出归约**：第二个 GEMM 结束后，通过一次 All-Reduce 计算 $Z=\sum_i Z_i$。两个 GEMM 之间始终保持激活分片布局。
 
 **自注意力层张量并行**
 
-Megatron-LM 也对 Transformer 的自注意力层中的 Query($Q$), Key($K$), Value($V$) 权重矩阵进行张量并行切分，并进行相应的局部矩阵乘法和全局拼接操作，实现自注意力层的张量并行化。自注意力层的计算公式为：
+Megatron-LM 也对 Query($Q$)、Key($K$)、Value($V$)投影按注意力头进行切分，每个 GPU 本地计算一部分 attention heads；输出投影采用行并行，并在输出端执行 All-Reduce。自注意力层的计算公式为：
 
 $$
 \text{Attention}(X, Q, K, V) = \text{softmax}\left(\frac{(XQ)(XK)^T}{\sqrt{d_k}}\right)XV

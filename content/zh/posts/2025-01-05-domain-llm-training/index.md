@@ -1,6 +1,7 @@
 ---
 title: 构建特定领域的大语言模型
 date: 2025-01-05T12:00:00+08:00
+lastmod: 2026-07-15T12:00:00+08:00
 author: "Yue Shui"
 tags: ["AI", "NLP", "LLM", "Pre-training", "Post-training", "DPO", "领域模型", "DeepSpeed"]
 categories: ["技术博客"]
@@ -115,7 +116,7 @@ type: "posts"
   - **推理框架**：[vLLM](https://github.com/vllm-project/vllm)、[ollama](https://github.com/jmorganca/ollama) 等，优化推理速度和资源利用。
 
 - **并行策略**  
-  - **数据并行**：适用于单卡可容纳模型的情况，通过 DeepSpeed 的 ZeRO Stage 0 实现。
+  - **数据并行**：适用于单卡可容纳模型的情况，在 DeepSpeed 中对应不进行模型状态分片的 ZeRO Stage 0。
   - **分片数据并行与模型并行**：单卡无法容纳时，可先用 ZeRO Stage 1、2、3 做分片数据并行（ZeRO-DP）降低显存占用，必要时再叠加张量并行（TP）和流水线并行（PP）；注意 ZeRO 与 TP/PP 属于不同维度，不能等同。也可使用 ZeRO-Infinity 将参数和优化器状态部分卸载到 CPU 或 NVMe。
 
 ## DeepSpeed ZeRO 分片策略对比
@@ -124,12 +125,12 @@ type: "posts"
 
 ### ZeRO Stage 分片策略
 
-| **ZeRO Stage** | **描述** | **显存占用** | **训练速度** |
+| **ZeRO Stage** | **描述** | **显存占用** | **通信与性能** |
 |----------------|----------|--------------|--------------|
-| **ZeRO-0**     | 纯数据并行，不进行任何分片。所有优化器状态、梯度和参数在每张 GPU 上完全复制。 | 最高 | **最快** |
-| **ZeRO-1**     | 分片优化器状态（例如动量和二阶矩），减少显存占用，但梯度和参数仍为数据并行。 | 高 | 略慢于 ZeRO-0 |
-| **ZeRO-2**     | 分片优化器状态和梯度，在 ZeRO-1 的基础上进一步减少显存占用。 | 中 | 慢于 ZeRO-1 |
-| **ZeRO-3**     | 分片优化器状态、梯度和模型参数，显存占用最低，适合大规模模型。但需要在前向和后向时进行参数广播（All-Gather/All-Reduce），通信量显著增加。 | 低 | 明显慢于 ZeRO-2，取决于模型大小和网络带宽 |
+| **ZeRO-0**     | 纯数据并行，不进行任何分片。所有优化器状态、梯度和参数在每张 GPU 上完全复制。 | 最高 | 普通 DP 基线 |
+| **ZeRO-1**     | 仅分片优化器状态；每个 GPU 更新负责的参数分片后，通过 All-Gather 同步完整的更新后参数。 | 高 | 通信量与普通 DP 相同，性能取决于通信调度和实现 |
+| **ZeRO-2**     | 分片优化器状态和梯度；通过 Reduce-Scatter 归约梯度分片，更新参数分片后再 All-Gather 参数。 | 中 | 通信量与普通 DP 相同 |
+| **ZeRO-3**     | 分片优化器状态、梯度和参数；前向和反向按层 All-Gather 参数，梯度通过 Reduce-Scatter 归约。 | 低 | 通信量最多约为普通 DP 的 1.5 倍，对网络带宽更敏感 |
 
 ### Offload 策略
 
@@ -138,15 +139,15 @@ type: "posts"
 | **ZeRO-1 + CPU Offload**        | 在 ZeRO-1 的基础上，将优化器状态卸载到 CPU 内存；可进一步降低 GPU 显存占用，但需要 CPU-GPU 数据传输，依赖 PCIe 带宽，且占用 CPU 内存。 | 中偏低 | 慢于 ZeRO-1，受 CPU 性能和 PCIe 带宽影响 |
 | **ZeRO-2 + CPU Offload**        | 在 ZeRO-2 的基础上，将优化器状态卸载到 CPU 内存；对较大模型进一步降低 GPU 显存占用，但会增加 CPU-GPU 数据传输开销。 | 较低 | 慢于 ZeRO-2，受 CPU 性能和 PCIe 带宽影响 |
 | **ZeRO-3 + CPU Offload**        | 在 ZeRO-3 的基础上，将优化器状态和模型参数卸载到 CPU；GPU 显存占用最小，但 CPU-GPU 通信量极大，且 CPU 带宽远小于 GPU-GPU 通信。 | **极低** | **非常慢** |
-| **ZeRO-Infinity (NVMe Offload)**| 基于 ZeRO-3，将优化器状态、梯度和参数卸载到 NVMe，突破 CPU 内存限制，适合超大规模模型；性能高度依赖 NVMe 并行读写速度。 | **极低**；需 NVMe 支持 | 慢于 ZeRO-3，但通常优于 ZeRO-3 + CPU Offload |
+| **ZeRO-Infinity (NVMe Offload)**| 基于 ZeRO-3，将优化器状态、梯度和参数卸载到 NVMe，突破 CPU 内存限制，适合超大规模模型；性能高度依赖 NVMe 并行读写速度。 | **极低**；需 NVMe 支持 | 在其他条件相近时通常慢于 CPU Offload，但可利用更大的 NVMe 容量 |
 
 ## 通信量与性能影响
 
 - **ZeRO-0/1/2**
-  - 通信以 **梯度同步** 为主，使用 All-Reduce 操作，通信量相对较低。
+  - 设模型参数量为 $\Psi$，[ZeRO 原论文](https://arxiv.org/pdf/1910.02054)按每个数据并行进程在单步中发送和接收的数据量计算：普通 DP 的梯度 All-Reduce 通信量为 $2\Psi$，ZeRO-1/2 的总通信量同样为 $2\Psi$。以 ZeRO-2 为例，梯度 Reduce-Scatter 和更新后参数 All-Gather 的通信量各为 $\Psi$。
 
 - **ZeRO-3**
-  - 需要对模型参数进行 **All-Gather/All-Reduce** 操作，通信量显著增大，网络带宽成为关键瓶颈，前后传播时的参数广播进一步加剧通信负担。
+  - 前向和反向传播分别按需 All-Gather 参数，并通过 Reduce-Scatter 归约梯度，总通信量为 $3\Psi$，最多约为普通 DP 的 1.5 倍；它不需要对参数执行 All-Reduce，实际性能影响取决于模型、通信调度和网络带宽。
 
 - **CPU Offload**（ZeRO-1/2/3 + CPU）
   - 卸载优化器状态或参数到 CPU，减少 GPU 显存占用。
@@ -154,7 +155,7 @@ type: "posts"
 
 - **NVMe Offload**（ZeRO-Infinity）
   - 在 **ZeRO-3** 的基础上进一步卸载至 NVMe，突破 CPU 内存限制以支持超大规模模型。
-  - 性能强烈依赖 **NVMe I/O 带宽** 和并行度，若 NVMe 速度足够高，通常优于 CPU Offload；但在 I/O 性能较弱或高延迟场景下，效果可能不佳。
+  - NVMe 的带宽和延迟通常不如 CPU 内存，而且数据需要经过 NVMe、CPU 内存和 GPU 之间的传输，因此在其他条件相近时通常慢于 CPU Offload；其主要优势是容量更大。ZeRO-Infinity 通过并行 I/O 和通信重叠缓解这部分开销。
 
 ### 硬件与配置影响
 
@@ -163,7 +164,7 @@ type: "posts"
 
 - **补充说明**
   - **CPU Offload** 利用 CPU 内存并通过 PCIe 传输数据；**NVMe Offload** 则将状态保存于 NVMe 设备。
-  - NVMe Offload 在 **NVMe I/O 性能充足** 时通常优于 CPU Offload，但需避免因 I/O 性能不足导致的性能瓶颈。
+  - 在容量允许时通常优先使用 CPU Offload；当 CPU 内存不足时，再使用容量更大但更慢的 NVMe 层级。高并行度 NVMe 和充分的 I/O 重叠可以缩小性能差距。
 
 - **与官方文档对照**
   - 建议结合 [DeepSpeed 官方文档](https://www.deepspeed.ai/) 获取最新、最准确的配置参数和性能调优建议。

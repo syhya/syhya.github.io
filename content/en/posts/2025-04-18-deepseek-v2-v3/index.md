@@ -1,6 +1,7 @@
 ---
 title: "DeepSeek-V2 vs V3"
 date: 2025-04-18T12:00:00+08:00
+lastmod: 2026-07-15T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "DeepSeek-V2", "DeepSeek-V3", "MoE", "Transformer", "MLA", "DeepSeekMoE", "MTP", "FP8 Training", "GRPO", "SFT", "RL", "KV Cache"]
 categories: ["Technical Blog"]
@@ -308,7 +309,7 @@ A typical MoE layer includes the following components:
 
 ### Noisy Top-k Gating
 
-To achieve sparse activation and ensure balanced expert utilization, MoE typically employs **Noisy Top-k Gating** as the gating mechanism. This method introduces noise and top-k selection to ensure computational efficiency while preventing uneven expert load. Here's the detailed workflow:
+To achieve sparse activation and improve expert load balancing, MoE typically employs **Noisy Top-k Gating** as the gating mechanism. Top-k selection reduces computation, while noise encourages exploration across experts; the auxiliary losses described below provide an additional load-balancing signal. Here is the detailed workflow:
 
 1.  **Gating Score Calculation:**
 
@@ -322,9 +323,9 @@ To achieve sparse activation and ensure balanced expert utilization, MoE typical
         -   $W_g \in \mathbb{R}^{d \times n}$: Trainable weight matrix of the gating network, where $d$ is the input feature dimension and $n$ is the number of experts.
         -   $W_{\text{noise}} \in \mathbb{R}^{d \times n}$: Weight matrix used to generate noise.
         -   $\epsilon \sim \mathcal{N}(0, 1)$: Standard Gaussian noise, adding randomness to the gating.
-        -   $\text{softplus}(x) = \log(1 + e^x)$: Smooth activation function ensuring non-negative noise.
+        -   $\text{softplus}(x) = \log(1 + e^x)$: Smooth activation function that keeps the scale of the Gaussian noise positive.
 
-    The introduction of noise prevents the gating network from always selecting the same experts, enhancing the model's robustness and diversity.
+    The noise provides an exploration signal for gating and helps improve load balancing.
 
 2.  **Top-k Selection:**
 
@@ -362,7 +363,7 @@ To achieve sparse activation and ensure balanced expert utilization, MoE typical
 
 ### Auxiliary Loss
 
-To **prevent the gating network from overly favoring a few experts**, MoE introduces an **Auxiliary Loss** ([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)) to encourage uniform usage of all experts. A common method is based on the square of the [Coefficient of Variation (CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation) of expert usage:
+To improve the distribution of expert load, MoE introduces **Auxiliary Losses** ([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)). The importance loss uses the squared [Coefficient of Variation (CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation) of the summed gate values across experts:
 
 $$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
@@ -370,11 +371,11 @@ $$
 
 -   **Parameters:**
     -   $X$: A mini-batch of input samples.
-    -   $\sum_{x \in X} G(x)$: Counts the number of times each expert is activated within the mini-batch.
-    -   $\text{CV}$: The ratio of the standard deviation to the mean, measuring the uniformity of expert usage distribution.
+    -   $\sum_{x \in X} G(x)$: The sum of gate values assigned to each expert in the mini-batch, called expert importance.
+    -   $\text{CV}$: The ratio of the standard deviation to the mean, measuring how evenly importance is distributed across experts.
     -   $w_{\text{aux}}$: Weight of the auxiliary loss, needs manual tuning.
 
--   **Purpose:** By minimizing $\mathcal{L}_{\text{aux}}$, the model optimizes the balance of expert selection, preventing some experts from being overused while others remain idle.
+-   **Purpose:** Minimizing $\mathcal{L}_{\text{aux}}$ encourages experts to receive similar total gate weights. The original paper also defines a separate load loss that balances a differentiable estimate of the number of inputs received by each expert.
 
 ### GShard
 
@@ -385,16 +386,16 @@ $$
 GShard builds upon Noisy Top-k Gating with several improvements to enhance performance and stability:
 
 -   **Expert Capacity:**
-    To prevent expert overload, GShard introduces expert capacity limits. Each expert network has a maximum capacity, indicating the maximum number of tokens it can process. If a token is routed to an expert that has reached its capacity limit, the token is marked as "overflowed," and its gating output is set to a zero vector, meaning it won't be routed to any expert.
+    GShard limits how many tokens each expert can process. Each token is considered for dispatch to both candidate experts. When both candidates have exhausted their capacity, the token is marked as "overflowed"; its MoE gate output becomes zero and its representation continues through the residual connection.
 
 -   **Local Group Dispatching:**
-    To improve gating efficiency, GShard groups tokens and enforces expert capacity limits at the group level. For example, tokens in a mini-batch are divided into multiple local groups, each containing a certain number of tokens. The gating network selects top-k experts for each local group, ensuring that the number of tokens processed by each expert within a group does not exceed its capacity limit.
+    GShard evenly partitions the mini-batch tokens into local groups that are processed independently. Each token still performs top-2 selection; expert capacity is divided among the groups and enforced within each group to enable parallel dispatch.
 
 -   **Auxiliary Loss:**
-    GShard also uses an auxiliary loss function to balance expert load. Unlike the original MoE model's auxiliary loss, GShard's loss aims to minimize the mean squared error of the proportion of data routed to each expert, more directly measuring expert load balance.
+    GShard is motivated by minimizing the mean square of the fraction of tokens routed to each expert. Its actual auxiliary loss uses the product of each expert's routed-token fraction and mean gate value as a differentiable approximation to the non-differentiable top-2 token counts.
 
 -   **Random Routing:**
-    To increase routing randomness, GShard introduces a random routing mechanism when selecting the top-k experts. Besides selecting the best top-k experts, GShard also randomly selects sub-optimal experts with a certain probability, increasing expert diversity and improving the model's generalization ability.
+    Subject to capacity, GShard dispatches the token to the best expert deterministically and uses a probability proportional to the second-best expert's gate weight $g_2$ to decide whether to dispatch the token there as well.
 
 Below is the core algorithm flow of GShard:
 
@@ -426,7 +427,7 @@ $$
     -   $T$: Total number of tokens in batch $B$.
     -   $\alpha$: Weight hyperparameter for the auxiliary loss, typically set to $10^{-2}$.
 
-By minimizing this loss, the model encourages the actual routing fraction $f_i$ to align with the predicted probability $P_i$, indirectly promoting load balance among experts and preventing some from being idle.
+Minimizing this loss encourages both the dispatched-token fractions $f_i$ and the mean router probabilities $P_i$ to approach the uniform value $1/N$ across experts, thereby promoting load balance.
 
 {{< figure
     src="switch_transformer.png"
@@ -451,7 +452,7 @@ By minimizing this loss, the model encourages the actual routing fraction $f_i$ 
 To improve the training stability of Switch Transformer, the paper proposes the following optimization strategies:
 
 -   **Selective Precision:**
-    Using FP32 precision inside the router function improves training stability without the overhead of FP32 tensor communication. Specifically, the Switch Router computations are performed entirely in FP32, and the final result is converted back to FP16 to balance efficiency and precision.
+    Using FP32 inside the router function improves training stability. Local Switch Router computations use FP32, and the resulting dispatch and combine tensors are cast back to BF16 for efficiency.
 
 -   **Smaller Initialization:**
     It is recommended to adjust the Transformer weight initialization scale parameter $s$ from 1.0 to 0.1. A smaller initialization scale helps mitigate the risk of gradient explosion early in training, thereby improving overall training stability. This is implemented by sampling from a truncated normal distribution with mean 0 and standard deviation $\sqrt{s/n}$ (where $n$ is the number of input units).
@@ -525,9 +526,9 @@ $$
 \end{aligned}
 $$
 
-The optimization problem defines a matrix $A$ where the element at row $i$, column $j$ indicates whether expert $i$ selected token $j$ (value 0 or 1). Since solving this optimization problem is complex, the paper uses [Dykstra's algorithm](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full) (obtaining an approximate solution through multiple iterations).
+The optimization variable $A \in \mathbb{R}^{e \times n}$ satisfies $0 \leq A[i,j] \leq 1$ and represents a relaxed assignment of token $j$ to expert $i$. Entropy regularization yields a near-integer solution while enabling iterative solution with [Dykstra's algorithm](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full); top-k is then applied to $A$ to obtain the actual routing indices.
 
-The parameter $b$ is typically determined by the total number of tokens $n$ in the batch and a capacity factor, which represents the average number of experts used per token. Most experiments use a high capacity factor. Experimental results show that even with reduced capacity, EC generally outperforms traditional top-1 token choice routing, although capped expert choice slightly degrades fine-tuning performance.
+Each expert selects $k=nc/e$ tokens, where $n$ is the number of tokens in the batch, $e$ is the number of experts, and the capacity factor $c$ is the average number of experts used per token. The separate parameter $b$ caps how many experts may select one token. Most experiments use $c=2$; EC still outperforms top-1 token-choice routing at lower capacity factors, while capped expert choice slightly reduces fine-tuning performance.
 
 The advantages of EC are mainly twofold:
 -   **Perfect Load Balancing:** Each expert processes a fixed $k$ tokens, avoiding the issue of some experts being overloaded while others are idle, achieving ideal load balance.
@@ -571,7 +572,7 @@ A core challenge in MoE models is load balancing: ensuring all experts are effec
     \]
     where \(\mathbf{e}_i\) is the learnable center vector for the \(i\)-th routing expert. The \(K_r\) experts with the highest \(s_{i,t}\) are selected.
 
-*   **DeepSeek-V3:** Uses the Sigmoid function to compute affinity scores. More importantly, it introduces a learnable bias term \(b_i\) for each routing expert. Top-K selection is based on the **bias-adjusted affinity** \(s_{i,t} + b_i\).
+*   **DeepSeek-V3:** Uses the Sigmoid function to compute affinity scores and maintains a dynamically adjusted bias term \(b_i\) for each routing expert. Top-K selection is based on the **bias-adjusted affinity** \(s_{i,t} + b_i\).
     \[
     s_{i, t} = \operatorname{Sigmoid}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})
     \]
@@ -607,7 +608,7 @@ A core challenge in MoE models is load balancing: ensuring all experts are effec
             P_{i} &= \frac{1}{T} \sum_{t=1}^{T} s_{i, t}
             \end{aligned}
             \]
-            where \(T\) is the total number of tokens in the batch, \(f_i\) is the fraction of tokens routed to expert \(i\) (relative to the ideal balanced state), \(P_i\) is the average affinity score for expert \(i\), and \(\alpha_1\) is a hyperparameter.
+            where \(T\) is the number of tokens in the current sequence, \(f_i\) is the normalized load of expert \(i\), which approaches 1 under balanced routing, \(P_i\) is the expert's mean affinity over that sequence, and \(\alpha_1\) is a hyperparameter.
         *   **Device-level Balancing Loss (\(\mathcal{L}_{\text{DevBal}}\)):** Encourages uniform distribution of computational load across different device groups (assuming experts are distributed across \(D\) device groups \(\{\mathcal{E}_1, \dots, \mathcal{E}_D\}\)).
             \[
             \begin{aligned}
@@ -627,13 +628,13 @@ A core challenge in MoE models is load balancing: ensuring all experts are effec
             \]
             where \(f_i''\) is the fraction of tokens sent to device \(i\) (relative to the ideal balanced state), \(P_i''\) is the total affinity for device group \(i\), and \(\alpha_3\) is a hyperparameter.
     *   **Routing Restriction: Device-Limited Routing** Limits each token to route to experts distributed on at most \(M\) different devices. In V2, \(M=3\).
-    *   **Token Dropping:** During training, if a device receives more tokens than a preset capacity factor (usually slightly above the average), some tokens with the lowest routing weights (affinities) are dropped to avoid wasting computational resources. However, tokens from about 10% of sequences are preserved from dropping.
+    *   **Token Dropping:** V2 uses a per-device capacity factor of 1.0 during training and drops the lowest-affinity tokens above the average computation budget. About 10% of training sequences are kept intact, and evaluation retains all tokens.
 
 *   **DeepSeek-V3:**
-    *   **Primary Strategy: Auxiliary-Loss-Free Load Balancing** V3 posits that auxiliary losses can harm model performance and thus adopts an innovative **Auxiliary-Loss-Free Load Balancing** ([Wang et al., 2024](https://arxiv.org/abs/2408.15664)). It achieves load balancing by dynamically adjusting the aforementioned learnable bias terms \(b_i\):
+    *   **Primary Strategy: Auxiliary-Loss-Free Load Balancing** V3 adopts **Auxiliary-Loss-Free Load Balancing** ([Wang et al., 2024](https://arxiv.org/abs/2408.15664)). It dynamically adjusts routing bias terms \(b_i\) according to expert load, balancing load distribution with model performance:
         *   **Bias Update:** After each training step, monitor the number of tokens processed by each expert \(i\) in the current batch.
-            *   If expert \(i\) is overloaded (processed tokens > Total batch tokens / \(N_r\)), decrease its bias: \(b_i \leftarrow b_i - \gamma\).
-            *   If expert \(i\) is underloaded (processed tokens < Total batch tokens / \(N_r\)), increase its bias: \(b_i \leftarrow b_i + \gamma\).
+            *   For \(T_{batch}\) tokens with \(K_r\) routed experts selected per token, the balanced target load per expert is \(K_rT_{batch}/N_r\).
+            *   An expert above this target receives the update \(b_i \leftarrow b_i - \gamma\); an expert below it receives \(b_i \leftarrow b_i + \gamma\).
         *   \(\gamma\) is a small positive step size (bias update rate hyperparameter). This way, highly loaded experts become less likely to be selected in subsequent routing, while lowly loaded experts become more likely, dynamically balancing the load at the batch level.
     *   **Supplementary Strategy: Sequence-Level Auxiliary Loss (\(\mathcal{L}_{\text{Bal}}\))** V3 still retains an auxiliary loss with an **extremely small weight** (\(\alpha=0.0001\)), but it acts on the expert selection balance **within individual sequences**, rather than the entire batch. This is mainly to prevent extreme imbalance within a single sequence.
         \[
@@ -643,8 +644,8 @@ A core challenge in MoE models is load balancing: ensuring all experts are effec
         s_{i, t}^{\prime} = \frac{s_{i, t}}{\sum_{j=1}^{N_{r}} s_{j, t}}, \quad P_{i} = \frac{1}{T_{seq}} \sum_{t=1}^{T_{seq}} s_{i, t}^{\prime}
         \end{gathered}
         \]
-        Note that \(f_i, P_i\) here are computed over a single sequence (length \(T_{seq}\)), and \(s_{i,t}'\) is the value of original \(s_{i,t}\) normalized within the sequence.
-    *   **Routing Restriction: Node-Limited Routing** Similar to V2's device limit, but applied at the node level. In V3, \(M=4\).
+        Here, \(f_i\) and \(P_i\) are computed over a single sequence of length \(T_{seq}\). For each token \(t\), \(s_{i,t}'\) is normalized across all routed experts.
+    *   **Routing Restriction: Node-Limited Routing** V3 selects at most \(M\) nodes according to the sum of the highest \(K_r/M\) expert affinity scores on each node, then routes the token to target experts on those nodes. V3 uses \(M=4\).
     *   **No Token Dropping:** Due to the effectiveness of bias-adjustment-based load balancing, V3 does not drop any tokens during training or inference.
 
 **Advantages of V3's Strategy:**
@@ -675,11 +676,11 @@ The key difference between auxiliary-loss-free load balancing and sequence-level
 | **Affinity Calculation \(s_{i,t}\)** | \(\operatorname{Softmax}_{i}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})\)                                                                                                         | \(\operatorname{Sigmoid}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})\)                                                                                                                                           |
 | **TopK Selection Basis**    | Original affinity \(s_{i,t}\)                                                                                                                                             | Bias-adjusted affinity \(s_{i,t} + b_i\)                                                                                                                                                                |
 | **Gating Value Calc. \(g_{i,t}\)** | For selected experts, \(g_{i,t} = s_{i,t}\) (Usually no extra normalization)                                                                                             | For selected experts, normalize based on original affinity \(s_{i,t}\): \(g_{i, t} = \frac{s_{i, t}}{\sum_{j \in \text{Selected}} s_{j, t}}\)                                                                     |
-| **Primary Load Balancing**  | **Auxiliary Losses:** \(\mathcal{L}_{\text{ExpBal}}\) (Expert-level); \(\mathcal{L}_{\text{DevBal}}\) (Device-level); \(\mathcal{L}_{\text{CommBal}}\) (Comm-level) | **Auxiliary-Loss-Free:** Dynamic adjustment of learnable bias \(b_i\) (step \(\gamma\)) for batch-level balancing                                                                                    |
+| **Primary Load Balancing**  | **Auxiliary Losses:** \(\mathcal{L}_{\text{ExpBal}}\) (Expert-level); \(\mathcal{L}_{\text{DevBal}}\) (Device-level); \(\mathcal{L}_{\text{CommBal}}\) (Comm-level) | **Auxiliary-Loss-Free:** Rule-based dynamic adjustment of routing bias \(b_i\) (step \(\gamma\)) for batch-level balancing                                                                                    |
 | **Supplementary Balancing** | No explicit supplementary strategy                                                                                                                                       | **Sequence-Level Aux Loss** \(\mathcal{L}_{\text{Bal}}\) (Weight \(\alpha\) minimal, e.g., 0.0001), prevents extreme imbalance within single sequences                                                     |
 | **Routing Restriction**     | **Device Limit:** Each token routes to experts on at most \(M=3\) devices                                                                                             | **Node Limit:** Each token routes to experts on at most \(M=4\) nodes                                                                                                                             |
 | **Token Dropping**          | **Yes:** During training, tokens exceeding device capacity with lowest affinity are dropped (preserving ~10% sequences) to mitigate bottlenecks                               | **No:** No tokens dropped during training or inference                                                                                                                                                  |
-| **Balancing Granularity**   | Primarily enforced at sequence/batch level via auxiliary losses                                                                                                            | Primarily balanced dynamically at batch level via bias adjustment, looser constraints                                                                                                                   |
+| **Balancing Granularity**   | Primarily balanced with sequence-level auxiliary losses                                                                                                            | Primarily balanced dynamically at batch level via bias adjustment, with a very small sequence-level auxiliary loss                                                                                                                   |
 | **Impact on Performance**   | Auxiliary losses might negatively impact model performance                                                                                                               | Designed to minimize negative impact of balancing strategy on performance, allowing better expert specialization                                                                                        |
 
 ### Multi-Token Prediction (MTP)

@@ -1,6 +1,7 @@
 ---
 title: "DeepSeek-V2 vs V3"
 date: 2025-04-18T12:00:00+08:00
+lastmod: 2026-07-15T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "DeepSeek-V2", "DeepSeek-V3", "MoE", "Transformer", "MLA", "DeepSeekMoE", "MTP", "FP8 Training", "GRPO", "SFT", "RL", "KV Cache"]
 categories: ["技术博客"]
@@ -315,7 +316,7 @@ MoE 设计灵感来源于[集成学习(Ensemble learning)](https://en.wikipedia.
 
 ### Noisy Top-k Gating
 
-为了实现稀疏激活并确保专家使用均衡，MoE 通常采用 **Noisy Top-k Gating** 作为门控机制。这种方法通过引入噪声和 top-k 选择，既保证了计算效率，又避免了专家负载不均的问题。以下是其详细工作流程：
+为了实现稀疏激活并改善专家负载均衡，MoE 通常采用 **Noisy Top-k Gating** 作为门控机制。这种方法通过 top-k 选择降低计算量，并利用噪声促进不同专家的探索；负载均衡还可结合下文的辅助损失进行优化。以下是其详细工作流程：
 
 
 1. **门控分数计算:**
@@ -330,9 +331,9 @@ $$
   - $W_g \in \mathbb{R}^{d \times n}$：门控网络的可训练权重矩阵，$d$ 是输入特征维度，$n$ 是专家数量。
   - $W_{\text{noise}} \in \mathbb{R}^{d \times n}$：用于生成噪声的权重矩阵。
   - $\epsilon \sim \mathcal{N}(0, 1)$：标准高斯噪声，增加门控随机性。
-  - $\text{softplus}(x) = \log(1 + e^x)$：平滑激活函数，确保噪声非负。
+  - $\text{softplus}(x) = \log(1 + e^x)$：平滑激活函数，确保高斯噪声的尺度为正。
 
-噪声的引入避免了门控网络总是选择固定的专家，增强了模型的鲁棒性和多样性。
+噪声为门控选择提供探索信号，有助于改善负载均衡。
 
 2. **Top-k 选择:**
 
@@ -371,7 +372,7 @@ $$
 
 ### 辅助损失
 
-为了**避免门控网络过度偏向少数专家**，MoE 引入了**辅助损失(Auxiliary Loss)**([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))，鼓励所有专家被均匀使用。一种常用方法是基于专家使用率的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)的平方：
+为了改善门控网络的专家负载分布，MoE 引入了**辅助损失(Auxiliary Loss)**([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538))。其中 importance loss 基于各专家门控权重之和的[变异系数(Coefficient of Variation, CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation)平方：
 
 $$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
@@ -379,11 +380,11 @@ $$
 
 - **参数说明**：  
   - $X$：一个 mini-batch 的输入样本。  
-  - $\sum_{x \in X} G(x)$：统计每个专家在 mini-batch 中的激活次数。  
-  - $\text{CV}$：标准差与均值的比值，衡量专家使用分布的均匀性。  
+  - $\sum_{x \in X} G(x)$：每个专家在 mini-batch 中获得的门控权重之和，称为 expert importance。
+  - $\text{CV}$：标准差与均值的比值，衡量各专家 importance 的均匀性。
   - $w_{\text{aux}}$：辅助损失的权重，需手动调整。  
 
-- **作用**：通过最小化 $\mathcal{L}_{\text{aux}}$，模型优化专家选择的均衡性，避免某些专家被过度使用而其他专家闲置。
+- **作用**：通过最小化 $\mathcal{L}_{\text{aux}}$，模型鼓励各专家获得相近的门控权重。原论文还定义了独立的 load loss，用于平衡各专家接收样本数量的可微估计。
 
 ### GShard
 
@@ -394,16 +395,16 @@ $$
 GShard 在 Noisy Top-k Gating 的基础上，进行了一些改进，以提高门控机制的性能和稳定性：
 
 - **专家容量(Expert Capacity):**  
-  为了避免专家过载，GShard 引入了专家容量限制。每个专家网络都有一个容量上限，表示它最多可以处理的 token 数量。如果一个 token 被路由到一个已经达到容量上限的专家网络，则该 token 会被标记为 "overflowed"，门控输出会被设置为零向量，表示该 token 不会被路由到任何专家网络。
+  GShard 为每个专家设置可处理 token 数量的上限。每个 token 依次尝试分发给两个候选专家；两个候选专家的容量均耗尽时，该 token 被标记为 "overflowed"，MoE 门控输出退化为零向量，并通过残差连接传递到下一层。
 
 - **局部组分发(Local Group Dispatching):**  
-  为了提高门控效率，GShard 将 token 分组，在组级别强制执行专家容量限制。例如，将 mini-batch 中的 token 划分为多个局部组，每个局部组包含一定数量的 token。门控网络为每个局部组选择 top-k 个专家网络，并确保每个专家网络在一个局部组内处理的 token 数量不超过其容量上限。
+  GShard 将 mini-batch 中的 token 均匀划分为多个局部组，各组独立处理。每个 token 仍执行 top-2 选择，而专家容量按组分配并在组内执行，从而支持并行分发。
 
 - **辅助损失(Auxiliary Loss):**  
-  GShard 也使用了辅助损失函数来平衡专家负载。与原始 MoE 模型的辅助损失不同，GShard 的辅助损失旨在最小化每个专家网络路由到的数据比例的均方误差，更加直接地衡量专家负载平衡程度。
+  GShard 希望减小各专家路由比例的均方。实际辅助损失使用“路由到专家的 token 比例”与“该专家的平均门控权重”的乘积，为不可微的 top-2 token 计数提供可微近似。
 
 - **随机路由(Random Routing):**  
-  为了增加路由的随机性，GShard 在选择 top-k 个专家网络时，引入了随机路由机制。除了选择最佳的 top-k 个专家网络外，GShard 还会以一定的概率随机选择次优的专家网络，增加专家网络的多样性，提高模型的泛化能力。
+  在容量允许时，GShard 确定性地将 token 分发给最佳专家，并以与第二名专家门控权重 $g_2$ 成比例的概率决定是否同时分发给第二名专家。
 
 下面是 GShard 的核心算法流程:
 
@@ -439,7 +440,7 @@ $$
   - $T$：批次 $B$ 中的 token 总数。  
   - $\alpha$：辅助损失的权重超参数，通常设为 $10^{-2}$。  
 
-通过最小化 $\text{loss}$，模型使实际路由比例 $f_i$ 与预测概率 $P_i$ 趋于一致，从而间接促进专家间的负载平衡，避免部分专家闲置。
+通过最小化 $\text{loss}$，模型鼓励实际路由比例 $f_i$ 和平均路由概率 $P_i$ 分别趋向均匀分布，即对所有专家接近 $1/N$，从而促进负载均衡。
 
 {{< figure
     src="switch_transformer.png"
@@ -464,7 +465,7 @@ $$
 为提升 Switch Transformer 的训练稳定性，论文提出了如下优化策略：
 
 - **选择性精度(Selective Precision)**  
-  在路由函数内部采用 FP32 精度既能提高训练稳定性，又能避免因 FP32 张量通信而产生的额外开销。具体来说，Switch Router 的计算过程全程使用 FP32，最终结果再转换为 FP16 以兼顾效率与精度。
+  在路由函数内部采用 FP32 精度可以提高训练稳定性。Switch Router 的局部计算使用 FP32，生成的 dispatch 和 combine 张量再转换回 BF16，以兼顾效率与精度。
 
 - **更小初始化(Smaller Initialization)**  
   建议将 Transformer 的权重初始化尺度参数 $s$ 从 1 调整至 0.1。较小的初始化尺度有助于缓解训练初期的梯度爆炸风险，从而提升整体训练稳定性。具体实现为：从均值为 0、标准差为 $\sqrt{s/n}$(其中 $n$ 为输入单元数) 的截断正态分布中采样。
@@ -539,9 +540,9 @@ $$
 \end{aligned}
 $$
 
-考虑的优化问题中定义了一个矩阵 $A$，其第 $i$ 行第 $j$ 列的元素表示第 $i$ 个专家是否选择了第 $j$ 个 token(取值 0 或 1)。由于该优化问题求解较为复杂，论文中采用 [Dykstra 算法](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full)(通过多次迭代获得近似解)来解决。
+优化变量 $A \in \mathbb{R}^{e \times n}$ 满足 $0 \leq A[i,j] \leq 1$，表示专家 $i$ 选择 token $j$ 的松弛分配值。熵正则使解接近整数，同时便于使用 [Dykstra 算法](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full)迭代求解；得到 $A$ 后再通过 top-k 选出实际路由索引。
 
-参数 $b$ 通常由批量中 token 总数 $n$ 与容量因子决定，其中容量因子表示每个 token 平均使用的专家数量。大多数实验采用较高的容量因子，实验结果表明，即使在容量降低的情况下，EC 整体表现仍优于传统的 top-1 token 选择路由，尽管 capped expert choice 略微降低了微调性能。
+每个专家选择的 token 数量为 $k=nc/e$，其中 $n$ 是批次中的 token 总数，$e$ 是专家数量，容量因子 $c$ 表示每个 token 平均使用的专家数量。参数 $b$ 是另一项约束，规定每个 token 最多可被多少个专家选择。论文大多数实验采用 $c=2$；降低容量因子后，EC 仍优于传统的 top-1 token 选择路由，而 capped expert choice 的微调性能略有下降。
 
 EC 的优势主要体现在以下两方面：
 - **完美负载均衡：** 每个专家固定处理 $k$ 个 token，从而避免了部分专家过载而其他专家闲置的问题，实现了理想的负载均衡。
@@ -585,7 +586,7 @@ MoE 模型的一个核心挑战是负载均衡：确保所有专家都能得到�
     \]
     其中 \(\mathbf{e}_i\) 是第 \(i\) 个路由专家的可学习中心向量。选择 \(s_{i,t}\) 最高的 \(K_r\) 个专家。
 
-*   **DeepSeek-V3:** 使用 Sigmoid 函数计算亲和度分数。更重要的是，它引入了一个可学习的偏置项 \(b_i\) 用于每个路由专家。Top-K 选择是基于 **加偏置后的亲和度** \(s_{i,t} + b_i\)。
+*   **DeepSeek-V3:** 使用 Sigmoid 函数计算亲和度分数，并为每个路由专家维护一个动态调整的偏置项 \(b_i\)。Top-K 选择基于 **加偏置后的亲和度** \(s_{i,t} + b_i\)。
     \[
     s_{i, t} = \operatorname{Sigmoid}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})
     \]
@@ -621,7 +622,7 @@ MoE 模型的一个核心挑战是负载均衡：确保所有专家都能得到�
             P_{i} &= \frac{1}{T} \sum_{t=1}^{T} s_{i, t}
             \end{aligned}
             \]
-            其中 \(T\) 是 batch 中的 token 总数，\(f_i\) 是路由到专家 \(i\) 的 token 比例（相对于理想均衡状态），\(P_i\) 是专家 \(i\) 的平均亲和度分数，\(\alpha_1\) 是超参数。
+            其中 \(T\) 是当前序列中的 token 数，\(f_i\) 是专家 \(i\) 的归一化负载，均衡时接近 1；\(P_i\) 是专家 \(i\) 在该序列上的平均亲和度分数，\(\alpha_1\) 是超参数。
         *   **设备级平衡损失 (\(\mathcal{L}_{\text{DevBal}}\)):** 鼓励将计算负载均匀分布到不同的设备组上（假设专家分布在 \(D\) 个设备组 \(\{\mathcal{E}_1, \dots, \mathcal{E}_D\}\)）。
             \[
             \begin{aligned}
@@ -641,13 +642,13 @@ MoE 模型的一个核心挑战是负载均衡：确保所有专家都能得到�
             \]
             其中 \(f_i''\) 是发送到设备 \(i\) 的 token 比例（相对于理想均衡状态），\(P_i''\) 是设备组 \(i\) 的总亲和度，\(\alpha_3\) 是超参数。
     *   **路由限制：设备限制路由** 限制每个 token 最多只能路由到分布在 \(M\) 个不同设备上的专家。V2 中设 \(M=3\)。
-    *   **Token 丢弃:** 在训练期间，如果某个设备接收到的 token 数量超过了预设的容量因子（通常略大于平均值），则会丢弃一部分具有最低路由权重（亲和度）的 token，以避免计算资源的浪费。但会保留约 10% 序列的 token 不被丢弃。
+    *   **Token 丢弃:** V2 训练时将每个设备的容量因子设为 1.0，并按亲和度从低到高丢弃超出平均计算预算的 token；约 10% 的训练序列会完整保留。评估阶段保留全部 token。
 
 *   **DeepSeek-V3:**
-    *   **主要策略：无辅助损失的负载均衡 (Auxiliary-Loss-Free Load Balancing)** V3 认为辅助损失会损害模型性能，因此采用了一种创新的**无辅助损失的负载均衡**([Wang et al., 2024](https://arxiv.org/abs/2408.15664))。它通过动态调整前面提到的可学习偏置项 \(b_i\) 来实现负载均衡：
+    *   **主要策略：无辅助损失的负载均衡 (Auxiliary-Loss-Free Load Balancing)** V3 采用**无辅助损失的负载均衡**([Wang et al., 2024](https://arxiv.org/abs/2408.15664))，通过按专家负载动态调整路由偏置项 \(b_i\)，在负载均衡与模型性能之间取得平衡：
         *   **偏置更新:** 在每个训练步骤之后，监控每个专家 \(i\) 在当前 batch 中处理的 token 数量。
-            *   如果专家 \(i\) 过载（处理的 token 数 > Batch 总 token 数 / \(N_r\)），则降低其偏置：\(b_i \leftarrow b_i - \gamma\)。
-            *   如果专家 \(i\) 欠载（处理的 token 数 < Batch 总 token 数 / \(N_r\)），则增加其偏置：\(b_i \leftarrow b_i + \gamma\)。
+            *   设 batch 中共有 \(T_{batch}\) 个 token，每个 token 选择 \(K_r\) 个路由专家，则每个专家的均衡目标负载为 \(K_rT_{batch}/N_r\)。
+            *   专家 \(i\) 的负载高于目标时降低其偏置：\(b_i \leftarrow b_i - \gamma\)；低于目标时增加其偏置：\(b_i \leftarrow b_i + \gamma\)。
         *   \(\gamma\) 是一个小的正步长（偏置更新速率超参数）。通过这种方式，负载高的专家在后续路由中被选中的概率会降低，负载低的专家被选中的概率会增加，从而在批处理级别上动态平衡负载。
     *   **补充策略：序列级辅助损失 (\(\mathcal{L}_{\text{Bal}}\))** V3 仍然保留了一个**权重极小** (\(\alpha=0.0001\)) 的辅助损失，但它作用于**单个序列内部**的专家选择平衡，而不是整个 batch。这主要是为了防止在单个序列中出现极端不平衡的情况。
         \[
@@ -657,8 +658,8 @@ MoE 模型的一个核心挑战是负载均衡：确保所有专家都能得到�
         s_{i, t}^{\prime} = \frac{s_{i, t}}{\sum_{j=1}^{N_{r}} s_{j, t}}, \quad P_{i} = \frac{1}{T_{seq}} \sum_{t=1}^{T_{seq}} s_{i, t}^{\prime}
         \end{gathered}
         \]
-        注意这里的 \(f_i, P_i\) 是在单个序列（长度为 \(T_{seq}\)）上计算的，并且 \(s_{i,t}'\) 是在序列内对原始 \(s_{i,t}\) 归一化后的值。
-    *   **路由限制：节点限制路由** 类似于 V2 的设备限制，但应用于节点级别。V3 中设 \(M=4\)。
+        这里的 \(f_i, P_i\) 在单个序列（长度为 \(T_{seq}\)）上统计；对每个 token \(t\)，\(s_{i,t}'\) 沿全部路由专家维度归一化。
+    *   **路由限制：节点限制路由** V3 根据每个节点上最高 \(K_r/M\) 个亲和度分数之和选择最多 \(M\) 个节点，并将 token 路由到这些节点上的目标专家。V3 中设 \(M=4\)。
     *   **无 Token 丢弃:** 由于基于偏置调整的负载均衡效果良好，V3 在训练和推理过程中均不丢弃任何 token。
 
 **V3 策略的优势:**
@@ -689,11 +690,11 @@ V3 的无辅助损失策略旨在最小化负载均衡机制对模型最终性�
 | **亲和度计算 \(s_{i,t}\)** | \(\operatorname{Softmax}_{i}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})\)                                                                                                         | \(\operatorname{Sigmoid}(\mathbf{u}_{t}^{T} \mathbf{e}_{i})\)                                                                                                                                           |
 | **TopK 选择依据**        | 原始亲和度 \(s_{i,t}\)                                                                                                                                                     | 加偏置后的亲和度 \(s_{i,t} + b_i\)                                                                                                                                                                        |
 | **门控值计算 \(g_{i,t}\)**  | 对选中的专家，\(g_{i,t} = s_{i,t}\) (通常无额外归一化)                                                                                                                            | 对选中的专家，基于原始亲和度 \(s_{i,t}\) 进行归一化: \(g_{i, t} = \frac{s_{i, t}}{\sum_{j \in \text{Selected}} s_{j, t}}\)                                                                                             |
-| **主要负载均衡策略**     | **辅助损失:** \(\mathcal{L}_{\text{ExpBal}}\)（专家级）；\(\mathcal{L}_{\text{DevBal}}\)（设备级）；\(\mathcal{L}_{\text{CommBal}}\)（通信级）                               | **无辅助损失:** 通过动态调整可学习偏置项 \(b_i\)（步长 \(\gamma\)）实现批处理级均衡                                                                                                                            |
+| **主要负载均衡策略**     | **辅助损失:** \(\mathcal{L}_{\text{ExpBal}}\)（专家级）；\(\mathcal{L}_{\text{DevBal}}\)（设备级）；\(\mathcal{L}_{\text{CommBal}}\)（通信级）                               | **无辅助损失:** 通过按负载规则动态调整路由偏置项 \(b_i\)（步长 \(\gamma\)）实现批处理级均衡                                                                                                                            |
 | **补充负载均衡**         | 无明确的补充策略                                                                                                                                                           | **序列级辅助损失** \(\mathcal{L}_{\text{Bal}}\) (权重 \(\alpha\) 极小, e.g., 0.0001)，防止单序列内极端不平衡                                                                                                     |
 | **路由限制**             | **设备限制:** 每个 token 最多路由到 \(M=3\) 个设备上的专家                                                                                                  | **节点限制:** 每个 token 最多路由到 \(M=4\) 个节点上的专家                                                                                                                                  |
 | **Token 丢弃**           | **是:** 训练时，为缓解计算瓶颈，会丢弃超出设备容量的 token 中亲和度最低的部分 (保留约10%序列不丢弃)                                                                                             | **否:** 训练和推理中均不丢弃 token                                                                                                                                                                      |
-| **均衡粒度**             | 主要通过辅助损失在序列/Batch 级别强制均衡                                                                                                                                    | 主要通过偏置调整在 Batch 级别动态均衡，约束更宽松                                                                                                                                                           |
+| **均衡粒度**             | 主要通过序列级辅助损失进行均衡                                                                                                                                    | 主要通过偏置调整在 Batch 级别动态均衡，并辅以权重极小的序列级损失                                                                                                                                                           |
 | **对模型性能影响**       | 辅助损失可能对模型性能产生负面影响                                                                                                                                             | 设计上旨在最小化均衡策略对性能的负面影响，允许更好的专家特化                                                                                                                                                   |
 
 ### 多 token 预测 (MTP)

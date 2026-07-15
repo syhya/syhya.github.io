@@ -1,6 +1,7 @@
 ---
 title: Building Domain-Specific LLMs
 date: 2025-01-05T12:00:00+08:00
+lastmod: 2026-07-15T12:00:00+08:00
 author: "Yue Shui"
 tags: ["AI", "NLP", "LLM", "Pre-training", "Post-training", "DPO", "Domain Models", "DeepSpeed"]
 categories: ["Technical Blog"]
@@ -113,19 +114,19 @@ Training large language models requires robust computational resources and effic
   - **Inference Frameworks**: [vLLM](https://github.com/vllm-project/vllm), [ollama](https://github.com/jmorganca/ollama), etc., optimize inference speed and resource utilization.
 
 - **Parallel Strategies**  
-  - **Data Parallelism (DP)**: Suitable when the model fits on a single GPU, implemented via DeepSpeed's ZeRO Stage 0.  
+  - **Data Parallelism (DP)**: Suitable when the model fits on a single GPU; in DeepSpeed, this corresponds to ZeRO Stage 0, which does not shard model states.
   - **Sharded Data Parallelism and Model Parallelism**: When the model cannot fit on a single GPU, first use ZeRO Stage 1, 2, or 3 for sharded data parallelism (ZeRO-DP) to reduce memory usage, and layer on Tensor Parallelism (TP) and Pipeline Parallelism (PP) when necessary; note that ZeRO operates on a different axis from TP/PP and is not equivalent to them. ZeRO-Infinity can also be used to offload parts of parameters and optimizer states to CPU or NVMe.
 
 ## DeepSpeed ZeRO Sharding Strategies Comparison
 
 ### ZeRO Stage Sharding Strategies
 
-| **ZeRO Stage** | **Description**                                                                                                                                                                                        | **GPU Memory Usage** | **Training Speed** |
+| **ZeRO Stage** | **Description**                                                                                                                                                                                        | **GPU Memory Usage** | **Communication and Performance** |
 |----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|---------------------|
-| **ZeRO-0**     | Pure data parallelism without any sharding. All optimizer states, gradients, and parameters are fully replicated on each GPU.                                                                        | Highest              | **Fastest**         |
-| **ZeRO-1**     | Shards optimizer states (e.g., momentum and second moments), reducing GPU memory usage, but gradients and parameters remain data parallel.                                                             | High                 | Slightly slower than ZeRO-0 |
-| **ZeRO-2**     | Shards optimizer states and gradients, further reducing GPU memory usage based on ZeRO-1.                                                                                                             | Medium               | Slower than ZeRO-1  |
-| **ZeRO-3**     | Shards optimizer states, gradients, and model parameters, achieving the lowest GPU memory usage, suitable for extremely large models. Requires parameter broadcasting (All-Gather/All-Reduce) during forward/backward passes, significantly increasing communication overhead. | Low                  | Significantly slower than ZeRO-2, depends on model size and network bandwidth |
+| **ZeRO-0**     | Pure data parallelism without sharding. Optimizer states, gradients, and parameters are fully replicated on every GPU. | Highest | Standard DP baseline |
+| **ZeRO-1**     | Shards optimizer states only. Each GPU updates its assigned parameter shard, then uses All-Gather to synchronize the complete updated parameters. | High | Same communication volume as standard DP; performance depends on scheduling and implementation |
+| **ZeRO-2**     | Shards optimizer states and gradients. Gradients are reduced with Reduce-Scatter, followed by an All-Gather of the updated parameter shards. | Medium | Same communication volume as standard DP |
+| **ZeRO-3**     | Shards optimizer states, gradients, and parameters. Parameters are gathered layer by layer for forward and backward computation, while gradients use Reduce-Scatter. | Low | At most about 1.5 times the communication volume of standard DP; more sensitive to network bandwidth |
 
 ### Offload Strategies
 
@@ -134,17 +135,17 @@ Training large language models requires robust computational resources and effic
 | **ZeRO-1 + CPU Offload**        | Extends ZeRO-1 by offloading optimizer states to CPU memory, further reducing GPU memory usage but necessitating CPU-GPU data transfer, relying on PCIe bandwidth, and occupying CPU memory.              | Medium-low                 | Slower than ZeRO-1, affected by CPU performance and PCIe bandwidth                                                     |
 | **ZeRO-2 + CPU Offload**        | Extends ZeRO-2 by offloading optimizer states to CPU memory, further reducing GPU memory usage for larger models but increasing CPU-GPU data transfer overhead.                                         | Lower                      | Slower than ZeRO-2, affected by CPU performance and PCIe bandwidth                                                     |
 | **ZeRO-3 + CPU Offload**        | Extends ZeRO-3 by offloading optimizer states and model parameters to CPU, achieving minimal GPU memory usage but with extremely high CPU-GPU communication volume and CPU bandwidth significantly lower than GPU-GPU communication. | Extremely Low             | Very Slow                                                                                                               |
-| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, offloads optimizer states, gradients, and parameters to NVMe, breaking CPU memory limits and suitable for ultra-large-scale models; performance highly depends on NVMe parallel read/write speeds. | Extremely low; requires NVMe support | Slower than ZeRO-3 but generally faster than ZeRO-3 + CPU Offload, can achieve better throughput if NVMe bandwidth is sufficient |
+| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, offloads optimizer states, gradients, and parameters to NVMe, breaking CPU memory limits and suitable for ultra-large-scale models; performance highly depends on NVMe parallel read/write speeds. | Extremely low; requires NVMe support | Usually slower than CPU Offload under otherwise similar conditions, but provides access to much larger NVMe capacity |
 
 ---
 
 ## Communication Volume and Performance Impact
 
 - **ZeRO-0/1/2**:  
-  Communication is primarily **gradient synchronization** using All-Reduce operations, resulting in relatively low communication volume.
+  Let $\Psi$ denote the number of model parameters. Under the per-data-parallel-process data-movement model used in the [ZeRO paper](https://arxiv.org/pdf/1910.02054), a standard DP gradient All-Reduce communicates $2\Psi$ per step, and ZeRO-1/2 have the same total communication volume of $2\Psi$. For ZeRO-2, the gradient Reduce-Scatter and updated-parameter All-Gather each communicate $\Psi$.
 
 - **ZeRO-3**:  
-  Requires **All-Gather/All-Reduce** operations for model parameters, significantly increasing communication volume. Network bandwidth becomes a critical bottleneck, and parameter broadcasting during forward/backward passes further exacerbates communication load.
+  Parameters are gathered on demand during both the forward and backward passes, while gradients are reduced with Reduce-Scatter. The total communication volume is $3\Psi$, at most about 1.5 times that of standard DP. ZeRO-3 does not All-Reduce parameters; its actual performance impact depends on the model, communication schedule, and network bandwidth.
 
 - **CPU Offload** (ZeRO-1/2/3 + CPU):  
   - Offloads optimizer states or parameters to CPU, reducing GPU memory usage.  
@@ -152,7 +153,7 @@ Training large language models requires robust computational resources and effic
 
 - **NVMe Offload** (ZeRO-Infinity):  
   - Further offloads to NVMe based on **ZeRO-3**, overcoming CPU memory limitations to support ultra-large-scale models.  
-  - Performance heavily relies on **NVMe I/O bandwidth** and parallelism. If NVMe speed is sufficiently high, it typically outperforms CPU Offload; however, performance may suffer in scenarios with weak I/O performance or high latency.
+  - NVMe generally has lower bandwidth and higher latency than CPU memory, and data must move through NVMe, CPU memory, and the GPU. It is therefore usually slower than CPU Offload under otherwise similar conditions; its primary advantage is greater capacity. ZeRO-Infinity mitigates this cost through parallel I/O and communication overlap.
 
 ### Hardware and Configuration Impact
 
@@ -161,7 +162,7 @@ Training large language models requires robust computational resources and effic
 
 - **Additional Notes**:  
   - **CPU Offload** utilizes CPU memory and transfers data via PCIe; **NVMe Offload** saves states on NVMe devices.  
-  - NVMe Offload generally outperforms CPU Offload when **NVMe I/O performance is adequate**, but care must be taken to avoid performance bottlenecks caused by insufficient I/O performance.
+  - CPU Offload is generally preferred when CPU memory capacity is sufficient. The larger but slower NVMe tier is used when CPU memory is insufficient; highly parallel NVMe and effective I/O overlap can narrow the performance gap.
 
 - **Reference to Official Documentation**:  
   - It is recommended to consult the [DeepSpeed official documentation](https://www.deepspeed.ai/) for the latest and most accurate configuration parameters and performance tuning advice.

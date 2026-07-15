@@ -1,7 +1,7 @@
 ---
 title: "Parallelism and Memory Optimization Techniques for Training Large Models"
 date: 2025-03-01T12:00:00+08:00
-lastmod: 2026-07-14T12:00:00+08:00
+lastmod: 2026-07-15T12:00:00+08:00
 author: Yue Shui
 categories: ["Technical Blog"]
 tags: [LLM, Pre-training, Distributed Training, Memory Optimization, Data Parallelism, Model Parallelism, Pipeline Parallelism, Tensor Parallelism, Sequence Parallelism, Hybrid Parallelism, Heterogeneous Systems, MoE, ZeRO, LoRA, AI, Deep Learning, AI Infrastructure]
@@ -430,7 +430,7 @@ A typical MoE contains the following components:
 
 ### Noisy Top-k Gating
 
-To achieve sparse activation and ensure balanced expert usage, MoE usually adopts **Noisy Top-k Gating** as the gating mechanism. This method guarantees computational efficiency and avoids uneven expert load through the introduction of noise and top-k selection. The detailed workflow is as follows:
+To achieve sparse activation and improve expert load balancing, MoE usually adopts **Noisy Top-k Gating** as the gating mechanism. Top-k selection reduces computation, while noise encourages exploration across experts; the auxiliary losses described below provide an additional load-balancing signal. The detailed workflow is as follows:
 
 1. **Gating Score Calculation:**
 
@@ -444,9 +444,9 @@ $$
   - $W_g \in \mathbb{R}^{d \times n}$: Trainable weight matrix of the gating network, where $d$ is the input feature dimension and $n$ is the number of experts.
   - $W_{\text{noise}} \in \mathbb{R}^{d \times n}$: Weight matrix used to generate noise.
   - $\epsilon \sim \mathcal{N}(0, 1)$: Standard Gaussian noise, increasing gating randomness.
-  - $\text{softplus}(x) = \log(1 + e^x)$: Smooth activation function to ensure that the noise is non-negative.
+  - $\text{softplus}(x) = \log(1 + e^x)$: Smooth activation function that keeps the scale of the Gaussian noise positive.
 
-The introduction of noise avoids the gating network always selecting fixed experts and enhances the robustness and diversity of the model.
+The noise provides an exploration signal for gating and helps improve load balancing.
 
 2. **Top-k Selection:**
 
@@ -484,7 +484,7 @@ Since only $k$ experts are activated, the amount of calculation is much lower th
 
 ### Auxiliary Loss
 
-To prevent the gating network from being overly biased towards a few experts, MoE introduces Auxiliary Loss ([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)) to encourage all experts to be used evenly. A common method is based on the square of the [Coefficient of Variation (CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation) of expert usage rate:
+To prevent the gating network from being overly biased toward a few experts, MoE introduces auxiliary losses ([Shazeer et al. 2017](https://arxiv.org/abs/1701.06538)). The importance loss uses the squared [Coefficient of Variation (CV)](https://en.wikipedia.org/wiki/Coefficient_of_variation) of the summed gate values across experts:
 
 $$
 \mathcal{L}_{\text{aux}} = w_{\text{aux}} \cdot \text{CV}\left( \sum_{x \in X} G(x) \right)^2
@@ -492,11 +492,11 @@ $$
 
 - **Parameter Description**:
   - $X$: Input samples of a mini-batch.
-  - $\sum_{x \in X} G(x)$: Statistics on the number of times each expert is activated in a mini-batch.
-  - $\text{CV}$: The ratio of standard deviation to mean, measuring the uniformity of expert usage distribution.
+  - $\sum_{x \in X} G(x)$: The sum of gate values assigned to each expert in the mini-batch, called expert importance.
+  - $\text{CV}$: The ratio of standard deviation to mean, measuring how evenly importance is distributed across experts.
   - $w_{\text{aux}}$: Weight of auxiliary loss, which needs to be adjusted manually.
 
-- **Function**: By minimizing $\mathcal{L}_{\text{aux}}$, the model optimizes the balance of expert selection and avoids some experts being overused while others are idle.
+- **Function**: Minimizing $\mathcal{L}_{\text{aux}}$ encourages experts to receive similar total gate weights. The original paper also defines a separate load loss that balances a differentiable estimate of the number of inputs received by each expert.
 
 ### GShard
 
@@ -507,16 +507,16 @@ GShard ([Lepikhin et al. 2020](https://arxiv.org/abs/2006.16668)) mainly shards 
 GShard has made some improvements on the basis of Noisy Top-k Gating to improve the performance and stability of the gating mechanism:
 
 - **Expert Capacity:**
-  To avoid expert overload, GShard introduces expert capacity limits. Each expert network has a capacity limit, indicating the maximum number of tokens it can process. If a token is routed to an expert network that has reached its capacity limit, the token will be marked as "overflowed", and the gating output will be set to a zero vector, indicating that the token will not be routed to any expert network.
+  To avoid expert overload, GShard limits how many tokens each expert can process. Each token is considered for dispatch to both candidate experts. When both candidates have exhausted their capacity, the token is marked as "overflowed"; its MoE gate output becomes zero and its representation continues through the residual connection.
 
 - **Local Group Dispatching:**
-  To improve gating efficiency, GShard groups tokens and enforces expert capacity limits at the group level. For example, divide the tokens in a mini-batch into multiple local groups, each local group containing a certain number of tokens. The gating network selects the top-k expert networks for each local group and ensures that the number of tokens processed by each expert network in a local group does not exceed its capacity limit.
+  GShard evenly partitions the mini-batch tokens into local groups that are processed independently. Each token still performs top-2 selection; expert capacity is divided among the groups and enforced within each group to enable parallel dispatch.
 
 - **Auxiliary Loss:**
-  GShard also uses an auxiliary loss function to balance expert load. Different from the auxiliary loss of the original MoE model, GShard's auxiliary loss aims to minimize the mean square error of the proportion of data routed to each expert network, which more directly measures the degree of expert load balance.
+  GShard is motivated by minimizing the mean square of the fraction of tokens routed to each expert. Because the token counts come from a non-differentiable top-2 operation, the actual auxiliary loss uses the product of each expert's routed-token fraction and its mean gate value as a differentiable approximation.
 
 - **Random Routing:**
-  To increase the randomness of routing, GShard introduces a random routing mechanism when selecting the top-k expert networks. In addition to selecting the best top-k expert networks, GShard also randomly selects suboptimal expert networks with a certain probability to increase the diversity of expert networks and improve the generalization ability of the model.
+  Subject to capacity, GShard dispatches the token to the best expert deterministically and uses a probability proportional to the second-best expert's gate weight $g_2$ to decide whether to dispatch the token there as well.
 
 Below is the core algorithm flow of GShard:
 
@@ -552,7 +552,7 @@ $$
   - $T$: Total number of tokens in batch $B$.
   - $\alpha$: Weight hyperparameter of auxiliary loss, usually set to $10^{-2}$.
 
-By minimizing $\text{loss}$, the model makes the actual routing ratio $f_i$ consistent with the predicted probability $P_i$, thereby indirectly promoting load balancing between experts and avoiding some experts being idle.
+Minimizing $\text{loss}$ encourages both the dispatched-token fractions $f_i$ and the mean router probabilities $P_i$ to approach the uniform value $1/N$ across experts, thereby promoting load balance.
 
 {{< figure
     src="switch_transformer.png"
@@ -577,7 +577,7 @@ By minimizing $\text{loss}$, the model makes the actual routing ratio $f_i$ cons
 To improve the training stability of Switch Transformer, the paper proposes the following optimization strategies:
 
 - **Selective Precision**
-  Using FP32 precision inside the routing function can improve training stability and avoid additional overhead caused by FP32 tensor communication. Specifically, the calculation process of Switch Router uses FP32 throughout, and the final result is converted to FP16 to balance efficiency and precision.
+  Using FP32 inside the routing function improves training stability without communicating FP32 tensors. Specifically, local Switch Router computations use FP32, and the resulting dispatch and combine tensors are cast back to BF16 for efficiency.
 
 - **Smaller Initialization**
   It is recommended to adjust the weight initialization scale parameter $s$ of Transformer from 1 to 0.1. A smaller initialization scale helps to alleviate the risk of gradient explosion in the early stage of training, thereby improving overall training stability. The specific implementation is to sample from a truncated normal distribution with a mean of 0 and a standard deviation of $\sqrt{s/n}$ (where $n$ is the number of input units).
@@ -651,9 +651,9 @@ $$
 \end{aligned}
 $$
 
-In the optimization problem considered, a matrix $A$ is defined, and the element in the $i$-th row and $j$-th column indicates whether the $i$-th expert has selected the $j$-th token (value 0 or 1). Since this optimization problem is complex to solve, the paper uses [Dykstra's algorithm](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full) (to obtain an approximate solution through multiple iterations) to solve it.
+The optimization variable $A \in \mathbb{R}^{e \times n}$ satisfies $0 \leq A[i,j] \leq 1$ and represents a relaxed assignment of token $j$ to expert $i$. Entropy regularization yields a near-integer solution while enabling iterative solution with [Dykstra's algorithm](https://projecteuclid.org/journals/annals-of-probability/volume-13/issue-3/An-Iterative-Procedure-for-Obtaining-I-Projections-onto-the-Intersection/10.1214/aop/1176992918.full); top-k is then applied to $A$ to obtain the actual routing indices.
 
-The parameter $b$ is usually determined by the total number of tokens $n$ in the batch and the capacity factor, where the capacity factor represents the average number of experts used by each token. Most experiments use a higher capacity factor. The experimental results show that even when the capacity is reduced, EC (Expert Choice) still performs better than traditional top-1 token choice routing, although capped expert choice slightly reduces fine-tuning performance.
+Each expert selects $k=nc/e$ tokens, where $n$ is the number of tokens in the batch, $e$ is the number of experts, and the capacity factor $c$ is the average number of experts used per token. The separate parameter $b$ caps how many experts may select one token. Most experiments use $c=2$; EC still outperforms top-1 token-choice routing at lower capacity factors, while capped expert choice slightly reduces fine-tuning performance.
 
 The advantages of EC are mainly reflected in the following two aspects:
 - **Perfect Load Balancing:** Each expert processes a fixed number of $k$ tokens, thus avoiding the problem of some experts being overloaded while others are idle, achieving ideal load balancing.
@@ -770,17 +770,17 @@ ZeRO is divided into three stages, each stage further reduces memory redundancy 
 #### ZeRO-1 (Optimizer State Sharding)
 - **Principle:**
   - Shard optimizer states (such as Adam's momentum and second-order moments) along the parameter dimension into $P$ shards ($P$ is the number of GPUs), and each GPU only stores the states corresponding to the model parameters it is responsible for.
-  - Local Update: Each GPU only updates its locally stored state and parameter shards during the parameter update phase, without additional cross-GPU communication.
+  - Local Update: Each GPU only updates its assigned parameter shard during the parameter update phase. After the update, an All-Gather exchanges these shards so that every GPU obtains the complete and consistent updated parameters.
 
 #### ZeRO-2 (Gradient Sharding)
 - **Principle:**
   - On the basis of optimizer state sharding, gradients are also sharded along the parameter dimension, and each GPU only stores the corresponding gradient shard.
-  - Each GPU calculates local gradients and uses efficient Reduce-Scatter operations to aggregate gradients and then update local parameter shards.
+  - Each GPU computes local gradients. A Reduce-Scatter delivers each reduced gradient shard to its assigned GPU, which updates the local parameter shard; an All-Gather then synchronizes the updated parameters.
 
 #### ZeRO-3 (Parameter Sharding)
 - **Principle:**
   - On the basis of ZeRO-1 and ZeRO-2, model parameters (usually 16-bit data) are also sharded, and each GPU only stores the parameter shards corresponding to it.
-  - Parameter Collection on Demand: During forward or backward propagation, if a GPU needs complete model parameters, it collects the missing shards from other GPUs. This process is only performed when necessary to reduce communication overhead.
+  - Parameter Collection on Demand: Before computing each layer in the forward and backward passes, an All-Gather temporarily reconstructs that layer's parameters, which can be released after use. Gradients are reduced and retained as shards through Reduce-Scatter.
 
 The following figure shows the comparison of model state memory consumption per device in different stages:
 
@@ -795,27 +795,27 @@ The following figure shows the comparison of model state memory consumption per 
 
 To better understand DeepSpeed's ZeRO strategy, the following compares each stage and Offload scheme:
 
-| **ZeRO Stage** | **Description** | **Memory Footprint** | **Training Speed** |
+| **ZeRO Stage** | **Description** | **Memory Footprint** | **Communication and Performance** |
 |----------------|----------|--------------|--------------|
-| **ZeRO-0**     | Pure data parallelism, no sharding, all states are fully replicated on each GPU. | Highest | **Fastest** |
-| **ZeRO-1**     | Optimizer states are sharded only, gradients and parameters are still replicated. | Higher | Slightly slower than ZeRO-0 |
-| **ZeRO-2**     | Optimizer states and gradients are sharded. | Medium | Slower than ZeRO-1 |
-| **ZeRO-3**     | Optimizer states, gradients, and model parameters are sharded. | Lowest | Significantly slower than ZeRO-2, affected by model size and network bandwidth |
+| **ZeRO-0**     | Pure data parallelism, no sharding, all states are fully replicated on each GPU. | Highest | Standard DP baseline |
+| **ZeRO-1**     | Optimizer states are sharded only; gradients and parameters remain replicated. | Higher | Same communication volume as standard DP; performance depends on communication scheduling and implementation |
+| **ZeRO-2**     | Optimizer states and gradients are sharded. | Medium | Same communication volume as standard DP, using gradient Reduce-Scatter and parameter All-Gather |
+| **ZeRO-3**     | Optimizer states, gradients, and model parameters are sharded. | Lowest | At most about 1.5 times the communication volume of standard DP; more sensitive to network bandwidth |
 
 | **Offload Type**                | **Description** | **Memory Footprint** | **Training Speed** |
 |----------------------------------|----------|--------------|--------------|
 | **ZeRO-1 + CPU Offload**         | On the basis of ZeRO-1, optimizer states are offloaded to CPU memory, reducing GPU memory footprint, but relying on PCIe bandwidth and occupying CPU memory. | Medium-Low | Slower than ZeRO-1 |
 | **ZeRO-2 + CPU Offload**         | On the basis of ZeRO-2, optimizer states are offloaded to CPU memory, further reducing GPU memory footprint for large models, but increasing CPU-GPU data transfer. | Low | Slower than ZeRO-2 |
 | **ZeRO-3 + CPU Offload**         | On the basis of ZeRO-3, optimizer states and model parameters are offloaded to CPU, GPU memory footprint is the lowest, but CPU-GPU communication overhead is extremely large. | **Extremely Low** | **Very Slow** |
-| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, states are offloaded to NVMe devices, breaking through CPU memory limits, suitable for ultra-large models; performance is highly dependent on NVMe parallel read and write speed. | **Extremely Low**; NVMe support required | Slower than ZeRO-3, but usually better than CPU Offload scheme |
+| **ZeRO-Infinity (NVMe Offload)** | Based on ZeRO-3, states are offloaded to NVMe devices, breaking through CPU memory limits, suitable for ultra-large models; performance is highly dependent on NVMe parallel read and write speed. | **Extremely Low**; NVMe support required | Usually slower than CPU Offload under otherwise similar conditions, but provides access to much larger NVMe capacity |
 
 ### Communication Volume and Performance Impact
 
 - **ZeRO-0/1/2:**
-  Mainly rely on All-Reduce for gradient synchronization, and the communication volume is relatively low.
+  Let $\Psi$ denote the number of model parameters. Under the per-data-parallel-process data-movement model used in the original paper, a standard DP gradient All-Reduce communicates $2\Psi$ per step, and ZeRO-1/2 have the same total communication volume of $2\Psi$. For ZeRO-2, the gradient Reduce-Scatter and updated-parameter All-Gather each communicate $\Psi$.
 
 - **ZeRO-3:**
-  All-Gather/All-Reduce operations are required for model parameters, and the communication volume increases significantly. Network bandwidth becomes a key bottleneck.
+  Parameters are gathered on demand during both the forward and backward passes, while gradients are reduced with Reduce-Scatter. The total communication volume is $3\Psi$, at most about 1.5 times that of standard DP. Parameter communication uses All-Gather and gradient communication uses Reduce-Scatter; the actual performance impact depends on the model, communication schedule, and network bandwidth.
 
 - **Offload Strategy (CPU/NVMe):**
   Data transmission is mainly between CPU ↔ GPU or NVMe ↔ GPU. The transmission bandwidth is much lower than the communication between GPUs, which may significantly affect the training speed, especially in ZeRO-3 scenarios.
@@ -969,12 +969,12 @@ Modern GPUs have higher throughput and lower memory footprint in low-precision c
 Mixed-precision training mainly relies on the following three key technologies:
 
 1. **Full-Precision Master Copy of Weights**
-   To prevent gradients from being truncated to zero due to being too small in magnitude under FP16, a master copy of FP32 weights is maintained during training. The specific process is:
+   Training maintains an FP32 master copy of the weights. Its greater mantissa precision preserves small changes when parameter updates are added to the weights. The specific process is:
    - **Initialization:** Use FP32 weights as the master copy of the model;
    - **Forward/Backward Propagation:** Before each iteration starts, convert FP32 weights to FP16 for forward propagation and backward propagation to calculate FP16 gradients;
    - **Parameter Update:** Before updating parameters, convert FP16 gradients to FP32 and use them to update the FP32 master copy.
 
-   This design not only utilizes the efficiency of low-precision computing but also ensures the accuracy of parameter updates.
+   This design combines efficient low-precision forward and backward computation with the numerical precision needed for parameter updates.
 
 2. **Loss Scaling**
 To avoid gradient underflow due to the limited representation range of low precision, the loss value is usually amplified before backpropagation. The specific process is:
@@ -1011,7 +1011,7 @@ Compression technology can be divided into two categories:
    Methods such as Huffman coding or Lempel-Ziv algorithm are used to ensure that the decompressed data is completely consistent with the original data. However, due to the low compression rate, its memory saving effect is limited.
 
 2. **Lossy Compression:**
-   Algorithms such as JPEG or MPEG are used to obtain higher compression rates on the premise of allowing certain data loss. This method can significantly reduce memory footprint, but may have a certain impact on model accuracy and convergence.
+   Common methods for training tensors include low-bit quantization or encoding and gradient sparsification (such as top-$k$). Lossy gradient compression can also use error feedback to carry omitted residuals into later iterations; activations can use methods such as Gist's DPR described below.
 
 Gist ([Jain et al. 2018](https://www.microsoft.com/en-us/research/uploads/prod/2018/04/fiddle-gist-isca18.pdf)) is a memory optimization technology for activation value compression. Its core lies in using data encoding strategies to compress intermediate results, mainly including two encoding schemes:
 

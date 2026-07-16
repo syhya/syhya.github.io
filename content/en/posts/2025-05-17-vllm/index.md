@@ -1,7 +1,7 @@
 ---
 title: "vLLM: High-Throughput, Memory-Efficient LLM Serving"
 date: 2025-05-17T10:00:00+08:00
-lastmod: 2025-05-17T10:00:00+08:00
+lastmod: 2026-07-16T10:00:00+08:00
 author: "Yue Shui"
 categories: ["Technical Blog"]
 tags: ["vLLM", "PagedAttention", "LLM Serving", "Inference", "KV Cache", "Memory Optimization", "LLM", "AI Infrastructure", "Deep Learning"]
@@ -47,10 +47,10 @@ $$
 
 ### Inter-Token Latency (ITL)
 
-**Inter-Token Latency (ITL)** represents the average time interval between the generation of two consecutive tokens after the first token has been generated. It reflects the speed at which each subsequent token is generated, calculated as:
+**Inter-Token Latency (ITL)** represents the average time interval between consecutive output tokens after the first token has been generated. For a single request with at least two output tokens, it is calculated as:
 
 $$
-\text{ITL} = \frac{\text{End-to-End Latency} - \text{TTFT}}{\text{Batch Size} \times (\text{Number of Output Tokens} - 1)}
+\text{ITL} = \frac{\text{End-to-End Latency} - \text{TTFT}}{\text{Number of Output Tokens} - 1}
 $$
 
 These metrics reflect the inference engine's response speed, processing efficiency, and concurrency capabilities, serving as important benchmarks for evaluating and optimizing LLM inference performance.

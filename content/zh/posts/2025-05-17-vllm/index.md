@@ -1,7 +1,7 @@
 ---
 title: "vLLM：高吞吐、内存高效的 LLM 服务引擎"
 date: 2025-05-17T10:00:00+08:00
-lastmod: 2025-05-17T10:00:00+08:00
+lastmod: 2026-07-16T10:00:00+08:00
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["PagedAttention", "LLM Serving", "Inference", "KV Cache", "Memory Optimization", "LLM", "AI Infrastructure"]
@@ -48,10 +48,10 @@ $$
 
 ### Token 间延迟
 
-**Token 间延迟（Inter Token Latency, ITL）** 表示生成连续 token 时每两个 token 间的平均时间间隔。它体现了模型在生成首个 token 后，每个后续 token 的生成速度，计算公式为：
+**Token 间延迟（Inter Token Latency, ITL）** 表示生成首个 token 后，相邻输出 token 之间的平均时间间隔。对于至少生成两个输出 token 的单个请求，计算公式为：
 
 $$
-\text{ITL} = \frac{\text{End-to-End Latency} - \text{TTFT}}{\text{Batch Size} \times (\text{Number of Output Tokens} - 1)}
+\text{ITL} = \frac{\text{End-to-End Latency} - \text{TTFT}}{\text{Number of Output Tokens} - 1}
 $$
 
 这些指标反映了推理引擎的响应速度、处理效率和并发能力，是评估和优化 LLM 推理性能的重要依据。

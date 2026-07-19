@@ -1,7 +1,7 @@
 ---
 title: "DeepSeek-V2 vs V3"
 date: 2025-04-18T12:00:00+08:00
-lastmod: 2026-07-15T12:00:00+08:00
+lastmod: 2026-07-19T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "DeepSeek-V2", "DeepSeek-V3", "MoE", "Transformer", "MLA", "DeepSeekMoE", "MTP", "FP8 Training", "GRPO", "SFT", "RL", "KV Cache"]
 categories: ["Technical Blog"]
@@ -17,7 +17,7 @@ DeepSeek AI successively released **DeepSeek-V2** ([DeepSeek-AI, 2024](https://a
 
 The core innovations of these two models lie in the adoption of **Multi-head Latent Attention (MLA)** and the **DeepSeekMoE** architecture ([Dai et al., 2024](https://arxiv.org/abs/2401.06066)). MLA drastically reduces GPU memory usage during inference by compressing the Key-Value (KV) cache into low-dimensional latent vectors, improving efficiency. DeepSeekMoE achieves stronger expert specialization capabilities and more economical training costs through fine-grained expert segmentation and shared expert isolation. Building upon V2, DeepSeek-V3 further introduces an **Auxiliary-Loss-Free Load Balancing** strategy ([Wang et al., 2024](https://arxiv.org/abs/2408.15664)) and the **Multi-Token Prediction (MTP)** ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737)) training objective, further enhancing model performance and training efficiency.
 
-DeepSeek-V2 was pre-trained on 8.1T tokens, while DeepSeek-V3 was trained on a larger scale of 14.8T tokens. Both underwent Supervised Fine-Tuning (SFT) and Reinforcement Learning (RL) stages to fully unlock their potential. Evaluation results show that both DeepSeek-V2 and V3 achieved top-tier performance among open-source models across numerous benchmarks. DeepSeek-V3, in particular, has become one of the strongest open-source base models currently available, with performance comparable to top closed-source models.
+DeepSeek-V2 was pre-trained on 8.1T tokens, while DeepSeek-V3 was trained on a larger scale of 14.8T tokens. Both underwent Supervised Fine-Tuning (SFT) and Reinforcement Learning (RL) stages to fully unlock their potential. Evaluation results show that both DeepSeek-V2 and V3 achieved top-tier performance among open-source models across numerous benchmarks. In the December 2024 evaluations reported in the technical report, DeepSeek-V3 was among the strongest open-weight base models, with performance comparable to leading closed-source models at the time.
 
 {{< figure
     src="deepseek_v2_benchmark.png"
@@ -226,41 +226,44 @@ The core of attention score calculation is the dot product of query and key \(\m
 \[
 (\mathbf{q}_{t,i}^C)^T \mathbf{k}_{j,i}^C
 \]
-Substitute \(\mathbf{k}_{j,i}^C = W^{UK} \mathbf{c}_j^{KV}\):
+Let \(W_i^{UK} \in \mathbb{R}^{d_h \times d_c}\) and \(W_i^{UQ} \in \mathbb{R}^{d_h \times d_c'}\) denote the row blocks of \(W^{UK}\) and \(W^{UQ}\) for the \(i\)-th head, respectively. Then \(\mathbf{k}_{j,i}^C = W_i^{UK} \mathbf{c}_j^{KV}\), so:
 \[
-(\mathbf{q}_{t,i}^C)^T (W^{UK} \mathbf{c}_j^{KV})
+(\mathbf{q}_{t,i}^C)^T (W_i^{UK} \mathbf{c}_j^{KV})
 \]
 Using matrix multiplication associativity \((AB)C = A(BC)\) and transpose property \((AB)^T = B^T A^T\), the expression can be rewritten as:
 \[
-(\mathbf{q}_{t,i}^C)^T (W^{UK} \mathbf{c}_j^{KV}) = ((W^{UK})^T \mathbf{q}_{t,i}^C)^T \mathbf{c}_j^{KV}
+(\mathbf{q}_{t,i}^C)^T (W_i^{UK} \mathbf{c}_j^{KV}) = ((W_i^{UK})^T \mathbf{q}_{t,i}^C)^T \mathbf{c}_j^{KV}
 \]
-The significance of this transformation is: we no longer need to apply \(W^{UK}\) to the cached \(\mathbf{c}_j^{KV}\) to get \(\mathbf{k}_{j,i}^C\). Instead, we can first compute an "effective query" \(\tilde{\mathbf{q}}_{t,i}^C = (W^{UK})^T \mathbf{q}_{t,i}^C\), and then directly compute the dot product of this effective query with the cached latent vector \(\mathbf{c}_j^{KV}\).
+This form first computes the head-specific effective query \(\tilde{\mathbf{q}}_{t,i}^C = (W_i^{UK})^T \mathbf{q}_{t,i}^C\), and then takes its dot product with the cached latent vector \(\mathbf{c}_j^{KV}\).
 
-The original query \(\mathbf{q}_{t,i}^C\) is computed from \(\mathbf{h}_t\) via \(W^{UQ}\) and \(W^{DQ}\) (\(\mathbf{q}_{t,i}^C = (W^{UQ} W^{DQ} \mathbf{h}_t)_i\)). Thus, the entire computation from \(\mathbf{h}_t\) to the effective query \(\tilde{\mathbf{q}}_{t,i}^C\) can be viewed as a new, effective query projection operation that incorporates \(W^{UK}\). In practice, this means after computing \(\mathbf{q}_{t,i}^C\), one can left-multiply by \((W^{UK})^T\), or more efficiently, merge \((W^{UK})^T\) into the original query generation matrix \(W^Q\) (or \(W^{UQ}W^{DQ}\)) to form a new query projection matrix \(\tilde{W}^Q = (W^{UK})^T W^{UQ} W^{DQ}\).
+The original query is \(\mathbf{q}_{t,i}^C = W_i^{UQ}W^{DQ}\mathbf{h}_t\). Thus, the computation from \(\mathbf{h}_t\) to \(\tilde{\mathbf{q}}_{t,i}^C\) uses the head-specific effective projection \(\tilde{W}_i^Q = (W_i^{UK})^T W_i^{UQ} W^{DQ} \in \mathbb{R}^{d_c \times d}\).
 
-Crucially, the computation involving \(W^{UK}\) is moved to the query side and performed once before calculating attention scores, eliminating the need to recover \(\mathbf{k}_{j,i}^C\) from the cached \(\mathbf{c}_j^{KV}\) using \(W^{UK}\) for every query.
+The computation involving \(W_i^{UK}\) is therefore placed on the query side, while attention scores are computed directly against the cached \(\mathbf{c}_j^{KV}\).
 
 **2. Absorbing \(W^{UV}\) (Optimizing Weighted Sum):**
 
-The output of an attention head \(\mathbf{o}_{t,i}\) is the weighted sum of attention weights (denoted \(w_{ij}\)) and values \(\mathbf{v}_{j,i}^C\):
+Let \(W_i^{UV} \in \mathbb{R}^{d_h \times d_c}\) denote the row block of \(W^{UV}\) for the \(i\)-th head and \(W_i^O \in \mathbb{R}^{d \times d_h}\) the corresponding column block of \(W^O\). Following the attention formula in the paper, define the scalar attention weight from query token \(t\) to token \(j\) in head \(i\) as:
 \[
-\mathbf{o}_{t, i} = \sum_{j=1}^{t} w_{ij} \cdot \mathbf{v}_{j, i}^{C}
+a_{t,j}^{(i)}
+= \operatorname{Softmax}_{j}\left(
+\frac{\mathbf{q}_{t,i}^{T}\mathbf{k}_{j,i}}{\sqrt{d_h+d_h^R}}
+\right).
 \]
-Substitute \(\mathbf{v}_{j,i}^C = (W^{UV} \mathbf{c}_j^{KV})_i\) (where \((\cdot)_i\) denotes the part belonging to the \(i\)-th head):
+Each head then forms its own weighted sum in the latent space:
 \[
-\mathbf{o}_{t, i} = \sum_{j=1}^{t} w_{ij} \cdot (W^{UV} \mathbf{c}_j^{KV})_i
+\begin{aligned}
+\tilde{\mathbf{o}}_{t,i} &= \sum_{j=1}^{t} a_{t,j}^{(i)}\mathbf{c}_j^{KV}, \\
+\mathbf{o}_{t,i} &= \sum_{j=1}^{t} a_{t,j}^{(i)}W_i^{UV}\mathbf{c}_j^{KV}
+= W_i^{UV}\tilde{\mathbf{o}}_{t,i}.
+\end{aligned}
 \]
-The final attention layer output \(\mathbf{u}_t\) is obtained by concatenating the outputs of all heads \(\mathbf{o}_{t,i}\) and projecting through the output matrix \(W^O\):
+Partitioning the output projection by head gives:
 \[
-\mathbf{u}_{t} = W^{O}\left[\mathbf{o}_{t, 1} ; \ldots ; \mathbf{o}_{t, n_{h}}\right] = W^{O} \begin{bmatrix} \sum_{j} w_{1j} (W^{UV} \mathbf{c}_j^{KV})_1 \\ \vdots \\ \sum_{j} w_{n_h j} (W^{UV} \mathbf{c}_j^{KV})_{n_h} \end{bmatrix}
+\mathbf{u}_t
+= \sum_{i=1}^{n_h} W_i^O\mathbf{o}_{t,i}
+= \sum_{i=1}^{n_h}\left(W_i^O W_i^{UV}\right)\tilde{\mathbf{o}}_{t,i}.
 \]
-Due to the linearity of matrix multiplication (\(A(B+C) = AB + AC\) and \(A(cB) = c(AB)\)), \(W^{UV}\) can be "factored out" of the summation (this is for intuitive understanding; the actual operation is at the matrix level):
-\[
-\mathbf{u}_{t} \approx W^{O} W^{UV} \left( \sum_{j=1}^{t} \begin{bmatrix} w_{1j} (\mathbf{c}_j^{KV})_1 \\ \vdots \\ w_{n_h j} (\mathbf{c}_j^{KV})_{n_h} \end{bmatrix} \right)
-\]
-(Note: \((\mathbf{c}_j^{KV})_i\) here is illustrative; in practice, operations are performed directly on the complete \(\mathbf{c}_j^{KV}\), but the principle is the same: first perform the weighted sum on \(\mathbf{c}_j^{KV}\), then apply \(W^{UV}\) and \(W^O\)).
-
-Let the effective output matrix be \(\tilde{W}^O = W^O W^{UV}\). This means we can first compute the weighted sum of attention weights and the latent vectors \(\mathbf{c}_j^{KV}\) (yielding an intermediate result \(\tilde{\mathbf{o}}_t = \sum_j w_{ij} \mathbf{c}_j^{KV}\) of dimension \(d_c\)), and then directly use this merged effective output matrix \(\tilde{W}^O\) for the final projection to get \(\mathbf{u}_t\). Similarly, the computation involving \(W^{UV}\) is merged into the final output projection step, eliminating the need to recover \(\mathbf{v}_{j,i}^C\) from \(\mathbf{c}_j^{KV}\) during the weighted sum calculation.
+With \(\tilde{W}_i^O = W_i^O W_i^{UV}\) precomputed for each head, the inference path applies \(\tilde{W}_i^O\) directly to the head-specific latent weighted sum, so the full value vectors \(\mathbf{v}_{j,i}^C\) do not need to be explicitly recovered.
 
 **Summary:** Through matrix absorption, MLA avoids repeatedly computing the high-dimensional keys \(\mathbf{k}_{j,i}^C\) and values \(\mathbf{v}_{j,i}^C\) from the cached low-dimensional latent vectors \(\mathbf{c}_j^{KV}\) during inference, significantly improving computational efficiency. Only \(\mathbf{c}_t^{KV}\) and \(\mathbf{k}_t^R\) are actually cached.
 
@@ -837,7 +840,7 @@ To accelerate training and reduce GPU memory usage, DeepSeek-V3 employs an **FP8
     *   **Weights:** Scaled in groups of \(128 \times 128\) blocks.
     This method allows scaling factors to better adapt to the range of local data, reducing quantization error.
 2.  **Improved Accumulation Precision:** H800 Tensor Cores have limited accumulation precision (approx. 14 bits) for FP8 GEMM. To solve this, employ the **Promotion to CUDA Cores** strategy ([Thakkar et al., 2023](https://github.com/NVIDIA/cutlass)): Tensor Cores compute partial sums (e.g., every \(N_C=128\) elements), then transfer the results to CUDA Core FP32 registers for full-precision accumulation. Scaling factors from fine-grained quantization can also be efficiently applied on CUDA Cores. With concurrent execution of WGMMA operations, this method improves precision with minimal impact on computational efficiency.
-3.  **E4M3 Format:** V3 uniformly uses the **E4M3 format** (4 exponent bits, 3 mantissa bits) for all tensors, rather than mixing with **E5M2** ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313); [Sun et al., 2019b](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html)). The fine-grained quantization strategy effectively mitigates the smaller dynamic range issue of E4M3.
+3.  **Mantissa over Exponents:** Conventional hybrid FP8 schemes use **E4M3** (4 exponent bits, 3 mantissa bits) for Fprop and **E5M2** (5 exponent bits, 2 mantissa bits) for Dgrad and Wgrad ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313); [Sun et al., 2019b](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html)). In the FP8 GEMM path, V3 uses E4M3 tensor operands for Fprop, Dgrad, and Wgrad to favor mantissa precision. Tile-wise and block-wise scaling operate on smaller element groups, effectively sharing exponent bits within each group and mitigating the limited dynamic range. Embedding, Output Head, MoE Gating, Normalization, and Attention retain BF16/FP32 precision, while selected cached activations use the custom E5M6 format described below.
 4.  **Online Quantization:** Compute scaling factors based on the **maximum absolute value of each tile/block in real-time, rather than relying on historical values** ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313)), ensuring quantization accuracy.
 
 {{< figure
@@ -944,7 +947,7 @@ Based on the implementation of **All-to-all communication** and the **FP8 traini
 
 ### Data Construction
 
-Compared to DeepSeek-V2 (based on a 67B model, using a 100K vocabulary Byte-level BPE Tokenizer, 8.1T tokens), DeepSeek-V3 achieved larger scale and higher quality data construction during the pre-training phase through the following strategies:
+Compared to DeepSeek-V2 (236B total parameters with 21B activated per token, using a 100K vocabulary Byte-level BPE tokenizer and 8.1T training tokens), DeepSeek-V3 achieved larger scale and higher quality data construction during the pre-training phase through the following strategies:
 
 1.  **Corpus Expansion and Refinement**
     *   **Domain Focus:** Significantly increased the proportion of text related to mathematics and programming, strengthening the model's understanding and generation capabilities in technical domains.
@@ -1139,7 +1142,7 @@ Comparison of DeepSeek-V3 Chat with representative open-source and closed-source
 
 **Summary:**
 *   DeepSeek-V2 Chat (RL) was already a top-tier open-source chat model at its release, particularly excelling on AlpacaEval and the Chinese AlignBench.
-*   DeepSeek-V3 Chat further boosted performance, becoming the current strongest open-source chat model. It shows extremely strong performance in code, math, Chinese knowledge, and open-ended evaluations like Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939)) and AlpacaEval, reaching levels comparable to GPT-4o and Claude-3.5-Sonnet.
+*   In the December 2024 evaluations reported in the technical report, DeepSeek-V3 Chat was among the strongest open-weight chat models. It showed extremely strong performance in code, math, Chinese knowledge, and open-ended evaluations like Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939)) and AlpacaEval, reaching levels comparable to the evaluated versions of GPT-4o and Claude-3.5-Sonnet.
 *   V3's R1 distillation significantly improved reasoning capabilities but might also increase response length, requiring a trade-off between accuracy and efficiency.
 *   V3's self-reward capability (strong performance on RewardBench ([Lambert et al., 2024](https://arxiv.org/abs/2403.13787))) provides an effective pathway for continuous alignment.
 
@@ -1156,7 +1159,7 @@ Comparison of DeepSeek-V3 Chat with representative open-source and closed-source
 
 ### Conclusion
 
-DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE language models. Through innovations like the MLA and DeepSeekMoE architectures, along with V3's introduction of auxiliary-loss-free load balancing, MTP, FP8 training, and R1 distillation, they have achieved breakthroughs in performance, training cost, and inference efficiency. DeepSeek-V3 has become one of the strongest open-source models currently available, with performance competitive with top closed-source models.
+DeepSeek-V2 and DeepSeek-V3 are two powerful, economical, and efficient MoE language models. Through innovations like the MLA and DeepSeekMoE architectures, along with V3's introduction of auxiliary-loss-free load balancing, MTP, FP8 training, and R1 distillation, they have achieved breakthroughs in performance, training cost, and inference efficiency. In the December 2024 evaluations reported in the technical report, DeepSeek-V3 was among the strongest open-weight models, with performance competitive with leading closed-source models evaluated at the time.
 
 ### Limitations
 

@@ -1,7 +1,7 @@
 ---
 title: "DeepSeek-V2 vs V3"
 date: 2025-04-18T12:00:00+08:00
-lastmod: 2026-07-15T12:00:00+08:00
+lastmod: 2026-07-19T12:00:00+08:00
 author: "Yue Shui"
 tags: ["Deep Learning", "AI", "LLM", "DeepSeek-V2", "DeepSeek-V3", "MoE", "Transformer", "MLA", "DeepSeekMoE", "MTP", "FP8 Training", "GRPO", "SFT", "RL", "KV Cache"]
 categories: ["技术博客"]
@@ -17,7 +17,7 @@ DeepSeek AI 先后发布了 **DeepSeek-V2** ([DeepSeek-AI, 2024](https://arxiv.o
 
 这两个模型的核心创新在于采用了 **多头隐注意力 (Multi-head Latent Attention, MLA)** 和 **DeepSeekMoE** 架构 ([Dai et al., 2024](https://arxiv.org/abs/2401.06066))。MLA 通过将键值（KV）缓存压缩到低维隐向量中，大幅降低了推理时的显存占用，提高了效率。DeepSeekMoE 则通过细粒度专家切分和共享专家隔离，实现了更强的专家特化能力和更经济的训练成本。DeepSeek-V3 在 V2 的基础上，进一步引入了**无辅助损失的负载均衡策略 (Auxiliary-Loss-Free Load Balancing)** ([Wang et al., 2024](https://arxiv.org/abs/2408.15664)) 和**多 token 预测 (Multi-Token Prediction, MTP)** ([Gloeckle et al., 2024](https://arxiv.org/abs/2404.19737))训练目标 ，进一步提升了模型性能和训练效率。
 
-DeepSeek-V2 在 8.1T tokens 上进行预训练，而 DeepSeek-V3 则在更大规模的 14.8T tokens 上训练。两者都经过了监督微调（Supervised Fine-Tuning, SFT）和强化学习（Reinforcement Learning, RL）阶段以充分释放潜力。评估结果显示，DeepSeek-V2 和 V3 在众多基准测试中均达到了开源模型的顶尖水平，DeepSeek-V3 更是成为了目前最强的开源基础模型之一，性能可与顶尖闭源模型媲美。
+DeepSeek-V2 在 8.1T tokens 上进行预训练，而 DeepSeek-V3 则在更大规模的 14.8T tokens 上训练。两者都经过了监督微调（Supervised Fine-Tuning, SFT）和强化学习（Reinforcement Learning, RL）阶段以充分释放潜力。评估结果显示，DeepSeek-V2 和 V3 在众多基准测试中均达到了开源模型的顶尖水平。在技术报告公布的 2024 年 12 月评测中，DeepSeek-V3 是表现最强的开放权重基础模型之一，性能可与当时领先的闭源模型媲美。
 
 {{< figure
     src="deepseek_v2_benchmark.png"
@@ -229,41 +229,44 @@ MLA 的一个关键优势在于推理效率的提升，这部分得益于矩阵�
 \[
 (\mathbf{q}_{t,i}^C)^T \mathbf{k}_{j,i}^C
 \]
-将 \(\mathbf{k}_{j,i}^C = W^{UK} \mathbf{c}_j^{KV}\) 代入：
+令 \(W_i^{UK} \in \mathbb{R}^{d_h \times d_c}\) 和 \(W_i^{UQ} \in \mathbb{R}^{d_h \times d_c'}\) 分别表示 \(W^{UK}\) 和 \(W^{UQ}\) 中属于第 \(i\) 个头的行块。于是 \(\mathbf{k}_{j,i}^C = W_i^{UK} \mathbf{c}_j^{KV}\)，从而有：
 \[
-(\mathbf{q}_{t,i}^C)^T (W^{UK} \mathbf{c}_j^{KV})
+(\mathbf{q}_{t,i}^C)^T (W_i^{UK} \mathbf{c}_j^{KV})
 \]
 根据矩阵乘法结合律 \((AB)C = A(BC)\) 和转置性质 \((AB)^T = B^T A^T\)，可以将上式改写为：
 \[
-(\mathbf{q}_{t,i}^C)^T (W^{UK} \mathbf{c}_j^{KV}) = ((W^{UK})^T \mathbf{q}_{t,i}^C)^T \mathbf{c}_j^{KV}
+(\mathbf{q}_{t,i}^C)^T (W_i^{UK} \mathbf{c}_j^{KV}) = ((W_i^{UK})^T \mathbf{q}_{t,i}^C)^T \mathbf{c}_j^{KV}
 \]
-这个变换的意义在于：不再需要用 \(W^{UK}\) 作用于缓存的 \(\mathbf{c}_j^{KV}\) 来得到 \(\mathbf{k}_{j,i}^C\)。相反，可以先计算一个“有效查询” \(\tilde{\mathbf{q}}_{t,i}^C = (W^{UK})^T \mathbf{q}_{t,i}^C\)，然后直接用这个有效查询与缓存的隐向量 \(\mathbf{c}_j^{KV}\) 进行点积。
+这一形式先计算第 \(i\) 个头的有效查询 \(\tilde{\mathbf{q}}_{t,i}^C = (W_i^{UK})^T \mathbf{q}_{t,i}^C\)，再与缓存的隐向量 \(\mathbf{c}_j^{KV}\) 进行点积。
 
-原始查询 \(\mathbf{q}_{t,i}^C\) 是通过 \(W^{UQ}\) 和 \(W^{DQ}\) 从 \(\mathbf{h}_t\) 计算得到的 (\(\mathbf{q}_{t,i}^C = (W^{UQ} W^{DQ} \mathbf{h}_t)_i\))。因此，从 \(\mathbf{h}_t\) 到有效查询 \(\tilde{\mathbf{q}}_{t,i}^C\) 的整个计算过程可以看作是一个新的、合并了 \(W^{UK}\) 的有效查询投影操作。在实际实现中，这意味着计算 \(\mathbf{q}_{t,i}^C\) 后，可以再左乘 \((W^{UK})^T\)，或者更高效地，将 \((W^{UK})^T\) 合并到生成查询的原始矩阵 \(W^Q\)（或 \(W^{UQ}W^{DQ}\)）中，形成一个新的查询投影矩阵 \(\tilde{W}^Q = (W^{UK})^T W^{UQ} W^{DQ}\)。
+原始查询为 \(\mathbf{q}_{t,i}^C = W_i^{UQ}W^{DQ}\mathbf{h}_t\)。因此，从 \(\mathbf{h}_t\) 到 \(\tilde{\mathbf{q}}_{t,i}^C\) 的计算使用第 \(i\) 个头的有效投影 \(\tilde{W}_i^Q = (W_i^{UK})^T W_i^{UQ} W^{DQ} \in \mathbb{R}^{d_c \times d}\)。
 
-关键在于，涉及 \(W^{UK}\) 的计算被移到了查询侧，在计算注意力分数之前一次性完成，而无需在每次查询时都用 \(W^{UK}\) 从缓存的 \(\mathbf{c}_j^{KV}\) 中恢复 \(\mathbf{k}_{j,i}^C\)。
+由此，涉及 \(W_i^{UK}\) 的计算位于查询侧，注意力分数直接基于缓存的 \(\mathbf{c}_j^{KV}\) 计算。
 
 **2. 吸收 \(W^{UV}\) (优化加权求和):**
 
-注意力头的输出 \(\mathbf{o}_{t,i}\) 是注意力权重 (记作 \(w_{ij}\)) 与值 \(\mathbf{v}_{j,i}^C\) 的加权和：
+令 \(W_i^{UV} \in \mathbb{R}^{d_h \times d_c}\) 表示 \(W^{UV}\) 中属于第 \(i\) 个头的行块，\(W_i^O \in \mathbb{R}^{d \times d_h}\) 表示 \(W^O\) 中对应的列块。沿用论文中的注意力公式，将第 \(i\) 个头中查询 token \(t\) 对 token \(j\) 的标量注意力权重定义为：
 \[
-\mathbf{o}_{t, i} = \sum_{j=1}^{t} w_{ij} \cdot \mathbf{v}_{j, i}^{C}
+a_{t,j}^{(i)}
+= \operatorname{Softmax}_{j}\left(
+\frac{\mathbf{q}_{t,i}^{T}\mathbf{k}_{j,i}}{\sqrt{d_h+d_h^R}}
+\right).
 \]
-将 \(\mathbf{v}_{j,i}^C = (W^{UV} \mathbf{c}_j^{KV})_i\) 代入（这里 \(( \cdot )_i\) 表示属于第 \(i\) 个头的部分）：
+每个头随后在隐空间中独立完成加权求和：
 \[
-\mathbf{o}_{t, i} = \sum_{j=1}^{t} w_{ij} \cdot (W^{UV} \mathbf{c}_j^{KV})_i
+\begin{aligned}
+\tilde{\mathbf{o}}_{t,i} &= \sum_{j=1}^{t} a_{t,j}^{(i)}\mathbf{c}_j^{KV}, \\
+\mathbf{o}_{t,i} &= \sum_{j=1}^{t} a_{t,j}^{(i)}W_i^{UV}\mathbf{c}_j^{KV}
+= W_i^{UV}\tilde{\mathbf{o}}_{t,i}.
+\end{aligned}
 \]
-最终的注意力层输出 \(\mathbf{u}_t\) 是所有头的输出 \(\mathbf{o}_{t,i}\) 拼接后通过输出矩阵 \(W^O\) 投影得到的：
+按注意力头拆分输出投影后，可以得到：
 \[
-\mathbf{u}_{t} = W^{O}\left[\mathbf{o}_{t, 1} ; \ldots ; \mathbf{o}_{t, n_{h}}\right] = W^{O} \begin{bmatrix} \sum_{j} w_{1j} (W^{UV} \mathbf{c}_j^{KV})_1 \\ \vdots \\ \sum_{j} w_{n_h j} (W^{UV} \mathbf{c}_j^{KV})_{n_h} \end{bmatrix}
+\mathbf{u}_t
+= \sum_{i=1}^{n_h} W_i^O\mathbf{o}_{t,i}
+= \sum_{i=1}^{n_h}\left(W_i^O W_i^{UV}\right)\tilde{\mathbf{o}}_{t,i}.
 \]
-由于矩阵乘法的线性性质（\(A(B+C) = AB + AC\) 以及 \(A(cB) = c(AB)\)），可以将 \(W^{UV}\) 从求和中“提出”（这里是为了直观理解，实际操作是矩阵层面的）：
-\[
-\mathbf{u}_{t} \approx W^{O} W^{UV} \left( \sum_{j=1}^{t} \begin{bmatrix} w_{1j} (\mathbf{c}_j^{KV})_1 \\ \vdots \\ w_{n_h j} (\mathbf{c}_j^{KV})_{n_h} \end{bmatrix} \right)
-\]
-（注意：这里的 \((\mathbf{c}_j^{KV})_i\) 只是示意，实际计算中是直接对完整的 \(\mathbf{c}_j^{KV}\) 操作，但原理相同，即先对 \(\mathbf{c}_j^{KV}\) 进行加权求和，再应用 \(W^{UV}\) 和 \(W^O\)）。
-
-令有效输出矩阵 \(\tilde{W}^O = W^O W^{UV}\)。这意味着可以先计算注意力权重与隐向量 \(\mathbf{c}_j^{KV}\) 的加权和（得到一个维度为 \(d_c\) 的中间结果 \(\tilde{\mathbf{o}}_t = \sum_j w_{ij} \mathbf{c}_j^{KV}\)），然后直接用这个合并后的有效输出矩阵 \(\tilde{W}^O\) 进行最终投影得到 \(\mathbf{u}_t\)。同样，涉及 \(W^{UV}\) 的计算被合并到了最后的输出投影步骤，无需在计算加权和时从 \(\mathbf{c}_j^{KV}\) 恢复 \(\mathbf{v}_{j,i}^C\)。
+为每个头预先计算 \(\tilde{W}_i^O = W_i^O W_i^{UV}\) 后，推理时可以直接将其作用于该头对应的隐空间加权和，无需显式恢复完整的值向量 \(\mathbf{v}_{j,i}^C\)。
 
 **总结:** 通过矩阵吸收，MLA 在推理时避免了从缓存的低维隐向量 \(\mathbf{c}_j^{KV}\) 重复计算高维的键 \(\mathbf{k}_{j,i}^C\) 和值 \(\mathbf{v}_{j,i}^C\)，显著提高了计算效率。实际缓存的只有 \(\mathbf{c}_t^{KV}\) 和 \(\mathbf{k}_t^R\)。
 
@@ -852,7 +855,7 @@ DeepSeek-V3 的训练基于自研的高效轻量级框架 **HAI-LLM**。整体�
     *   **权重:** 按 \(128 \times 128\) 的 block 分组缩放。
     这种方法让缩放因子更适应局部数据的范围，减少量化误差。
 2.  **提升累加精度:** H800 的 Tensor Core 进行 FP8 GEMM 时累加精度有限（约 14 位）。为解决此问题，采用 **Promotion to CUDA Cores** 策略 ([Thakkar et al., 2023](https://github.com/NVIDIA/cutlass))：Tensor Core 计算部分累加和（例如每 \(N_C=128\) 个元素），然后将结果传输到 CUDA Core 的 FP32 寄存器中进行全精度累加。细粒度量化的缩放因子也可以在 CUDA Core 上高效应用。通过 WGMMA 操作的并发执行，这种方法在提升精度的同时，对计算效率影响较小。
-3.  **E4M3 格式:** V3 在所有张量上统一使用 **E4M3 格式**（4 位指数，3 位尾数），而非混合使用 **E5M2** ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313); [Sun et al., 2019b](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html))。细粒度量化策略有效缓解了 E4M3 动态范围较小的问题。
+3.  **尾数优先于指数（Mantissa over Exponents）:** 传统的混合 FP8 方案在 Fprop 中使用 **E4M3**（4 位指数、3 位尾数），在 Dgrad 和 Wgrad 中使用 **E5M2**（5 位指数、2 位尾数）([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313); [Sun et al., 2019b](https://papers.nips.cc/paper_files/paper/2019/hash/65fc9fb4897a89789352e211ca2d398f-Abstract.html))。在 FP8 GEMM 路径中，V3 的 Fprop、Dgrad 和 Wgrad 张量输入均采用 E4M3，以获得更高的尾数精度。Tile-wise 和 block-wise 缩放作用于更小的元素组，使组内元素有效共享指数位，从而缓解动态范围有限带来的影响。Embedding、Output Head、MoE Gating、Normalization 和 Attention 保留 BF16/FP32 精度，部分激活缓存使用下文所述的定制 E5M6 格式。
 4.  **在线量化:** 实时计算每个 tile/block 的**最大绝对值来确定缩放因子，而非依赖历史值** ([NVIDIA, 2024](https://github.com/NVIDIA/TransformerEngine); [Peng et al., 2023](https://arxiv.org/abs/2310.18313))，确保量化精度。
 
 {{< figure
@@ -960,7 +963,7 @@ DeepSeek 团队基于 **All-to-all 通信**和 **FP8 训练方案**的实现，�
 
 ### 数据构建
 
-相较于 DeepSeek‑V2（基于 67B 模型，使用 100K 词表 Byte‑level BPE Tokenizer，8.1T tokens），DeepSeek‑V3 在预训练阶段通过以下策略，实现了更大规模和更高质量的数据构建：
+相较于 DeepSeek‑V2（总参数 236B、每个 token 激活 21B 参数，使用 100K 词表 Byte‑level BPE tokenizer 和 8.1T 训练 tokens），DeepSeek‑V3 在预训练阶段通过以下策略，实现了更大规模和更高质量的数据构建：
 
 1. **语料库扩展与精炼**
    - **专注领域**：显著增加数学与编程相关文本占比，强化模型在技术领域的理解与生成能力。
@@ -1155,7 +1158,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 
 **总结:**
 *   DeepSeek-V2 Chat (RL) 在发布时已是顶尖的开源聊天模型，尤其在 AlpacaEval 和中文 AlignBench 上表现优异。
-*   DeepSeek-V3 Chat 进一步提升了性能，成为目前最强的开源聊天模型，在代码、数学、中文知识以及 Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939))、AlpacaEval 等开放式评估中表现极其亮眼，达到了与 GPT-4o、Claude-3.5-Sonnet 相媲美的水平。
+*   在技术报告公布的 2024 年 12 月评测中，DeepSeek-V3 Chat 是表现最强的开放权重聊天模型之一，在代码、数学、中文知识以及 Arena-Hard ([Li et al., 2024](https://arxiv.org/abs/2406.11939))、AlpacaEval 等开放式评估中表现突出，达到了与评测所用版本的 GPT-4o、Claude-3.5-Sonnet 相媲美的水平。
 *   V3 的 R1 蒸馏显著提升了推理能力，但也可能增加响应长度，需要在准确性和效率间权衡。
 *   V3 的自奖励能力（在 RewardBench ([Lambert et al., 2024](https://arxiv.org/abs/2403.13787)) 上表现优异）为其持续对齐提供了有效途径。
 
@@ -1173,7 +1176,7 @@ DeepSeek-V3 Chat 与代表性开源及闭源 Chat 模型对比 (部分结果)。
 
 ### 结论 
 
-DeepSeek-V2 和 DeepSeek-V3 是两款强大、经济且高效的 MoE 语言模型。它们通过 MLA 和 DeepSeekMoE 架构创新，以及 V3 引入的无辅助损失负载均衡、MTP、FP8 训练和 R1 蒸馏等技术，在性能、训练成本和推理效率上取得了突破。DeepSeek-V3 已成为当前最强的开源模型之一，性能可与顶尖闭源模型竞争。
+DeepSeek-V2 和 DeepSeek-V3 是两款强大、经济且高效的 MoE 语言模型。它们通过 MLA 和 DeepSeekMoE 架构创新，以及 V3 引入的无辅助损失负载均衡、MTP、FP8 训练和 R1 蒸馏等技术，在性能、训练成本和推理效率上取得了突破。在技术报告公布的 2024 年 12 月评测中，DeepSeek-V3 是表现最强的开放权重模型之一，性能可与当时参与评测的领先闭源模型竞争。
 
 ### 局限性
 

@@ -1,7 +1,7 @@
 ---
 title: "GPU Kernel Generation and Optimization with Coding Agents: MLSys 2026 FlashInfer Contest Summary"
 date: 2026-05-18T00:00:00+08:00
-lastmod: 2026-05-25T00:00:00+08:00
+lastmod: 2026-07-21T00:00:00+08:00
 author: "Yue Shui"
 categories: ["Technical Blog"]
 tags: ["LLM", "GPU Kernel", "CUDA", "Triton", "FlashInfer", "MLSys", "Agent", "Harness Engineering"]
@@ -15,7 +15,7 @@ math: true
 
 Recently, I participated in the **MLSys 2026 - NVIDIA Track: FlashInfer AI Kernel Generation Contest** ([FlashInfer Contest, 2026a](https://mlsys26.flashinfer.ai/)). This post is not a tutorial on CUDA kernel optimization, and I am not a GPU operator development expert. My main goal was to use a highly verifiable task environment with clear feedback to study how coding agents can continuously produce high-quality GPU kernels in a closed-loop workflow.
 
-The full materials are split into two reports: **Harness Engineering for LLM-Driven GPU Kernel Generation** ([Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf)) and **Full-Agent Kernel Generation for FlashInfer** ([Ma et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf)). The code is available in [mlsys26-flashinfer-contest](https://github.com/syhya/mlsys26-flashinfer-contest).
+The full materials are split into two reports: **Harness Engineering for LLM-Driven GPU Kernel Generation** ([Shui et al., 2026](https://arxiv.org/abs/2607.17979)) and **Full-Agent Kernel Generation for FlashInfer** ([Ma et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf)). The code is available in [mlsys26-flashinfer-contest](https://github.com/syhya/mlsys26-flashinfer-contest).
 
 ## Research Background
 
@@ -88,7 +88,7 @@ In [Self-Evolving Agents](/posts/2026-02-20-self-evolving-agents/), I discussed 
 
 {{< figure
     src="agent-assisted-arch.png"
-    caption="Fig. 6. Agent-Assisted closed-loop harness for B200 kernel optimization. The workflow grounds agents in operator definitions, workload distributions, references, profile signals, and explicit promotion policies. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 6. Agent-Assisted closed-loop harness for B200 kernel optimization. The workflow grounds agents in operator definitions, workload distributions, references, profile signals, and explicit promotion policies. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="100%"
 >}}
@@ -151,7 +151,7 @@ This table is for local analysis only, not the official per-operator or per-trac
 
 {{< figure
     src="flashinfer-speedup.png"
-    caption="Fig. 8. Final retained speedups over the supplied FlashInfer baseline, measured using mean latency on local Modal B200 runs. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 8. Final retained speedups over the supplied FlashInfer baseline, measured using mean latency on local Modal B200 runs. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="65%"
 >}}
@@ -162,7 +162,7 @@ Agent-Assisted outperforms the FlashInfer baseline on all five operators, with s
 
 {{< figure
     src="iteration-trajectory.png"
-    caption="Fig. 9. Retained speedup trajectories over the supplied FlashInfer baseline. The curves show long plateaus and discrete jumps rather than smooth monotonic progress. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 9. Retained speedup trajectories over the supplied FlashInfer baseline. The curves show long plateaus and discrete jumps rather than smooth monotonic progress. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="100%"
 >}}
@@ -192,7 +192,7 @@ The Full-Agent trajectories come from automatic search logs. Full-Agent can stil
 
 [1] FlashInfer Contest. ["FlashInfer AI Kernel Generation Contest."](https://mlsys26.flashinfer.ai/) MLSys 2026 Competition, NVIDIA Track (2026a).
 
-[2] Shui, Yue, Chenyu Ma, Hangfei Xu, Shengzhao Wen, and Yanpeng Wang. ["Harness Engineering for LLM-Driven GPU Kernel Generation."](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf) Technical Report (2026).
+[2] Shui, Yue, Chenyu Ma, Hangfei Xu, Shengzhao Wen, and Yanpeng Wang. ["Harness Engineering for LLM-Driven GPU Kernel Generation."](https://arxiv.org/abs/2607.17979) arXiv preprint arXiv:2607.17979 (2026).
 
 [3] Ma, Chenyu, Yue Shui, Hangfei Xu, Shengzhao Wen, and Yanpeng Wang. ["Full-Agent Kernel Generation for FlashInfer @ MLSys 2026."](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf) Technical Report (2026).
 

@@ -1,7 +1,7 @@
 ---
 title: "基于代码智能体的 GPU Kernel 生成与优化：MLSys 2026 FlashInfer 比赛总结"
 date: 2026-05-18T00:00:00+08:00
-lastmod: 2026-05-25T00:00:00+08:00
+lastmod: 2026-07-21T00:00:00+08:00
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["LLM", "GPU Kernel", "CUDA", "Triton", "FlashInfer", "MLSys", "Agent", "Harness Engineering"]
@@ -15,7 +15,7 @@ math: true
 
 我最近参加了 **MLSys 2026 - NVIDIA Track: FlashInfer AI Kernel Generation Contest**（[FlashInfer Contest, 2026a](https://mlsys26.flashinfer.ai/)）。这篇博客并不是一篇关于 CUDA kernel 优化技巧的教程，我本身并不是 GPU 算子开发专家；参加这次比赛的主要目的，是想借助一个高度可验证、反馈明确的任务环境，研究如何让 Coding Agent 在持续闭环中产出高质量的 GPU kernel。
 
-完整材料分为两份报告：**Harness Engineering for LLM-Driven GPU Kernel Generation**（[Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf)）和 **Full-Agent Kernel Generation for FlashInfer**（[Ma et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf)），代码公开在 [mlsys26-flashinfer-contest](https://github.com/syhya/mlsys26-flashinfer-contest)。
+完整材料分为两份报告：**Harness Engineering for LLM-Driven GPU Kernel Generation**（[Shui et al., 2026](https://arxiv.org/abs/2607.17979)）和 **Full-Agent Kernel Generation for FlashInfer**（[Ma et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf)），代码公开在 [mlsys26-flashinfer-contest](https://github.com/syhya/mlsys26-flashinfer-contest)。
 
 ## 研究背景
 
@@ -88,7 +88,7 @@ LLM CUDA 队伍分别提交了 Agent-Assisted 和 Full-Agent 两套路线。它�
 
 {{< figure
     src="agent-assisted-arch.png"
-    caption="Fig. 6. Agent-Assisted closed-loop harness for B200 kernel optimization. The workflow grounds agents in operator definitions, workload distributions, references, profile signals, and explicit promotion policies. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 6. Agent-Assisted closed-loop harness for B200 kernel optimization. The workflow grounds agents in operator definitions, workload distributions, references, profile signals, and explicit promotion policies. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="100%"
 >}}
@@ -151,7 +151,7 @@ Full-Agent 路线使用框架 **LoongFlow**（[Wan et al., 2025](https://arxiv.o
 
 {{< figure
     src="flashinfer-speedup.png"
-    caption="Fig. 8. Final retained speedups over the supplied FlashInfer baseline, measured using mean latency on local Modal B200 runs. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 8. Final retained speedups over the supplied FlashInfer baseline, measured using mean latency on local Modal B200 runs. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="65%"
 >}}
@@ -162,7 +162,7 @@ Agent-Assisted 在五个算子上全部优于 FlashInfer baseline，加速比从
 
 {{< figure
     src="iteration-trajectory.png"
-    caption="Fig. 9. Retained speedup trajectories over the supplied FlashInfer baseline. The curves show long plateaus and discrete jumps rather than smooth monotonic progress. (Image source: [Shui et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf))"
+    caption="Fig. 9. Retained speedup trajectories over the supplied FlashInfer baseline. The curves show long plateaus and discrete jumps rather than smooth monotonic progress. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="100%"
 >}}
@@ -192,7 +192,7 @@ Full-Agent 轨迹来自自动搜索日志。它也能在部分算子上找到有
 
 [1] FlashInfer Contest. ["FlashInfer AI Kernel Generation Contest."](https://mlsys26.flashinfer.ai/) MLSys 2026 Competition, NVIDIA Track (2026a).
 
-[2] Shui, Yue, Chenyu Ma, Hangfei Xu, Shengzhao Wen, and Yanpeng Wang. ["Harness Engineering for LLM-Driven GPU Kernel Generation."](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/agent-assisted/report.pdf) Technical Report (2026).
+[2] Shui, Yue, Chenyu Ma, Hangfei Xu, Shengzhao Wen, and Yanpeng Wang. ["Harness Engineering for LLM-Driven GPU Kernel Generation."](https://arxiv.org/abs/2607.17979) arXiv preprint arXiv:2607.17979 (2026).
 
 [3] Ma, Chenyu, Yue Shui, Hangfei Xu, Shengzhao Wen, and Yanpeng Wang. ["Full-Agent Kernel Generation for FlashInfer @ MLSys 2026."](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf) Technical Report (2026).
 

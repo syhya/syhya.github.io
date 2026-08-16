@@ -1,7 +1,7 @@
 ---
 title: "How to Choose the Right Agent Architecture?"
 date: 2026-06-21T12:00:00+08:00
-lastmod: 2026-06-21T20:48:13+08:00
+lastmod: 2026-08-17T12:00:00+08:00
 author: "Yue Shui"
 categories: ["Technical Blog"]
 tags: ["LLM", "Agent", "Agent Skills", "Subagents", "Multi-Agent", "Dynamic Workflows", "Context Engineering"]
@@ -228,9 +228,13 @@ Subagents are workers temporarily dispatched by the main Agent, while Agent Team
 
 ## Multi-Agent Systems
 
-When a complex problem can be split into multiple relatively independent directions to be explored in parallel, a single Subagent is no longer enough; an orchestrator is needed to organize a group of Subagents. This is the **Multi-Agent System**, whose most classic form is the **Orchestrator-Worker** pattern.
+When a task exceeds the context or capability boundary of a single Agent, multiple Agents can take on different responsibilities and exchange results through explicit coordination mechanisms. Such systems are collectively called **Multi-Agent Systems**.
 
-In **How We Built Our Multi-Agent Research System** ([Anthropic, 2025d](https://www.anthropic.com/engineering/built-multi-agent-research-system)), Anthropic describes in detail the architecture of its Research feature.
+### Orchestrator-Subagent
+
+The **Orchestrator-Subagent** pattern ([Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)) is defined by hierarchy: an Orchestrator plans the work, delegates bounded subtasks, and synthesizes the results, while Subagents handle specific responsibilities and report back.
+
+**How We Built Our Multi-Agent Research System** ([Anthropic, 2025d](https://www.anthropic.com/engineering/built-multi-agent-research-system)) provides a multi-agent research architecture where a lead agent decomposes the research problem into parallel search tasks, delegates them to specialized subagents, synthesizes their findings, and finally invokes a CitationAgent to ground the resulting report with supporting citations.
 
 {{< figure
     src="multi-agent-architecture.png"
@@ -239,7 +243,7 @@ In **How We Built Our Multi-Agent Research System** ([Anthropic, 2025d](https://
     width="100%"
 >}}
 
-This is a typical orchestrator-worker multi-agent architecture: a lead agent coordinates the whole process and delegates tasks to specialized Subagents running in parallel, and finally a CitationAgent processes the documents and research report to identify specific locations for citations. The full execution flow is shown below:
+**Why are research tasks especially well-suited to Multi-Agent?** Research is open-ended and path-dependent, so its process is hard to hard-code: you have to adjust direction while searching. It also decomposes naturally into independent sub-directions. And search is essentially compression—distilling key tokens from a large number of web pages—so giving each Subagent its own context window to explore and return a small, high-value summary fits the problem well.
 
 {{< figure
     src="multi-agent-process.png"
@@ -248,11 +252,49 @@ This is a typical orchestrator-worker multi-agent architecture: a lead agent coo
     width="100%"
 >}}
 
-**Why are research tasks especially well-suited to Multi-Agent?** Research is open-ended and path-dependent, so its process is hard to hard-code: you have to adjust direction while searching. It also decomposes naturally into independent sub-directions. And search is essentially compression—distilling key tokens from a large number of web pages—so giving each Subagent its own context window to explore and return a small, high-value summary fits the problem well.
-
 A multi-agent system using Claude Opus 4 as the lead agent and Claude Sonnet 4 as Subagents outperformed a single-agent Claude Opus 4 by 90.2% on Anthropic's internal research eval. But the gains come with significant cost. Anthropic's empirical observation is that ordinary Agent systems consume roughly **4× the tokens** of chat, while Multi-Agent Systems consume roughly **15× the tokens**. Multi-Agent is suited to high-value, highly parallel tasks whose information volume exceeds a single context window—not to every task.
 
 The effectiveness of a Multi-Agent System depends heavily on the lead agent's task-decomposition ability and the design of the delegation prompt. The lead agent needs to tell each Subagent clearly what the research objective is, what the search scope is, which sources to focus on, which directions not to duplicate, and in what format to return the final result. If the division of labor is unclear, multiple Subagents may search the same batch of information repeatedly, or miss key directions, which actually drives up the cost of synthesis.
+
+### Message Bus
+
+When a workflow is driven by dynamic events and conditional logic accumulates in the central coordinator, a **Message Bus** ([Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)) makes routing explicit and extensible. Agents publish events and subscribe to relevant topics, while a router delivers matching messages; new Agent types can join existing topics without rewiring connections among the existing Agents.
+
+Message Bus works well for security alerts, asynchronous tasks, and event-driven systems whose Agent ecosystem is likely to grow. The trade-off is harder tracing: if the router misclassifies or drops an event, or a downstream subscription is misconfigured, work may be omitted silently without a crash. Event chains therefore need complete, correlated logs, and the results of LLM-based routing should be validated.
+
+### Shared State
+
+When Agents need to build on one another's intermediate findings rather than respond to discrete events, they can use **Shared State** ([Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)). All Agents directly read and write the same database, file system, or document. With no Orchestrator or router deciding where each finding goes, the shared store itself becomes an evolving collaboration context.
+
+Shared State works well for collaborative research and shared knowledge bases, but removing the central coordinator can also lead to duplicate work, conflicting writes, and reactive loops. Locking, versioning, or partitioning can mitigate concurrent writes; behavioral loops require explicit termination conditions, such as a time budget, several rounds without new findings, or a designated Agent deciding that the available information is sufficient. In short, use Message Bus when discrete events trigger downstream actions, and Shared State when findings must accumulate and be revisited.
+
+### Coordination Boundaries
+
+The preceding Subagents, Agent Teams, and coordination topologies mainly answer how work is divided and how information flows. **Patterns and problems in emerging multiagent systems** ([Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems)) examines the next boundary: after decomposition, can multiple Agents coordinate reliably while sharing a search space, codebase, decision process, or execution environment? Anthropic observes that Agents work efficiently when they can treat one another as tool invocations with well-defined inputs and outputs, but struggle when interacting as distinct, long-lived peers without a clear hierarchy.
+
+In a software-vulnerability experiment, Anthropic launched **45 Agents**, each in its own virtual machine with access to a shared forum. All received the same prompt to search 15 open-source projects and peer-reviewed one another's findings; a separate arbiter Agent decided whether each submission was both new and valid. With Mythos Preview, an independent parallel baseline with preassigned search locations found **21 vulnerabilities** using about **6.5 million sampled output tokens**, while the coordinating swarm found **266 vulnerabilities** using about **27 million sampled output tokens**.
+
+{{< figure
+    src="multi-agent-vulnerability-discovery.png"
+    caption="Fig. 16. Coordinated swarm findings (solid curves) versus independently partitioned agents (stars); dashed curves show overlap, while the dotted Mythos Preview curve keeps only findings inside the baseline's core directories. Search scopes and token budgets are not matched. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    align="center"
+    width="100%"
+>}}
+
+The Agent swarm used roughly four times as many tokens and searched beyond the directories assigned to the independent baseline; within the baseline's core directories, the two methods found vulnerabilities at roughly comparable rates per token. For decomposable search with independently verifiable results, fixed partitioning limits coverage to a predefined scope, whereas an Agent swarm can redirect attention, build tools, and specialize to expand search coverage.
+
+Shared code presents a different challenge because each edit immediately changes the environment in which other Agents work. Anthropic ran 10, 20, 40, or 80 Agents for 12 hours on a shared forum and repository to build an open-world game. PR merge rate measures the final fraction of successfully merged PRs; code sharing measures how much code in an Agent's participating files was written by other Agents. A score of 0 means that the Agent never touched shared files, while a score near 1 means that it mostly made small changes to files owned by others.
+
+{{< figure
+    src="multi-agent-code-coordination.png"
+    caption="Fig. 17. End-of-run merged-PR fraction and median-agent code sharing for 12-hour game-building swarms, averaged across three prompt types. These are coordination proxies rather than quality scores, and high merge rates can reflect file isolation instead of collaboration. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    align="center"
+    width="100%"
+>}}
+
+Sonnet 4.6 and Opus 4.6 showed relatively high code sharing, but many conflicting PRs were never merged. Opus 4.8 and Mythos Preview maintained relatively high merge rates as Agent count increased mainly by preserving file ownership and reducing shared edits. Only Sonnet 5 maintained both relatively high code sharing and merged-PR fractions.
+
+Taken together, [Anthropic's multi-agent experiments](https://www.anthropic.com/research/multiagent-systems) suggest that performance depends on more than Agent count and model capability. It is also shaped by task coupling and by how the system handles coordination, epistemic trust, incompatible goals, and verification.
 
 ## Dynamic Workflows
 
@@ -280,7 +322,7 @@ Viewing it alongside Subagents and Agent Teams, the three represent different or
 
 {{< figure
     src="compare-agent-teams-dynamic-workflows.png"
-    caption="Fig. 16. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
+    caption="Fig. 18. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
     align="center"
     width="100%"
 >}}
@@ -291,7 +333,7 @@ Anthropic summarizes several common workflow patterns. When Claude generates a h
 
 {{< figure
     src="six-workflow-patterns.png"
-    caption="Fig. 17. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
+    caption="Fig. 19. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
     align="center"
     width="100%"
 >}}
@@ -313,7 +355,7 @@ The preceding sections introduced increasingly complex modes of organization, bu
 
 {{< figure
     src="agent-archs.png"
-    caption="Fig. 18. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 20. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}
@@ -323,7 +365,7 @@ Several key findings:
 
 {{< figure
     src="agent-scaling.png"
-    caption="Fig. 19. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 21. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}
@@ -337,7 +379,7 @@ To converge all the preceding mechanisms into an actionable decision rule, you c
 
 1. Is the process stable and used repeatedly? If so, prefer encapsulating it as an **Agent Skill**.
 2. Will the subtask produce large amounts of intermediate information that pollutes the main context? If so, hand it to a **Subagent**.
-3. Is the task naturally parallelizable, with an information volume that exceeds a single context window? If so, consider a **Multi-Agent System**.
+3. Is the task naturally parallelizable, are its results independently verifiable, and does its information volume exceed a single context window? If so, consider a **Multi-Agent System**.
 4. Do you need strong verification, automatic scheduling, or repeatable control logic? If so, introduce **Dynamic Workflows**.
 5. If the task is strongly sequentially dependent, or a single Agent is already strong enough, keep a **Single Agent**—do not add complexity for complexity's sake.
 
@@ -347,7 +389,9 @@ To converge all the preceding mechanisms into an actionable decision rule, you c
 | Independent task pollutes the context | **Subagents** | Heavy search, complex analysis, massive intermediate information | The point is to isolate the task and avoid Context Rot |
 | Fixed role reused over the long term | **Custom Subagents** | Fixed permissions, fixed tools, long-term reuse | Not only the process is fixed; "who does it" is also fixed |
 | Standard process + independent execution | **Subagents + Skill** | A dedicated role executing a standardized process | Subagents handle isolation and permissions, Skill handles the standardized process |
-| Parallelizable, information exceeds a single context | **Multi-Agent System** | Open-ended research, parallel multi-direction exploration | The orchestrator splits and schedules, the workers compress in parallel |
+| Parallelizable, independently verifiable, information exceeds a single context | **Multi-Agent System** | Open-ended research, parallel multi-direction exploration | The orchestrator splits and schedules, workers compress in parallel, and a shared arbiter validates the results |
+| Event-driven, dynamically changing paths | **Message Bus** | Security alerts, asynchronous tasks, extensible Agent ecosystems | Decouple Agents through publish/subscribe, with correlated logs tracing routing and event chains |
+| Intermediate findings need real-time sharing | **Shared State** | Collaborative research, shared knowledge bases, shared workspaces | Exchange findings through persistent state while explicitly handling concurrency, deduplication, and stopping conditions |
 | Task too large to coordinate manually / strong verification needed | **Dynamic Workflows** | Large-scale migration, fact-checking, security review, root cause | Runtime dynamic orchestration + adversarial verification |
 | Strongly sequential reasoning / single agent already strong enough | **Single Agent** | Chain-of-thought reasoning, planning, simple coding | Multi-agent communication overhead fragments the reasoning instead of helping it |
 
@@ -363,7 +407,7 @@ Dynamic Workflows
 
 ## Summary
 
-The key to Agent architecture design is not stacking up more Agents, but matching task structure to system complexity. Skills solve reusable processes, Subagents solve context isolation, Multi-Agent Systems solve parallel division of labor, and Dynamic Workflows solve runtime orchestration and verification. The harder skill is restraint: reach for the lightest mechanism the task structure actually demands, and add a heavier one only when a concrete failure—context pollution, unmanageable parallelism, weak verification—forces your hand.
+The key to Agent architecture design is not stacking up more Agents, but matching task structure to system complexity. Skills solve reusable processes, Subagents solve context isolation, and Multi-Agent Systems solve parallel division of labor; within Multi-Agent Systems, choose an Orchestrator, Message Bus, or Shared State according to the information flow. Dynamic Workflows solve runtime orchestration and verification. The harder skill is restraint: reach for the lightest mechanism the task structure actually demands, and add a heavier one only when a concrete failure—context pollution, unmanageable parallelism, blocked information routing, or weak verification—forces your hand.
 
 ## References
 
@@ -387,9 +431,13 @@ The key to Agent architecture design is not stacking up more Agents, but matchin
 
 [10] Anthropic. ["How We Built Our Multi-Agent Research System."](https://www.anthropic.com/engineering/built-multi-agent-research-system) Anthropic Engineering Blog (2025d).
 
-[11] Anthropic. ["A Harness for Every Task: Dynamic Workflows in Claude Code."](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code) Anthropic Blog (2026d).
+[11] Phillips, Cara. ["Multi-Agent Coordination Patterns: Five Approaches and When to Use Them."](https://claude.com/blog/multi-agent-coordination-patterns) Claude Blog (Apr. 10, 2026).
 
-[12] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
+[12] Anthropic Frontier Red Team. ["Patterns and Problems in Emerging Multiagent Systems."](https://www.anthropic.com/research/multiagent-systems) Anthropic Research (Aug. 13, 2026).
+
+[13] Anthropic. ["A Harness for Every Task: Dynamic Workflows in Claude Code."](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code) Anthropic Blog (2026d).
+
+[14] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
 
 ## Citation
 

@@ -1,7 +1,7 @@
 ---
 title: "如何选择合适的 Agent 架构？"
 date: 2026-06-21T12:00:00+08:00
-lastmod: 2026-06-21T20:48:13+08:00
+lastmod: 2026-08-17T12:00:00+08:00
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["LLM", "Agent", "Agent Skills", "Subagents", "Multi-Agent", "Dynamic Workflows", "Context Engineering"]
@@ -228,9 +228,13 @@ Subagents 是主 Agent 临时派出的 worker，Agent Teams 更像多个长期�
 
 ## Multi-Agent Systems
 
-当一个复杂问题可以被拆成多个相对独立的方向并行探索时，单个 Subagent 就不够了，需要一个调度者来组织一组 Subagents。这就是 **Multi-Agent System**，最经典的形态是 **Orchestrator-Worker（编排者-工作者）** 模式。
+当任务规模超出单个 Agent 的上下文或能力边界时，可以让多个 Agent 分担不同职责，并通过明确的协调机制交换结果。这样的系统统称为 **Multi-Agent System**。
 
-Anthropic 在 **How we built our multi-agent research system**（[Anthropic, 2025d](https://www.anthropic.com/engineering/built-multi-agent-research-system)）中详细介绍了其 Research 功能的架构。
+### Orchestrator-Subagent
+
+**Orchestrator-Subagent（编排者-子智能体）**（[Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)）：一个 Orchestrator 负责规划、委派任务并综合结果，Subagents 各自处理边界清晰的职责，再把结果返回给 Orchestrator。
+
+Anthropic 在 **How we built our multi-agent research system**（[Anthropic, 2025d](https://www.anthropic.com/engineering/built-multi-agent-research-system)）中详细介绍了其 Research 功能的架构。lead agent 将研究任务拆给并行运行的 search subagent，综合检索结果后，再由 citation agent 定位报告中的具体引用位置。
 
 {{< figure
     src="multi-agent-architecture.png"
@@ -239,8 +243,7 @@ Anthropic 在 **How we built our multi-agent research system**（[Anthropic, 202
     width="100%"
 >}}
 
-这是一个典型的 orchestrator-worker 模式的多智能体架构：由一个 lead agent 协调全程并把任务委派给并行运行的专业化 Subagents，最后由 CitationAgent 处理文档和 research report 以定位具体引用位置。完整的执行流程如下图所示：
-
+**为什么研究任务特别适合 Multi-Agent？** 因为研究是开放式、路径依赖的，流程难以预先写死：需要边搜索边调整方向。它也天然能拆成多个独立子方向。而搜索的本质是压缩，即从大量网页里提炼关键 token，因此给每个 Subagent 独立的上下文窗口去探索、再返回少量高价值摘要，正好契合问题本身。
 {{< figure
     src="multi-agent-process.png"
     caption="Fig. 15. The full process of the multi-agent research system: the LeadResearcher plans and spawns subagents, which retrieve in parallel and return results, and finally the CitationAgent aligns citation locations to produce the report. (Image source: [Anthropic, 2025d](https://www.anthropic.com/engineering/built-multi-agent-research-system))"
@@ -248,11 +251,50 @@ Anthropic 在 **How we built our multi-agent research system**（[Anthropic, 202
     width="100%"
 >}}
 
-**为什么研究任务特别适合 Multi-Agent？** 因为研究是开放式、路径依赖的，流程难以预先写死：需要边搜索边调整方向。它也天然能拆成多个独立子方向。而搜索的本质是压缩，即从大量网页里提炼关键 token，因此给每个 Subagent 独立的上下文窗口去探索、再返回少量高价值摘要，正好契合问题本身。
 
 以 Claude Opus 4 作为 lead agent、Claude Sonnet 4 作为 Subagents 的多智能体系统，在 Anthropic 内部 research eval 上比单 agent Claude Opus 4 提升 90.2%。但收益伴随显著成本。Anthropic 给出的经验观测是普通 Agent 系统约消耗 chat 的 **4× token**，而 Multi-Agent Systems 约消耗 **15× token**。Multi-Agent 适合高价值、强并行、信息量超过单个上下文窗口的任务，而不是所有任务。
 
 Multi-Agent Systems 的效果很大程度取决于 lead agent 的任务拆解能力和委派提示词（delegation prompt）的设计。lead agent 需要明确告诉每个 Subagent 研究目标是什么、搜索范围是什么、应关注哪些来源、不要重复哪些方向、最终按什么格式返回。如果分工不清，多个 Subagents 可能重复搜索同一批信息，或遗漏关键方向，结果反而推高了汇总成本。
+
+### Message Bus
+
+当工作流由动态事件驱动、中心协调者的条件分支越来越复杂时，可以引入 **Message Bus（消息总线）**（[Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)）：Agent 只负责 publish 事件或 subscribe 自己关心的 topic，由 router 完成消息分发，新 Agent 可以接入已有 topic，而不需要重写其他 Agent 的连接关系。
+
+Message Bus 适合安全告警、异步任务和不断增加新 Agent 类型的事件驱动系统。它的代价是执行链路更难追踪：router 分类错误、漏投事件或下游订阅配置错误时，系统可能没有显式崩溃，却静默地遗漏工作。因此需要为事件链保留完整、可关联的日志，并验证 LLM router 的路由结果。
+
+### Shared State
+
+如果 Agent 不是依次响应事件，而是需要持续利用彼此的中间发现，可以改用 **Shared State（共享状态）**（[Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)）。所有 Agent 直接读写同一个数据库、文件系统或文档，不再由 orchestrator 或 router 决定信息应该传给谁；共享存储本身成为持续演化的协作上下文。
+
+Shared State 适合协作研究和共同维护知识库，但去掉中心协调者也会带来重复工作、矛盾写入和 reactive loop。并发写入可以用锁、版本控制或分区缓解；行为层面的循环则必须依靠明确的停止条件，例如时间预算、连续若干轮没有新发现，或由指定 Agent 判断信息已经充分。简而言之，离散事件触发后续动作时使用 Message Bus；信息需要持续积累并被反复读取时使用 Shared State。
+
+### 协调边界
+
+前面的 Subagents、Agent Teams 和几种协调拓扑主要回答工作如何拆分、信息如何流动。**Patterns and problems in emerging multiagent systems**（[Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems)）关注的是下一层边界：任务拆分之后，当多个 Agent 共享搜索空间、代码库、决策过程或执行环境时，它们能否继续可靠地协调。Anthropic 的观察是，当 Agent 把其他 Agent 当作输入输出明确的工具调用时，协作相对有效；一旦它们变成长时间运行、缺少清晰层级，协调就会明显变难。
+
+在软件漏洞实验中，Anthropic 启动了 **45 个 Agent**。每个 Agent 使用独立虚拟机，通过共享论坛协调，接收相同的 prompt，在 15 个开源项目中搜索漏洞并互相复核发现；最后由独立的仲裁 Agent（arbiter）判断提交的漏洞是否新颖且有效。以 Mythos Preview 为例，预先指定搜索位置的独立并行基线使用约 **650 万 sampled output tokens**，发现 **21 个漏洞**；协调式 swarm 使用约 **2700 万 sampled output tokens**，发现 **266 个漏洞**。
+
+{{< figure
+    src="multi-agent-vulnerability-discovery.png"
+    caption="Fig. 16. Coordinated swarm findings (solid curves) versus independently partitioned agents (stars); dashed curves show overlap, while the dotted Mythos Preview curve keeps only findings inside the baseline's core directories. Search scopes and token budgets are not matched. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    align="center"
+    width="100%"
+>}}
+
+Agent swarm 使用了约四倍的 Token，并扩展到了更多代码目录；限定在独立基线的核心代码目录后，两种方法单位 Token 的发现效率大致相当.对于结果可独立验证的可分解搜索，固定分区将搜索限制在预设范围，Agent swarm 则能动态调整方向、自建工具并形成专业分工, 从而扩展搜索覆盖范围。
+
+共享代码则不同，一个修改会立即改变其他 Agent 所处的环境。Anthropic 让 10、20、40 或 80 个 Agent 在共享论坛和仓库中运行 12 小时共同开发开放世界游戏。图中的 PR merge rate 表示最终成功合并的 PR 比例；code sharing 则衡量一个 Agent 参与的文件中，有多少代码由其他 Agent 写入。code sharing 为 0 表示它从未接触共享文件，接近 1 表示它主要在其他 Agent 负责的文件中做少量修改。
+
+{{< figure
+    src="multi-agent-code-coordination.png"
+    caption="Fig. 17. End-of-run merged-PR fraction and median-agent code sharing for 12-hour game-building swarms, averaged across three prompt types. These are coordination proxies rather than quality scores, and high merge rates can reflect file isolation instead of collaboration. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    align="center"
+    width="100%"
+>}}
+
+Sonnet 4.6 和 Opus 4.6 的 code sharing 较高，但许多 PR 因冲突而未能合并。Opus 4.8 和 Mythos Preview 主要通过让每个 Agent 保持较高的文件所有权、减少共同修改，在 Agent 数量增加时仍取得相对较高的 merge rate。只有 Sonnet 5 同时保持了相对较高的 code sharing 和 PR 合并比例。
+
+[Anthropic 的多 Agent 系统实验](https://www.anthropic.com/research/multiagent-systems) 进一步表明，多 Agent 系统的表现不仅取决于 Agent 数量和模型能力，还受到任务耦合度，以及协作协议、信息可信度、目标兼容性与验证机制设计的共同制约。
 
 ## Dynamic Workflows
 
@@ -280,7 +322,7 @@ Dynamic Workflows 要解决的，正是长程任务在单一上下文中反复�
 
 {{< figure
     src="compare-agent-teams-dynamic-workflows.png"
-    caption="Fig. 16. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
+    caption="Fig. 18. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
     align="center"
     width="100%"
 >}}
@@ -291,7 +333,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 {{< figure
     src="six-workflow-patterns.png"
-    caption="Fig. 17. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
+    caption="Fig. 19. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
     align="center"
     width="100%"
 >}}
@@ -313,7 +355,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 {{< figure
     src="agent-archs.png"
-    caption="Fig. 18. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 20. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}
@@ -323,7 +365,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 {{< figure
     src="agent-scaling.png"
-    caption="Fig. 19. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 21. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}
@@ -337,7 +379,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 1. 流程是否稳定、会反复使用？如果是，优先封装为 **Agent Skill**。
 2. 子任务是否会产生大量中间信息、污染主上下文？如果是，交给 **Subagent**。
-3. 任务是否天然可并行，且信息量超过单个上下文窗口？如果是，考虑 **Multi-Agent System**。
+3. 任务是否天然可并行、结果可独立验证，且信息量超过单个上下文窗口？如果是，考虑 **Multi-Agent System**。
 4. 是否需要强验证、自动调度或可重复的控制逻辑？如果是，引入 **Dynamic Workflows**。
 5. 如果任务强顺序依赖，或单 Agent 已经足够强，就保持 **Single Agent**，不要为了复杂而复杂。
 
@@ -347,7 +389,9 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 | 独立任务会污染上下文 | **Subagents** | 大量搜索、复杂分析、海量中间信息 | 重点是把任务隔离出去，避免 Context Rot |
 | 长期复用的固定角色 | **Custom Subagents** | 固定权限、固定工具、长期复用 | 不只流程固定，"谁来做"也固定 |
 | 标准流程 + 独立执行 | **Subagents + Skill** | 专门角色执行标准化流程 | Subagents 负责隔离与权限，Skill 负责标准化流程 |
-| 可并行、信息量超单上下文 | **Multi-Agent System** | 开放式研究、多方向并行探索 | Orchestrator 拆分调度，Worker 并行压缩 |
+| 可并行、可独立验收、信息量超单上下文 | **Multi-Agent System** | 开放式研究、多方向并行探索 | Orchestrator 拆分调度，Worker 并行压缩|
+| 事件驱动、处理路径动态变化 | **Message Bus** | 安全告警、异步任务、可扩展 Agent 生态 | 通过 publish/subscribe 解耦 Agent，并对路由与事件链做完整追踪 |
+| 中间发现需要实时共享 | **Shared State** | 协作研究、共同知识库、共享工作空间 | 通过持久状态直接交换发现，并显式处理并发、去重和停止条件 |
 | 任务大到无法手动协调 / 需强验证 | **Dynamic Workflows** | 大规模迁移、事实核查、安全审查、root cause | 运行时动态编排 + 对抗式验证 |
 | 强顺序依赖的推理 / 单 agent 已够强 | **Single Agent** | 链式推理、规划、简单 coding | 多 agent 通信开销反而割裂推理 |
 
@@ -363,7 +407,7 @@ Dynamic Workflows
 
 ## 小结
 
-Agent 架构设计的关键不是堆更多 Agent，而是让任务结构和系统复杂度匹配。Skill 解决可复用流程，Subagent 解决上下文隔离，Multi-Agent Systems 解决并行分工，Dynamic Workflows 解决运行时编排与验证。更难的功夫在于克制：永远先用任务结构真正需要的最轻量机制，只有当出现具体的失败——上下文污染、并行度失控、验证不足——再上更重的一层。
+Agent 架构设计的关键不是堆更多 Agent，而是让任务结构和系统复杂度匹配。Skill 解决可复用流程，Subagent 解决上下文隔离，Multi-Agent Systems 解决并行分工，其内部再根据信息流选择 Orchestrator、Message Bus 或 Shared State；Dynamic Workflows 解决运行时编排与验证。更难的功夫在于克制：永远先用任务结构真正需要的最轻量机制，只有当出现具体的失败——上下文污染、并行度失控、信息路由受阻或验证不足——再上更重的一层。
 
 ## 参考文献
 
@@ -387,9 +431,13 @@ Agent 架构设计的关键不是堆更多 Agent，而是让任务结构和系�
 
 [10] Anthropic. ["How We Built Our Multi-Agent Research System."](https://www.anthropic.com/engineering/built-multi-agent-research-system) Anthropic Engineering Blog (2025d).
 
-[11] Anthropic. ["A Harness for Every Task: Dynamic Workflows in Claude Code."](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code) Anthropic Blog (2026d).
+[11] Phillips, Cara. ["Multi-Agent Coordination Patterns: Five Approaches and When to Use Them."](https://claude.com/blog/multi-agent-coordination-patterns) Claude Blog (Apr. 10, 2026).
 
-[12] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
+[12] Anthropic Frontier Red Team. ["Patterns and Problems in Emerging Multiagent Systems."](https://www.anthropic.com/research/multiagent-systems) Anthropic Research (Aug. 13, 2026).
+
+[13] Anthropic. ["A Harness for Every Task: Dynamic Workflows in Claude Code."](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code) Anthropic Blog (2026d).
+
+[14] Kim, Yubin, et al. ["Towards a Science of Scaling Agent Systems."](https://arxiv.org/abs/2512.08296) arXiv preprint arXiv:2512.08296 (2025).
 
 ## 引用
 

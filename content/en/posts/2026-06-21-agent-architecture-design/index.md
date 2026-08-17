@@ -260,11 +260,25 @@ The effectiveness of a Multi-Agent System depends heavily on the lead agent's ta
 
 When a workflow is driven by dynamic events and conditional logic accumulates in the central coordinator, a **Message Bus** ([Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)) makes routing explicit and extensible. Agents publish events and subscribe to relevant topics, while a router delivers matching messages; new Agent types can join existing topics without rewiring connections among the existing Agents.
 
+{{< figure
+    src="message-bus.png"
+    caption="Fig. 16. Message Bus pattern: Agents publish events to a shared bus and subscribe to relevant topics, remaining decoupled from one another. (Image source: [Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns))"
+    align="center"
+    width="100%"
+>}}
+
 Message Bus works well for security alerts, asynchronous tasks, and event-driven systems whose Agent ecosystem is likely to grow. The trade-off is harder tracing: if the router misclassifies or drops an event, or a downstream subscription is misconfigured, work may be omitted silently without a crash. Event chains therefore need complete, correlated logs, and the results of LLM-based routing should be validated.
 
 ### Shared State
 
 When Agents need to build on one another's intermediate findings rather than respond to discrete events, they can use **Shared State** ([Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)). All Agents directly read and write the same database, file system, or document. With no Orchestrator or router deciding where each finding goes, the shared store itself becomes an evolving collaboration context.
+
+{{< figure
+    src="shared-state.png"
+    caption="Fig. 17. Shared State pattern: autonomous Agents read from and write to a common persistent store, making findings immediately available to the other Agents. (Image source: [Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns))"
+    align="center"
+    width="100%"
+>}}
 
 Shared State works well for collaborative research and shared knowledge bases, but removing the central coordinator can also lead to duplicate work, conflicting writes, and reactive loops. Locking, versioning, or partitioning can mitigate concurrent writes; behavioral loops require explicit termination conditions, such as a time budget, several rounds without new findings, or a designated Agent deciding that the available information is sufficient. In short, use Message Bus when discrete events trigger downstream actions, and Shared State when findings must accumulate and be revisited.
 
@@ -276,7 +290,7 @@ In a software-vulnerability experiment, Anthropic launched **45 Agents**, each i
 
 {{< figure
     src="multi-agent-vulnerability-discovery.png"
-    caption="Fig. 16. Coordinated swarm findings (solid curves) versus independently partitioned agents (stars); dashed curves show overlap, while the dotted Mythos Preview curve keeps only findings inside the baseline's core directories. Search scopes and token budgets are not matched. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    caption="Fig. 18. Coordinated swarm findings (solid curves) versus independently partitioned agents (stars); dashed curves show overlap, while the dotted Mythos Preview curve keeps only findings inside the baseline's core directories. Search scopes and token budgets are not matched. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
     align="center"
     width="100%"
 >}}
@@ -287,7 +301,7 @@ Shared code presents a different challenge because each edit immediately changes
 
 {{< figure
     src="multi-agent-code-coordination.png"
-    caption="Fig. 17. End-of-run merged-PR fraction and median-agent code sharing for 12-hour game-building swarms, averaged across three prompt types. These are coordination proxies rather than quality scores, and high merge rates can reflect file isolation instead of collaboration. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    caption="Fig. 19. End-of-run merged-PR fraction and median-agent code sharing for 12-hour game-building swarms, averaged across three prompt types. These are coordination proxies rather than quality scores, and high merge rates can reflect file isolation instead of collaboration. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
     align="center"
     width="100%"
 >}}
@@ -322,7 +336,7 @@ Viewing it alongside Subagents and Agent Teams, the three represent different or
 
 {{< figure
     src="compare-agent-teams-dynamic-workflows.png"
-    caption="Fig. 18. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
+    caption="Fig. 20. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
     align="center"
     width="100%"
 >}}
@@ -333,7 +347,7 @@ Anthropic summarizes several common workflow patterns. When Claude generates a h
 
 {{< figure
     src="six-workflow-patterns.png"
-    caption="Fig. 19. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
+    caption="Fig. 21. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
     align="center"
     width="100%"
 >}}
@@ -355,7 +369,7 @@ The preceding sections introduced increasingly complex modes of organization, bu
 
 {{< figure
     src="agent-archs.png"
-    caption="Fig. 20. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 22. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}
@@ -365,7 +379,7 @@ Several key findings:
 
 {{< figure
     src="agent-scaling.png"
-    caption="Fig. 21. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 23. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}

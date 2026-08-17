@@ -260,11 +260,25 @@ Multi-Agent Systems 的效果很大程度取决于 lead agent 的任务拆解能
 
 当工作流由动态事件驱动、中心协调者的条件分支越来越复杂时，可以引入 **Message Bus（消息总线）**（[Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)）：Agent 只负责 publish 事件或 subscribe 自己关心的 topic，由 router 完成消息分发，新 Agent 可以接入已有 topic，而不需要重写其他 Agent 的连接关系。
 
+{{< figure
+    src="message-bus.png"
+    caption="Fig. 16. Message Bus pattern: Agents publish events to a shared bus and subscribe to relevant topics, remaining decoupled from one another. (Image source: [Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns))"
+    align="center"
+    width="100%"
+>}}
+
 Message Bus 适合安全告警、异步任务和不断增加新 Agent 类型的事件驱动系统。它的代价是执行链路更难追踪：router 分类错误、漏投事件或下游订阅配置错误时，系统可能没有显式崩溃，却静默地遗漏工作。因此需要为事件链保留完整、可关联的日志，并验证 LLM router 的路由结果。
 
 ### Shared State
 
 如果 Agent 不是依次响应事件，而是需要持续利用彼此的中间发现，可以改用 **Shared State（共享状态）**（[Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns)）。所有 Agent 直接读写同一个数据库、文件系统或文档，不再由 orchestrator 或 router 决定信息应该传给谁；共享存储本身成为持续演化的协作上下文。
+
+{{< figure
+    src="shared-state.png"
+    caption="Fig. 17. Shared State pattern: autonomous Agents read from and write to a common persistent store, making findings immediately available to the other Agents. (Image source: [Phillips, 2026](https://claude.com/blog/multi-agent-coordination-patterns))"
+    align="center"
+    width="100%"
+>}}
 
 Shared State 适合协作研究和共同维护知识库，但去掉中心协调者也会带来重复工作、矛盾写入和 reactive loop。并发写入可以用锁、版本控制或分区缓解；行为层面的循环则必须依靠明确的停止条件，例如时间预算、连续若干轮没有新发现，或由指定 Agent 判断信息已经充分。简而言之，离散事件触发后续动作时使用 Message Bus；信息需要持续积累并被反复读取时使用 Shared State。
 
@@ -276,7 +290,7 @@ Shared State 适合协作研究和共同维护知识库，但去掉中心协调�
 
 {{< figure
     src="multi-agent-vulnerability-discovery.png"
-    caption="Fig. 16. Coordinated swarm findings (solid curves) versus independently partitioned agents (stars); dashed curves show overlap, while the dotted Mythos Preview curve keeps only findings inside the baseline's core directories. Search scopes and token budgets are not matched. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    caption="Fig. 18. Coordinated swarm findings (solid curves) versus independently partitioned agents (stars); dashed curves show overlap, while the dotted Mythos Preview curve keeps only findings inside the baseline's core directories. Search scopes and token budgets are not matched. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
     align="center"
     width="100%"
 >}}
@@ -287,7 +301,7 @@ Agent swarm 使用了约四倍的 Token，并扩展到了更多代码目录；�
 
 {{< figure
     src="multi-agent-code-coordination.png"
-    caption="Fig. 17. End-of-run merged-PR fraction and median-agent code sharing for 12-hour game-building swarms, averaged across three prompt types. These are coordination proxies rather than quality scores, and high merge rates can reflect file isolation instead of collaboration. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
+    caption="Fig. 19. End-of-run merged-PR fraction and median-agent code sharing for 12-hour game-building swarms, averaged across three prompt types. These are coordination proxies rather than quality scores, and high merge rates can reflect file isolation instead of collaboration. (Image source: [Anthropic, 2026e](https://www.anthropic.com/research/multiagent-systems))"
     align="center"
     width="100%"
 >}}
@@ -322,7 +336,7 @@ Dynamic Workflows 要解决的，正是长程任务在单一上下文中反复�
 
 {{< figure
     src="compare-agent-teams-dynamic-workflows.png"
-    caption="Fig. 18. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
+    caption="Fig. 20. Claude Code parallelizes work in several ways: subagents delegate a side task in their own context and return only a summary, agent teams coordinate through a shared task list with direct messaging, and dynamic workflows script and cross-check many subagents for jobs too big to coordinate one turn at a time. (Image source: [Cat Wu on X](https://x.com/_catwu/status/2060054180379689074))"
     align="center"
     width="100%"
 >}}
@@ -333,7 +347,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 {{< figure
     src="six-workflow-patterns.png"
-    caption="Fig. 19. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
+    caption="Fig. 21. Six common dynamic workflow patterns in Claude Code: classify-and-act, fan-out-and-synthesize, adversarial verification, generate-and-filter, tournament, and loop until done. (Image source: [Anthropic, 2026d](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code))"
     align="center"
     width="100%"
 >}}
@@ -355,7 +369,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 {{< figure
     src="agent-archs.png"
-    caption="Fig. 20. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 22. The agent system architectures studied: a single-agent baseline alongside several multi-agent coordination topologies. (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}
@@ -365,7 +379,7 @@ Anthropic 总结了几种常见的 workflow pattern。Claude 在运行时生成 
 
 {{< figure
     src="agent-scaling.png"
-    caption="Fig. 21. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
+    caption="Fig. 23. Multi-agent coordination helps on parallelizable tasks but hurts on sequential ones, and the benefit shrinks as the single-agent baseline grows stronger (capability saturation). (Image source: [Kim et al., 2025](https://arxiv.org/abs/2512.08296))"
     align="center"
     width="100%"
 >}}

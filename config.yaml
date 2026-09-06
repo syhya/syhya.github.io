@@ -179,7 +179,7 @@ languages:
 
       homeInfoParams:
         Title: "👋 Welcome to Yue's blog"
-        Content: "Hi, this is Yue Shui. I’m currently working on LLM algorithms, with a focus on Agentic RL. My past experience includes researching and applying LLMs in fields such as finance, audit, and code generation. This blog is where I document and share insights from my work and learning journey. The grammar mistakes in the posts might give you a hint about ChatGPT’s involvement 😉—let me know if you spot any! My interests include model training, RAG, and LLM Agent. Feel free to connect!"
+        Content: "Hi, I’m Yue Shui. I work on LLM algorithms and explore recursive self-improvement. My focus is improving agents’ performance on code and reasoning tasks and using them to accelerate model and AI infra development. Previously, I applied LLMs in finance and auditing. Here, I share insights from my work and learning. Feedback and discussion are welcome!"
 
       socialIcons:
         - name: linkedin
@@ -291,7 +291,7 @@ languages:
 
       homeInfoParams:
         Title: "👋 欢迎访问我的博客"
-        Content: "你好，我是 Yue Shui，目前从事大模型算法相关工作，研究方向为 Agentic RL。我的过往经历包括将 LLM 应用于金融、审计和代码生成等领域。这个博客用于记录和分享我在工作与学习中的见解。文章中的语法错误或许能透露出 ChatGPT 的参与程度😉——记得告诉我！我的兴趣包括模型训练、RAG 以及 LLM Agent。欢迎交流！"
+        Content: "你好，我是 Yue Shui，目前从事大模型算法相关工作，探索 AI 的递归自我改进。我关注如何持续提升 Agent 在代码与推理任务中的表现，并用它们加速模型与 AI infra 的研发。此前，我曾将 LLM 应用于金融和审计领域。这里分享我在工作与学习中的思考与实践，欢迎交流与指正！"
 
       socialIcons:
         - name: linkedin

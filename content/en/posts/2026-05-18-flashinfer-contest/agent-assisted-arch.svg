@@ -1,0 +1,520 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1672" height="941" viewBox="0 0 1672 941" version="1.1" id="agent-assisted-b200-kernel-optimization" xml:space="preserve">
+  <title>Agent-Assisted Closed-Loop Harness for B200 Kernel Optimization</title>
+  <desc>Editable vector reconstruction, original-style typography revision 3. Canvas: 1672 by 941. All 85 original labels are live SVG text, with native Roboto / Roboto Condensed font proportions. Text and its ancestor groups have no transforms; no forced text lengths or glyph stretching. Typography is consistent by semantic role. Original figure content, colors, icons, arrows and flow relationships are retained. Step 7 has a 16.2-pixel wider card so its native text does not need compression. Fonts are not embedded; install Roboto and Roboto Condensed locally for matching editable rendering.</desc>
+  <defs>
+    <linearGradient id="panel-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eef3fd"/>
+      <stop offset="100%" stop-color="#f7f9fd"/>
+    </linearGradient>
+    <linearGradient id="panel-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7f3fc"/>
+      <stop offset="100%" stop-color="#faf8fc"/>
+    </linearGradient>
+    <linearGradient id="panel-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7eb"/>
+      <stop offset="100%" stop-color="#fff9f2"/>
+    </linearGradient>
+    <linearGradient id="panel-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f7ef"/>
+      <stop offset="100%" stop-color="#f6f9f3"/>
+    </linearGradient>
+    <linearGradient id="card-white" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fdfefe"/>
+    </linearGradient>
+    <linearGradient id="card-warm" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fffdfb"/>
+    </linearGradient>
+    <linearGradient id="rule-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf7ff"/>
+      <stop offset="100%" stop-color="#f0eafa"/>
+    </linearGradient>
+    <linearGradient id="rule-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff9ee"/>
+      <stop offset="100%" stop-color="#fffcf5"/>
+    </linearGradient>
+    <linearGradient id="icon-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a66d0"/>
+      <stop offset="100%" stop-color="#1c55b9"/>
+    </linearGradient>
+    <linearGradient id="icon-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6c45c1"/>
+      <stop offset="100%" stop-color="#4c2da4"/>
+    </linearGradient>
+    <linearGradient id="icon-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef6b12"/>
+      <stop offset="100%" stop-color="#cb4f00"/>
+    </linearGradient>
+    <linearGradient id="icon-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#278744"/>
+      <stop offset="100%" stop-color="#076726"/>
+    </linearGradient>
+    <linearGradient id="icon-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dda722"/>
+      <stop offset="100%" stop-color="#b97e0c"/>
+    </linearGradient>
+    <linearGradient id="arrow-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#477adc"/>
+      <stop offset="100%" stop-color="#2c5ebd"/>
+    </linearGradient>
+    <linearGradient id="arrow-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7350c9"/>
+      <stop offset="100%" stop-color="#5934b4"/>
+    </linearGradient>
+    <linearGradient id="arrow-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fa963f"/>
+      <stop offset="100%" stop-color="#f17221"/>
+    </linearGradient>
+  </defs>
+  <g id="layer-background" inkscape:label="00 · Background" inkscape:groupmode="layer">
+    <rect x="0" y="0" width="1672" height="941" rx="0" fill="#ffffff" id="canvas-background"/>
+  </g>
+  <g id="layer-title" inkscape:label="01 · Title and subtitle" inkscape:groupmode="layer">
+    <text id="diagram-title" x="867.897" y="56.203" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="46" font-weight="700" font-style="normal" fill="#090a0c" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-title">Agent-Assisted Closed-Loop Harness for B200 Kernel Optimization</text>
+    <text id="diagram-subtitle" x="851.641" y="97.548" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="27" font-weight="400" font-style="italic" fill="#606173" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-subtitle">Reference-first, shape-aware optimization for FlashInfer contest operators</text>
+  </g>
+  <g id="layer-grounding-inputs" inkscape:label="02 · Grounding Inputs" inkscape:groupmode="layer">
+    <rect x="39" y="126.7" width="258.2" height="629.1" rx="14" fill="#24343b" opacity="0.026" id="grounding-shadow"/>
+    <rect x="39" y="123.7" width="258.2" height="629.1" rx="14" fill="url(#panel-blue)" stroke="#7296ed" stroke-width="1.25" id="grounding-frame"/>
+    <text id="grounding-heading" x="166.545" y="157.687" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="21" font-weight="700" font-style="normal" fill="#1558c8" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-section-heading">1. Grounding Inputs</text>
+    <g id="operator-definition" inkscape:label="operator definition">
+      <rect x="53.2" y="178.5" width="229" height="80.6" rx="10.4" fill="#25333e" opacity="0.022" id="operator-definition-shadow-soft"/>
+      <rect x="53.2" y="177.5" width="229" height="80.6" rx="10.2" fill="#25333e" opacity="0.035" id="operator-definition-shadow-near"/>
+      <rect x="53.2" y="175.8" width="229" height="80.6" rx="10" fill="url(#card-white)" stroke="#6689dc" stroke-width="1.15" id="operator-definition-frame"/>
+      <g id="operator-definition-icon" transform="translate(68 192) scale(0.916667 0.979167)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="code-file icon">
+        <path d="M9 1 H30 L42 13 V45 Q42 48 39 48 H9 Q6 48 6 45 V4 Q6 1 9 1 Z" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="0.8" id="vector-detail-001"/>
+        <path d="M30 1 V13 H42" fill="none" stroke="#e4edff" stroke-width="2" id="vector-detail-002"/>
+        <path d="M18 23 L12 29 L18 34 M30 23 L36 29 L30 34 M26 21 L22 37" fill="none" stroke="#ffffff" stroke-width="2.8" id="vector-detail-003"/>
+      </g>
+      <text id="operator-definition-text-1" x="127.500" y="210.172" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Operator definition</text>
+      <text id="operator-definition-text-2" x="127.500" y="231.672" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">&amp; config</text>
+    </g>
+    <g id="workload-latency" inkscape:label="workload latency">
+      <rect x="53" y="281.5" width="229" height="83.4" rx="10.4" fill="#25333e" opacity="0.022" id="workload-latency-shadow-soft"/>
+      <rect x="53" y="280.5" width="229" height="83.4" rx="10.2" fill="#25333e" opacity="0.035" id="workload-latency-shadow-near"/>
+      <rect x="53" y="278.8" width="229" height="83.4" rx="10" fill="url(#card-white)" stroke="#6689dc" stroke-width="1.15" id="workload-latency-frame"/>
+      <g id="workload-latency-icon" transform="translate(69 295) scale(0.958333 1.020833)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="database-clock icon">
+        <path d="M3 9 C3 3 33 3 33 9 V33 C33 42 3 42 3 33 Z" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="0.5" id="vector-detail-004"/>
+        <ellipse cx="18" cy="9" rx="15" ry="7.5" fill="url(#icon-blue)" stroke="#ffffff" stroke-width="1.8" id="vector-detail-005"/>
+        <path d="M3 11 V32 C3 36 11 39 18 39" fill="none" stroke="#194aab" stroke-width="0.8" id="vector-detail-006"/>
+        <circle cx="35" cy="36" r="11.5" fill="#ffffff" stroke="#ffffff" stroke-width="3.8" id="vector-detail-007"/>
+        <circle cx="35" cy="36" r="10.8" fill="#ffffff" stroke="#1558c8" stroke-width="1.8" id="vector-detail-008"/>
+        <path d="M35 29 V36 L40 39" fill="none" stroke="#1558c8" stroke-width="2.1" id="vector-detail-009"/>
+      </g>
+      <text id="workload-latency-text-1" x="127.500" y="314.062" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Workload JSONL</text>
+      <text id="workload-latency-text-2" x="127.500" y="335.562" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">+ latency logs</text>
+    </g>
+    <g id="reference-repositories" inkscape:label="reference repositories">
+      <rect x="52.5" y="389.2" width="229.5" height="81.5" rx="10.4" fill="#25333e" opacity="0.022" id="reference-repositories-shadow-soft"/>
+      <rect x="52.5" y="388.2" width="229.5" height="81.5" rx="10.2" fill="#25333e" opacity="0.035" id="reference-repositories-shadow-near"/>
+      <rect x="52.5" y="386.5" width="229.5" height="81.5" rx="10" fill="url(#card-white)" stroke="#6689dc" stroke-width="1.15" id="reference-repositories-frame"/>
+      <g id="reference-repositories-icon" transform="translate(67.5 399) scale(0.875000 1.104167)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="cloud-server icon">
+        <path d="M10 25 C1 25 -1 15 6 11 C6 6 11 3 16 5 C20 -3 34 -1 37 10 C49 11 48 25 39 25 H27 V21 Q27 17 23 17 Q19 17 19 21 V25 Z" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="0.8" id="vector-detail-010"/>
+        <path d="M23 21 V33" fill="none" stroke="#1558c8" stroke-width="2.8" id="vector-detail-011"/>
+        <rect x="8" y="31" width="30" height="7" rx="0" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="0.5" id="vector-detail-012"/>
+        <rect x="8" y="41" width="30" height="7" rx="0" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="0.5" id="vector-detail-013"/>
+        <rect x="12" y="33.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-014"/>
+        <rect x="16" y="33.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-015"/>
+        <rect x="30" y="33.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-016"/>
+        <rect x="34" y="33.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-017"/>
+        <rect x="12" y="43.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-018"/>
+        <rect x="16" y="43.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-019"/>
+        <rect x="30" y="43.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-020"/>
+        <rect x="34" y="43.5" width="2.1" height="2.1" rx="0" fill="#ffffff" id="vector-detail-021"/>
+      </g>
+      <text id="reference-repositories-text-1" x="127.000" y="417.641" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Local / online</text>
+      <text id="reference-repositories-text-2" x="127.000" y="439.141" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">reference repos</text>
+    </g>
+    <g id="official-parity" inkscape:label="official parity">
+      <rect x="52" y="491.7" width="230" height="98" rx="10.4" fill="#25333e" opacity="0.022" id="official-parity-shadow-soft"/>
+      <rect x="52" y="490.7" width="230" height="98" rx="10.2" fill="#25333e" opacity="0.035" id="official-parity-shadow-near"/>
+      <rect x="52" y="489" width="230" height="98" rx="10" fill="url(#card-white)" stroke="#6689dc" stroke-width="1.15" id="official-parity-frame"/>
+      <g id="official-parity-icon" transform="translate(65 499) scale(0.979167 0.979167)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="cpu icon">
+        <line x1="14" y1="2" x2="14" y2="10" stroke="#1558c8" stroke-width="3.1" id="vector-detail-022"/>
+        <line x1="14" y1="39" x2="14" y2="47" stroke="#1558c8" stroke-width="3.1" id="vector-detail-023"/>
+        <line x1="1" y1="13" x2="9" y2="13" stroke="#1558c8" stroke-width="3.1" id="vector-detail-024"/>
+        <line x1="40" y1="13" x2="47" y2="13" stroke="#1558c8" stroke-width="3.1" id="vector-detail-025"/>
+        <line x1="22" y1="2" x2="22" y2="10" stroke="#1558c8" stroke-width="3.1" id="vector-detail-026"/>
+        <line x1="22" y1="39" x2="22" y2="47" stroke="#1558c8" stroke-width="3.1" id="vector-detail-027"/>
+        <line x1="1" y1="21" x2="9" y2="21" stroke="#1558c8" stroke-width="3.1" id="vector-detail-028"/>
+        <line x1="40" y1="21" x2="47" y2="21" stroke="#1558c8" stroke-width="3.1" id="vector-detail-029"/>
+        <line x1="30" y1="2" x2="30" y2="10" stroke="#1558c8" stroke-width="3.1" id="vector-detail-030"/>
+        <line x1="30" y1="39" x2="30" y2="47" stroke="#1558c8" stroke-width="3.1" id="vector-detail-031"/>
+        <line x1="1" y1="29" x2="9" y2="29" stroke="#1558c8" stroke-width="3.1" id="vector-detail-032"/>
+        <line x1="40" y1="29" x2="47" y2="29" stroke="#1558c8" stroke-width="3.1" id="vector-detail-033"/>
+        <line x1="38" y1="2" x2="38" y2="10" stroke="#1558c8" stroke-width="3.1" id="vector-detail-034"/>
+        <line x1="38" y1="39" x2="38" y2="47" stroke="#1558c8" stroke-width="3.1" id="vector-detail-035"/>
+        <line x1="1" y1="37" x2="9" y2="37" stroke="#1558c8" stroke-width="3.1" id="vector-detail-036"/>
+        <line x1="40" y1="37" x2="47" y2="37" stroke="#1558c8" stroke-width="3.1" id="vector-detail-037"/>
+        <rect x="8" y="9" width="32" height="31" rx="3" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="1.3" id="vector-detail-038"/>
+        <rect x="12.5" y="13.5" width="23" height="22" rx="1" fill="none" stroke="#ffffff" stroke-width="2" id="vector-detail-039"/>
+        <path d="M18 31 V18 H30 V31 H24" fill="none" stroke="#ffffff" stroke-width="2" id="vector-detail-040"/>
+      </g>
+      <text id="official-parity-text-1" x="127.000" y="511.766" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Official-parity</text>
+      <text id="official-parity-text-2" x="127.000" y="533.266" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">environment</text>
+      <text id="official-parity-text-3" x="127.000" y="554.766" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">B200 + CUDA 13.2 +</text>
+      <text id="official-parity-text-4" x="127.000" y="576.266" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">FlashInfer-Bench</text>
+    </g>
+    <g id="optimization-policy" inkscape:label="optimization policy">
+      <rect x="52" y="610.7" width="230" height="75" rx="10.4" fill="#25333e" opacity="0.022" id="optimization-policy-shadow-soft"/>
+      <rect x="52" y="609.7" width="230" height="75" rx="10.2" fill="#25333e" opacity="0.035" id="optimization-policy-shadow-near"/>
+      <rect x="52" y="608" width="230" height="75" rx="10" fill="url(#card-white)" stroke="#6689dc" stroke-width="1.15" id="optimization-policy-frame"/>
+      <g id="optimization-policy-icon" transform="translate(66 619) scale(0.812500 1.000000)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="head-brain icon">
+        <path d="M11 48 L12 36 C9 32 5 28 5 20 C4 8 13 0 25 0 C36 0 43 9 43 19 L48 28 L41 29 L40 35 Q40 39 35 39 H30 V48 Z" fill="url(#icon-blue)" stroke="#1558c8" stroke-width="0.5" id="vector-detail-041"/>
+        <path d="M19 7 C14 8 12 11 13 15 C8 19 12 24 15 25 C15 31 21 31 24 27 C28 28 31 24 31 21 C36 20 37 16 33 13 C33 8 28 5 26 8 C23 3 20 4 19 7 Z" fill="none" stroke="#ffffff" stroke-width="2.6" id="vector-detail-042"/>
+        <path d="M22 7 V14 L18 17 L19 24 L17 27 M27 8 L26 15 L30 17 M14 13 L18 14 M13 21 L18 19 M23 16 L23 26 M25 22 L30 20" fill="none" stroke="#ffffff" stroke-width="2" id="vector-detail-043"/>
+      </g>
+      <text id="optimization-policy-text-1" x="126.500" y="640.062" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Optimization skill /</text>
+      <text id="optimization-policy-text-2" x="126.500" y="661.562" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">policy</text>
+    </g>
+    <line x1="46" y1="699.6" x2="289" y2="699.6" stroke="#6e93eb" stroke-width="1.2" stroke-dasharray="4 2" id="grounding-footer-separator"/>
+    <text id="reference-first-label" x="170.707" y="726.890" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="17" font-weight="700" font-style="italic" fill="#1558c8" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-reference-note">Reference-first reconnaissance</text>
+  </g>
+  <g id="layer-shape-discovery" inkscape:label="03 · Shape Discovery &amp; Planning" inkscape:groupmode="layer">
+    <rect x="333.7" y="127" width="274.8" height="630.2" rx="14" fill="#24343b" opacity="0.026" id="shape-planning-shadow"/>
+    <rect x="333.7" y="124" width="274.8" height="630.2" rx="14" fill="url(#panel-purple)" stroke="#957ad7" stroke-width="1.25" id="shape-planning-frame"/>
+    <text id="shape-planning-heading" x="475.148" y="157.656" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="21" font-weight="700" font-style="normal" fill="#5633b2" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-section-heading">2. Shape Discovery &amp; Planning</text>
+    <g id="parse-workloads" inkscape:label="parse workloads">
+      <rect x="352.1" y="184.7" width="235" height="82.6" rx="10.4" fill="#25333e" opacity="0.022" id="parse-workloads-shadow-soft"/>
+      <rect x="352.1" y="183.7" width="235" height="82.6" rx="10.2" fill="#25333e" opacity="0.035" id="parse-workloads-shadow-near"/>
+      <rect x="352.1" y="182" width="235" height="82.6" rx="10" fill="url(#card-white)" stroke="#957ad7" stroke-width="1.15" id="parse-workloads-frame"/>
+      <g id="parse-workloads-icon" transform="translate(365 201) scale(0.854167 0.854167)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="magnifier icon">
+        <circle cx="20" cy="19" r="14" fill="none" stroke="url(#icon-purple)" stroke-width="4" id="vector-detail-044"/>
+        <path d="M30 30 L43 44" fill="none" stroke="url(#icon-purple)" stroke-width="5" id="vector-detail-045"/>
+        <path d="M12 16 C12 12 15 9 18 9" fill="none" stroke="#9f87df" stroke-width="2" id="vector-detail-046"/>
+      </g>
+      <text id="parse-workloads-text-1" x="425.500" y="217.188" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Parse axes and</text>
+      <text id="parse-workloads-text-2" x="425.500" y="238.688" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">workload UUIDs</text>
+    </g>
+    <g id="join-latency" inkscape:label="join latency">
+      <rect x="352.1" y="307.2" width="235" height="82.5" rx="10.4" fill="#25333e" opacity="0.022" id="join-latency-shadow-soft"/>
+      <rect x="352.1" y="306.2" width="235" height="82.5" rx="10.2" fill="#25333e" opacity="0.035" id="join-latency-shadow-near"/>
+      <rect x="352.1" y="304.5" width="235" height="82.5" rx="10" fill="url(#card-white)" stroke="#957ad7" stroke-width="1.15" id="join-latency-frame"/>
+      <g id="join-latency-icon" transform="translate(364 323) scale(0.875000 0.875000)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="table icon">
+        <rect x="3" y="3" width="42" height="42" rx="2" fill="url(#icon-purple)" stroke="#5633b2" stroke-width="0.7" id="vector-detail-047"/>
+        <rect x="7" y="12" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-048"/>
+        <rect x="19" y="12" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-049"/>
+        <rect x="31" y="12" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-050"/>
+        <rect x="7" y="22" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-051"/>
+        <rect x="19" y="22" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-052"/>
+        <rect x="31" y="22" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-053"/>
+        <rect x="7" y="32" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-054"/>
+        <rect x="19" y="32" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-055"/>
+        <rect x="31" y="32" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-056"/>
+      </g>
+      <text id="join-latency-text-1" x="425.500" y="339.563" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Join per-workload</text>
+      <text id="join-latency-text-2" x="425.500" y="361.063" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">latency</text>
+    </g>
+    <g id="representative-regimes" inkscape:label="representative regimes">
+      <rect x="351.7" y="435.7" width="235.8" height="113.2" rx="10.4" fill="#25333e" opacity="0.022" id="representative-regimes-shadow-soft"/>
+      <rect x="351.7" y="434.7" width="235.8" height="113.2" rx="10.2" fill="#25333e" opacity="0.035" id="representative-regimes-shadow-near"/>
+      <rect x="351.7" y="433" width="235.8" height="113.2" rx="10" fill="url(#card-white)" stroke="#957ad7" stroke-width="1.15" id="representative-regimes-frame"/>
+      <g id="representative-regimes-icon" transform="translate(359 461) scale(0.833333 0.958333)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="bars icon">
+        <rect x="4" y="25" width="7" height="18" rx="0" fill="url(#icon-purple)" id="vector-detail-057"/>
+        <rect x="14" y="12" width="7" height="31" rx="0" fill="url(#icon-purple)" id="vector-detail-058"/>
+        <rect x="24" y="21" width="7" height="22" rx="0" fill="url(#icon-purple)" id="vector-detail-059"/>
+        <rect x="34" y="4" width="7" height="39" rx="0" fill="url(#icon-purple)" id="vector-detail-060"/>
+        <line x1="2" y1="47" x2="45" y2="47" stroke="#5633b2" stroke-width="3.1" id="vector-detail-061"/>
+      </g>
+      <text id="representative-regimes-text-1" x="416.000" y="462.000" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Identify representative</text>
+      <text id="representative-regimes-text-2" x="416.000" y="483.500" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">regimes</text>
+      <text id="representative-regimes-text-3" x="416.000" y="505.000" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">(short / medium / long,</text>
+      <text id="representative-regimes-text-4" x="416.000" y="526.500" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">outliers)</text>
+    </g>
+    <g id="bottleneck-hypothesis" inkscape:label="bottleneck hypothesis">
+      <rect x="351.3" y="587.9" width="235" height="80.1" rx="10.4" fill="#25333e" opacity="0.022" id="bottleneck-hypothesis-shadow-soft"/>
+      <rect x="351.3" y="586.9" width="235" height="80.1" rx="10.2" fill="#25333e" opacity="0.035" id="bottleneck-hypothesis-shadow-near"/>
+      <rect x="351.3" y="585.2" width="235" height="80.1" rx="10" fill="url(#card-white)" stroke="#957ad7" stroke-width="1.15" id="bottleneck-hypothesis-frame"/>
+      <g id="bottleneck-hypothesis-icon" transform="translate(363 605) scale(0.854167 0.854167)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="target icon">
+        <circle cx="22" cy="26" r="19" fill="none" stroke="url(#icon-purple)" stroke-width="3.4" id="vector-detail-062"/>
+        <circle cx="22" cy="26" r="12.5" fill="none" stroke="url(#icon-purple)" stroke-width="3" id="vector-detail-063"/>
+        <circle cx="22" cy="26" r="5.4" fill="url(#icon-purple)" id="vector-detail-064"/>
+        <path d="M22 26 L39 9" fill="none" stroke="#ffffff" stroke-width="7" id="vector-detail-065"/>
+        <path d="M22 26 L40 8" fill="none" stroke="url(#icon-purple)" stroke-width="4.2" id="vector-detail-066"/>
+        <path d="M35 10 L36 3 L41 0 L41 7 L47 8 L42 14 Z" fill="url(#icon-purple)" id="vector-detail-067"/>
+      </g>
+      <text id="bottleneck-hypothesis-text-1" x="419.000" y="620.563" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Select bottleneck</text>
+      <text id="bottleneck-hypothesis-text-2" x="419.000" y="642.063" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">hypothesis</text>
+    </g>
+    <g id="planning-arrow-1" inkscape:label="Planning arrow 1">
+      <line x1="470.6" y1="268.5" x2="470.6" y2="289.5" stroke="#5633b2" stroke-width="2.2" id="vector-detail-068"/>
+      <polygon points="470.6,298.5 464.1,285.5 477.1,285.5" fill="#5633b2" id="planning-arrow-1-head"/>
+    </g>
+    <g id="planning-arrow-2" inkscape:label="Planning arrow 2">
+      <line x1="470.6" y1="392.1" x2="470.6" y2="417.1" stroke="#5633b2" stroke-width="2.2" id="vector-detail-069"/>
+      <polygon points="470.6,426.1 464.1,413.1 477.1,413.1" fill="#5633b2" id="planning-arrow-2-head"/>
+    </g>
+    <g id="planning-arrow-3" inkscape:label="Planning arrow 3">
+      <line x1="470.6" y1="550" x2="470.6" y2="570.3" stroke="#5633b2" stroke-width="2.2" id="vector-detail-070"/>
+      <polygon points="470.6,579.3 464.1,566.3 477.1,566.3" fill="#5633b2" id="planning-arrow-3-head"/>
+    </g>
+    <line x1="340.5" y1="694.2" x2="600.5" y2="694.2" stroke="#957ad7" stroke-width="1.15" stroke-dasharray="3.3 2.8" id="shape-footer-separator"/>
+    <g id="shape-aware-rule" inkscape:label="shape aware rule">
+      <rect x="378.3" y="706.5" width="172" height="36.5" rx="11" fill="url(#rule-purple)" stroke="#957ad7" stroke-width="1.15" id="shape-aware-rule-frame"/>
+      <text id="shape-aware-rule-label" x="464.300" y="729.891" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="500" font-style="normal" fill="#5633b2" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-shape-rule">Shape-aware rule</text>
+    </g>
+  </g>
+  <g id="layer-closed-loop" inkscape:label="04 · Closed-Loop Optimization Harness" inkscape:groupmode="layer">
+    <rect x="641.3" y="127" width="652.2" height="634.4" rx="14" fill="#24343b" opacity="0.026" id="optimization-harness-shadow"/>
+    <rect x="641.3" y="124" width="652.2" height="634.4" rx="14" fill="url(#panel-orange)" stroke="#fd762d" stroke-width="1.25" id="optimization-harness-frame"/>
+    <text id="harness-heading" x="952.533" y="157.250" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="21" font-weight="700" font-style="normal" fill="#eb5900" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-section-heading">3. Closed-Loop Optimization Harness</text>
+    <g id="human-and-agent-controls" inkscape:label="Human-designed controls and coding agents">
+      <g id="human-controls" inkscape:label="human controls">
+        <rect x="675.2" y="175.7" width="270.6" height="157.3" rx="14" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.15" id="human-controls-frame"/>
+        <g id="human-controls-icon" transform="translate(689.5 185) scale(0.541667 0.562500)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="human icon">
+          <ellipse cx="24" cy="12" rx="10.5" ry="12" fill="url(#icon-orange)" id="vector-detail-071"/>
+          <path d="M3 47 V41 C3 29 12 26 24 26 C36 26 45 30 45 41 V47 Z" fill="url(#icon-orange)" id="vector-detail-072"/>
+        </g>
+        <text id="human-controls-title" x="725.000" y="205.000" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="17" font-weight="700" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-heading">Human-designed controls</text>
+        <circle cx="718.5" cy="228.3" r="2" fill="#101116" id="human-bullet-1"/>
+        <text id="human-control-1" x="732.000" y="231.913" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">objective &amp; metrics</text>
+        <circle cx="718.5" cy="250.4" r="2" fill="#101116" id="human-bullet-2"/>
+        <text id="human-control-2" x="732.000" y="254.913" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">harness &amp; tooling</text>
+        <circle cx="718.5" cy="273.1" r="2" fill="#101116" id="human-bullet-3"/>
+        <text id="human-control-3" x="732.000" y="277.913" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">references &amp; search</text>
+        <circle cx="718.5" cy="296.3" r="2" fill="#101116" id="human-bullet-4"/>
+        <text id="human-control-4" x="732.000" y="300.913" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">promotion policy</text>
+      </g>
+      <g id="coding-agents" inkscape:label="coding agents">
+        <rect x="960.4" y="175.7" width="264.7" height="157.3" rx="14" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.15" id="coding-agents-frame"/>
+        <g id="coding-agent-robot" transform="translate(974.5 184) scale(0.677083 0.666667)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="robot icon">
+          <line x1="24" y1="3" x2="24" y2="10" stroke="#eb5900" stroke-width="3" id="vector-detail-073"/>
+          <circle cx="24" cy="2" r="2.2" fill="url(#icon-orange)" id="vector-detail-074"/>
+          <rect x="8" y="11" width="32" height="33" rx="4" fill="url(#icon-orange)" id="vector-detail-075"/>
+          <rect x="2" y="18" width="4" height="15" rx="2" fill="url(#icon-orange)" id="vector-detail-076"/>
+          <rect x="42" y="18" width="4" height="15" rx="2" fill="url(#icon-orange)" id="vector-detail-077"/>
+          <circle cx="17" cy="24" r="4.1" fill="#ffffff" id="vector-detail-078"/>
+          <circle cx="31" cy="24" r="4.1" fill="#ffffff" id="vector-detail-079"/>
+          <path d="M17 35 H31" fill="none" stroke="#ffffff" stroke-width="3.1" id="vector-detail-080"/>
+        </g>
+        <text id="coding-agents-title" x="1018.000" y="205.000" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="17" font-weight="700" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-heading">Coding agents</text>
+        <circle cx="1004.5" cy="228.3" r="2" fill="#101116" id="coding-bullet-1"/>
+        <text id="coding-agent-description-1" x="1018.000" y="230.163" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">Codex / Claude</text>
+        <circle cx="1004.5" cy="250.4" r="2" fill="#101116" id="coding-bullet-2"/>
+        <text id="coding-agent-description-2" x="1018.000" y="252.663" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">sub-agent debate</text>
+        <circle cx="1004.5" cy="273.1" r="2" fill="#101116" id="coding-bullet-3"/>
+        <text id="coding-agent-description-3" x="1018.000" y="275.163" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">CUDA / Triton / CuTe</text>
+        <text id="coding-agent-description-4" x="1018.000" y="297.663" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">candidates</text>
+        <circle cx="1004.5" cy="317.1" r="2" fill="#101116" id="coding-bullet-5"/>
+        <text id="coding-agent-description-5" x="1018.000" y="320.163" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-control-body">analysis &amp; summaries</text>
+      </g>
+    </g>
+    <g id="control-join" stroke-linecap="round" stroke-linejoin="round" inkscape:label="Human and agent controls feed baseline">
+      <path d="M798 333 V347 Q798 354.5 805.5 354.5 H930 Q938.5 354.5 938.5 361" fill="none" stroke="#eb5900" stroke-width="2.5" id="human-to-baseline"/>
+      <path d="M1109 333 V347 Q1109 354.5 1101.5 354.5 H947 Q938.5 354.5 938.5 361" fill="none" stroke="#eb5900" stroke-width="2.5" id="agents-to-baseline"/>
+      <polygon points="938.5,369.5 932,356.5 945,356.5" fill="#eb5900" id="controls-to-baseline-head"/>
+    </g>
+    <g id="measured-loop-connectors" stroke-linecap="round" stroke-linejoin="round" inkscape:label="Eight-step measured feedback loop connectors">
+      <path d="M1017 400.5 H1033 C1058 400.5 1075 408 1085 426" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-1-to-2"/>
+      <polygon points="1085,426 1073.2366,419.0954 1083.4656,412.4466" fill="#eb5900" id="loop-1-to-2-head"/>
+      <path d="M1103.5 485 V517" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-2-to-3"/>
+      <polygon points="1103.5,525 1097.4,512.8 1109.6,512.8" fill="#eb5900" id="loop-2-to-3-head"/>
+      <path d="M1103.5 594 V629" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-3-to-4"/>
+      <polygon points="1103.5,637.5 1097.4,625.3 1109.6,625.3" fill="#eb5900" id="loop-3-to-4-head"/>
+      <path d="M1054 697 C1045 707 1032 714.4 1016 714.4 H1008" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-4-to-5"/>
+      <polygon points="1007,714.4 1019.4,708.2 1019.4,720.6" fill="#eb5900" id="loop-4-to-5-head"/>
+      <path d="M873 714.4 H855 C835 714.4 822 709 814 697" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-5-to-6"/>
+      <path d="M787.6 634 V604" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-6-to-7"/>
+      <polygon points="787.6,596.5 781.5,608.7 793.7,608.7" fill="#eb5900" id="loop-6-to-7-head"/>
+      <path d="M787.6 528 V493" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-7-to-8"/>
+      <polygon points="787.6,487 781.5,499.2 793.7,499.2" fill="#eb5900" id="loop-7-to-8-head"/>
+      <path d="M803 427 C817 408 835 400.5 857 400.5 H869" fill="none" stroke="#eb5900" stroke-width="2.6" id="loop-8-to-1"/>
+      <polygon points="869,400.5 856.8,394.4 856.8,406.6" fill="#eb5900" id="loop-8-to-1-head"/>
+    </g>
+    <g id="candidate-decision-branches" stroke-linecap="round" stroke-linejoin="round" inkscape:label="Candidate retention and rejection branches">
+      <path d="M739 455.5 H731 C706 455.5 692.5 471 692.5 494" fill="none" stroke="#c61417" stroke-width="1.45" stroke-dasharray="4.5 2.8" id="rejection-branch"/>
+      <polygon points="692.5,506 686.4,493.8 698.6,493.8" fill="#c61417" id="rejection-branch-head"/>
+      <path d="M1156 455.5 H1193 C1215 455.5 1228 470 1228 494" fill="none" stroke="#197735" stroke-width="1.45" stroke-dasharray="4.5 2.8" id="retention-branch"/>
+      <polygon points="1169,455.5 1155.8,448.9 1155.8,462.1" fill="#197735" id="retention-exit-head"/>
+      <polygon points="1228,506 1221.9,493.8 1234.1,493.8" fill="#197735" id="retention-branch-head"/>
+    </g>
+    <g id="optimization-loop-steps" inkscape:label="Optimization loop steps 1–8">
+      <g id="step-1-baseline-evidence" inkscape:label="step 1 baseline evidence">
+        <rect x="870" y="373.5" width="147.1" height="56.5" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-1-baseline-evidence-frame"/>
+        <ellipse cx="889.8" cy="391.6" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-1-badge"/>
+        <text id="step-1-number" x="889.800" y="398.006" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">1</text>
+        <text id="step-1-label-1" x="948.072" y="398.734" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Baseline &amp;</text>
+        <text id="step-1-label-2" x="950.326" y="419.734" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">retained evidence</text>
+      </g>
+      <g id="step-2-generate-candidates" inkscape:label="step 2 generate candidates">
+        <rect x="1029.7" y="427.3" width="127.1" height="57.5" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-2-generate-candidates-frame"/>
+        <ellipse cx="1049.7" cy="445.5" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-2-badge"/>
+        <text id="step-2-number" x="1049.700" y="452.000" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">2</text>
+        <text id="step-2-label-1" x="1099.855" y="451.922" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Generate</text>
+        <text id="step-2-label-2" x="1097.780" y="472.922" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">candidate family</text>
+      </g>
+      <g id="step-3-preflight" inkscape:label="step 3 preflight">
+        <rect x="1043.1" y="528" width="113.6" height="65.9" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-3-preflight-frame"/>
+        <ellipse cx="1060.9" cy="550.9" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-3-badge"/>
+        <text id="step-3-number" x="1060.900" y="557.306" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">3</text>
+        <text id="step-3-label-1" x="1107.247" y="558.313" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Preflight</text>
+        <text id="step-3-label-2" x="1105.227" y="579.313" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">compile / pack</text>
+      </g>
+      <g id="step-4-paired-gate" inkscape:label="step 4 paired gate">
+        <rect x="1024.3" y="640" width="140.3" height="57.1" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-4-paired-gate-frame"/>
+        <ellipse cx="1044.7" cy="658.4" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-4-badge"/>
+        <text id="step-4-number" x="1044.700" y="664.806" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">4</text>
+        <text id="step-4-label-1" x="1098.937" y="665.703" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Paired</text>
+        <text id="step-4-label-2" x="1097.330" y="686.703" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">representative gate</text>
+      </g>
+      <g id="step-5-profile" inkscape:label="step 5 profile">
+        <rect x="873.6" y="671" width="133.7" height="58.8" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-5-profile-frame"/>
+        <ellipse cx="893.4" cy="690.9" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-5-badge"/>
+        <text id="step-5-number" x="893.400" y="697.197" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">5</text>
+        <text id="step-5-label-1" x="946.421" y="697.422" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Profile with</text>
+        <text id="step-5-label-2" x="944.919" y="718.422" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">NCU / Torch</text>
+      </g>
+      <g id="step-6-diagnose" inkscape:label="step 6 diagnose">
+        <rect x="749.8" y="634" width="111.1" height="63.4" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-6-diagnose-frame"/>
+        <ellipse cx="766.1" cy="657.8" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-6-badge"/>
+        <text id="step-6-number" x="766.100" y="664.159" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">6</text>
+        <text id="step-6-label-1" x="814.774" y="663.578" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Diagnose</text>
+        <text id="step-6-label-2" x="811.565" y="684.578" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">bottleneck</text>
+      </g>
+      <g id="step-7-shape-local-dispatch" inkscape:label="step 7 shape local dispatch">
+        <rect x="738.1" y="528" width="136" height="65" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-7-shape-local-dispatch-frame"/>
+        <ellipse cx="753.4" cy="550.8" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-7-badge"/>
+        <text id="step-7-number" x="753.400" y="557.191" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">7</text>
+        <text id="step-7-label-1" x="768.000" y="558.234" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-step-label">Integrate shape-</text>
+        <text id="step-7-label-2" x="802.443" y="579.234" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">local dispatch</text>
+      </g>
+      <g id="step-8-full-sweep" inkscape:label="step 8 full sweep">
+        <rect x="739.2" y="426.9" width="126.3" height="57.6" rx="10.3" fill="url(#card-warm)" stroke="#fd762d" stroke-width="1.05" id="step-8-full-sweep-frame"/>
+        <ellipse cx="756.6" cy="445.2" rx="10.7" ry="11.8" fill="url(#icon-orange)" id="step-8-badge"/>
+        <text id="step-8-number" x="756.600" y="451.606" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="18" font-weight="700" font-style="normal" fill="#ffffff" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-number">8</text>
+        <text id="step-8-label-1" x="815.312" y="452.156" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">Full sweep +</text>
+        <text id="step-8-label-2" x="809.485" y="473.156" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15.5" font-weight="500" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-step-label">retry + decision</text>
+      </g>
+    </g>
+    <text id="measured-feedback-line-1" x="943.420" y="541.891" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="24" font-weight="700" font-style="normal" fill="#eb5900" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-loop-emphasis">Measured</text>
+    <text id="measured-feedback-line-2" x="947.196" y="572.688" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="24" font-weight="700" font-style="normal" fill="#eb5900" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-loop-emphasis">feedback loop</text>
+    <g id="rejected-probes" inkscape:label="Rejected probes archived">
+      <rect x="654.6" y="509.4" width="71.9" height="119.3" rx="11" fill="#fffdfd" stroke="#c61417" stroke-width="1.05" stroke-dasharray="4.1 2.8" id="rejected-probes-frame"/>
+      <g id="rejected-probes-icon" transform="translate(672.5 519.5) scale(0.729167 0.729167)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="rejected icon">
+        <path d="M13 6 A19 19 0 0 1 43 25 M40 36 A19 19 0 0 1 20 43 M10 37 A19 19 0 0 1 8 16" fill="none" stroke="#c61417" stroke-width="2.8" id="vector-detail-081"/>
+        <path d="M11 8 L39 40 M39 8 L10 40" fill="none" stroke="#c61417" stroke-width="3" id="vector-detail-082"/>
+      </g>
+      <text id="rejected-probes-label-1" x="690.550" y="572.531" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15" font-weight="700" font-style="normal" fill="#c61417" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-branch-label">Rejected</text>
+      <text id="rejected-probes-label-2" x="690.550" y="592.531" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15" font-weight="700" font-style="normal" fill="#c61417" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-branch-label">probes</text>
+      <text id="rejected-probes-label-3" x="690.550" y="612.531" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15" font-weight="700" font-style="normal" fill="#c61417" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-branch-label">archived</text>
+    </g>
+    <g id="promising-candidates" inkscape:label="Promising candidates retained">
+      <rect x="1185.2" y="509.5" width="90.8" height="119.1" rx="11" fill="#fcfffb" stroke="#4b9858" stroke-width="1.05" stroke-dasharray="4.1 2.8" id="promising-candidates-frame"/>
+      <g id="promising-candidates-icon" transform="translate(1213.2 519.8) scale(0.708333 0.708333)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="check icon">
+        <path d="M41 20 A20 20 0 1 1 29 4" fill="none" stroke="#197735" stroke-width="2.5" id="vector-detail-083"/>
+        <path d="M12 23 L21 32 L43 7" fill="none" stroke="#197735" stroke-width="3.4" id="vector-detail-084"/>
+      </g>
+      <text id="promising-candidates-label-1" x="1230.600" y="572.453" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-branch-label">Promising</text>
+      <text id="promising-candidates-label-2" x="1230.600" y="592.453" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-branch-label">candidates</text>
+      <text id="promising-candidates-label-3" x="1230.600" y="612.453" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="15" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-branch-label">retained</text>
+    </g>
+  </g>
+  <g id="layer-outputs" inkscape:label="05 · Outputs" inkscape:groupmode="layer">
+    <rect x="1342.2" y="127.1" width="291.9" height="632.9" rx="14" fill="#24343b" opacity="0.026" id="outputs-shadow"/>
+    <rect x="1342.2" y="124.1" width="291.9" height="632.9" rx="14" fill="url(#panel-green)" stroke="#819f70" stroke-width="1.25" id="outputs-frame"/>
+    <text id="outputs-heading" x="1478.565" y="159.937" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="21" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-section-heading">4. Outputs</text>
+    <g id="promoted-kernel" inkscape:label="promoted kernel">
+      <rect x="1356.4" y="187.5" width="263.4" height="72" rx="11.4" fill="#25333e" opacity="0.022" id="promoted-kernel-shadow-soft"/>
+      <rect x="1356.4" y="186.5" width="263.4" height="72" rx="11.2" fill="#25333e" opacity="0.035" id="promoted-kernel-shadow-near"/>
+      <rect x="1356.4" y="184.8" width="263.4" height="72" rx="11" fill="url(#card-white)" stroke="#819f70" stroke-width="1.15" id="promoted-kernel-frame"/>
+      <g id="promoted-kernel-icon" transform="translate(1370.5 199) scale(0.875000 0.895833)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="trophy icon">
+        <path d="M12 3 H37 V15 C37 27 31 33 25 34 C19 33 12 27 12 15 Z" fill="url(#icon-green)" stroke="#197735" stroke-width="1" id="vector-detail-085"/>
+        <path d="M12 7 H3 V12 C3 21 8 24 16 25 M37 7 H46 V12 C46 21 40 24 34 25" fill="none" stroke="#197735" stroke-width="3.8" id="vector-detail-086"/>
+        <rect x="21" y="31" width="7" height="12" rx="0" fill="url(#icon-green)" id="vector-detail-087"/>
+        <path d="M12 46 C13 41 20 40 25 40 C30 40 37 42 38 46 Z" fill="url(#icon-green)" id="vector-detail-088"/>
+        <path d="M25 12 V24 M19.5 17.5 H30.5" fill="none" stroke="#ffffff" stroke-width="4.8" id="vector-detail-089"/>
+        <circle cx="25" cy="13" r="2.8" fill="#ffffff" id="vector-detail-090"/>
+      </g>
+      <text id="promoted-kernel-label-1" x="1428.000" y="226.437" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Promoted solution kernel</text>
+    </g>
+    <g id="latency-improvement" inkscape:label="latency improvement">
+      <rect x="1356.4" y="278.8" width="263.4" height="72.1" rx="11.4" fill="#25333e" opacity="0.022" id="latency-improvement-shadow-soft"/>
+      <rect x="1356.4" y="277.8" width="263.4" height="72.1" rx="11.2" fill="#25333e" opacity="0.035" id="latency-improvement-shadow-near"/>
+      <rect x="1356.4" y="276.1" width="263.4" height="72.1" rx="11" fill="url(#card-white)" stroke="#819f70" stroke-width="1.15" id="latency-improvement-frame"/>
+      <g id="latency-improvement-icon" transform="translate(1370.8 290.4) scale(0.822917 0.833333)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="line-chart icon">
+        <path d="M4 2 V45 H46" fill="none" stroke="#197735" stroke-width="3.3" id="vector-detail-091"/>
+        <path d="M11 32 L22 21 L30 28 L43 12" fill="none" stroke="#197735" stroke-width="3.5" id="vector-detail-092"/>
+        <path d="M35 11 H43 V19" fill="none" stroke="#197735" stroke-width="3.5" id="vector-detail-093"/>
+      </g>
+      <text id="latency-improvement-label-1" x="1428.000" y="317.578" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Latency improvement</text>
+    </g>
+    <g id="bottleneck-matrix" inkscape:label="bottleneck matrix">
+      <rect x="1356.4" y="372.5" width="263.4" height="73" rx="11.4" fill="#25333e" opacity="0.022" id="bottleneck-matrix-shadow-soft"/>
+      <rect x="1356.4" y="371.5" width="263.4" height="73" rx="11.2" fill="#25333e" opacity="0.035" id="bottleneck-matrix-shadow-near"/>
+      <rect x="1356.4" y="369.8" width="263.4" height="73" rx="11" fill="url(#card-white)" stroke="#819f70" stroke-width="1.15" id="bottleneck-matrix-frame"/>
+      <g id="bottleneck-matrix-icon" transform="translate(1369.7 385.5) scale(0.895833 0.895833)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="table icon">
+        <rect x="3" y="3" width="42" height="42" rx="2" fill="url(#icon-green)" stroke="#197735" stroke-width="0.7" id="vector-detail-094"/>
+        <rect x="7" y="12" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-095"/>
+        <rect x="19" y="12" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-096"/>
+        <rect x="31" y="12" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-097"/>
+        <rect x="7" y="22" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-098"/>
+        <rect x="19" y="22" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-099"/>
+        <rect x="31" y="22" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-100"/>
+        <rect x="7" y="32" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-101"/>
+        <rect x="19" y="32" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-102"/>
+        <rect x="31" y="32" width="9" height="7.5" rx="0" fill="#ffffff" id="vector-detail-103"/>
+      </g>
+      <text id="bottleneck-matrix-label-1" x="1428.000" y="413.437" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">NCU bottleneck matrix</text>
+    </g>
+    <g id="artifact-archive" inkscape:label="artifact archive">
+      <rect x="1356.4" y="466.6" width="263.4" height="71.9" rx="11.4" fill="#25333e" opacity="0.022" id="artifact-archive-shadow-soft"/>
+      <rect x="1356.4" y="465.6" width="263.4" height="71.9" rx="11.2" fill="#25333e" opacity="0.035" id="artifact-archive-shadow-near"/>
+      <rect x="1356.4" y="463.9" width="263.4" height="71.9" rx="11" fill="url(#card-white)" stroke="#819f70" stroke-width="1.15" id="artifact-archive-frame"/>
+      <g id="artifact-archive-icon" transform="translate(1371 478.6) scale(0.812500 0.895833)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="archive icon">
+        <path d="M8 1 H40 L44 7 H4 Z" fill="url(#icon-green)" id="vector-detail-104"/>
+        <rect x="2" y="10" width="44" height="7" rx="1" fill="url(#icon-green)" id="vector-detail-105"/>
+        <rect x="2" y="20" width="44" height="28" rx="1.5" fill="url(#icon-green)" id="vector-detail-106"/>
+        <path d="M16 27 H32 V34 L26 37 L24 41 L21 37 L16 35 Z" fill="#ffffff" id="vector-detail-107"/>
+      </g>
+      <text id="artifact-archive-label-1" x="1428.000" y="505.016" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Artifact archive</text>
+    </g>
+    <g id="promotion-decision" inkscape:label="promotion decision">
+      <rect x="1356.4" y="561.1" width="263.4" height="72.1" rx="11.4" fill="#25333e" opacity="0.022" id="promotion-decision-shadow-soft"/>
+      <rect x="1356.4" y="560.1" width="263.4" height="72.1" rx="11.2" fill="#25333e" opacity="0.035" id="promotion-decision-shadow-near"/>
+      <rect x="1356.4" y="558.4" width="263.4" height="72.1" rx="11" fill="url(#card-white)" stroke="#819f70" stroke-width="1.15" id="promotion-decision-frame"/>
+      <g id="promotion-decision-icon" transform="translate(1369.8 573.8) scale(0.895833 0.895833)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="scales icon">
+        <path d="M24 5 V41 M9 46 L18 41 H30 L39 46 Z" fill="url(#icon-green)" stroke="#197735" stroke-width="2.8" id="vector-detail-108"/>
+        <path d="M7 10 L23 4 L41 10" fill="none" stroke="#197735" stroke-width="3" id="vector-detail-109"/>
+        <circle cx="24" cy="4" r="3" fill="#ffffff" stroke="#197735" stroke-width="2.5" id="vector-detail-110"/>
+        <path d="M8 12 L1 32 H15 Z M40 12 L33 32 H47 Z" fill="none" stroke="#197735" stroke-width="2.3" id="vector-detail-111"/>
+        <path d="M0 33 H16 C14 42 2 42 0 33 Z M32 33 H48 C46 42 34 42 32 33 Z" fill="url(#icon-green)" id="vector-detail-112"/>
+      </g>
+      <text id="promotion-decision-label-1" x="1428.000" y="588.063" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">Explicit promotion /</text>
+      <text id="promotion-decision-label-2" x="1428.000" y="609.563" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="16" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-card-body">reject decision</text>
+    </g>
+    <line x1="1350.4" y1="661.9" x2="1626" y2="661.9" stroke="#819f70" stroke-width="1.1" stroke-dasharray="3.1 2.7" id="output-tags-separator"/>
+    <g id="operator-moe" inkscape:label="operator moe">
+      <rect x="1356.5" y="685" width="73.7" height="43.2" rx="11" fill="url(#panel-green)" stroke="#819f70" stroke-width="1.05" id="operator-moe-frame"/>
+      <text id="operator-moe-label" x="1393.350" y="712.569" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="17" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-tag-label">MoE</text>
+    </g>
+    <g id="operator-dsa" inkscape:label="operator dsa">
+      <rect x="1450.8" y="685" width="73.6" height="43.2" rx="11" fill="url(#panel-green)" stroke="#819f70" stroke-width="1.05" id="operator-dsa-frame"/>
+      <text id="operator-dsa-label" x="1487.600" y="712.663" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="17" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-tag-label">DSA</text>
+    </g>
+    <g id="operator-gdn" inkscape:label="operator gdn">
+      <rect x="1545.1" y="685" width="73.6" height="43.2" rx="11" fill="url(#panel-green)" stroke="#819f70" stroke-width="1.05" id="operator-gdn-frame"/>
+      <text id="operator-gdn-label" x="1581.900" y="712.663" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="17" font-weight="700" font-style="normal" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-tag-label">GDN</text>
+    </g>
+  </g>
+  <g id="layer-stage-connectors" inkscape:label="06 · Inter-stage flow and next-round feedback" inkscape:groupmode="layer">
+    <polygon points="296.9,398.3 318.1,398.3 318.1,386.4 334.1,404.5 318.1,422.6 318.1,410.7 296.9,410.7" fill="url(#arrow-blue)" id="grounding-to-planning"/>
+    <polygon points="608.3,398.3 628.8,398.3 628.8,386.4 644.8,404.5 628.8,422.6 628.8,410.7 608.3,410.7" fill="url(#arrow-purple)" id="planning-to-harness"/>
+    <polygon points="1293.2,398.3 1321.6,398.3 1321.6,386.4 1337.6,404.5 1321.6,422.6 1321.6,410.7 1293.2,410.7" fill="url(#arrow-orange)" id="harness-to-outputs"/>
+    <g id="next-round-feedback" stroke-linecap="round" stroke-linejoin="round" inkscape:label="Outputs provide evidence for the next round">
+      <path d="M1453 757.5 V767 C1453 786 1441 797 1410 807 C1347 827 1235 832 1143 827.5 C1052 823.5 986 812 958 794 C947 787 944.6 780.6 944.6 772" fill="none" stroke="#197735" stroke-width="3" id="next-round-feedback-connector"/>
+      <polygon points="944.6,758.8 934.5,779 954.7,779" fill="#197735" id="next-round-feedback-head"/>
+      <text id="next-round-feedback-label" x="1188.744" y="809.013" font-family="'Roboto Condensed', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif" font-size="20" font-weight="700" font-style="italic" fill="#197735" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="middle" class="type-feedback-note">evidence for next round</text>
+    </g>
+  </g>
+  <g id="layer-acceptance-rule" inkscape:label="07 · Conservative acceptance rule" inkscape:groupmode="layer">
+    <rect x="194.1" y="853.5" width="1266.2" height="59.4" rx="11" fill="url(#rule-gold)" stroke="#d59a2d" stroke-width="1.15" id="acceptance-rule-frame"/>
+    <g id="acceptance-shield" transform="translate(267.5 861) scale(0.812500 0.937500)" stroke-linecap="round" stroke-linejoin="round" inkscape:label="shield icon">
+      <path d="M24 0 C18 4 10 5 3 7 V24 C3 35 12 43 24 48 C36 43 45 35 45 24 V7 C38 5 30 4 24 0 Z" fill="url(#icon-gold)" stroke="#c79116" stroke-width="0.7" id="vector-detail-113"/>
+      <path d="M14 25 L21 32 L35 17" fill="none" stroke="#ffffff" stroke-width="4.2" id="vector-detail-114"/>
+    </g>
+    <text id="acceptance-rule-title" x="340.000" y="890.750" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="20" font-weight="700" font-style="normal" fill="#0a0b0e" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-acceptance-heading">Conservative acceptance rule:</text>
+    <text id="acceptance-rule-body" x="632.000" y="890.750" font-family="Roboto, Arial, 'Liberation Sans', sans-serif" font-size="20" font-weight="400" font-style="normal" fill="#101116" font-stretch="normal" font-variant="normal" letter-spacing="0" word-spacing="0" text-anchor="start" class="type-acceptance-body">promote only when the full workload distribution improves and correctness is preserved.</text>
+  </g>
+</svg>

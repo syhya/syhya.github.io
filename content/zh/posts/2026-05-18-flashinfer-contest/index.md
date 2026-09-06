@@ -87,7 +87,7 @@ LLM CUDA 队伍分别提交了 Agent-Assisted 和 Full-Agent 两套路线。它�
 [Self-Evolving Agents](/zh/posts/2026-02-20-self-evolving-agents/) 中讨论过 **Harness Engineering**（[Lopopolo, 2026](https://openai.com/index/harness-engineering/)；[Rajasekaran, 2026](https://www.anthropic.com/engineering/harness-design-long-running-apps)）的核心范式：人类负责设计约束、构建反馈机制并定义评估标准，Agent 在受控环境内迭代生成更高质量的代码。
 
 {{< figure
-    src="agent-assisted-arch.png"
+    src="agent-assisted-arch.svg"
     caption="Fig. 6. Agent-Assisted closed-loop harness for B200 kernel optimization. The workflow grounds agents in operator definitions, workload distributions, references, profile signals, and explicit promotion policies. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="100%"
@@ -105,7 +105,7 @@ Agent-Assisted harness 主要分成四层：
 ### Full-Agent
 
 {{< figure
-    src="full-agent-arch.png"
+    src="full-agent-arch.svg"
     caption="Fig. 7. Modified LoongFlow Full-Agent stack. The agent iterates through planning, code generation, evaluation, summarization, and database updates, turning failed candidates into searchable context for later iterations. (Image source: [Ma et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf))"
     align="center"
     width="100%"

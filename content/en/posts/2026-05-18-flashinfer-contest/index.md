@@ -87,7 +87,7 @@ The LLM CUDA team submitted two routes: Agent-Assisted and Full-Agent. Their mai
 In [Self-Evolving Agents](/posts/2026-02-20-self-evolving-agents/), I discussed the core paradigm of **Harness Engineering** ([Lopopolo, 2026](https://openai.com/index/harness-engineering/); [Rajasekaran, 2026](https://www.anthropic.com/engineering/harness-design-long-running-apps)): humans design constraints, build feedback mechanisms, and define evaluation criteria, while agents iteratively generate higher-quality code inside a controlled environment.
 
 {{< figure
-    src="agent-assisted-arch.png"
+    src="agent-assisted-arch.svg"
     caption="Fig. 6. Agent-Assisted closed-loop harness for B200 kernel optimization. The workflow grounds agents in operator definitions, workload distributions, references, profile signals, and explicit promotion policies. (Image source: [Shui et al., 2026](https://arxiv.org/abs/2607.17979))"
     align="center"
     width="100%"
@@ -105,7 +105,7 @@ Humans wrote optimization [skills](https://github.com/syhya/mlsys26-flashinfer-c
 ### Full-Agent
 
 {{< figure
-    src="full-agent-arch.png"
+    src="full-agent-arch.svg"
     caption="Fig. 7. Modified LoongFlow Full-Agent stack. The agent iterates through planning, code generation, evaluation, summarization, and database updates, turning failed candidates into searchable context for later iterations. (Image source: [Ma et al., 2026](https://github.com/syhya/mlsys26-flashinfer-contest/blob/main/full-agent/FULL_AGENT_WRITEUP.pdf))"
     align="center"
     width="100%"

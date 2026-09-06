@@ -1,0 +1,674 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1536" height="1024" viewBox="0 0 1536 1024" version="1.1" id="modified-loongflow-full-agent-stack">
+  <title>Modified LoongFlow Full-Agent Stack — editable vector reconstruction</title>
+  <desc>Manually reconstructed from the supplied 1536 × 1024 reference. All labels are live SVG text. Panels, pictograms, branching graphs, connectors and arrowheads are separately editable vector objects. Text uses a Times-family serif font with natural, unstretched glyph proportions. No image, bitmap, embedded font, foreignObject, script, external reference or text outline is used.</desc>
+  <defs>
+    <linearGradient id="blue-panel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f2f7ff"/>
+      <stop offset="100%" stop-color="#eff5ff"/>
+    </linearGradient>
+    <linearGradient id="green-panel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f7fff8"/>
+      <stop offset="100%" stop-color="#f3fdf5"/>
+    </linearGradient>
+    <linearGradient id="amber-panel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffdf5"/>
+      <stop offset="100%" stop-color="#fffaf0"/>
+    </linearGradient>
+    <linearGradient id="purple-panel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbf7ff"/>
+      <stop offset="100%" stop-color="#f8f3ff"/>
+    </linearGradient>
+    <linearGradient id="blue-cylinder" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a9d8ff"/>
+      <stop offset="55%" stop-color="#5da7fa"/>
+      <stop offset="100%" stop-color="#87bcff"/>
+    </linearGradient>
+    <linearGradient id="slate-cylinder" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#97aed8"/>
+      <stop offset="50%" stop-color="#526fa8"/>
+      <stop offset="100%" stop-color="#91a9d0"/>
+    </linearGradient>
+    <linearGradient id="gold-cup" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fff19a"/>
+      <stop offset="40%" stop-color="#ffe147"/>
+      <stop offset="100%" stop-color="#ffc300"/>
+    </linearGradient>
+    <linearGradient id="tree-root" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24bcff"/>
+      <stop offset="100%" stop-color="#168bf0"/>
+    </linearGradient>
+  </defs>
+  <g id="layer-background" inkscape:label="01 · Canvas" inkscape:groupmode="layer">
+    <rect x="0" y="0" width="1536" height="1024" fill="#ffffff" id="white-background"/>
+  </g>
+  <g id="layer-header" inkscape:label="02 · Figure title and subtitle" inkscape:groupmode="layer">
+    <text x="798" y="48" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="50.25" fill="#090069" font-weight="bold" text-anchor="middle" id="figure-title">Modified LoongFlow Full-Agent Stack</text>
+    <text x="792.5" y="85" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="25.05" fill="#090069" font-style="italic" text-anchor="middle" id="figure-subtitle">Autonomous kernel optimization through iterative plan–execute–evaluate–summarize–store loop</text>
+  </g>
+  <g id="layer-iteration-boundary" inkscape:label="03 · One-iteration boundary" inkscape:groupmode="layer">
+    <rect x="245.3" y="139.1" width="1049.3" height="606.7" rx="24" fill="#ffffff" stroke="#005cff" stroke-width="1.25" id="iteration-frame" stroke-dasharray="8 5"/>
+    <rect x="646.3" y="118" width="188.2" height="30.5" fill="#ffffff" id="iteration-label-knockout"/>
+    <text x="740.4" y="141.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="23.2" fill="#0000b6" font-weight="bold" text-anchor="middle" id="iteration-heading">One Iteration (K)</text>
+  </g>
+  <g id="layer-inputs" inkscape:label="04 · Search Context / Inputs" inkscape:groupmode="layer">
+    <rect x="17.4" y="116.1" width="189.8" height="646" rx="10" fill="#ffffff" stroke="#4e65a4" stroke-width="0.95" id="inputs-outline"/>
+    <text x="112.3" y="141.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.2" fill="#0000b6" font-weight="bold" text-anchor="middle" id="inputs-heading"><tspan x="112.3" y="141.8">Search Context</tspan><tspan x="112.3" y="164">(Inputs)</tspan></text>
+    <g id="input-task-constraints" inkscape:label="Task &amp; Constraints">
+      <rect x="26" y="176.5" width="172.5" height="144.4" rx="6" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.95"/>
+      <g id="icon-checklist" inkscape:label="Checklist icon">
+        <rect x="34.8" y="186.4" width="23" height="27" rx="2" fill="#ffffff" stroke="#09045c" stroke-width="1.45"/>
+        <circle cx="40.2" cy="193.4" r="1.6" fill="#09045c"/>
+        <line x1="44.2" y1="193.4" x2="53.5" y2="193.4" stroke="#09045c" stroke-width="1.3" stroke-linecap="round"/>
+        <circle cx="40.2" cy="199.8" r="1.6" fill="#09045c"/>
+        <line x1="44.2" y1="199.8" x2="53.5" y2="199.8" stroke="#09045c" stroke-width="1.3" stroke-linecap="round"/>
+        <circle cx="40.2" cy="206.1" r="1.6" fill="#09045c"/>
+        <line x1="44.2" y1="206.1" x2="53.5" y2="206.1" stroke="#09045c" stroke-width="1.3" stroke-linecap="round"/>
+      </g>
+      <text x="69.1" y="205.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.05" fill="#0000b6" font-weight="bold" id="task-constraints-heading">Task &amp; Constraints</text>
+      <g id="task-constraint-1">
+        <text x="39.7" y="233.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="233.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="task-constraint-1-text">Operator / workload</text>
+      </g>
+      <g id="task-constraint-2">
+        <text x="39.7" y="252.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="252.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="task-constraint-2-text">Shape range</text>
+      </g>
+      <g id="task-constraint-3">
+        <text x="39.7" y="271.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="271.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="task-constraint-3-text">Hardware / GPU</text>
+      </g>
+      <g id="task-constraint-4">
+        <text x="39.7" y="290.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="290.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="task-constraint-4-text">Metrics (latency, etc.)</text>
+      </g>
+      <g id="task-constraint-5">
+        <text x="39.7" y="309.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="309.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="task-constraint-5-text">Constraints</text>
+      </g>
+    </g>
+    <g id="input-database-state" inkscape:label="Database State">
+      <rect x="26" y="330" width="172.5" height="144.3" rx="6" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.95"/>
+      <g id="icon-input-database" inkscape:label="Database cylinder icon">
+        <path d="M 35.3 343.38 L 35.3 358.32 C 35.3 363.936 56.099999999999994 363.936 56.099999999999994 358.32 L 56.099999999999994 343.38 Z" fill="url(#blue-cylinder)" stroke="#09045c" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>
+        <ellipse cx="45.7" cy="343.38" rx="10.4" ry="4.68" fill="#91ccff" stroke="#09045c" stroke-width="1.05"/>
+        <path d="M 35.599999999999994 349.60699999999997 C 39.044 354.81899999999996 52.56399999999999 354.81899999999996 55.8 349.60699999999997" fill="none" stroke="#f1f6ff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M 35.599999999999994 350.60699999999997 C 39.044 354.81899999999996 52.56399999999999 354.81899999999996 55.8 350.60699999999997" fill="none" stroke="#09045c" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M 35.599999999999994 355.19599999999997 C 39.044 360.40799999999996 52.56399999999999 360.40799999999996 55.8 355.19599999999997" fill="none" stroke="#f1f6ff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M 35.599999999999994 356.19599999999997 C 39.044 360.40799999999996 52.56399999999999 360.40799999999996 55.8 356.19599999999997" fill="none" stroke="#09045c" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round"/>
+      </g>
+      <text x="69.2" y="356.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#0000b6" font-weight="bold" id="database-state-heading">Database State</text>
+      <g id="database-state-1">
+        <text x="39.7" y="382.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="382.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="database-state-1-text">Current best</text>
+      </g>
+      <g id="database-state-2">
+        <text x="39.7" y="401.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="401.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="database-state-2-text">Admitted solutions</text>
+      </g>
+      <g id="database-state-3">
+        <text x="39.7" y="420.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="420.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="database-state-3-text">Shape coverage</text>
+      </g>
+      <g id="database-state-4">
+        <text x="39.7" y="439.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="439.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="database-state-4-text">Performance summary</text>
+      </g>
+      <g id="database-state-5">
+        <text x="39.7" y="458.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="458.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="database-state-5-text">Failure cases</text>
+      </g>
+    </g>
+    <g id="input-past-summaries" inkscape:label="Past Summaries">
+      <rect x="26" y="483.3" width="172.5" height="122.4" rx="6" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.95"/>
+      <g id="icon-past-summaries" inkscape:label="Open-book icon">
+        <path d="M34.8 494.3 Q39.8 491.3 46.8 496.3 Q53.8 491.3 58.8 494.3 L58.8 515.3 Q51.8 514.3 46.8 517.3 Q41.8 514.3 34.8 515.3 Z" fill="#aac0e0" stroke="#09045c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M36.8 493.3 Q41.8 491.3 46.8 496.3 L46.8 514.3 Q41.8 510.3 36.8 512.3 Z" fill="#ffffff" stroke="#09045c" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M56.8 493.3 Q51.8 491.3 46.8 496.3 L46.8 514.3 Q51.8 510.3 56.8 512.3 Z" fill="#ffffff" stroke="#09045c" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>
+        <line x1="46.8" y1="496.3" x2="46.8" y2="517.3" stroke="#09045c" stroke-width="1" stroke-linecap="round"/>
+      </g>
+      <text x="69.6" y="510.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#0000b6" font-weight="bold" id="past-summaries-heading">Past Summaries</text>
+      <g id="past-summary-1">
+        <text x="39.7" y="537" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="537" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="past-summary-1-text">Lessons learned</text>
+      </g>
+      <g id="past-summary-2">
+        <text x="39.7" y="556" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="556" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="past-summary-2-text">Failure modes</text>
+      </g>
+      <g id="past-summary-3">
+        <text x="39.7" y="575" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="575" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="past-summary-3-text">Heuristics</text>
+      </g>
+      <g id="past-summary-4">
+        <text x="39.7" y="594" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="594" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="past-summary-4-text">What works / not</text>
+      </g>
+    </g>
+    <g id="input-parent-solutions" inkscape:label="Parent Solutions / Selected">
+      <rect x="26" y="614.7" width="172.5" height="136" rx="6" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.95"/>
+      <g id="icon-parent-solutions" inkscape:label="Selected-parent tree icon">
+        <line x1="46.7" y1="634.9" x2="36.2" y2="652.9" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <circle cx="36.2" cy="652.9" r="3.05" fill="#7898c6" stroke="#09045c" stroke-width="0.95"/>
+        <line x1="46.7" y1="634.9" x2="46.7" y2="652.9" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <circle cx="46.7" cy="652.9" r="3.05" fill="#7898c6" stroke="#09045c" stroke-width="0.95"/>
+        <line x1="46.7" y1="634.9" x2="57.2" y2="652.9" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <circle cx="57.2" cy="652.9" r="3.05" fill="#7898c6" stroke="#09045c" stroke-width="0.95"/>
+        <circle cx="46.7" cy="630.9" r="4.25" fill="#84a0cc" stroke="#09045c" stroke-width="0.95"/>
+      </g>
+      <text x="69.4" y="638.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#0000b6" font-weight="bold" id="parent-solutions-heading"><tspan x="69.4" y="638.7">Parent Solutions</tspan><tspan x="69.4" y="657.9">(Selected)</tspan></text>
+      <g id="parent-solution-1">
+        <text x="39.7" y="681.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="681.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="parent-solution-1-text">Parent IDs</text>
+      </g>
+      <g id="parent-solution-2">
+        <text x="39.7" y="700.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="700.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="parent-solution-2-text">Key configs</text>
+      </g>
+      <g id="parent-solution-3">
+        <text x="39.7" y="719.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="719.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="parent-solution-3-text">Code pointers</text>
+      </g>
+      <g id="parent-solution-4">
+        <text x="39.7" y="738.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.972" fill="#000031">•</text>
+        <text x="53.3" y="738.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.25" fill="#000031" id="parent-solution-4-text">Performance</text>
+      </g>
+    </g>
+  </g>
+  <g id="layer-plan" inkscape:label="05 · 1 Plan" inkscape:groupmode="layer">
+    <rect x="259" y="160.2" width="182" height="537.5" rx="6.5" fill="#ffffff" stroke="#4e65a4" stroke-width="1" id="plan-column"/>
+    <circle cx="323.7" cy="188.9" r="12.8" fill="#ffffff" stroke="#0000b6" stroke-width="1.1" id="plan-number-circle"/>
+    <text x="323.7" y="196.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="22" fill="#0000b6" text-anchor="middle" id="plan-number">1</text>
+    <text x="348.2" y="195.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.6" fill="#0000b6" font-weight="bold" id="plan-heading">Plan</text>
+    <g id="icon-planner-brain" inkscape:label="Planner brain icon">
+      <path d="M288.5 225.0 C284.5 221.0 279.5 223.0 279.5 227.0 C275.5 227.0 273.5 231.0 275.5 235.0 C270.5 238.0 271.5 243.0 275.5 245.0 C273.5 249.0 277.5 253.0 281.5 252.0 C283.5 257.0 288.5 256.0 288.5 252.0 C290.5 257.0 296.5 256.0 297.5 252.0 C302.5 252.0 305.5 248.0 302.5 245.0 C307.5 241.0 304.5 236.0 302.5 235.0 C303.5 230.0 299.5 227.0 296.5 227.0 C296.5 223.0 291.5 221.0 288.5 225.0 Z" fill="#ffffff" stroke="#09045c" stroke-width="1.55" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M288.5 226.0 L288.5 252.0" fill="none" stroke="#09045c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M280.5 239.0 Q281.5 242.0 284.5 242.0 M282.5 243.0 L282.5 246.0" fill="none" stroke="#09045c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M294.5 245.0 Q294.5 242.0 297.5 241.0" fill="none" stroke="#09045c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M280.5 231.0 L280.5 233.0 M295.5 232.0 L295.5 234.0" fill="none" stroke="#09045c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="278" cy="240" r="1" fill="#09045c"/>
+      <circle cx="299" cy="237" r="1" fill="#09045c"/>
+    </g>
+    <text x="318.5" y="243.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.1" fill="#0000b6" font-weight="bold" id="planner-role">Planner (LLM)</text>
+    <text x="274.7" y="291.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.8" fill="#000031" id="planner-description"><tspan x="274.7" y="291.5">Propose a high-level</tspan><tspan x="274.7" y="311.5">search direction.</tspan></text>
+    <g id="planner-search-directions" inkscape:label="Search-direction examples">
+      <rect x="270.2" y="345.9" width="158" height="241.3" rx="6" fill="url(#blue-panel)" stroke="#548fff" stroke-width="0.95" id="planner-examples-panel"/>
+      <g id="plan-register-state">
+        <text x="278.8" y="368" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="17.289" fill="#000031">•</text>
+        <text x="290.8" y="368" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.3" fill="#000031" id="plan-register-state-text"><tspan x="290.8" y="368">use register-resident</tspan><tspan x="290.8" y="387">state</tspan></text>
+      </g>
+      <g id="plan-sequence-paths">
+        <text x="278.8" y="411" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="17.289" fill="#000031">•</text>
+        <text x="290.8" y="411" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.3" fill="#000031" id="plan-sequence-paths-text"><tspan x="290.8" y="411">split small / large</tspan><tspan x="290.8" y="430">sequence paths</tspan></text>
+      </g>
+      <g id="plan-autotune">
+        <text x="278.8" y="454" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="17.289" fill="#000031">•</text>
+        <text x="290.8" y="454" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.3" fill="#000031" id="plan-autotune-text"><tspan x="290.8" y="454">preserve grouped</tspan><tspan x="290.8" y="473">GEMM parent and</tspan><tspan x="290.8" y="492">add one autotune</tspan><tspan x="290.8" y="511">configuration</tspan></text>
+      </g>
+      <g id="plan-stage-pipeline">
+        <text x="278.8" y="535.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="17.289" fill="#000031">•</text>
+        <text x="290.8" y="535.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.3" fill="#000031" id="plan-stage-pipeline-text"><tspan x="290.8" y="535.1">try different stage</tspan><tspan x="290.8" y="554.1">pipeline</tspan></text>
+      </g>
+    </g>
+    <text x="272.3" y="625.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.3" fill="#0000b6" font-weight="bold" id="plan-output-heading">Output:</text>
+    <text x="272.3" y="648" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14" fill="#000031" id="plan-output"><tspan x="272.3" y="648">Plan (strategy, hypotheses,</tspan><tspan x="272.3" y="667.4">constraints, tools, budgets)</tspan></text>
+  </g>
+  <g id="layer-execute" inkscape:label="06 · 2 Execute" inkscape:groupmode="layer">
+    <rect x="457.5" y="160.2" width="213.1" height="537.5" rx="6.5" fill="#ffffff" stroke="#4e65a4" stroke-width="1" id="execute-column"/>
+    <circle cx="531.4" cy="188.9" r="12.8" fill="#ffffff" stroke="#0000b6" stroke-width="1.1" id="execute-number-circle"/>
+    <text x="531.4" y="196.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="22" fill="#0000b6" text-anchor="middle" id="execute-number">2</text>
+    <text x="552.6" y="195.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.6" fill="#0000b6" font-weight="bold" id="execute-heading">Execute</text>
+    <g id="icon-executor-code" inkscape:label="Code-generation icon">
+      <path d="M484.2 231.0 L475.2 239.0 L484.2 247.0" fill="none" stroke="#09045c" stroke-width="2.9" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M497.2 227.0 L490.2 251.0" fill="none" stroke="#09045c" stroke-width="2.9" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M502.2 231.0 L510.2 239.0 L502.2 247.0" fill="none" stroke="#09045c" stroke-width="2.9" stroke-linejoin="round" stroke-linecap="round"/>
+    </g>
+    <text x="522" y="243.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.1" fill="#0000b6" font-weight="bold" id="executor-role">Executor (Code Agent)</text>
+    <text x="474.2" y="291.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.8" fill="#000031" id="executor-description"><tspan x="474.2" y="291.5">Turn plan into CUDA /</tspan><tspan x="474.2" y="311.5">Triton code.</tspan><tspan x="474.2" y="331.5">Generate multiple</tspan><tspan x="474.2" y="351.5">children candidates.</tspan></text>
+    <g id="execution-children" inkscape:label="Child candidates and generated artifacts">
+      <rect x="468.6" y="368.5" width="189.9" height="301.5" rx="6" fill="#ffffff" stroke="#91acf0" stroke-width="0.95" id="execution-children-panel" stroke-dasharray="5 3"/>
+      <text x="558.4" y="395.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.4" fill="#0000b6" font-weight="bold" text-anchor="middle" id="children-heading">Children (M_N)</text>
+      <g id="candidate-tree" inkscape:label="Editable child-candidate tree">
+        <path d="M 557.8 432.2 L 530.2 454.0 Q 525.0 458.0 525.0 461.1" fill="none" stroke="#09045c" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round" id="candidate-root-left"/>
+        <line x1="558" y1="432.8" x2="558.8" y2="460.9" stroke="#09045c" stroke-width="1.15" stroke-linecap="round" id="candidate-root-center"/>
+        <path d="M 558.2 432.4 L 589.4 454.0 Q 594.1 458.1 594.1 461.0" fill="none" stroke="#09045c" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round" id="candidate-root-right"/>
+        <line x1="524.8" y1="474.1" x2="512" y2="490.5" stroke="#09045c" stroke-width="1.1" stroke-linecap="round" id="candidate-left-leaf1"/>
+        <line x1="525.2" y1="474" x2="539.2" y2="490.5" stroke="#09045c" stroke-width="1.1" stroke-linecap="round" id="candidate-left-leaf2"/>
+        <line x1="559" y1="474" x2="574.5" y2="490.5" stroke="#09045c" stroke-width="1.1" stroke-linecap="round" id="candidate-middle-leaf"/>
+        <line x1="594.2" y1="474.2" x2="608.2" y2="490.5" stroke="#09045c" stroke-width="1.1" stroke-linecap="round" id="candidate-right-leaf"/>
+        <circle cx="557.8" cy="422.2" r="10.8" fill="url(#tree-root)" stroke="#09045c" stroke-width="1.2" id="candidate-root"/>
+        <circle cx="525" cy="467.8" r="6.8" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-1"/>
+        <circle cx="558.9" cy="467.8" r="6.8" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-2"/>
+        <circle cx="594.1" cy="467.8" r="6.8" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-3"/>
+        <circle cx="512" cy="495.1" r="4.6" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-4"/>
+        <circle cx="539.3" cy="495.1" r="4.6" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-5"/>
+        <circle cx="574.6" cy="495.1" r="4.6" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-6"/>
+        <circle cx="608.3" cy="495.1" r="4.6" fill="#ffffff" stroke="#09045c" stroke-width="1.05" id="candidate-node-7"/>
+        <text x="621.9" y="478" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18" fill="#0000b6" id="candidate-tree-more">...</text>
+      </g>
+      <text x="476.7" y="528.9" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.4" fill="#0000b6" font-weight="bold" id="execution-child-heading">Per child i:</text>
+      <g id="child-directory">
+        <text x="475.7" y="551.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.633" fill="#000060">•</text>
+        <text x="487.7" y="551.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.95" fill="#000060" id="child-directory-text"><tspan x="487.7" y="551.7">iteration/K/</tspan><tspan x="487.7" y="570.1">executor/M_N/i/</tspan></text>
+      </g>
+      <g id="child-candidate-file">
+        <text x="475.7" y="591.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.633" fill="#000060">•</text>
+        <text x="487.7" y="591.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.95" fill="#000060" id="child-candidate-file-text">candidate.(cu | triton)</text>
+      </g>
+      <g id="child-history-file">
+        <text x="475.7" y="612" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.633" fill="#000060">•</text>
+        <text x="487.7" y="612" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.95" fill="#000060" id="child-history-file-text">history.md</text>
+      </g>
+      <g id="child-tools-directory">
+        <text x="475.7" y="632.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.633" fill="#000060">•</text>
+        <text x="487.7" y="632.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.95" fill="#000060" id="child-tools-directory-text">tools/ (intermediate)</text>
+      </g>
+      <g id="child-metadata-file">
+        <text x="475.7" y="653.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.125" fill="#000060">•</text>
+        <text x="487.7" y="653.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.5" fill="#000060" id="child-metadata-file-text">meta.json (config, parent_id, ...)</text>
+      </g>
+    </g>
+  </g>
+  <g id="layer-evaluate" inkscape:label="07 · 3 Evaluate" inkscape:groupmode="layer">
+    <rect x="686.8" y="160.2" width="198.3" height="537.5" rx="6.5" fill="#ffffff" stroke="#4e65a4" stroke-width="1" id="evaluate-column"/>
+    <circle cx="750.1" cy="188.9" r="12.8" fill="#ffffff" stroke="#0000b6" stroke-width="1.1" id="evaluate-number-circle"/>
+    <text x="750.1" y="196.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="22" fill="#0000b6" text-anchor="middle" id="evaluate-number">3</text>
+    <text x="772.3" y="195.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.6" fill="#0000b6" font-weight="bold" id="evaluate-heading">Evaluate</text>
+    <g id="icon-evaluator-flask" inkscape:label="Evaluation flask icon">
+      <path d="M715.6 224.8 L715.6 237.8 L707.6 251.8 Q706.6 254.8 709.6 254.8 L729.6 254.8 Q732.6 254.8 731.6 251.8 L723.6 237.8 L723.6 224.8 Z" fill="#ffffff" stroke="#09045c" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M713.6 243.8 Q717.6 241.8 720.6 243.8 Q724.6 242.8 726.6 243.8 L730.6 251.8 Q731.6 253.8 728.6 253.8 L710.6 253.8 Q707.6 253.8 708.6 251.8 Z" fill="#849bc4" stroke-linejoin="round" stroke-linecap="round"/>
+      <rect x="714.1" y="222.8" width="11" height="2.4" rx="0.6" fill="#ffffff" stroke="#09045c" stroke-width="0.85"/>
+      <path d="M716.1 240.8 L718.6 240.8 M723.6 245.8 L724.6 246.8" fill="none" stroke="#09045c" stroke-width="0.75" stroke-linejoin="round" stroke-linecap="round"/>
+    </g>
+    <text x="743.9" y="243.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14" fill="#0000b6" font-weight="bold" id="evaluator-role">Evaluator (Tool Agent)</text>
+    <text x="702.4" y="291.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.8" fill="#000031" id="evaluator-description"><tspan x="702.4" y="291.5">Build and run candidates</tspan><tspan x="702.4" y="311.5">on target workloads.</tspan><tspan x="702.4" y="331.5">Return metrics and logs.</tspan></text>
+    <g id="evaluation-results" inkscape:label="Evaluation results">
+      <rect x="695.9" y="368.5" width="177.5" height="236.2" rx="5.8" fill="url(#green-panel)" stroke="#32a756" stroke-width="0.95" id="evaluation-results-panel"/>
+      <text x="774" y="392" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.2" fill="#000060" font-weight="bold" text-anchor="middle" id="evaluation-results-heading">Evaluation Results</text>
+      <g id="evaluation-correctness">
+        <text x="703.6" y="417" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="417" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-correctness-text"><tspan x="715.5" y="417">Correctness</tspan><tspan x="715.5" y="436.4">(pass / fail / unstable)</tspan></text>
+      </g>
+      <g id="evaluation-latency">
+        <text x="703.6" y="460.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="460.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-latency-text">Kernel latency (ms)</text>
+      </g>
+      <g id="evaluation-reference-latency">
+        <text x="703.6" y="482" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="482" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-reference-latency-text">Reference latency (ms)</text>
+      </g>
+      <g id="evaluation-speedup">
+        <text x="703.6" y="503.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="503.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-speedup-text">Speedup</text>
+      </g>
+      <g id="evaluation-shape-coverage">
+        <text x="703.6" y="525.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="525.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-shape-coverage-text">Shape coverage</text>
+      </g>
+      <g id="evaluation-resource-usage">
+        <text x="703.6" y="547" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="547" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-resource-usage-text">Resource usage</text>
+      </g>
+      <g id="evaluation-diagnostics">
+        <text x="703.6" y="568.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="715.5" y="568.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="evaluation-diagnostics-text"><tspan x="715.5" y="568.8">Diagnostic logs</tspan><tspan x="715.5" y="588.2">(compiler, runtime, etc.)</tspan></text>
+      </g>
+    </g>
+    <text x="700.9" y="629.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.4" fill="#0000b6" font-weight="bold" id="evaluation-child-heading">Per child i:</text>
+    <text x="700.9" y="652.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.4" fill="#000031" id="evaluation-output-files"><tspan x="700.9" y="652.6">result.json, perf.csv, logs/,</tspan><tspan x="700.9" y="671.8">correctness.json, ...</tspan></text>
+  </g>
+  <g id="layer-summarize" inkscape:label="08 · 4 Summarize" inkscape:groupmode="layer">
+    <rect x="901.8" y="160.2" width="186.4" height="537.5" rx="6.5" fill="#ffffff" stroke="#4e65a4" stroke-width="1" id="summarize-column"/>
+    <circle cx="955.6" cy="188.9" r="12.8" fill="#ffffff" stroke="#0000b6" stroke-width="1.1" id="summarize-number-circle"/>
+    <text x="955.6" y="196.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="22" fill="#0000b6" text-anchor="middle" id="summarize-number">4</text>
+    <text x="977.3" y="195.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.6" fill="#0000b6" font-weight="bold" id="summarize-heading">Summarize</text>
+    <g id="icon-summarizer-document" inkscape:label="Document icon">
+      <path d="M921.1 223.0 L935.0 223.0 L943.4 231.4 L943.4 255.0 L919.4 255.0 L919.4 224.8 Q919.4 223.0 921.1 223.0 Z" fill="#ffffff" stroke="#09045c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M935.0 223.4 L935.0 231.4 L943.0 231.4" fill="none" stroke="#09045c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+      <line x1="924.68" y1="236.12" x2="937.16" y2="236.12" stroke="#09045c" stroke-width="1.15" stroke-linecap="round"/>
+      <line x1="924.68" y1="241.88" x2="937.16" y2="241.88" stroke="#09045c" stroke-width="1.15" stroke-linecap="round"/>
+      <line x1="924.68" y1="247.64" x2="934.28" y2="247.64" stroke="#09045c" stroke-width="1.15" stroke-linecap="round"/>
+    </g>
+    <text x="957.5" y="243.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14" fill="#0000b6" font-weight="bold" id="summarizer-role">Summarizer (LLM)</text>
+    <text x="918.4" y="291.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.8" fill="#000031" id="summarizer-description"><tspan x="918.4" y="291.5">Extract reusable lessons</tspan><tspan x="918.4" y="311.5">from successes and</tspan><tspan x="918.4" y="331.5">failures.</tspan></text>
+    <g id="summary-artifacts" inkscape:label="Summary artifacts">
+      <rect x="911.7" y="368.5" width="164" height="225.1" rx="5.8" fill="url(#amber-panel)" stroke="#ffae1b" stroke-width="0.9" id="summary-artifacts-panel"/>
+      <text x="989.3" y="392" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.3" fill="#000060" font-weight="bold" text-anchor="middle" id="summary-artifacts-heading">Summary Artifacts</text>
+      <g id="summary-what-worked">
+        <text x="919.2" y="420.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.385" fill="#000031">•</text>
+        <text x="931" y="420.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#000031" id="summary-what-worked-text">What worked and why</text>
+      </g>
+      <g id="summary-root-cause">
+        <text x="919.2" y="444" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.385" fill="#000031">•</text>
+        <text x="931" y="444" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#000031" id="summary-root-cause-text"><tspan x="931" y="444">Why it failed</tspan><tspan x="931" y="463.2">(root cause)</tspan></text>
+      </g>
+      <g id="summary-generalization">
+        <text x="919.2" y="487.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.385" fill="#000031">•</text>
+        <text x="931" y="487.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#000031" id="summary-generalization-text"><tspan x="931" y="487.3">When it generalizes</tspan><tspan x="931" y="506.5">(shape / hardware)</tspan></text>
+      </g>
+      <g id="summary-heuristics">
+        <text x="919.2" y="530.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.385" fill="#000031">•</text>
+        <text x="931" y="530.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#000031" id="summary-heuristics-text">Actionable heuristics</text>
+      </g>
+      <g id="summary-follow-up">
+        <text x="919.2" y="554.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.385" fill="#000031">•</text>
+        <text x="931" y="554.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#000031" id="summary-follow-up-text">Follow-up ideas</text>
+      </g>
+    </g>
+    <text x="915.9" y="629.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.4" fill="#0000b6" font-weight="bold" id="summary-output-heading">Output:</text>
+    <text x="915.9" y="652.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.4" fill="#000031" id="summary-output"><tspan x="915.9" y="652.6">summary.md</tspan><tspan x="915.9" y="671.8">(tagged, indexed)</tspan></text>
+  </g>
+  <g id="layer-store" inkscape:label="09 · 5 Store" inkscape:groupmode="layer">
+    <rect x="1103.8" y="160.2" width="177.5" height="537.5" rx="6.5" fill="#ffffff" stroke="#4e65a4" stroke-width="1" id="store-column"/>
+    <circle cx="1171.7" cy="188.9" r="12.8" fill="#ffffff" stroke="#0000b6" stroke-width="1.1" id="store-number-circle"/>
+    <text x="1171.7" y="196.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="22" fill="#0000b6" text-anchor="middle" id="store-number">5</text>
+    <text x="1193.1" y="195.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.6" fill="#0000b6" font-weight="bold" id="store-heading">Store</text>
+    <g id="icon-manager-database" inkscape:label="Database cylinder icon">
+      <path d="M 1123.2 228.29000000000002 L 1123.2 249.01 C 1123.2 255.598 1147.6000000000001 255.598 1147.6000000000001 249.01 L 1147.6000000000001 228.29000000000002 Z" fill="url(#slate-cylinder)" stroke="#09045c" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>
+      <ellipse cx="1135.4" cy="228.29" rx="12.2" ry="5.49" fill="#8ea6ce" stroke="#09045c" stroke-width="1.05"/>
+      <path d="M 1123.5 237.333 C 1127.592 243.274 1143.452 243.274 1147.3000000000002 237.333" fill="none" stroke="#f1f6ff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M 1123.5 238.333 C 1127.592 243.274 1143.452 243.274 1147.3000000000002 238.333" fill="none" stroke="#09045c" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M 1123.5 244.62400000000002 C 1127.592 250.56500000000003 1143.452 250.56500000000003 1147.3000000000002 244.62400000000002" fill="none" stroke="#f1f6ff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M 1123.5 245.62400000000002 C 1127.592 250.56500000000003 1143.452 250.56500000000003 1147.3000000000002 245.62400000000002" fill="none" stroke="#09045c" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round"/>
+    </g>
+    <text x="1159.9" y="243.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14" fill="#0000b6" font-weight="bold" id="database-manager-role">Database Manager</text>
+    <text x="1120.5" y="291" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="database-manager-description"><tspan x="1120.5" y="291">Admit selected candidates,</tspan><tspan x="1120.5" y="310.2">checkpoint metadata,</tspan><tspan x="1120.5" y="329.4">record lineage, and</tspan><tspan x="1120.5" y="348.6">maintain best.</tspan></text>
+    <g id="storage-operations" inkscape:label="Storage and admission operations">
+      <rect x="1112.8" y="375.5" width="158.9" height="240.1" rx="5.8" fill="url(#purple-panel)" stroke="#a16bd3" stroke-width="0.95" id="storage-operations-panel"/>
+      <text x="1194.2" y="399.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.5" fill="#0000b6" font-weight="bold" text-anchor="middle" id="storage-operations-heading">Operations</text>
+      <g id="store-admission-policy">
+        <text x="1121.1" y="424.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="1132.8" y="424.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="store-admission-policy-text"><tspan x="1132.8" y="424.7">Admission policy</tspan><tspan x="1132.8" y="443.9">(Pareto / constraints)</tspan></text>
+      </g>
+      <g id="store-record-parent-ids">
+        <text x="1121.1" y="467.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="1132.8" y="467.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="store-record-parent-ids-text">Record parent_ids</text>
+      </g>
+      <g id="store-update-performance">
+        <text x="1121.1" y="491.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="1132.8" y="491.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="store-update-performance-text"><tspan x="1132.8" y="491.5">Update performance</tspan><tspan x="1132.8" y="510.7">list</tspan></text>
+      </g>
+      <g id="store-update-best">
+        <text x="1121.1" y="534.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="1132.8" y="534.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="store-update-best-text"><tspan x="1132.8" y="534.6">Update best solution</tspan><tspan x="1132.8" y="553.8">per workload</tspan></text>
+      </g>
+      <g id="store-index-summaries">
+        <text x="1121.1" y="577.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.328" fill="#000031">•</text>
+        <text x="1132.8" y="577.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.45" fill="#000031" id="store-index-summaries-text"><tspan x="1132.8" y="577.6">Index summaries</tspan><tspan x="1132.8" y="596.8">and failures</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="layer-flow-connectors" inkscape:label="10 · Forward flow and next-iteration feedback" inkscape:groupmode="layer">
+    <g id="inputs-to-plan" inkscape:label="Search context → Plan">
+      <path d="M 207.3 658.5 L 221.4 658.5 L 221.4 247.0 L 244.2 247.0" fill="none" stroke="#000060" stroke-width="1.85" stroke-linejoin="round" stroke-linecap="round" id="input-context-route"/>
+      <polygon points="251.5,247 241.6,240.9 241.6,253.1" fill="#000060" stroke-linejoin="round" id="input-context-arrowhead"/>
+    </g>
+    <g id="plan-to-execute">
+      <line x1="441.1" y1="245.5" x2="450.86" y2="245.5" stroke="#000060" stroke-width="1.65" stroke-linecap="round"/>
+      <polygon points="458,245.5 449.6,240.208 449.6,250.792" fill="#000060" stroke-linejoin="round"/>
+    </g>
+    <g id="execute-to-evaluate">
+      <line x1="670.7" y1="245.5" x2="680.86" y2="245.5" stroke="#000060" stroke-width="1.65" stroke-linecap="round"/>
+      <polygon points="688,245.5 679.6,240.208 679.6,250.792" fill="#000060" stroke-linejoin="round"/>
+    </g>
+    <g id="evaluate-to-summarize">
+      <line x1="885.2" y1="245.5" x2="895.96" y2="245.5" stroke="#000060" stroke-width="1.65" stroke-linecap="round"/>
+      <polygon points="903.1,245.5 894.7,240.208 894.7,250.792" fill="#000060" stroke-linejoin="round"/>
+    </g>
+    <g id="summarize-to-store">
+      <line x1="1088.3" y1="245.5" x2="1097.86" y2="245.5" stroke="#000060" stroke-width="1.65" stroke-linecap="round"/>
+      <polygon points="1105,245.5 1096.6,240.208 1096.6,250.792" fill="#000060" stroke-linejoin="round"/>
+    </g>
+    <g id="store-to-outputs">
+      <line x1="1281.3" y1="245.5" x2="1312.575" y2="245.5" stroke="#000060" stroke-width="1.65" stroke-linecap="round"/>
+      <polygon points="1321.5,245.5 1311,238.885 1311,252.115" fill="#000060" stroke-linejoin="round"/>
+    </g>
+    <g id="iteration-to-explanation">
+      <line x1="1294.6" y1="420.2" x2="1312.575" y2="420.2" stroke="#000060" stroke-width="1.85" stroke-linecap="round"/>
+      <polygon points="1321.5,420.2 1311,413.585 1311,426.815" fill="#000060" stroke-linejoin="round"/>
+    </g>
+    <g id="feedback-to-next-iteration" inkscape:label="Store / summaries → next iteration Plan">
+      <path d="M 1189.5 698.0 L 1189.5 720.8 Q 1189.5 725.0 1185.0 725.0 L 348.1 725.0 Q 343.7 725.0 343.7 720.5 L 343.7 706.5" fill="none" stroke="#005cff" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" id="feedback-route"/>
+      <polygon points="343.7,697.7 337.8,709.2 349.6,709.2" fill="#005cff" stroke-linejoin="round" id="feedback-arrowhead"/>
+      <rect x="537.7" y="713.2" width="400.2" height="23.2" fill="#ffffff" id="feedback-label-knockout"/>
+      <text x="737.8" y="731.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.2" fill="#0000b6" text-anchor="middle" id="feedback-caption">Summaries &amp; database state feed into next iteration (K + 1)</text>
+    </g>
+  </g>
+  <g id="layer-outputs" inkscape:label="11 · Outputs / Current Best Solution" inkscape:groupmode="layer">
+    <rect x="1329.1" y="141.6" width="190.2" height="176" rx="8.1" fill="#ffffff" stroke="#4e65a4" stroke-width="0.95" id="outputs-outline"/>
+    <text x="1422.2" y="167" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18.2" fill="#0000b6" font-weight="bold" text-anchor="middle" id="outputs-heading">Outputs</text>
+    <g id="icon-output-trophy" inkscape:label="Best-solution trophy icon">
+      <path d="M1347.0 188.8 L1342.0 188.8 Q1339.0 189.8 1341.0 195.8 Q1343.0 200.8 1348.0 201.8" fill="#ffdd3b" stroke="#09045c" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M1361.0 188.8 L1366.0 188.8 Q1369.0 189.8 1367.0 195.8 Q1365.0 200.8 1360.0 201.8" fill="#ffdd3b" stroke="#09045c" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M1346.0 185.8 L1362.0 185.8 L1361.0 197.8 Q1360.0 203.8 1355.5 205.8 L1355.5 209.8 Q1356.0 211.8 1360.0 212.3 L1360.0 213.8 L1348.0 213.8 L1348.0 212.3 Q1352.0 211.8 1352.5 209.8 L1352.5 205.8 Q1348.0 203.8 1347.0 197.8 Z" fill="url(#gold-cup)" stroke="#09045c" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round"/>
+      <line x1="1350" y1="187.8" x2="1350" y2="197.8" stroke="#fff7bd" stroke-width="1.7" stroke-linecap="round"/>
+      <line x1="1347" y1="186.3" x2="1361" y2="186.3" stroke="#ffffff" stroke-width="0.6" stroke-linecap="round"/>
+    </g>
+    <text x="1377.6" y="203.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14" fill="#0000b6" font-weight="bold" id="current-best-heading">Current Best Solution</text>
+    <g id="output-1">
+      <text x="1351.3" y="233.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.424" fill="#000031">•</text>
+      <text x="1365.9" y="233.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.65" fill="#000031" id="output-1-text">Code (CUDA / Triton)</text>
+    </g>
+    <g id="output-2">
+      <text x="1351.3" y="253.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.424" fill="#000031">•</text>
+      <text x="1365.9" y="253.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.65" fill="#000031" id="output-2-text">Config</text>
+    </g>
+    <g id="output-3">
+      <text x="1351.3" y="274" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.424" fill="#000031">•</text>
+      <text x="1365.9" y="274" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.65" fill="#000031" id="output-3-text">Performance</text>
+    </g>
+    <g id="output-4">
+      <text x="1351.3" y="294.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.424" fill="#000031">•</text>
+      <text x="1365.9" y="294.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.65" fill="#000031" id="output-4-text">Coverage</text>
+    </g>
+  </g>
+  <g id="layer-architecture-notes" inkscape:label="12 · Why This Architecture Matters" inkscape:groupmode="layer">
+    <rect x="1329.1" y="334.9" width="190.2" height="455.4" rx="8.1" fill="#ffffff" stroke="#4e65a4" stroke-width="0.9" id="architecture-notes-outline"/>
+    <text x="1342" y="360.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="18" fill="#0000b6" font-weight="bold" id="architecture-notes-heading"><tspan x="1342" y="360.3">Why This</tspan><tspan x="1342" y="381.6">Architecture Matters</tspan></text>
+    <g id="note-nonobvious-failures">
+      <text x="1340.8" y="412.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.554" fill="#000031">•</text>
+      <text x="1349" y="412.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.65" fill="#000031" id="note-nonobvious-failures-text"><tspan x="1349" y="412.1">Kernel search often fails in</tspan><tspan x="1349" y="431.6">non-obvious ways.</tspan></text>
+    </g>
+    <g id="note-numerical-instability">
+      <text x="1341.8" y="457" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.554" fill="#000031">•</text>
+      <text x="1352.9" y="457" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.65" fill="#000031" id="note-numerical-instability-text"><tspan x="1352.9" y="457">A candidate may compile</tspan><tspan x="1352.9" y="476.5">but be numerically</tspan><tspan x="1352.9" y="496">unstable.</tspan></text>
+    </g>
+    <g id="note-shape-correctness">
+      <text x="1341.8" y="520.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.554" fill="#000031">•</text>
+      <text x="1352.9" y="520.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.65" fill="#000031" id="note-shape-correctness-text"><tspan x="1352.9" y="520.6">Be correct only for a</tspan><tspan x="1352.9" y="540.1">subset of shapes.</tspan></text>
+    </g>
+    <g id="note-performance-regression">
+      <text x="1341.8" y="565.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="16.554" fill="#000031">•</text>
+      <text x="1352.9" y="565.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.65" fill="#000031" id="note-performance-regression-text"><tspan x="1352.9" y="565.5">Improve one workload</tspan><tspan x="1352.9" y="585">while regressing</tspan><tspan x="1352.9" y="604.5">another.</tspan></text>
+    </g>
+    <polygon points="1419.2,610.8 1429.1,610.8 1429.1,621.4 1435.3,621.4 1424.1,634.5 1413,621.4 1419.2,621.4" fill="#c3d2ef" stroke-linejoin="round" id="lessons-down-arrow"/>
+    <g id="architecture-lessons-callout" inkscape:label="Failures become reusable search information">
+      <rect x="1337.5" y="641.8" width="174.4" height="134.2" rx="6.2" fill="#f4f8ff" stroke="#91b3f4" stroke-width="0.9" id="lessons-callout-panel"/>
+      <text x="1422.7" y="665.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="15.25" fill="#0000b6" font-weight="bold" text-anchor="middle" id="lessons-callout-text"><tspan x="1422.7" y="665.2">The Summarizer and</tspan><tspan x="1422.7" y="684.6">Database convert these</tspan><tspan x="1422.7" y="704">failures into search</tspan><tspan x="1422.7" y="723.4">information, enabling</tspan><tspan x="1422.7" y="742.8">data-driven iterative</tspan><tspan x="1422.7" y="762.2">improvement.</tspan></text>
+    </g>
+  </g>
+  <g id="layer-persistent-database" inkscape:label="13 · Persistent Database / LoongFlow DB" inkscape:groupmode="layer">
+    <path d="M 130.9 780.2 C 130.9 772.8 147.0 773.3 165.6 771.9 C 355.8 763.9 1057.0 763.9 1265.5 771.9 C 1284.0 772.8 1294.6 773.8 1294.6 780.2 L 1294.6 961.2 C 1294.6 968.0 1282.5 968.8 1265.5 969.4 C 1094.0 975.4 340.6 975.4 159.5 969.5 C 141.4 968.8 130.9 968.0 130.9 961.2 Z" fill="#ffffff" stroke="#4e65a4" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" id="database-enclosure"/>
+    <text x="719.5" y="790.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="20" fill="#0000b6" font-weight="bold" text-anchor="middle" id="database-heading">Persistent Database (LoongFlow DB)</text>
+    <g id="db-solutions-list" inkscape:label="Solutions List">
+      <rect x="140.4" y="797" width="211.3" height="167.4" rx="6.2" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.9" id="db-solutions-card"/>
+      <g id="icon-solutions-table" inkscape:label="Solutions table icon">
+        <rect x="159.3" y="807.8" width="22" height="25" rx="1.1" fill="white" stroke="#09045c" stroke-width="1.25"/>
+        <line x1="159.3" y1="813.8" x2="181.3" y2="813.8" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <line x1="160.3" y1="819.8" x2="180.3" y2="819.8" stroke="#09045c" stroke-width="0.85" stroke-linecap="round"/>
+        <line x1="160.3" y1="825.8" x2="180.3" y2="825.8" stroke="#09045c" stroke-width="0.85" stroke-linecap="round"/>
+        <line x1="166.5" y1="813.8" x2="166.5" y2="831.8" stroke="#09045c" stroke-width="0.85" stroke-linecap="round"/>
+        <line x1="173.7" y1="813.8" x2="173.7" y2="831.8" stroke="#09045c" stroke-width="0.85" stroke-linecap="round"/>
+      </g>
+      <text x="193.4" y="824.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.3" fill="#0000b6" font-weight="bold" id="db-solutions-heading">Solutions List</text>
+      <g id="db-solution-row-1">
+        <text x="153.2" y="859.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.125" fill="#000060">•</text>
+        <text x="164.8" y="859.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.5" fill="#000060" id="db-solution-row-1-text">s_001 (parent: -, status: best)</text>
+      </g>
+      <g id="db-solution-row-2">
+        <text x="153.2" y="882.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.125" fill="#000060">•</text>
+        <text x="164.8" y="882.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.5" fill="#000060" id="db-solution-row-2-text">s_002 (parent: s_001, status: good)</text>
+      </g>
+      <g id="db-solution-row-3">
+        <text x="153.2" y="905.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.125" fill="#000060">•</text>
+        <text x="164.8" y="905.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.5" fill="#000060" id="db-solution-row-3-text">s_003 (parent: s_001, status: fail)</text>
+      </g>
+      <g id="db-solution-row-4">
+        <text x="153.2" y="928.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.125" fill="#000060">•</text>
+        <text x="164.8" y="928.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.5" fill="#000060" id="db-solution-row-4-text">...</text>
+      </g>
+    </g>
+    <g id="db-performance-list" inkscape:label="Performance List">
+      <rect x="359.6" y="797" width="210.5" height="167.4" rx="6.2" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.9" id="db-performance-card"/>
+      <g id="icon-performance-chart" inkscape:label="Performance chart icon">
+        <polyline points="375.6,834.7 384.6,823.7 393.6,828.7 402.6,814.7" fill="none" stroke="#09045c" stroke-width="1.5"/>
+        <circle cx="375.6" cy="834.7" r="3" fill="#101080" stroke="#09045c" stroke-width="0.8"/>
+        <circle cx="384.6" cy="823.7" r="3" fill="#101080" stroke="#09045c" stroke-width="0.8"/>
+        <circle cx="393.6" cy="828.7" r="3" fill="#101080" stroke="#09045c" stroke-width="0.8"/>
+        <circle cx="402.6" cy="814.7" r="3" fill="#101080" stroke="#09045c" stroke-width="0.8"/>
+      </g>
+      <text x="421" y="821.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.3" fill="#0000b6" font-weight="bold" id="db-performance-heading">Performance List</text>
+      <text x="421" y="837.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.15" fill="#000060" id="db-performance-subheading">(per workload / shape)</text>
+      <g id="db-performance-row-1">
+        <text x="371.1" y="864.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.012" fill="#000060">•</text>
+        <text x="383.1" y="864.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.4" fill="#000060" id="db-performance-row-1-text">w_001 / shape_1: latency, speedup</text>
+      </g>
+      <g id="db-performance-row-2">
+        <text x="371.1" y="887" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.012" fill="#000060">•</text>
+        <text x="383.1" y="887" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.4" fill="#000060" id="db-performance-row-2-text">w_001 / shape_2: latency, speedup</text>
+      </g>
+      <g id="db-performance-row-3">
+        <text x="371.1" y="909.9" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.012" fill="#000060">•</text>
+        <text x="383.1" y="909.9" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.4" fill="#000060" id="db-performance-row-3-text">w_002 / shape_1: latency, speedup</text>
+      </g>
+      <g id="db-performance-row-4">
+        <text x="371.1" y="932.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.012" fill="#000060">•</text>
+        <text x="383.1" y="932.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.4" fill="#000060" id="db-performance-row-4-text">...</text>
+      </g>
+    </g>
+    <g id="db-lineage" inkscape:label="Lineage / DAG">
+      <rect x="577.6" y="797" width="185.6" height="167.4" rx="6.2" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.9" id="db-lineage-card"/>
+      <g id="icon-lineage-dag" inkscape:label="Lineage icon">
+        <line x1="611.4" y1="814.9" x2="595.9" y2="832.9" stroke="#09045c" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="611.4" y1="814.9" x2="626.9" y2="832.9" stroke="#09045c" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="611.4" cy="814.9" r="5.25" fill="#92aad0" stroke="#09045c" stroke-width="0.9"/>
+        <circle cx="595.9" cy="832.9" r="5.25" fill="#92aad0" stroke="#09045c" stroke-width="0.9"/>
+        <circle cx="626.9" cy="832.9" r="5.25" fill="#92aad0" stroke="#09045c" stroke-width="0.9"/>
+      </g>
+      <text x="646.8" y="823.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.3" fill="#0000b6" font-weight="bold" id="db-lineage-heading">Lineage / DAG</text>
+      <g id="db-lineage-edges" inkscape:label="Editable lineage edges">
+        <path d="M 680.4 850.8 L 680.4 858.8 L 628.2 873.1 L 628.2 878.3" fill="none" stroke="#09045c" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round" id="lineage-001-to-002"/>
+        <line x1="680.4" y1="858.8" x2="680.4" y2="875.5" stroke="#09045c" stroke-width="1.05" stroke-linecap="round" id="lineage-001-to-003"/>
+        <path d="M 680.4 858.8 L 730.0 873.8 L 730.5 885.6" fill="none" stroke="#09045c" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round" id="lineage-001-to-more"/>
+        <path d="M 628.0 894.2 L 628.0 902.2 L 605.8 917.7 L 605.8 926.0" fill="none" stroke="#09045c" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round" id="lineage-002-to-004"/>
+        <path d="M 628.0 902.2 L 651.8 918.3 L 652.2 926.4" fill="none" stroke="#09045c" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round" id="lineage-002-to-005"/>
+      </g>
+      <text x="680.3" y="846.9" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.75" fill="#000060" text-anchor="middle" id="lineage-s001">s_001</text>
+      <text x="625.3" y="891" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.75" fill="#000060" text-anchor="middle" id="lineage-s002">s_002</text>
+      <text x="684.4" y="891" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.75" fill="#000060" text-anchor="middle" id="lineage-s003">s_003</text>
+      <text x="738.1" y="887.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.1" fill="#000060" text-anchor="middle" id="lineage-more">...</text>
+      <text x="604" y="938.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.75" fill="#000060" text-anchor="middle" id="lineage-s004">s_004</text>
+      <text x="663" y="938.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.75" fill="#000060" text-anchor="middle" id="lineage-s005">s_005</text>
+    </g>
+    <g id="db-summaries-index" inkscape:label="Summaries Index">
+      <rect x="770.9" y="797" width="173" height="167.4" rx="6.2" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.9" id="db-summaries-card"/>
+      <g id="icon-summary-index" inkscape:label="Summary-index document icon">
+        <rect x="785.9" y="808.5" width="18" height="24" rx="1" fill="white" stroke="#09045c" stroke-width="1.2"/>
+        <line x1="789.4" y1="813.5" x2="800.4" y2="813.5" stroke="#09045c" stroke-width="0.95" stroke-linecap="round"/>
+        <line x1="789.4" y1="817.5" x2="800.4" y2="817.5" stroke="#09045c" stroke-width="0.95" stroke-linecap="round"/>
+        <line x1="789.4" y1="821.5" x2="800.4" y2="821.5" stroke="#09045c" stroke-width="0.95" stroke-linecap="round"/>
+        <line x1="789.4" y1="825.5" x2="797.4" y2="825.5" stroke="#09045c" stroke-width="0.95" stroke-linecap="round"/>
+      </g>
+      <text x="815.2" y="824.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.3" fill="#0000b6" font-weight="bold" id="db-summaries-heading">Summaries Index</text>
+      <g id="db-summary-row-1">
+        <text x="784.2" y="857.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="796.6" y="857.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-summary-row-1-text">summary_001 (success)</text>
+      </g>
+      <g id="db-summary-row-2">
+        <text x="784.2" y="879.9" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="796.6" y="879.9" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-summary-row-2-text">summary_002 (failure)</text>
+      </g>
+      <g id="db-summary-row-3">
+        <text x="784.2" y="902.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="796.6" y="902.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-summary-row-3-text">summary_003 (heuristic)</text>
+      </g>
+      <g id="db-summary-row-4">
+        <text x="784.2" y="924.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="796.6" y="924.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-summary-row-4-text">...</text>
+      </g>
+      <text x="785.3" y="948.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-summary-tags">(tag, topic, related ids)</text>
+    </g>
+    <g id="db-artifacts" inkscape:label="Artifacts / Code Store">
+      <rect x="951.6" y="797" width="191.4" height="167.4" rx="6.2" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.9" id="db-artifacts-card"/>
+      <g id="icon-artifact-folder" inkscape:label="Code-store folder icon">
+        <path d="M968.2 813.0 L968.2 811.0 Q968.2 810.0 970.2 810.0 L976.2 810.0 L979.2 813.0 L989.2 813.0 L989.2 830.0 L968.2 830.0 Z" fill="#7595c5" stroke="#09045c" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M969.0 815.0 L989.6 815.0 L989.6 829.2 L969.0 829.2 Z" fill="#5073af" stroke="#09045c" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round"/>
+      </g>
+      <text x="1000.8" y="823.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14" fill="#0000b6" font-weight="bold" id="db-artifacts-heading">Artifacts / Code Store</text>
+      <g id="artifact-directory-branches" inkscape:label="Directory tree branches">
+        <line x1="978.6" y1="846.9" x2="978.6" y2="909.6" stroke="#09045c" stroke-width="1.15" stroke-linecap="round"/>
+        <line x1="978.6" y1="853" x2="986.7" y2="853" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <line x1="1001" y1="865.9" x2="1001" y2="894.8" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <line x1="1001" y1="871.1" x2="1009.4" y2="871.1" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <line x1="1001" y1="889.8" x2="1009.4" y2="889.8" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <line x1="978.6" y1="917" x2="978.6" y2="945.8" stroke="#09045c" stroke-width="1.15" stroke-linecap="round"/>
+        <line x1="978.6" y1="924.1" x2="986.7" y2="924.1" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+        <line x1="978.6" y1="945.8" x2="986.7" y2="945.8" stroke="#09045c" stroke-width="1.05" stroke-linecap="round"/>
+      </g>
+      <text x="993.3" y="857.4" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="artifact-path-solutions">/solutions/</text>
+      <text x="1015" y="876.3" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="artifact-path-s001">s_001/</text>
+      <text x="1015" y="895" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="artifact-path-s002">s_002/</text>
+      <text x="994.4" y="908.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="artifact-path-more">....</text>
+      <text x="993.3" y="928.7" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="artifact-path-summaries">/summaries/</text>
+      <text x="993.3" y="948.2" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="artifact-path-logs">/logs/</text>
+    </g>
+    <g id="db-best-records" inkscape:label="Best Records">
+      <rect x="1150.4" y="797" width="136.4" height="167.4" rx="6.2" fill="#ffffff" stroke="#a9bfe6" stroke-width="0.9" id="db-best-records-card"/>
+      <g id="icon-best-records-star" inkscape:label="Best-records star icon">
+        <polygon points="1172.9,810 1175.898,816.874 1183.362,817.601 1177.75,822.576 1179.366,829.899 1172.9,826.1 1166.434,829.899 1168.05,822.576 1162.438,817.601 1169.902,816.874" fill="#6e91c4" stroke="#09045c" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <text x="1191.8" y="824.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.1" fill="#0000b6" font-weight="bold" id="db-best-records-heading">Best Records</text>
+      <g id="db-best-record-1">
+        <text x="1162.6" y="859.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="1175.6" y="859.5" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-best-record-1-text">per workload</text>
+      </g>
+      <g id="db-best-record-2">
+        <text x="1162.6" y="881.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="1175.6" y="881.8" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-best-record-2-text">per shape bucket</text>
+      </g>
+      <g id="db-best-record-3">
+        <text x="1162.6" y="904.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="14.52" fill="#000060">•</text>
+        <text x="1175.6" y="904.1" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.85" fill="#000060" id="db-best-record-3-text">per objective</text>
+      </g>
+    </g>
+  </g>
+  <g id="layer-legend" inkscape:label="14 · Legend" inkscape:groupmode="layer">
+    <text x="123.5" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="13.65" fill="#000060" font-weight="bold" id="legend-heading">Legend:</text>
+    <g id="legend-reasoning" inkscape:label="LLM / Reasoning">
+      <rect x="191.5" y="988.8" width="20.3" height="19.8" rx="0.25" fill="url(#blue-panel)" stroke="#548fff" stroke-width="0.8"/>
+      <text x="220.8" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-label-reasoning">LLM / Reasoning</text>
+    </g>
+    <g id="legend-code-generation" inkscape:label="Code Generation">
+      <rect x="349.1" y="988.8" width="20.3" height="19.8" rx="0.25" fill="#f6f9ff" stroke="#548fff" stroke-width="0.8"/>
+      <text x="377.1" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-label-code-generation">Code Generation</text>
+    </g>
+    <g id="legend-evaluation" inkscape:label="Evaluation / Tools">
+      <rect x="486.8" y="988.8" width="20.3" height="19.8" rx="0.25" fill="url(#green-panel)" stroke="#32a756" stroke-width="0.8"/>
+      <text x="514.7" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-label-evaluation">Evaluation / Tools</text>
+    </g>
+    <g id="legend-knowledge" inkscape:label="Knowledge Extraction">
+      <rect x="628.3" y="988.8" width="20.3" height="19.8" rx="0.25" fill="url(#amber-panel)" stroke="#ffae1b" stroke-width="0.8"/>
+      <text x="656.3" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-label-knowledge">Knowledge Extraction</text>
+    </g>
+    <g id="legend-storage" inkscape:label="Storage / Management">
+      <rect x="789.1" y="988.8" width="20.3" height="19.8" rx="0.25" fill="url(#purple-panel)" stroke="#a16bd3" stroke-width="0.8"/>
+      <text x="817" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-label-storage">Storage / Management</text>
+    </g>
+    <g id="legend-flow-arrow">
+      <line x1="960.5" y1="998.8" x2="989.91" y2="998.8" stroke="#005cff" stroke-width="1.6" stroke-linecap="round"/>
+      <polygon points="997.9,998.8 988.5,992.878 988.5,1004.722" fill="#005cff" stroke-linejoin="round"/>
+    </g>
+    <text x="1006.2" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-label-flow">Feedback / Context Flow</text>
+    <text x="1177" y="1002.6" font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', Times, serif" font-size="12.8" fill="#000060" id="legend-milliseconds">ms: milliseconds</text>
+  </g>
+</svg>

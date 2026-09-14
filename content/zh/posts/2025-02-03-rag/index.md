@@ -202,7 +202,7 @@ RAG 的第一步是准备和处理外部知识源。这些知识源可以是各�
         *   **LLMLingua** ([Jiang, H. et al., 2023](https://arxiv.org/abs/2310.05736)): 使用小型 LLM 来识别和移除提示中的冗余词元，从而在保持关键信息的同时压缩上下文长度，减少 LLM 推理成本和延迟。
         *   **选择性上下文 (Selective Context)**: 根据某些启发式规则或小型模型来选择最重要的文本块或句子，而不是使用所有检索到的内容。
         *   **信息过滤**: 过滤掉与查询主题无关或质量较低的检索结果。FILCO ([Wang, Z. et al., 2023](https://arxiv.org/abs/2311.08377)) 学习过滤上下文以增强 RAG。
-        *   **RECOMP (Retrieve, Compress, Prepend)** ([Xu et al., 2024](https://arxiv.org/abs/2310.04408)): 检索文档后，使用 LLM 将其压缩成摘要，然后将摘要添加到原始查询前，再输入给 LLM 生成答案。
+        *   **RECOMP** ([Xu et al., 2024](https://arxiv.org/abs/2310.04408)): 检索文档后，通过抽取有用句子或生成摘要来压缩上下文，再将压缩结果添加到 LLM 输入前；当检索内容无关或没有额外信息时，可以返回空字符串。
 
 #### 2.2 优化生成过程 (Optimizing Generation)
 
@@ -227,15 +227,15 @@ RAG 的第一步是准备和处理外部知识源。这些知识源可以是各�
     *   **记忆模块 (Memory Module)**: 存储和利用历史交互信息（如对话历史、用户偏好、先前检索结果）来个性化检索和生成过程，或支持多轮对话。Self-Mem ([Cheng, X. et al., 2023](https://arxiv.org/abs/2305.02437)) 利用迭代的检索增强生成器构建记忆池。
     *   **融合模块 (Fusion Module)**: 当从多个来源或通过多种方法检索到信息时，融合模块负责将这些信息整合起来，例如对不同检索器的结果进行加权融合或选择最佳结果。RAG-Fusion ([Rackauckas, 2024](https://arxiv.org/abs/2402.03367)) 采用多查询策略并通过倒数排名融合（RRF）整合多路检索结果。
     *   **路由模块 (Routing Module)**: 根据查询的类型、意图或复杂性，将查询导向不同的处理路径、知识源或特定工具。例如，简单的事实查询可能直接由 LLM 回答，而复杂查询则需要经过多步检索和推理。
-    *   **预测模块 (Predict Module)**: 在某些场景下，可以预测用户可能需要的下一步信息或操作，主动提供相关内容或建议。GenRead ([Yu et al., 2023](https://arxiv.org/abs/2209.10063)) 提出用 LLM 生成的上下文替代检索。
-    *   **任务适配器 (Task Adapter Module)**: 针对特定的下游任务（如问答、摘要、对话、代码生成）调整 RAG 的行为、提示和输出格式。PROMPTAGATOR ([Dai et al., 2023](https://arxiv.org/abs/2209.11755)) 或 UPRISE ([Cheng, D. et al., 2023](https://aclanthology.org/2023.emnlp-main.758/)) 为特定任务自动检索提示。
+    *   **预测模块 (Predict Module)**: 利用 LLM 根据查询直接生成相关上下文，以替代或补充外部检索。GenRead ([Yu et al., 2023](https://arxiv.org/abs/2209.10063)) 提出用 LLM 生成的上下文替代检索。
+    *   **任务适配器 (Task Adapter Module)**: 针对特定的下游任务（如问答、摘要、对话、代码生成）调整 RAG 的行为、提示和输出格式。PROMPTAGATOR ([Dai et al., 2023](https://arxiv.org/abs/2209.11755)) 通过少样本提示生成查询，用生成的数据训练任务专用检索器；UPRISE ([Cheng, D. et al., 2023](https://aclanthology.org/2023.emnlp-main.758/)) 则自动检索提示示例。
 
 *   **交互模式 (Interaction Patterns)**:
     *   **重写-检索-阅读 (Rewrite-Retrieve-Read)**: 先利用 LLM 重写用户查询（例如，使其更清晰、更具体，或分解为子查询），再进行检索，最后让 LLM 基于检索结果生成答案。
-    *   **生成-阅读 (Generate-Read / Retrieve-then-Read with Generated Content)**: 先让 LLM 生成初步内容（如假设性答案、草稿、或与查询相关的关键词/概念），再将这些生成的内容用于检索相关信息，最后进行修正或完善。
+    *   **生成-阅读 (Generate-Read)**: 先让 LLM 根据查询生成相关上下文，再阅读这些生成的内容并生成答案，例如 GenRead。
     *   **迭代检索 (Iterative Retrieval)**: 多轮检索和生成，每一轮的输出可以作为下一轮检索的输入或引导，逐步逼近最终答案。这对于需要多步推理的复杂问题尤其有效。例如，第一轮检索可能提供初步线索，LLM 基于这些线索生成新的查询或细化方向，进行第二轮检索。ITER-RETGEN ([Shao et al., 2023](https://arxiv.org/abs/2305.15294)) 就是一个迭代检索和生成的例子。
     *   **自适应检索 (Adaptive Retrieval)**:
-        *   **Self-RAG** ([Asai et al., 2024](https://arxiv.org/abs/2310.11511)): LLM 在生成过程中动态决定是否需要检索以及检索什么内容。它会生成检索令牌（如 `[Retrieve]`）和批判令牌（如 `ISREL`、`ISSUP`、`ISUSE`）来评估是否需要外部知识、检索段落是否相关、答案是否被证据支持以及输出是否有用。如果判断需要检索，它会生成检索查询，获取信息，然后继续生成。
+        *   **Self-RAG** ([Asai et al., 2024](https://arxiv.org/abs/2310.11511)): LLM 在生成过程中动态决定是否需要检索。它会生成检索令牌（如 `[Retrieve]`）和批判令牌（如 `ISREL`、`ISSUP`、`ISUSE`）来评估是否需要外部知识、检索段落是否相关、答案是否被证据支持以及输出是否有用。如果判断需要检索，检索器会根据原始输入和先前生成的片段获取信息，然后模型继续生成。
         *   **FLARE (Forward-Looking Active REtrieval augmented generation)** ([Jiang, Z. et al., 2023](https://arxiv.org/abs/2305.06983)): 一种主动检索方法。LLM 在生成答案时，会临时生成一个短期的未来句子。如果这个未来句子中包含低概率的词元（表明模型对这部分内容不确定），系统就会触发一次检索，查询与这个未来句子相关的信息，然后用检索到的信息重新生成。
         *   **SKR (Self-Knowledge Guided Retrieval Augmentation)** ([Wang, Y. et al., 2023](https://arxiv.org/abs/2310.05002)): 利用 LLM 自身的知识判断是否需要检索。
         *   **AdaptiveRAG** ([Jeong et al., 2024](https://arxiv.org/abs/2403.14403)): 通过分类器判断查询复杂度，动态选择检索策略。
@@ -285,15 +285,15 @@ BM25 的优点在于其简单、高效，并且在很多场景下能提供良好
 
 *   **分层可导航小世界图 (Hierarchical Navigable Small World, HNSW):** HNSW 是一种基于图的 ANN 算法，因其出色的性能（高召回率和高查询速度）而被广泛应用 ([Malkov and Yashunin, 2020](https://arxiv.org/abs/1603.09320))。
     *   **构建过程:** HNSW 构建一个多层图结构。最底层包含所有数据点。每一层都是下一层的一个子集，层数越高，节点越稀疏，连接的边也越长（跳跃性更大）。在每一层中，节点都与其“近邻”相连，形成一个可导航的小世界网络。新节点插入时，会从顶层开始贪婪地搜索其最近邻，并在每一层找到的最近邻基础上，在下一层继续搜索，直到到达底层。然后，新节点会与找到的最近邻建立连接。
-    *   **搜索过程:** 查询时，从顶层的入口点（entry point）开始，贪婪地向着查询向量方向在当前层图上移动，直到找到局部最优（即当前节点的所有邻居中没有比它更接近查询向量的）。然后，将这个局部最优点作为下一层的入口点，重复此过程，直到到达最底层。在最底层找到的若干最近邻即为最终的近似结果。
-    *   HNSW 的关键参数包括 `M`（每个节点的最大出度）、`efConstruction`（构建图时动态候选列表的大小）和 `efSearch`（搜索时动态候选列表的大小）。
+    *   **搜索过程:** 查询时，从顶层的入口点（entry point）开始，贪婪地向着查询向量方向在当前层图上移动，直到找到局部最优（即当前节点的所有邻居中没有比它更接近查询向量的）。然后，将这个局部最优点作为下一层的入口点，重复此过程，直到到达最底层。在最底层，使用由 `efSearch` 控制的候选列表继续搜索，再返回其中最近的若干结果。
+    *   HNSW 的关键参数包括 `M`（构建时每个新节点选择连接的邻居数）、`efConstruction`（构建图时动态候选列表的大小）和 `efSearch`（搜索时动态候选列表的大小）。
 
 
 ### 3. 混合搜索 (Hybrid Search) 与 RRF
 
 混合搜索结合了全文检索（如 BM25）和向量搜索的优点。全文检索擅长匹配关键词，而向量搜索擅长理解语义。通过融合两者的结果，可以获得更全面和相关的搜索结果。Azure AI Search 等现代搜索引擎提供了强大的混合搜索功能。
 
-**倒数排序融合 (Reciprocal Rank Fusion, RRF)** 是一种常用的无参数结果融合算法，它根据文档在不同检索系统结果列表中的排名来计算最终得分 ([Cormack et al., 2009](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf))。
+**倒数排序融合 (Reciprocal Rank Fusion, RRF)** 是一种常用的无需训练的结果融合算法，它根据文档在不同检索系统结果列表中的排名来计算最终得分 ([Cormack et al., 2009](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf))。
 RRF 的评分公式为：
 $$ \text{RRFScore}(D) = \sum_{r \in R_{systems}} \frac{1}{k_{rrf} + \text{rank}_r(D)} $$
 其中：
@@ -334,9 +334,9 @@ RRF 的优点在于其简单性、无需训练参数，并且对不同检索系�
     *   **图谱生成 (Graph Generation):** 将提取的实体作为图的节点，关系作为边，声明可以作为节点或边的属性。重复检测到的实体和关系可以进行合并，关系出现的频率可以作为边的权重。
 2.  **图社区检测与摘要 (Graph Communities & Summaries):**
     *   **社区检测 (Community Detection):** 应用图社区检测算法（如 Leiden 算法 ([Traag et al., 2019](https://arxiv.org/abs/1810.08473))）将知识图谱划分为若干个紧密连接的实体社区。这个过程可以是分层的，即在每个社区内部递归地检测子社区。
-    *   **社区摘要生成 (Community Summaries Generation):** 使用 LLM 为每个社区（在不同层级上）生成摘要。叶子节点的社区摘要基于其内部实体、关系和声明的描述。更高层级社区的摘要则递归地整合其子社区的摘要和该层级新增的关联信息。这些社区摘要提供了对数据不同粒度下的全局性描述和洞察。
+    *   **社区摘要生成 (Community Summaries Generation):** 使用 LLM 为每个社区（在不同层级上）生成摘要。叶子节点的社区摘要基于其内部实体、关系和声明的描述。更高层级社区在元素描述超出上下文窗口时，使用子社区摘要替换部分描述以压缩输入，再生成摘要。这些社区摘要提供了对数据不同粒度下的全局性描述和洞察。
 3.  **查询与答案生成 (Querying & Answering):**
-    *   **社区答案映射 (Map Community Answers):** 当用户提出查询时，针对选定层级的每个社区摘要，LLM 会并行地生成一个与查询相关的局部答案，并给出一个该局部答案对回答原始问题的“帮助性”评分。
+    *   **社区答案映射 (Map Community Answers):** 当用户提出查询时，将选定层级的社区摘要打乱并按 token 预算分块，LLM 会并行地为各块生成与查询相关的局部答案，并给出这些答案对回答原始问题的“帮助性”评分。
     *   **全局答案归约 (Reduce to Global Answer):** 将所有局部答案根据其帮助性评分进行排序，然后迭代地将评分最高的局部答案添加到新的上下文中（直到达到 LLM 的上下文窗口限制），最后 LLM 基于这个整合的上下文生成最终的全局答案。
 
 **GraphRAG 的优势**:
@@ -401,26 +401,26 @@ RRF 的优点在于其简单性、无需训练参数，并且对不同检索系�
 
 #### 纠正性 RAG (Corrective RAG / CRAG)
 
-CRAG ([Yan et al., 2024](https://arxiv.org/abs/2401.15884)) 引入了对检索结果进行自我纠正的机制。它包含一个评估器来判断检索到的文档的相关性。如果文档相关性高，则直接用于生成；如果相关性低或不确定，系统会触发额外的操作，如从其他来源（如网络）进行补充检索，或者对检索到的文档进行分解和筛选，以提高最终生成答案的鲁棒性和准确性。
+CRAG ([Yan et al., 2024](https://arxiv.org/abs/2401.15884)) 引入了对检索结果进行自我纠正的机制。它包含一个评估器来判断检索到的文档的相关性。如果检索结果被判定为正确，则对文档进行分解、筛选和重组后用于生成；如果判定为错误，则转向网络检索；如果不确定，则结合精炼后的检索文档与网络检索结果，以提高最终生成答案的鲁棒性和准确性。
 
 #### 自适应 RAG (Adaptive RAG)
 
 自适应 RAG ([Jeong et al., 2024](https://arxiv.org/abs/2403.14403)) 根据查询复杂性动态选择检索策略（无检索/单次检索/多轮迭代），详见模块化 RAG 中的自适应检索部分。
 
-#### 基于强化学习的 Agentic RAG
+#### 自主检索与推理增强的 Agentic RAG
 
-2025 年，基于强化学习训练 LLM 自主决定何时及如何检索成为 Agentic RAG 的重要方向：
+2025 年，训练 LLM 自主检索与在推理阶段集成搜索成为 Agentic RAG 的重要方向：
 
 *   **Search-R1** ([Jin et al., 2025](https://arxiv.org/abs/2503.09516)): 使用 RL 训练 LLM 在逐步推理过程中自主生成搜索查询并进行实时检索。引入 retrieved token masking 实现稳定的 RL 训练；在论文报告的七个 QA 数据集和相同检索设置下，Qwen2.5-7B 相比若干 RAG baseline 有显著提升。
 
 *   **R1-Searcher** ([Song et al., 2025](https://arxiv.org/abs/2503.05592)): 纯 RL 方法（无需过程奖励或蒸馏），教会 LLM 在推理过程中自主调用搜索。其优势应限定在论文实验的 QA 基准、检索环境和评测指标内，不应理解为通用模型能力排序。
 
-*   **Search-o1** ([Li et al., 2025](https://arxiv.org/abs/2501.05366)): 将 agentic RAG 集成到大型推理模型（如 o1）的推理过程中。包含 Reason-in-Documents 模块，在注入前分析检索文档以减少噪声。在科学、数学、编程和开放域 QA 上表现强劲。
+*   **Search-o1** ([Li et al., 2025](https://arxiv.org/abs/2501.05366)): 在推理阶段将 agentic RAG 集成到大型推理模型（如 QwQ）的推理过程中。包含 Reason-in-Documents 模块，在注入前分析检索文档以减少噪声。在科学、数学、编程和开放域 QA 上表现强劲。
 
 
 ## 多模态 RAG (Multimodal RAG)
 
-随着信息的多样化，仅仅处理文本数据已不能满足许多应用场景的需求。**多模态 RAG (Multimodal RAG)** ([Abootorabi et al., 2025](https://arxiv.org/abs/2502.08826); [Zhao et al., 2023](https://arxiv.org/abs/2309.15564)) 将 RAG 的能力扩展到多种数据模态，如文本、图像、音频、视频等。它旨在通过从包含多种类型数据的外部知识库中检索和融合信息，来增强多模态大型语言模型 (MLLMs) 的生成能力。
+随着信息的多样化，仅仅处理文本数据已不能满足许多应用场景的需求。**多模态 RAG (Multimodal RAG)** ([Abootorabi et al., 2025](https://arxiv.org/abs/2502.08826); [Zhao et al., 2023](https://aclanthology.org/2023.findings-emnlp.314/)) 将 RAG 的能力扩展到多种数据模态，如文本、图像、音频、视频等。它旨在通过从包含多种类型数据的外部知识库中检索和融合信息，来增强多模态大型语言模型 (MLLMs) 的生成能力。
 
 {{< figure
     src="multimodal_rag.jpg"
@@ -459,7 +459,7 @@ $$ r = G_{model}(q, X) $$
    * **模态中心检索 (Modality-Centric Retrieval):**
 
      * **文本中心:** 基于传统文本检索方法，使用 BM25、DPR、**Contriever** ([Izacard et al., 2022](https://arxiv.org/abs/2112.09118)) 等。
-     * **视觉中心:** 直接基于图像向量检索，如 EchoSight、ImgRet；**CIR (Composed Image Retrieval)** 模型支持多图组合查询。
+     * **视觉中心:** 直接基于图像向量检索，如 EchoSight、ImgRet；**CIR (Composed Image Retrieval)** 模型支持参考图像与修改文本组成的查询。
      * **视频中心:** 融合时序动态信息，例如 **iRAG** ([Arefeen et al., 2024](https://arxiv.org/abs/2404.12309)) 的增量检索、**Video-RAG** ([Luo et al., 2024](https://arxiv.org/abs/2411.13093)) 借助 OCR/ASR 辅助文本。
      * **文档检索与布局理解:** 处理含文本、图像、表格、布局信息的整页文档，如 **ColPali** ([Faysse et al., 2024](https://arxiv.org/abs/2407.01449))、**DocLLM** ([Wang et al., 2024](https://arxiv.org/abs/2401.00908))。
    * **重排序与选择策略:**
@@ -503,7 +503,7 @@ $$ r = G_{model}(q, X) $$
 
 ### 多模态 RAG 前沿进展
 
-*   **ViDoRAG** ([Wang, Q. et al., 2025](https://arxiv.org/abs/2502.18017)): 面向视觉文档的多智能体 RAG 系统，使用基于 GMM 的混合检索结合文本和视觉特征。采用迭代式智能体工作流（探索、总结、反思），比现有方法提升超过 10%。
+*   **ViDoRAG** ([Wang, Q. et al., 2025](https://arxiv.org/abs/2502.18017)): 面向视觉文档的多智能体 RAG 系统，使用基于 GMM 的混合检索结合文本和视觉特征。采用迭代式智能体工作流（探索、总结、反思），在 ViDoSeek 基准上比论文比较的方法提升超过 10%。
 
 *   **MegaRAG** ([Hsiao et al., 2025](https://arxiv.org/abs/2512.20626)): 基于多模态知识图谱的 RAG，支持跨模态推理。将视觉线索整合到知识图谱的构建、检索和答案生成中，同时支持全局和细粒度问答。
 
@@ -513,13 +513,13 @@ $$ r = G_{model}(q, X) $$
 
 *   **CoRAG (Chain-of-Retrieval Augmented Generation)** ([Wang, L. et al., 2025](https://arxiv.org/abs/2501.14342), Microsoft): 训练“o1-like RAG 模型”，通过拒绝采样生成中间检索链，实现逐步检索与推理。在论文报告的多跳问答设置下提升 10+ EM 分数，并展示了 RAG 的测试时计算扩展能力。
 
-*   **Contextual Retrieval** ([Anthropic, 2024](https://www.anthropic.com/engineering/contextual-retrieval)): Anthropic 提出的预处理技术，使用 Claude 为每个文本块添加 50-100 token 的上下文说明后再进行嵌入和索引。结合 Contextual Embeddings + Contextual BM25 + Reranking，实现检索失败率降低 67%。利用 prompt caching 将成本降至每百万文档 token 约 1.02 美元。
+*   **Contextual Retrieval** ([Anthropic, 2024](https://www.anthropic.com/engineering/contextual-retrieval)): Anthropic 提出的预处理技术，使用 Claude 为每个文本块添加 50-100 token 的上下文说明后再进行嵌入和索引。结合 Contextual Embeddings + Contextual BM25 + Reranking，在其 top-20 检索实验中使检索失败率相对降低 67%。利用 prompt caching，按文中配置与当时定价，生成上下文说明的一次性成本约为每百万文档 token 1.02 美元。
 
 *   **PRAG (Parametric Retrieval Augmented Generation)** ([Su et al., 2025](https://arxiv.org/abs/2501.15915)): 提出将外部知识直接整合到 FFN 参数中的新范式，而非附加到输入上下文。消除了上下文长度开销，实现更深层的知识整合，并可与传统 in-context RAG 结合进一步提升效果。
 
 *   **HippoRAG 2** ([Gutierrez et al., 2025](https://arxiv.org/abs/2502.14802)): 将 RAG 推向类人长期记忆系统，使用增强的 Personalized PageRank 实现更深层的段落整合。在论文报告的关联记忆任务中，比相关 SOTA 嵌入模型提升 7%，同时在事实和语义理解任务上表现优异。
 
-*   **RAG vs. Long-Context** ([Li, Z. et al., 2024](https://arxiv.org/abs/2407.16833), Google, EMNLP 2024): 对 RAG 与长上下文 LLM（包括 Gemini-1.5 和 GPT-4）进行了全面基准测试。提出 Self-Route 方法，根据模型自我反思将查询路由到 RAG 或长上下文处理。发现长上下文在某些任务上表现更优，但 RAG 在成本效率和特定检索密集型任务上仍具显著优势，两者各有适用场景。
+*   **RAG vs. Long-Context** ([Li, Z. et al., 2024](https://arxiv.org/abs/2407.16833), Google, EMNLP 2024): 对 RAG 与长上下文 LLM（包括 Gemini-1.5 和 GPT-4）进行了全面基准测试。提出 Self-Route 方法，根据模型自我反思将查询路由到 RAG 或长上下文处理。在该论文的实验中，资源充足时长上下文的平均表现优于 RAG，而 RAG 具有显著成本优势。
 
 ## RAG 系统的评估
 
@@ -535,31 +535,31 @@ Ragas 关注以下核心质量维度：
     *   **定义:** 衡量生成的答案 \( A \) 是否完全基于给定的上下文 \( C \) 得出，即答案中的声明是否都能从上下文中推断出来。这个指标对于避免幻觉至关重要。
     *   **计算方法 (Ragas):**
         1.  使用 LLM 从生成的答案 \( A \) 中提取一组声明（statements）\( S = \{s_1, s_2, \ldots, s_m\} \)。
-        2.  对于每个声明 \( s_i \in S \)，再次使用 LLM 验证该声明是否可以从上下文 \( C \) 中推断出来。得到一个验证为真的声明集合 \( V \)。
+        2.  对于每个声明 \( s_i \in S \)，再次使用 LLM 验证该声明是否可以从上下文 \( C \) 中推断出来。得到一个受上下文支持的声明集合 \( V \)。
         3.  忠实度得分 \( F_{faithfulness} \) 计算为：
             $$ F_{faithfulness} = \frac{|V|}{|S|} $$
-            其中 \( |V| \) 是被验证为真实的声明数量，\( |S| \) 是从答案中提取的声明总数。得分范围为 \( [0, 1] \)，越高越好。
+            其中 \( |V| \) 是得到上下文支持的声明数量，\( |S| \) 是从答案中提取的声明总数。得分范围为 \( [0, 1] \)，越高越好。
 
 *   **答案相关性 (Answer Relevance):**
     *   **定义:** 衡量生成的答案 \( A \) 与原始问题 \( Q \) 的相关程度。它惩罚不完整或包含冗余信息的答案。
     *   **计算方法 (Ragas):**
         1.  给定生成的答案 \( A \)，使用 LLM 生成 \( n_{q'} \) 个可能的反向问题 \( Q' = \{q'_1, q'_2, \ldots, q'_{n_{q'}}\} \)，这些问题应该可以由答案 \( A \) 来回答。
         2.  计算每个生成的反向问题 \( q'_j \) 与原始问题 \( Q \) 之间的嵌入相似度 \( \text{sim}(Q, q'_j) \)（例如使用 OpenAI text-embedding-3-small 计算余弦相似度）。
-        3.  答案相关性得分 \( \text{AR} \) 计算为这些相似度的平均值：
+        3.  [答案相关性得分](https://docs.ragas.io/en/latest/concepts/metrics/available_metrics/answer_relevance/) \( \text{AR} \) 计算为这些相似度的平均值：
             $$ \text{AR} = \frac{1}{n_{q'}} \sum_{j=1}^{n_{q'}} \text{sim}(Q, q'_j) $$
-            得分范围为 \( [0, 1] \)，越高越好。
+            得分通常位于 \( [0, 1] \)，但由于使用余弦相似度，其理论范围为 \( [-1, 1] \)，越高越好。
 
 *   **上下文精确率 (Context Precision):**
     *   **定义:** 衡量检索到的上下文块列表中，相关块是否排在靠前的位置。它是一个基于排序的指标，奖励将相关上下文排在前面的检索器。
-    *   **计算方法 (Ragas 中的 Context Precision):**
-        1.  给定问题 \( Q \) 和检索到的 \( K \) 个上下文块的有序列表 \( C = [c_1, c_2, \ldots, c_K] \)，使用 LLM 判断每个块 \( c_k \) 是否对回答问题有用，得到二值标签 \( v_k \in \{0, 1\} \)。
+    *   **计算方法 (Ragas 中基于 LLM、使用参考答案的 Context Precision):**
+        1.  给定问题 \( Q \)、参考答案 \( GT \) 和检索到的 \( K \) 个上下文块的有序列表 \( C = [c_1, c_2, \ldots, c_K] \)，使用 LLM 结合参考答案判断每个块 \( c_k \) 是否对回答问题有用，得到二值标签 \( v_k \in \{0, 1\} \)。
         2.  上下文精确率计算为各位置 precision@k 的加权平均：
-            $$ \text{Context Precision} = \frac{\sum_{k=1}^{K} (\text{Precision@}k \times v_k)}{\text{总相关块数}} $$
-            其中 \( \text{Precision@}k = \frac{\text{前 } k \text{ 个块中相关块数}}{k} \)。该指标惩罚相关块排在列表后面的情况。得分范围为 \( [0, 1] \)，越高越好。
+            $$ \text{Context Precision} = \frac{\sum_{k=1}^{K} (\text{Precision@}k \times v_k)}{\sum_{k=1}^{K} v_k} $$
+            其中 \( \text{Precision@}k = \frac{\text{前 } k \text{ 个块中相关块数}}{k} \)，分母为这 \( K \) 个检索块中的相关块数；没有相关块时记为 0。该指标惩罚相关块排在列表后面的情况。得分范围为 \( [0, 1] \)，越高越好。
 
 *   **上下文召回率 (Context Recall):** (需要真实答案 Ground Truth)
     *   **定义:** 衡量检索到的上下文 \( C \) 是否包含了回答问题 \( Q \) 所需的所有真实答案 \( GT \) 中的信息。
-    *   **计算方法 (Ragas):** 对于真实答案 \( GT \) 中的每个句子，判断其是否可以从检索到的上下文 \( C \) 中归因得到。上下文召回率 \( \text{CR}_{recall} \) 是可归因的真实答案句子数 \( |S_{GT\_attributable}| \) 与真实答案总句数 \( |S_{GT}| \) 的比率。
+    *   **计算方法 (Ragas，基于 LLM):** 将真实答案 \( GT \) 拆解为一组事实声明（claims），判断每条声明是否可以从检索到的上下文 \( C \) 中归因得到。[上下文召回率](https://docs.ragas.io/en/latest/concepts/metrics/available_metrics/context_recall/) \( \text{CR}_{recall} \) 是可归因的真实答案声明数 \( |S_{GT\_attributable}| \) 与真实答案声明总数 \( |S_{GT}| \) 的比率。一个句子可能包含多条声明。
         $$ \text{CR}_{recall} = \frac{|S_{GT\_attributable}|}{|S_{GT}|} $$
 
 *   **答案语义相似度 (Answer Semantic Similarity):** (需要真实答案 Ground Truth)
@@ -580,7 +580,7 @@ Ragas 关注以下核心质量维度：
     $$
     \text{MRR} = \frac{1}{|Q_{set}|} \sum_{i=1}^{|Q_{set}|} \frac{1}{\text{rank}_i}
     $$
-    其中 \( \text{rank}_i \) 是第 \( i \) 个查询的第一个相关文档的排名。
+    其中 \( \text{rank}_i \) 是第 \( i \) 个查询的第一个相关文档的排名；若未检索到相关文档，该查询的倒数排名记为 0。
 *   **归一化折扣累积增益 (Normalized Discounted Cumulative Gain, NDCG@k)**: 考虑检索结果的排序和相关性等级。
     $$
     \text{DCG}@k = \sum_{i=1}^{k} \frac{2^{\text{rel}_i} - 1}{\log_2(i+1)} \quad ; \quad \text{NDCG}@k = \frac{\text{DCG}@k}{\text{IDCG}@k}
@@ -591,7 +591,7 @@ Ragas 关注以下核心质量维度：
 
 *   **BLEU (Bilingual Evaluation Understudy)** ([Papineni et al., 2002](https://aclanthology.org/P02-1040/)): 基于 N-gram 精确率。
     $$ \text{BLEU} = \text{BP} \cdot \exp\left(\sum_{n=1}^{N} w_n \log p_n\right) $$
-*   **ROUGE (Recall-Oriented Understudy for Gisting Evaluation)** ([Lin, 2004](https://aclanthology.org/W04-1013/)): 基于 N-gram 召回率。
+*   **ROUGE (Recall-Oriented Understudy for Gisting Evaluation)** ([Lin, 2004](https://aclanthology.org/W04-1013/)): 其中 ROUGE-N 基于 N-gram 召回率。
     \[
     \begin{aligned}
     \text{ROUGE-N}
@@ -606,7 +606,7 @@ Ragas 关注以下核心质量维度：
     \]
 *   **METEOR (Metric for Evaluation of Translation with Explicit ORdering)** ([Banerjee and Lavie, 2005](https://aclanthology.org/W05-0909/)): 基于对齐的词级别匹配。
 *   **BERTScore** ([Zhang et al., 2019](https://arxiv.org/abs/1904.09675)): 计算嵌入之间的余弦相似度。
-*   **困惑度 (Perplexity, PPL)**: 衡量语言模型对其生成文本的自信程度。
+*   **困惑度 (Perplexity, PPL)**: 衡量语言模型对给定文本序列的预测能力，通常在固定测试语料上计算。
     \[
     \begin{aligned}
     \text{PPL}(W)
@@ -618,10 +618,10 @@ Ragas 关注以下核心质量维度：
 ### 4. 端到端评估与基准
 
 * **Ragas (Retrieval Augmented Generation Assessment)** ([Es et al., 2023](https://arxiv.org/abs/2309.15217))：如上所述，提供了一套自动化的评估指标。
-* **ARES (Automated RAG Evaluation System)** ([Saad-Falcon et al., 2023](https://arxiv.org/abs/2311.09476))：使用 LLM 生成的合成数据进行评估。
-* **TruLens** ([TruLens Docs, 2024](https://www.trulens.org/))：关注上下文相关性、无害性/忠实度和答案相关性。
+* **ARES (Automated RAG Evaluation System)** ([Saad-Falcon et al., 2023](https://arxiv.org/abs/2311.09476))：使用合成数据训练评判器，并结合少量人工标注通过预测驱动推断（PPI）校正评估。
+* **TruLens** ([TruLens Docs](https://www.trulens.org/getting_started/core_concepts/rag_triad/))：关注上下文相关性、依据性（Groundedness）和答案相关性。
 * **RGB (RAG Benchmark)** ([Chen, J. et al., 2024](https://arxiv.org/abs/2309.01431))：评估噪声鲁棒性、负例拒绝、信息整合和反事实鲁棒性。
-* **RECALL (Robustness Evaluation of Counterfactual Knowledge in RAG for LLMs)** ([Liu, X. et al., 2023](https://arxiv.org/abs/2311.08147))：专注于反事实知识的鲁棒性。
+* **RECALL (Robustness against External Counterfactual Knowledge)** ([Liu, Y. et al., 2023](https://arxiv.org/abs/2311.08147))：专注于反事实知识的鲁棒性。
 * **CRUD-RAG** ([Lyu et al., 2024](https://arxiv.org/abs/2401.17043))：全面的中文 RAG 基准。
 * **BEIR (Benchmarking IR)** ([Thakur et al., 2021](https://arxiv.org/abs/2104.08663))：通用信息检索基准。
 * **KILT (Knowledge Intensive Language Tasks)** ([Petroni et al., 2020](https://arxiv.org/abs/2009.02252))：知识密集型任务基准。
@@ -640,7 +640,7 @@ Ragas 等工具降低了人工评估的成本，使开发者可以更快迭代�
 RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中展现出巨大潜力：
 
 * **开放域问答 (Open-Domain Question Answering)**: 如 DrQA ([Chen et al., 2017](https://arxiv.org/abs/1704.00051))。
-* **领域特定问答 (Domain-Specific QA)**: 医疗 ([Zhu et al., 2024](https://arxiv.org/abs/2402.07016) - REALM for EHRs)、法律 ([Cui et al., 2023](https://arxiv.org/abs/2306.16092) - ChatLaw)、金融 ([Zhang et al., 2024](https://arxiv.org/abs/2403.12582) - AlphaFin)。
+* **领域特定应用 (Domain-Specific Applications)**: 医疗记录分析 ([Zhu et al., 2024](https://arxiv.org/abs/2402.07016) - REALM for EHRs)、法律问答 ([Cui et al., 2023](https://arxiv.org/abs/2306.16092) - ChatLaw)、金融分析 ([Li et al., 2024](https://arxiv.org/abs/2403.12582) - AlphaFin)。
 * **对话系统/聊天机器人 (Conversational AI/Chatbots)**: 如 BlenderBot 3 ([Shuster et al., 2022](https://arxiv.org/abs/2208.03188))。
 * **内容生成 (Content Generation)**: 生成报告、摘要等。
 * **代码生成与辅助 (Code Generation and Assistance)**: 如 DocPrompting ([Zhou et al., 2022](https://arxiv.org/abs/2207.05987))。
@@ -758,7 +758,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [48] Abootorabi, Mohammad Mahdi, et al. ["A survey on multimodal retrieval augmented generation."](https://arxiv.org/abs/2502.08826) arXiv preprint (2025).
 
-[49] Zhao, Penghao, et al. ["Retrieving multimodal information for augmented generation: A survey."](https://arxiv.org/abs/2309.15564) EMNLP 2023.
+[49] Zhao, Ruochen, et al. ["Retrieving Multimodal Information for Augmented Generation: A Survey."](https://aclanthology.org/2023.findings-emnlp.314/) Findings of EMNLP 2023.
 
 [50] Radford, Alec, et al. ["Learning transferable visual models from natural language supervision."](https://arxiv.org/abs/2103.00020) ICML 2021.
 
@@ -774,7 +774,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [56] Lin, Xi Victoria, et al. ["RA-DIT: Retrieval-augmented dual instruction tuning."](https://arxiv.org/abs/2310.01352) ICLR 2024.
 
-[57] Ding, Yujian, et al. ["RA-BLIP: Multimodal Adaptive Retrieval-Augmented Bootstrapping Language-Image Pre-training."](https://arxiv.org/abs/2410.14154) arXiv preprint (2024).
+[57] Ding, Muhe, et al. ["RA-BLIP: Multimodal Adaptive Retrieval-Augmented Bootstrapping Language-Image Pre-training."](https://arxiv.org/abs/2410.14154) arXiv preprint (2024).
 
 [58] Luo, Yongdong, et al. ["Video-RAG: Visually-aligned Retrieval-Augmented Long Video Comprehension."](https://arxiv.org/abs/2411.13093) arXiv preprint (2024).
 
@@ -796,7 +796,7 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [67] Chen, Jiawei, et al. ["Benchmarking large language models in retrieval-augmented generation."](https://arxiv.org/abs/2309.01431) AAAI 2024.
 
-[68] Liu, Xiang, et al. ["RECALL: A benchmark for LLMs robustness against external counterfactual knowledge."](https://arxiv.org/abs/2311.08147) arXiv preprint (2023).
+[68] Liu, Yi, et al. ["RECALL: A benchmark for LLMs robustness against external counterfactual knowledge."](https://arxiv.org/abs/2311.08147) arXiv preprint (2023).
 
 [69] Lyu, Yuanjie, et al. ["CRUD-RAG: A comprehensive Chinese benchmark for retrieval-augmented generation of large language models."](https://arxiv.org/abs/2401.17043) arXiv preprint (2024).
 
@@ -844,19 +844,19 @@ RAG 技术因其能够结合外部知识源的优势，在多种 NLP 应用中�
 
 [91] Yuan, Zheng, et al. ["RAMM: Retrieval-augmented Biomedical Visual Question Answering with Multi-modal Pre-training."](https://arxiv.org/abs/2303.00534) arXiv preprint (2023).
 
-[92] Zhai, Yuanhang. ["SAM-RAG: Multimodal retrieval augmented generation via self-adaptive multimodal retrieval."](https://arxiv.org/abs/2410.11321) arXiv preprint (2024).
+[92] Zhai, Wenjia. ["Self-adaptive Multimodal Retrieval-Augmented Generation."](https://arxiv.org/abs/2410.11321) arXiv preprint (2024).
 
 [93] Yang, Qian, et al. ["Enhancing Multi-modal and Multi-hop Question Answering via Structured Knowledge and Unified Retrieval-Generation."](https://arxiv.org/abs/2212.08632) arXiv preprint (2022).
 
-[94] Li, Ye, et al. ["OmniSearch: Adaptive search with an agentic retrieval pipeline."](https://arxiv.org/abs/2411.02937) arXiv preprint (2024).
+[94] Li, Yangning, et al. ["Benchmarking Multimodal Retrieval Augmented Generation with Dynamic VQA Dataset and Self-adaptive Planning Agent."](https://arxiv.org/abs/2411.02937) arXiv preprint (2024).
 
-[95] Khaliq, Varun, et al. ["RAGAR: Reasoning-augmented generation for retrieval-augmented reasoning."](https://arxiv.org/abs/2404.12065) arXiv preprint (2024).
+[95] Khaliq, M. Abdul, et al. ["RAGAR, Your Falsehood Radar: RAG-Augmented Reasoning for Political Fact-Checking using Multimodal Large Language Models."](https://arxiv.org/abs/2404.12065) arXiv preprint (2024).
 
 [96] Ma, Xueguang, et al. ["VISA: Retrieval augmented generation with visual source attribution."](https://arxiv.org/abs/2412.14457) arXiv preprint (2024).
 
-[97] Zhang, Xiang, et al. ["AlphaFin: Benchmarking financial analysis with retrieval-augmented stock-chain framework."](https://arxiv.org/abs/2403.12582) arXiv preprint (2024).
+[97] Li, Xiang, et al. ["AlphaFin: Benchmarking financial analysis with retrieval-augmented stock-chain framework."](https://arxiv.org/abs/2403.12582) arXiv preprint (2024).
 
-[98] Wu, Junda, et al. ["CoRAL: Collaborative retrieval-augmented large language models for recommendation."](https://arxiv.org/abs/2403.06447) arXiv preprint (2024).
+[98] Wu, Junda, et al. ["CoRAL: Collaborative Retrieval-Augmented Large Language Models Improve Long-tail Recommendation."](https://arxiv.org/abs/2403.06447) arXiv preprint (2024).
 
 [99] Gemini Team, Google. ["Gemini: A family of highly capable multimodal models."](https://arxiv.org/abs/2312.11805) arXiv preprint (2024).
 

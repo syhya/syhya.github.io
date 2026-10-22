@@ -187,7 +187,7 @@ languages:
         - name: github
           url: "https://github.com/syhya"
         - name: email
-          url: "mailto:syhya925666582@gmail.com"
+          url: "mailto:yueshui.llm@gmail.com"
 
       analytics:
         google:
@@ -213,7 +213,7 @@ languages:
         keys: ["title", "permalink", "summary", "content"]
 
       contact:
-        email: "syhya925666582@gmail.com"
+        email: "yueshui.llm@gmail.com"
 
     menu:
       main:
@@ -299,7 +299,7 @@ languages:
         - name: github
           url: "https://github.com/syhya"
         - name: email
-          url: "mailto:syhya925666582@gmail.com"
+          url: "mailto:yueshui.llm@gmail.com"
 
       analytics:
         google:
@@ -325,7 +325,7 @@ languages:
         keys: ["title", "permalink", "summary", "content"]
 
       contact:
-        email: "syhya925666582@gmail.com"
+        email: "yueshui.llm@gmail.com"
 
     menu:
       main:

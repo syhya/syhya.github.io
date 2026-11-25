@@ -19,6 +19,12 @@ buildDrafts: false
 buildFuture: false
 buildExpired: false
 enableInlineShortcodes: true
+
+# Hugo v0.162+ blocks raw text/html files in content/ by default; allow them for
+# HTML visualizations stored inside post page bundles.
+security:
+  allowContent:
+    - ".*"
 enableEmoji: true
 pygmentsUseClasses: true
 mainsections: ["posts", "papermod"]

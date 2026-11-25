@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>SOL-ExecBench 排名快照</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #ffffff;
+      --foreground: #20252b;
+      --muted: #59636e;
+      --track: #e9eef1;
+      --line: #dce3e7;
+      --accent: #087f8c;
+      --accent-soft: #e3f3f3;
+      --selected: #202b33;
+      --selected-text: #ffffff;
+      --focus: #087f8c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --background: #1d1e20;
+        --foreground: #e6e9ed;
+        --muted: #b2bbc4;
+        --track: #343b41;
+        --line: #414a52;
+        --accent: #62c7cf;
+        --accent-soft: #253f42;
+        --selected: #e2e8ec;
+        --selected-text: #1d252b;
+        --focus: #82d8df;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --background: #1d1e20;
+      --foreground: #e6e9ed;
+      --muted: #b2bbc4;
+      --track: #343b41;
+      --line: #414a52;
+      --accent: #62c7cf;
+      --accent-soft: #253f42;
+      --selected: #e2e8ec;
+      --selected-text: #1d252b;
+      --focus: #82d8df;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-width: 0; }
+    body {
+      background: var(--background);
+      color: var(--foreground);
+      font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    main { width: 100%; max-width: 960px; margin: 0 auto; padding: 22px 24px 18px; }
+    h1 { margin: 0; font-size: clamp(20px, 3.4vw, 25px); line-height: 1.2; font-weight: 650; letter-spacing: -.025em; }
+    .metadata { margin: 6px 0 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .controls { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; margin-top: 15px; background: var(--track); border-radius: 9px; }
+    button { border: 0; border-radius: 6px; padding: 9px 14px; min-height: 38px; background: transparent; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; }
+    button[aria-pressed="true"] { color: var(--selected-text); background: var(--selected); }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .chart { margin-top: 17px; }
+    .measure-note { margin: 0 0 5px; color: var(--muted); font-size: 12px; }
+    .axis, .track-plot { display: grid; grid-template-columns: minmax(0, 1fr) 82px; gap: 12px; align-items: center; }
+    .axis { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .scale { display: flex; justify-content: space-between; position: relative; padding-bottom: 6px; }
+    .scale::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--line); }
+    .axis-value { text-align: right; padding-bottom: 6px; }
+    .tracks { list-style: none; padding: 0; margin: 0; }
+    .track { padding-top: 14px; }
+    .track-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+    .track-name { min-width: 0; display: flex; align-items: baseline; gap: 7px; font-size: 14px; font-weight: 600; }
+    .track-name a { color: var(--foreground); text-decoration: none; text-underline-offset: 3px; }
+    .track-name a:hover { text-decoration: underline; }
+    .rank { display: inline-block; flex: none; padding: 1px 5px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 650; }
+    .solved { flex: none; white-space: nowrap; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .bar-track { height: 12px; border-radius: 3px; overflow: hidden; background: var(--track); }
+    .bar-fill { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width 200ms ease; }
+    .value { font-size: 16px; line-height: 1.3; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    noscript p { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+    @media (max-width: 420px) {
+      main { padding: 18px 14px 15px; }
+      .controls { margin-top: 13px; }
+      button { min-height: 40px; padding-inline: 12px; }
+      .chart { margin-top: 15px; }
+      .track-name { font-size: 13px; gap: 5px; }
+      .track-heading { gap: 6px; }
+      .solved { font-size: 11px; }
+      .axis, .track-plot { grid-template-columns: minmax(0, 1fr) 76px; gap: 10px; }
+      .track { padding-top: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
+  </style>
+</head>
+<body>
+  <main aria-labelledby="chart-title">
+    <header>
+      <h1 id="chart-title">四榜公开排名</h1>
+      <p class="metadata"><time datetime="2026-11-24">2026-11-24</time> · B200 · v1.1</p>
+    </header>
+    <div class="controls" role="group" aria-label="切换显示指标">
+      <button type="button" data-metric="sol" aria-pressed="true" aria-controls="leaderboard-chart">SOL 分数</button>
+      <button type="button" data-metric="coverage" aria-pressed="false" aria-controls="leaderboard-chart">通过覆盖率</button>
+    </div>
+    <section class="chart" id="leaderboard-chart" aria-labelledby="measure-note">
+      <p class="measure-note" id="measure-note">官方页面 SOL 分数 · 统一 0–1 轴</p>
+      <div class="axis" aria-hidden="true"><div class="scale"><span data-tick="0">0</span><span data-tick="1">0.5</span><span data-tick="2">1</span></div><span class="axis-value">分数</span></div>
+      <ol class="tracks">
+        <li class="track">
+          <div class="track-heading">
+            <div class="track-name"><a href="https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/1/B200" target="_blank" rel="noopener noreferrer" aria-label="打开官方榜单：L1 · 单算子">L1 · 单算子</a><span class="rank" aria-label="第 1 名">#1</span></div>
+            <span class="solved">94/94 已通过</span>
+          </div>
+          <div class="track-plot">
+            <div class="bar-track" role="meter" aria-label="L1 · 单算子 · SOL 分数" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.972859" aria-valuetext="0.972859" data-row="0"><span class="bar-fill" style="width:97.2859%" aria-hidden="true"></span></div>
+            <span class="value" data-value="0">0.972859</span>
+          </div>
+        </li>
+        <li class="track">
+          <div class="track-heading">
+            <div class="track-name"><a href="https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/2/B200" target="_blank" rel="noopener noreferrer" aria-label="打开官方榜单：L2 · 融合算子">L2 · 融合算子</a><span class="rank" aria-label="第 1 名">#1</span></div>
+            <span class="solved">82/82 已通过</span>
+          </div>
+          <div class="track-plot">
+            <div class="bar-track" role="meter" aria-label="L2 · 融合算子 · SOL 分数" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.991483" aria-valuetext="0.991483" data-row="1"><span class="bar-fill" style="width:99.1483%" aria-hidden="true"></span></div>
+            <span class="value" data-value="1">0.991483</span>
+          </div>
+        </li>
+        <li class="track">
+          <div class="track-heading">
+            <div class="track-name"><a href="https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/3/B200" target="_blank" rel="noopener noreferrer" aria-label="打开官方榜单：Quant · 量化">Quant · 量化</a><span class="rank" aria-label="第 1 名">#1</span></div>
+            <span class="solved">33/33 已通过</span>
+          </div>
+          <div class="track-plot">
+            <div class="bar-track" role="meter" aria-label="Quant · 量化 · SOL 分数" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.993653" aria-valuetext="0.993653" data-row="2"><span class="bar-fill" style="width:99.3653%" aria-hidden="true"></span></div>
+            <span class="value" data-value="2">0.993653</span>
+          </div>
+        </li>
+        <li class="track">
+          <div class="track-heading">
+            <div class="track-name"><a href="https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/4/B200" target="_blank" rel="noopener noreferrer" aria-label="打开官方榜单：FlashInfer-Bench">FlashInfer-Bench</a><span class="rank" aria-label="第 1 名">#1</span></div>
+            <span class="solved">26/26 已通过</span>
+          </div>
+          <div class="track-plot">
+            <div class="bar-track" role="meter" aria-label="FlashInfer-Bench · SOL 分数" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.927523" aria-valuetext="0.927523" data-row="3"><span class="bar-fill" style="width:92.7523%" aria-hidden="true"></span></div>
+            <span class="value" data-value="3">0.927523</span>
+          </div>
+        </li>
+      </ol>
+      <p class="sr-only" id="metric-status" role="status" aria-live="polite"></p>
+    </section>
+    <noscript><p>图中为 SOL 分数；切换指标需要启用 JavaScript。</p></noscript>
+  </main>
+  <script id="snapshot-data" type="application/json">{"observed_date":"2026-11-24","timezone":"Asia/Shanghai","hardware":"B200","evaluation_stack":"v1.1","leaderboards":[{"collection_id":1,"label":"L1 · 单算子","rank":1,"sol_score_display":"0.972859","solved":94,"total":94,"source_url":"https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/1/B200"},{"collection_id":2,"label":"L2 · 融合算子","rank":1,"sol_score_display":"0.991483","solved":82,"total":82,"source_url":"https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/2/B200"},{"collection_id":3,"label":"Quant · 量化","rank":1,"sol_score_display":"0.993653","solved":33,"total":33,"source_url":"https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/3/B200"},{"collection_id":4,"label":"FlashInfer-Bench","rank":1,"sol_score_display":"0.927523","solved":26,"total":26,"source_url":"https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/4/B200"}]}</script>
+  <script>
+    (() => {
+      "use strict";
+      const snapshot = JSON.parse(document.getElementById("snapshot-data").textContent);
+      const labels = {"sol":"SOL 分数","coverage":"通过覆盖率","solNote":"官方页面 SOL 分数 · 统一 0–1 轴","coverageNote":"已通过题数 / 全部题数 · 统一 0–100% 轴","scoreColumn":"分数","coverageColumn":"覆盖率","announcedSol":"当前显示官方 SOL 分数，范围 0 至 1。","announcedCoverage":"当前显示通过覆盖率，四个题组均为 100%。"};
+      const buttons = Array.from(document.querySelectorAll("[data-metric]"));
+      const meters = Array.from(document.querySelectorAll("[data-row]"));
+      const values = Array.from(document.querySelectorAll("[data-value]"));
+      const ticks = Array.from(document.querySelectorAll("[data-tick]"));
+      function setMetric(metric) {
+        const coverage = metric === "coverage";
+        buttons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.metric === metric)));
+        snapshot.leaderboards.forEach((row, index) => {
+          const value = coverage ? row.solved / row.total : Number(row.sol_score_display);
+          const display = coverage ? (value * 100).toLocaleString("zh-CN", { maximumFractionDigits: 1 }) + "%" : row.sol_score_display;
+          const meter = meters[index];
+          meter.setAttribute("aria-label", row.label + " · " + (coverage ? labels.coverage : labels.sol));
+          meter.setAttribute("aria-valuenow", String(value));
+          meter.setAttribute("aria-valuetext", display);
+          meter.firstElementChild.style.width = String(value * 100) + "%";
+          values[index].textContent = display;
+        });
+        (coverage ? ["0%", "50%", "100%"] : ["0", "0.5", "1"]).forEach((text, index) => { ticks[index].textContent = text; });
+        document.querySelector(".axis-value").textContent = coverage ? labels.coverageColumn : labels.scoreColumn;
+        document.getElementById("measure-note").textContent = coverage ? labels.coverageNote : labels.solNote;
+        document.getElementById("metric-status").textContent = coverage ? labels.announcedCoverage : labels.announcedSol;
+      }
+      buttons.forEach(button => button.addEventListener("click", () => setMetric(button.dataset.metric)));
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+      let parentBody = null;
+      let parentRoot = null;
+      try {
+        if (window.parent !== window && window.parent.document.body) {
+          parentBody = window.parent.document.body;
+          parentRoot = window.parent.document.documentElement;
+        }
+      } catch (_) { /* Cross-origin embeds use the system theme. */ }
+      function syncTheme() {
+        let dark = systemTheme.matches;
+        if (parentBody) {
+          const explicit = parentRoot.getAttribute("data-theme");
+          dark = explicit === "dark" || (explicit !== "light" && parentBody.classList.contains("dark"));
+        }
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      }
+      if (parentBody) {
+        const observer = new MutationObserver(syncTheme);
+        observer.observe(parentBody, { attributes: true, attributeFilter: ["class"] });
+        observer.observe(parentRoot, { attributes: true, attributeFilter: ["data-theme"] });
+      }
+      if (systemTheme.addEventListener) systemTheme.addEventListener("change", syncTheme);
+      syncTheme();
+    })();
+  </script>
+</body>
+</html>

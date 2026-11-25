@@ -1,0 +1,51 @@
+{
+  "observed_date": "2026-11-24",
+  "timezone": "Asia/Shanghai",
+  "hardware": "B200",
+  "evaluation_stack": "v1.1",
+  "display_name": "yue shui",
+  "provenance": "Read from the rendered public collection leaderboards in a browser. Displayed ranks and scores are a dated snapshot, separate from local per-task aggregates.",
+  "review_scope": "Leaderboard display does not establish successful anti-cheating review.",
+  "leaderboards": [
+    {
+      "collection_id": 1,
+      "collection": "L1 - Single Operations",
+      "rank": 1,
+      "sol_score_display": "0.972859",
+      "solved": 94,
+      "total": 94,
+      "average_speedup_display": "58.21x",
+      "source_url": "https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/1/B200"
+    },
+    {
+      "collection_id": 2,
+      "collection": "L2 - Fused Operations",
+      "rank": 1,
+      "sol_score_display": "0.991483",
+      "solved": 82,
+      "total": 82,
+      "average_speedup_display": "411.16x",
+      "source_url": "https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/2/B200"
+    },
+    {
+      "collection_id": 3,
+      "collection": "Quantization",
+      "rank": 1,
+      "sol_score_display": "0.993653",
+      "solved": 33,
+      "total": 33,
+      "average_speedup_display": "232.53x",
+      "source_url": "https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/3/B200"
+    },
+    {
+      "collection_id": 4,
+      "collection": "FlashInfer-Bench",
+      "rank": 1,
+      "sol_score_display": "0.927523",
+      "solved": 26,
+      "total": 26,
+      "average_speedup_display": "22.52x",
+      "source_url": "https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/collection/4/B200"
+    }
+  ]
+}

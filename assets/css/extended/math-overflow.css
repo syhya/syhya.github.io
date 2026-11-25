@@ -1,0 +1,7 @@
+/* Keep wide display equations scrollable within the article on small screens. */
+.post-content mjx-container[jax="CHTML"][display="true"] {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-block: 0.15em;
+}

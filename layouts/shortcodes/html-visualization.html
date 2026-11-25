@@ -1,0 +1,13 @@
+{{- $name := .Get "src" -}}
+{{- $source := .Page.Resources.GetMatch $name -}}
+{{- if not $source -}}
+  {{- errorf "Visualization %q is missing from %s" $name .Page.File.Path -}}
+{{- else -}}
+  {{- $markup := $source.Content -}}
+  {{- if eq $source.ResourceType "page" -}}
+    {{- $markup = $source.RawContent -}}
+  {{- end -}}
+  {{- $target := strings.TrimPrefix "/" (printf "%s%s" .Page.RelPermalink $name) -}}
+  {{- $document := resources.FromString $target $markup -}}
+  <iframe src="{{ $document.RelPermalink }}" title="{{ .Get "title" }}" loading="lazy" style="width:100%;height:{{ .Get "height" | default "560" }}px;border:0;display:block;"></iframe>
+{{- end -}}

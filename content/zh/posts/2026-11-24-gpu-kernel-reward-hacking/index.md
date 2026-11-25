@@ -13,7 +13,7 @@ draft: false
 math: true
 ---
 
-2026 年 11 月 24 日，我以 **`yue shui@syhya.github.io`** 的名字排在 SOL-ExecBench（[Lin et al., 2026](https://arxiv.org/abs/2603.19173v1)）的 L1、L2、Quantization 和 FlashInfer-Bench 四个 B200 [官方榜单](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard)第一，页面均使用 Evaluation Stack v1.1。不过，**这些成绩并不代表真实的 kernel 优化**，而是利用评测漏洞取得的。本文以这次实验为切入点，分析 GPU kernel 优化中的 reward hacking：结合 SOL-ExecBench 的评测流程与具体案例，说明这些漏洞的成因、它们为何能通过评测，以及相应的防护方法。
+2026 年 11 月 24 日，我在 SOL-ExecBench（[Lin et al., 2026](https://arxiv.org/abs/2603.19173v1)）的 L1、L2、Quantization 和 FlashInfer-Bench 四个 B200 [官方榜单](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard)上均排在第一，页面均使用 Evaluation Stack v1.1。不过，**这些成绩并不代表真实的 kernel 优化**，而是利用评测漏洞取得的。本文以这次实验为切入点，分析 GPU kernel 优化中的 reward hacking：结合 SOL-ExecBench 的评测流程与具体案例，说明这些漏洞的成因、它们为何能通过评测，以及相应的防护方法。
 
 ## 实验结果：四个榜单第一
 

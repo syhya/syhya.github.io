@@ -13,7 +13,7 @@ draft: false
 math: true
 ---
 
-On November 24, 2026, I held first place as **`yue shui@syhya.github.io`** on the L1, L2, Quantization, and FlashInfer-Bench B200 tracks of SOL-ExecBench ([Lin et al., 2026](https://arxiv.org/abs/2603.19173v1)), according to its [official leaderboards](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard). All four pages used Evaluation Stack v1.1. **These results do not reflect real kernel optimization**, though; they came from exploiting evaluation loopholes. Starting from this experiment, this post analyzes reward hacking in GPU kernel optimization. Drawing on SOL-ExecBench's evaluation pipeline and concrete cases, it explains how these loopholes arise, why they pass evaluation, and how to defend against them.
+On November 24, 2026, I held first place on the L1, L2, Quantization, and FlashInfer-Bench B200 tracks of SOL-ExecBench ([Lin et al., 2026](https://arxiv.org/abs/2603.19173v1)), according to its [official leaderboards](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard). All four pages used Evaluation Stack v1.1. **These results do not reflect real kernel optimization**, though; they came from exploiting evaluation loopholes. Starting from this experiment, this post analyzes reward hacking in GPU kernel optimization. Drawing on SOL-ExecBench's evaluation pipeline and concrete cases, it explains how these loopholes arise, why they pass evaluation, and how to defend against them.
 
 ## Results: First Place on All Four Leaderboards
 

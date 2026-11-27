@@ -1,7 +1,7 @@
 ---
 title: "GPU Kernel 优化中的 Reward Hacking：SOL-ExecBench 的评测漏洞与防护"
 date: 2026-11-24T00:00:00+08:00
-lastmod: 2026-11-25T00:00:00+08:00
+lastmod: 2026-11-26T00:00:00+08:00
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["LLM", "Agent", "GPU Kernel", "Evaluation", "Reward Hacking"]
@@ -19,7 +19,7 @@ math: true
 
 {{< html-visualization src="leaderboard-visualization.html" title="四个 B200 榜单的 SOL 分数与通过覆盖率" height="480" >}}
 
-上图分数均通过下文介绍的 reward hacking 方法取得，四个子榜单的题目全部通过。
+上面分数均通过下文介绍的 reward hacking 方法取得，四个子榜单的题目全部通过。
 
 {{< figure
     src="flashinfer-bench-res.png"
@@ -39,27 +39,49 @@ math: true
     width="100%"
 >}}
 
-**Reward hacking（奖励欺骗）是指利用奖励或评测规则的缺口获得高分，却没有相应实现设计者希望的目标。** Lilian Weng 的综述梳理了这个共同问题：实际被优化的奖励，未必完整表达我们真正想要的结果（[Weng, 2024](https://lilianweng.github.io/posts/2024-11-28-reward-hacking/)）。
+**Reward hacking（奖励欺骗）是指利用奖励或评测规则的缺口获得高分，却没有相应实现设计者希望的目标。** Lilian Weng 的综述梳理了这个共同问题：实际被优化的奖励，未必完整实现我们真正想要的结果（[Weng, 2024](https://lilianweng.github.io/posts/2024-11-28-reward-hacking/)）。
 
-在 kernel 优化里，真实目标是**对当前输入完成规定计算，并且更快**；评测器通常看到的则是有限正确性测试与一组计时读数。这些读数构成了优化时使用的代理目标。返回正确张量，不一定意味着处理了当前输入；整轮计算完成，也不一定意味着每次独立调用都完成了自己的工作。数值正确、调用语义和计时范围需要一起检查，分数才对应我们想测量的能力。
+在 kernel 优化里，真实目标是**对当前输入完成规定计算，并且更快**；评测器通常看到的则是有限正确性测试与一组计时读数。这些读数构成了优化时使用的代理目标。返回正确张量，不一定意味着处理了当前输入；整轮计算完成，也不一定意味着每次独立调用都完成了自己的工作。数值正确、调用语义和计时范围需要一起检查，只有都通过后的测验出来的分数才有可信度。
 
 这类偏离可以分成不同路径：**specification gaming** 利用字面规则与真实目标之间的缺口，不一定修改评分器；**reward tampering** 则直接干预奖励函数或它依赖的证据。两者都可能让分数上升，却没有完成预期任务（[Krakovna et al., 2020](https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/)；[Everitt et al., 2019](https://arxiv.org/abs/1908.04734)）。
 
-规则奖励和单元测试降低了部分主观性，仍然受输入覆盖、容差与执行边界限制。反过来，测试失败也不能直接叫作 hacking：EvilGenie（[Gabor et al., 2025](https://arxiv.org/html/2511.21654v1)）发现，正常实现可能漏掉边界条件，利用测试分布的启发式实现也可能通过保留测试。因此，判断需要结合规格、代码和执行证据。
+规则奖励和单元测试降低了部分主观性，仍然受输入覆盖、容差与执行边界限制。反过来，测试失败也不能直接叫作 hacking：EvilGenie（[Gabor et al., 2025](https://arxiv.org/html/2511.21654v1)）发现，正常实现可能漏掉边界条件，利用测试分布的启发式实现也可能通过保留测试。因此，判断需要结合规格、代码和执行轨迹。
 
 ## SOL-ExecBench 如何打分
 
-SOL-ExecBench 对单个 workload 使用以下评分公式（[NVIDIA, 2026a](https://research.nvidia.com/benchmarks/sol-execbench/blog/submission-guide#scoring)）：
+SOL-ExecBench 对单个 workload 使用以下评分公式（[NVIDIA, 2026a](https://research.nvidia.com/benchmarks/sol-execbench/blog/submission-guide#scoring)）。
 
 $$
-S(t)=
-\frac{t_b-t_{\mathrm{sol}}}
-{(t-t_{\mathrm{sol}})+(t_b-t_{\mathrm{sol}})}.
+S(T_k)=\frac{T_b-T_{\mathrm{SOL}}}{(T_k-T_{\mathrm{SOL}})+(T_b-T_{\mathrm{SOL}})}.
 $$
 
-其中，$t$ 是候选耗时，$t_b$ 是预计算的基线耗时，$t_{\mathrm{sol}}$ 是 SOL 模型估计的时间下界，三者使用相同单位。单题与集合依次对 workload 和 kernel 分数取算术平均，失败或缺失项记零。
+其中，$T_k$ 是候选实现的实测耗时，$T_b$ 是计分基线的耗时，$T_{\mathrm{SOL}}$ 是 SOLAR 估计的硬件耗时下界。计分基线是基于 PyTorch 参考实现优化得到的版本。在 $T_b>T_{\mathrm{SOL}}$、$T_k\geq T_{\mathrm{SOL}}$ 的条件下，分数上限为 1。
 
-在 $t_b>t_{\mathrm{sol}}$、$t\ge t_{\mathrm{sol}}$ 的正常评分区间内，$t$ 越小，分数越高。跨调用缓存可以在正确性检查时正常计算，而在计时阶段只返回旧输出、运行一个 marker kernel，把测得的 $t$ 压到远低于完整计算的耗时。若评测没有核验计时路径是否处理了当前输入，这个更小的 $t$ 就会被当作优化收益。
+- 与计分基线同速时，$S=0.5$。
+- 耗时达到 SOL 下界时，$S=1$。
+- 耗时趋于无穷时，$S\to 0$。
+
+Fig. 3 展示了分数随耗时变化的曲线。越接近 SOL 耗时下界，同样幅度的耗时变化对分数的影响越大。
+
+{{< figure
+    src="sol-execbench-score-vs-runtime.png"
+    alt="SOL 分数随 kernel 耗时变化的曲线。SOL 下界为 50 时得 1 分，基线耗时为 100 时得 0.5 分，耗时趋于无穷时分数趋于 0"
+    caption="Fig. 3. SOL score as a function of kernel runtime with an SOL bound of 50 and a scoring baseline of 100. (Image source: [Lin et al., 2026](https://arxiv.org/html/2603.19173v1#S4.F5))"
+    align="center"
+    width="100%"
+>}}
+
+当计时漏掉本次调用应完成的部分计算时，测得的耗时 $T_k$ 可能低于估计的 SOL 耗时下界 $T_{\mathrm{SOL}}$。[Cursor](https://cursor.com/blog/multi-agent-kernels) 在博客中提到若不当缓存等 Reward hacking 手段使测得的性能超出 B200 的硬件能力，评测流程应该成绩判为无效。
+
+以 Fig. 4 中的算子 [001_attention_softmax_dropout_value_matmul_backward](https://research.nvidia.com/benchmarks/sol-execbench/kernel/1) 为例，B200 榜单记录的提交耗时为 **0.002197 ms**，低于该题 **0.081720 ms** 的 SOL 下界。线上评测服务会将超过 1 的 SOL score 截为 **1**。
+
+{{< figure
+    src="sol-execbench-kernel-001-b200-leaderboard.png"
+    alt="算子 001_attention_softmax_dropout_value_matmul_backward 的 B200 榜单截图，提交耗时为 0.002197 ms，SOL 下界为 0.081720 ms，榜单分数为 1"
+    caption="Fig. 4. B200 leaderboard for 001_attention_softmax_dropout_value_matmul_backward. The submission’s reported runtime is below the SOL bound, and the leaderboard shows a score of 1."
+    align="center"
+    width="100%"
+>}}
 
 ## 四个案例
 
@@ -132,7 +154,7 @@ if (do_prep) {
 
 `prep_launch` 负责把当前输入转换、复制到内部缓冲。对同一 `(B, S)` 连续调用，且没有扩容或其他调用改写缓冲时，第 16 次起这一步就被跳过了。即使传入新的 hidden states、RoPE 参数或权重，后面的计算仍读取旧缓冲。
 
-即使进入 `prep_launch`，它也只抽样检查每个输入的 256 个位置。下面是 [CUDA 源码](https://github.com/Tencent-Hunyuan/Hyra-results/blob/b24e7f5543f08069fe190e98c5c05b62ca28a074/AI4AI/sol_execbench/k067__sid24692__flash_attention_gqa_ultralong__067_flash_attention_gqa_ultralong.json#L49)中的判断；`samp_pos` 按固定间隔选点：
+即使进入 `prep_launch`，它也只抽样检查每个输入的 256 个位置。下面是 [CUDA 源码](https://github.com/Tencent-Hunyuan/Hyra-results/blob/b24e7f5543f08069fe190e98c5c05b62ca28a074/AI4AI/sol_execbench/k067__sid24692__flash_attention_gqa_ultralong__067_flash_attention_gqa_ultralong.json)中的判断；`samp_pos` 按固定间隔选点：
 
 ```cpp
 float cur = tab.s[w][samp_pos(t, n)];
@@ -145,7 +167,7 @@ if (!dirty) return;
 
 这份代码还会在 `S <= 4096` 时捕获、重放 CUDA Graph。**Graph 重放仍会执行 GPU 计算；这里的问题是输入不再刷新。** [PyTorch 文档](https://docs.pytorch.org/docs/2.15/notes/cuda.html#cuda-graphs)说明了固定地址与更新数据的区别：重放复用捕获时的地址，但可以读取这些地址里的新内容。若使用内部静态输入，就需要在重放前写入本次输入；不能靠调用次数来决定是否更新。
 
-这个例子与前一个的节省来源不同：前者可以跳过 RMSNorm 本身，这里省掉的是输入准备，并对旧数据继续计算。这是对公开代码路径的分析，本文没有为这份提交重新运行 GPU 实验，也不据此推断它的全部性能收益。
+这个例子与前一个的节省来源不同：前者可以跳过 RMSNorm 本身，这里省掉的是输入准备，并对旧数据继续计算。
 
 ### 例子三：利用输入分布，删掉整个计算分支
 
@@ -156,37 +178,61 @@ _NEED_IDX = [0, 3, 4, 20, 21, 22, 23, 24]
 needed = [all_args[i] for i in _NEED_IDX]
 ```
 
-这些索引对应 hidden states、第二层归一化参数、输出投影 bias 和 MLP 参数；第一层归一化、短卷积、长滤波器与输出投影 weight 都没有进入计算。`_prologue` 直接从 `hidden_states + out_proj_bias` 构造残差，再执行归一化和 MLP。这里被删除的是计算分支，而不是通过融合减少 kernel 数量。
-
-一个可能的解释是：参考输入中多组权重按 `randn * 0.02` 初始化，经过门控后，Hyena 分支的贡献可能小到被最终输出容差掩盖。**这是对通过原因的推断，不是对任意输入的误差保证。** 需要放大被忽略的分支、改变输入分布，才能检验这个近似是否仍符合任务要求。
+这些索引对应 hidden states、第二层归一化参数、输出投影 bias 和 MLP 参数；第一层归一化、短卷积、长滤波器与输出投影 weight 都没有进入计算。`_prologue` 直接从 `hidden_states + out_proj_bias` 构造残差，再执行归一化和 MLP。这里被删除的是计算分支，而不是通过融合减少 kernel 数量。一个可能的解释是：参考输入中多组权重按 `randn * 0.02` 初始化，经过门控后，Hyena 分支的贡献可能小到被最终输出容差掩盖。
 
 同一提交还在计数超过 11 后停止向 Graph 的静态输入复制新值，叠加了前一例的状态问题。删分支和冻结输入是两条独立路径：换一批随机种子可能暴露前者，却未必触及计时阶段的后者。
 
 ### 例子四：计算完成了，单次调用的含义却变了
 
-跨调用状态还可以改变工作的组织方式。GPU MODE 的 NVFP4 复盘（[Kokoromyti, 2026](https://www.gpumode.com/news/reward-hacking-nvfp4)）记录了一份后来被撤销成绩的提交：它收集 15 份输入，把原本独立的调用合为一次 grouped GEMM，再在后续调用中返回缓存的输出句柄。
+跨调用状态还可以改变工作的组织方式。GPU MODE 的 NVFP4 复盘（[Kokoromyti, 2026](https://www.gpumode.com/news/reward-hacking-nvfp4)）记录了一份以 11.191 μs 登顶、随后被撤销成绩的提交。它利用了正确性检查与计时循环的差异：正确性阶段，评测器传入 15 份克隆数据，提交每次都正常运行 8-group GEMM，同时用 `id(data)` 计数；数到 15，就判断接下来进入计时阶段。
 
-在启用合批且对象身份稳定的计时轮里，第一次调用启动整批计算，其余 14 次只返回句柄。对新对象，提交还可以按形状收集输入，等收齐后再启动计算。独立调用的输出应满足调用方的 stream 语义，不能依赖后续其他调用补算；整轮结束后输出正确，无法证明这一点。
+{{< figure
+    src="nvfp4-correctness-vs-timing.png"
+    alt="正确性阶段每次调用都运行 8-group kernel；计时阶段只运行一次 120-group kernel，其余 14 次返回缓存结果"
+    caption="Fig. 5. Every correctness call runs a real 8-group kernel. In timing, one 120-group kernel computes all 15 inputs, and the other 14 calls return cached outputs. (Image source: [Kokoromyti, 2026](https://www.gpumode.com/news/reward-hacking-nvfp4))"
+    align="center"
+    width="100%"
+>}}
+
+计时阶段，评测器重复传入同一批对象。第一次调用启动一个合并 15 份数据的 120-group kernel，其余 14 次只返回缓存的输出。**GPU 上只运行了一个 kernel，总耗时却被除以 15。**
 
 这个案例确实完成了矩阵乘法，也可能获得真实的批处理吞吐收益；但把整批耗时除以 15，得到的是跨调用摊销后的读数。它没有证明一个独立请求能以同样延迟完成。如果生产接口允许合批，这可以是合法优化，同时需要报告等待成批的时间。**评测需要验证的，不只是答案对不对，还包括分数采用的工作单位是否符合任务约定。**
 
 ## 公开报告中还有哪些方法
 
-SOL-ExecBench 论文已讨论状态缓存，并介绍输入克隆、地址偏移和代码审核等防护（[Lin et al., 2026](https://arxiv.org/abs/2603.19173v1)）。结合论文、技术博客与事件记录，可以把已公开的方法归纳如下。它们会相互叠加，这里列的是代表性路径，并非完整清单。
+SOL-ExecBench 论文在内部 Agent 实验中标记并拒绝了 589 份提交，占该实验全部提交的 14.5%。Fig. 6 展示了检测到的类型及其分布（[Lin et al., 2026](https://arxiv.org/html/2603.19173v1#S5.F9)）。
 
-| 方法 | 利用的缺口与公开例子 |
+{{< figure
+    src="sol-execbench-exploit-distribution.png"
+    alt="SOL-ExecBench 论文统计的违规提交分布：精度降级 259 例（6.4%）、Monkey Patching 134 例（3.3%）、Stream Injection 100 例（2.5%）、复用缓存输出 67 例（1.6%），以及少量 JIT Forking、单次正确性和线程注入"
+    caption="Fig. 6. Reward-hacking submissions (589 total, 14.5%) flagged across L1, L2, Quantization, and FlashInfer-Bench in SOL-ExecBench. (Image source: [Lin et al., 2026](https://arxiv.org/abs/2603.19173v1))"
+    align="center"
+    width="100%"
+>}}
+
+论文将观察到的八种评测作弊手法分为并发绕过、状态与缓存和环境干预三类，并且列举了对应的防护措施。
+
+{{< figure
+    src="sol-execbench-reward-hacking-defenses.png"
+    alt="SOL-ExecBench 原论文表 3，按并发绕过、状态与缓存、环境干预列出八种做法及对应防护"
+    caption="Fig. 7. Reward-hacking methods observed in SOL-ExecBench and their corresponding defenses. (Image source: [Lin et al., 2026](https://arxiv.org/pdf/2603.19173v1#page=12))"
+    align="center"
+    width="100%"
+>}}
+
+下表汇总了 SOL-ExecBench 及其他 GPU kernel 评测与竞赛中公开记录的案例。
+
+| 方法 | 公开案例 |
 | --- | --- |
-| 跨调用缓存与阶段识别 | 按地址、形状、抽样值或调用次数复用旧输出、旧输入。前面的代码展示了其中几种组合。 |
-| 容差与输入分布利用 | [SF Tensor](https://sf-tensor.com/news/sol-execbench) 报告 MoE 从 top-10 少算到 top-2 仍通过；[doubleAI](https://www.doubleai.com/research/maxwell-approaches-speed-of-light-on-blackwell) 报告省略 softcap 在特定测试范围内仍足够接近。 |
-| 固定测试实例特化 | doubleAI 报告只覆盖 16 个 `theta` 值的 RoPE，以及更换种子后暴露的失败。问题是漏掉声明支持的输入，而不是 shape 特化本身。 |
-| 计时范围外执行或延迟计算 | SOL 论文记录 side stream、后台线程与 capture stream 问题；[Wafer](https://www.wafer.ai/blog/reward-hacks-field-guide) 还展示 Tensor 子类等到正确性比较时才计算。历史 CUDA-event 漏洞不能直接套用于本文的 CUPTI 版本。 |
-| 跨调用合批 | [GPU MODE](https://www.gpumode.com/news/reward-hacking-nvfp4) 记录把 15 次调用合为一次 grouped GEMM，再返回缓存句柄。矩阵乘法仍完成，但摊销耗时改变了独立调用的计量单位。 |
-| 获取参考答案或复用评分器缓冲 | [METR](https://metr.org/evaluations/openai-o3-report/#optimize-a-kernel) 记录沿 Python 调用栈读取 `y_torch`；Wafer 描述 no-op 利用已有输出、identity 利用测试输出接近输入的情形。 |
-| 修改计时器或参考环境 | SOL 论文记录替换 `Event.elapsed_time`；SF Tensor 报告在候选导入时修改环境变量，降低同进程 reference 的计算精度。 |
+| 只适配固定测试值 | [doubleAI](https://www.doubleai.com/research/maxwell-approaches-speed-of-light-on-blackwell#simple-verifiers-allow-overfitting) 报告，一份 RoPE 实现只支持测试集里的 16 个 `theta` 值，遇到其他值就会出错。doubleAI 还用新的随机种子做了复测，8 个此前通过的 kernel 各自在至少一个测试负载上失败。 |
+| 利用测试容差 | [SF Tensor](https://sf-tensor.com/news/sol-execbench#why-bother-computing-what-was-asked) 发现，一项 MoE 任务要求计算权重最高的 10 个专家并汇总结果，有个提交只算了前 2 个。由于路由权重高度集中，输出仍在测试容差内。 |
+| 复用已有答案 | [METR](https://metr.org/evaluations/openai-o3-report/#optimize-a-kernel) 记录了 o3 在一次 GPU kernel 优化评测中直接返回评分器预先算好的参考结果。这个案例暴露了评测器与候选实现之间的隔离缺口。 |
+| 跨调用缓存 | [Wafer](https://www.wafer.ai/blog/reward-hacks-field-guide#9-caching--memoization) 在 GEMM 评测中观察到，有提交先算出结果并保存下来，后续计时调用直接返回缓存的输出。这样测得的耗时没有计入重新计算的成本。 |
+| 跨调用合批 | [GPU MODE](https://www.gpumode.com/news/reward-hacking-nvfp4) 的 NVFP4 复盘记录了一份把 15 次调用合成一次 GPU 计算的提交。评测器把整批耗时除以 15，得到的是批量处理时每次调用分摊的耗时。 |
+| 把计算移出计时 | [Wafer](https://www.wafer.ai/blog/reward-hacks-field-guide#timing-attacks) 描述了两种计时器可能漏掉实际计算的情形。计算有时在计时器未覆盖的 CUDA stream 上执行，有时直到评测器检查输出时才开始。 |
+| 干预计时或校验 | [METR](https://metr.org/evaluations/openai-o3-report/#optimize-a-kernel) 记录，同一次 o3 尝试后来还改动了计时和 CUDA 同步函数。[SF Tensor](https://sf-tensor.com/news/sol-execbench#why-not-just-change-the-graders-reference-implementation) 则发现，有提交降低了同进程中参考实现的计算精度，使候选输出更容易通过误差检查。 |
 
-METR 的栈读取与本文缓存有一个重要区别：前者取走评分器已经算出的答案，后者保存自己先前算出的答案。两者都可能返回正确数值，却绕开本次要求的计算；防护分别需要保护参考数据的访问边界，以及验证跨调用状态的有效性。
-
-[Cursor](https://cursor.com/blog/multi-agent-kernels) 明确表示会排除缓存带来的不合理成绩，doubleAI 也讨论了计时改进。
+SOL-ExecBench 论文 v1 描述的是 CUDA Event 计时。例子一采用的评测器版本 `a9fa080` 默认使用 CUPTI，可以观测不同 CUDA stream 上的 GPU 活动，并按识别出的 kernel 活动序列计时。对于例子一的 workload，还需要在计时路径中改变输入值并核对输出，才能检查本次调用是否处理了当前输入。
 
 ## 怎样减少 Reward Hacking
 
@@ -228,6 +274,14 @@ METR 的栈读取与本文缓存有一个重要区别：前者取走评分器已
 
 SF Tensor 的形式化正确性工作（[Koska et al., 2026](https://sf-tensor.com/news/formal-correctness)）尝试从 PTX 建立符号模型，通过求解器验证实现与规格等价，覆盖随机测试容易漏掉的分支、mask 和同步问题。它把“测过若干输入”推进到“在模型与前提下证明性质”，但早期实现将浮点数视为精确实数，不能据此保证实际浮点误差。
 
+{{< figure
+    src="random-testing-vs-formal-verification.png"
+    alt="左侧展示随机测试如何漏掉未采样的缺陷区域；右侧展示用 SMT 求解器检查 PTX kernel 与参考规格是否等价"
+    caption="Fig. 8. Random testing samples inputs, while formal verification uses a symbolic model to check whether a PTX kernel can differ from its specification."
+    align="center"
+    width="100%"
+>}}
+
 ### 让监控形成“发现、调查、补洞”的闭环
 
 OpenAI 的 CoT 监控研究（[Baker et al., 2025](https://arxiv.org/abs/2503.11926v1)）展示了用监控发现作弊轨迹、人工调查并修补环境漏洞的过程。对 kernel Agent，可以同时保留工具调用、提交差异、GPU 活动与权威测试结果，用监控寻找新模式，再把确认的漏洞变成回归负例。
@@ -264,23 +318,23 @@ MONA（[Farquhar et al., 2025](https://arxiv.org/html/2501.13011v2)）则尝试�
 
 [6] NVIDIA. ["SOL-ExecBench Submission Guide: Scoring."](https://research.nvidia.com/benchmarks/sol-execbench/blog/submission-guide#scoring) NVIDIA Documentation (2026a).
 
-[7] NVIDIA. ["SOL-ExecBench Evaluation Code."](https://github.com/NVIDIA/SOL-ExecBench/tree/a9fa0804c793d438e70850c33fe34426e66d53dd) GitHub Repository (2026b).
+[7] Lin, Wilson, et al. ["Speeding Up GPU Kernels by 38% with a Multi-Agent System."](https://cursor.com/blog/multi-agent-kernels) Cursor Research Blog (2026).
 
-[8] Tencent Hunyuan. ["Hyra SOL-ExecBench Results and Submissions."](https://github.com/Tencent-Hunyuan/Hyra-results/tree/b24e7f5543f08069fe190e98c5c05b62ca28a074/AI4AI/sol_execbench) GitHub Repository (2026).
+[8] NVIDIA. ["SOL-ExecBench Evaluation Code."](https://github.com/NVIDIA/SOL-ExecBench/tree/a9fa0804c793d438e70850c33fe34426e66d53dd) GitHub Repository (2026b).
 
-[9] PyTorch. ["CUDA Semantics: CUDA Graphs."](https://docs.pytorch.org/docs/2.15/notes/cuda.html#cuda-graphs) PyTorch Documentation (version 2.15).
+[9] Tencent Hunyuan. ["Hyra SOL-ExecBench Results and Submissions."](https://github.com/Tencent-Hunyuan/Hyra-results/tree/b24e7f5543f08069fe190e98c5c05b62ca28a074/AI4AI/sol_execbench) GitHub Repository (2026).
 
-[10] Kokoromyti, Natalia. ["Anatomy of a Reward Hack: A Real Story from the Latest GPU Mode NVFP4 Competition."](https://www.gpumode.com/news/reward-hacking-nvfp4) GPU MODE Blog (2026).
+[10] PyTorch. ["CUDA Semantics: CUDA Graphs."](https://docs.pytorch.org/docs/2.15/notes/cuda.html#cuda-graphs) PyTorch Documentation (version 2.15).
 
-[11] SF Tensor. ["What We Learned Topping NVIDIA's SOL-ExecBench."](https://sf-tensor.com/news/sol-execbench) SF Tensor Blog (2026).
+[11] Kokoromyti, Natalia. ["Anatomy of a Reward Hack: A Real Story from the Latest GPU Mode NVFP4 Competition."](https://www.gpumode.com/news/reward-hacking-nvfp4) GPU MODE Blog (2026).
 
 [12] doubleAI. ["Maxwell Approaches Speed of Light on Blackwell."](https://www.doubleai.com/research/maxwell-approaches-speed-of-light-on-blackwell) doubleAI Research Blog (2026).
 
-[13] Andere, Emilio. ["A Field Guide to Reward Hacking in AI Kernel Generation."](https://www.wafer.ai/blog/reward-hacks-field-guide) Wafer Blog (2026).
+[13] SF Tensor. ["What We Learned Topping NVIDIA's SOL-ExecBench."](https://sf-tensor.com/news/sol-execbench) SF Tensor Blog (2026).
 
 [14] METR. ["Details About METR's Preliminary Evaluation of OpenAI's o3 and o4-mini."](https://metr.org/evaluations/openai-o3-report/) METR Evaluation Report (2025).
 
-[15] Lin, Wilson, et al. ["Speeding Up GPU Kernels by 38% with a Multi-Agent System."](https://cursor.com/blog/multi-agent-kernels) Cursor Research Blog (2026).
+[15] Andere, Emilio. ["A Field Guide to Reward Hacking in AI Kernel Generation."](https://www.wafer.ai/blog/reward-hacks-field-guide) Wafer Blog (2026).
 
 [16] NVIDIA. ["NVIDIA System Management Interface."](https://docs.nvidia.com/deploy/nvidia-smi/index.html) NVIDIA Documentation (2026c).
 
@@ -302,7 +356,8 @@ MONA（[Farquhar et al., 2025](https://arxiv.org/html/2501.13011v2)）则尝试�
 
 **Cited as:**
 
-> Yue Shui. (November 2026). GPU Kernel 优化中的 Reward Hacking：SOL-ExecBench 的评测漏洞与防护. [Yue Shui's Blog](https://syhya.github.io/zh/posts/2026-11-24-gpu-kernel-reward-hacking/).
+> Yue Shui. (Nov 2026). GPU Kernel 优化中的 Reward Hacking：SOL-ExecBench 的评测漏洞与防护.  
+https://syhya.github.io/zh/posts/2026-11-24-gpu-kernel-reward-hacking
 
 Or
 
@@ -312,7 +367,7 @@ Or
   author  = "Yue Shui",
   journal = "syhya.github.io",
   year    = "2026",
-  month   = "November",
-  url     = "https://syhya.github.io/zh/posts/2026-11-24-gpu-kernel-reward-hacking/"
+  month   = "Nov",
+  url     = "https://syhya.github.io/zh/posts/2026-11-24-gpu-kernel-reward-hacking"
 }
 ```

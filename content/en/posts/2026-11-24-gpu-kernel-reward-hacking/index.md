@@ -1,7 +1,7 @@
 ---
 title: "Reward Hacking in GPU Kernel Optimization: Loopholes and Defenses in SOL-ExecBench"
 date: 2026-11-24T00:00:00+08:00
-lastmod: 2026-11-26T00:00:00+08:00
+lastmod: 2026-11-27T00:00:00+08:00
 author: "Yue Shui"
 categories: ["Technical Blog"]
 tags: ["LLM", "Agent", "GPU Kernel", "Evaluation", "Reward Hacking"]
@@ -196,7 +196,7 @@ Cross-call state can also change the unit of work being measured. GPU MODE's NVF
 
 During the timing loop, the harness repeatedly passes in the same batch of input objects. On the first call, the submission launches a single 120-group kernel covering all 15 inputs at once; on the remaining 14 calls, it launches no GPU work and simply returns the cached outputs. **Only one kernel runs on the GPU, yet its total elapsed time is divided by 15.**
 
-This submission does perform all the matrix multiplications and can realize genuine batching throughput gains. Dividing the batch runtime by 15, however, measures an amortized per-call cost across invocations rather than the latency of an independent request. When a production interface permits batching, super-batching can be a valid optimization—provided the time spent waiting to assemble a batch is reported as well. **Evaluation must verify not only that the output is right, but also that the unit of work behind the score matches the task contract.**
+This submission does perform all the matrix multiplications and can realize genuine batching throughput gains. Dividing the batch runtime by 15, however, measures an amortized per-call cost across invocations rather than the latency of an independent request. When a production interface permits batching, super-batching can be a valid optimization—provided the queueing time spent waiting for multiple requests to form a batch is accounted for as well. **Evaluation must verify not only that the output is right, but also that the unit of work behind the score matches the task contract.**
 
 ## Other Publicly Reported Methods
 

@@ -1,7 +1,7 @@
 ---
 title: "GPU Kernel 优化中的 Reward Hacking：SOL-ExecBench 的评测漏洞与防护"
 date: 2026-11-24T00:00:00+08:00
-lastmod: 2026-11-26T00:00:00+08:00
+lastmod: 2026-11-27T00:00:00+08:00
 author: "Yue Shui"
 categories: ["技术博客"]
 tags: ["LLM", "Agent", "GPU Kernel", "Evaluation", "Reward Hacking"]
@@ -39,13 +39,13 @@ math: true
     width="100%"
 >}}
 
-**Reward hacking（奖励欺骗）是指利用奖励或评测规则的缺口获得高分，却没有相应实现设计者希望的目标。** Lilian Weng 的综述梳理了这个共同问题：实际被优化的奖励，未必完整实现我们真正想要的结果（[Weng, 2024](https://lilianweng.github.io/posts/2024-11-28-reward-hacking/)）。
+**Reward hacking（奖励欺骗）是指利用奖励或评测规则的缺口获得高分，却没有相应实现设计者希望的目标。** Lilian Weng 的综述梳理了这个共同问题：实际被优化的奖励，未必能完整反映我们真正想要的目标（[Weng, 2024](https://lilianweng.github.io/posts/2024-11-28-reward-hacking/)）。
 
-在 kernel 优化里，真实目标是**对当前输入完成规定计算，并且更快**；评测器通常看到的则是有限正确性测试与一组计时读数。这些读数构成了优化时使用的代理目标。返回正确张量，不一定意味着处理了当前输入；整轮计算完成，也不一定意味着每次独立调用都完成了自己的工作。数值正确、调用语义和计时范围需要一起检查，只有都通过后的测验出来的分数才有可信度。
+在 kernel 优化里，真实目标是**对当前输入完成规定计算，并且更快**；评测器通常看到的则是有限正确性测试与一组计时读数。这些读数构成了优化时使用的代理目标。返回正确张量，不一定意味着处理了当前输入；整轮计算完成，也不一定意味着每次独立调用都完成了自己的工作。数值正确、调用语义和计时范围需要一起检查，只有三者同时通过，测出的分数才有可信度。
 
 这类偏离可以分成不同路径：**specification gaming** 利用字面规则与真实目标之间的缺口，不一定修改评分器；**reward tampering** 则直接干预奖励函数或它依赖的证据。两者都可能让分数上升，却没有完成预期任务（[Krakovna et al., 2020](https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/)；[Everitt et al., 2019](https://arxiv.org/abs/1908.04734)）。
 
-规则奖励和单元测试降低了部分主观性，仍然受输入覆盖、容差与执行边界限制。反过来，测试失败也不能直接叫作 hacking：EvilGenie（[Gabor et al., 2025](https://arxiv.org/html/2511.21654v1)）发现，正常实现可能漏掉边界条件，利用测试分布的启发式实现也可能通过保留测试。因此，判断需要结合规格、代码和执行轨迹。
+规则奖励和单元测试降低了部分主观性，仍然受输入覆盖、容差与执行边界限制。反过来，测试失败也不能直接叫作 hacking：EvilGenie（[Gabor et al., 2025](https://arxiv.org/html/2511.21654v1)）发现，正常实现可能漏掉边界条件，利用测试分布的启发式实现也可能通过保留测试。因此，是否属于 hacking 不能只看测试结果，还要结合任务要求、代码实现和执行轨迹来判断。
 
 ## SOL-ExecBench 如何打分
 
@@ -71,9 +71,9 @@ Fig. 3 展示了分数随耗时变化的曲线。越接近 SOL 耗时下界，�
     width="100%"
 >}}
 
-当计时漏掉本次调用应完成的部分计算时，测得的耗时 $T_k$ 可能低于估计的 SOL 耗时下界 $T_{\mathrm{SOL}}$。[Cursor](https://cursor.com/blog/multi-agent-kernels) 在博客中提到若不当缓存等 Reward hacking 手段使测得的性能超出 B200 的硬件能力，评测流程应该成绩判为无效。
+当计时漏掉本次调用应完成的部分计算时，测得的耗时 $T_k$ 可能低于估计的 SOL 耗时下界 $T_{\mathrm{SOL}}$。[Cursor](https://cursor.com/blog/multi-agent-kernels) 在博客中提到，若不当缓存等 reward hacking 手段使测得的性能超出 B200 的硬件能力，评测流程应将该成绩判为无效。
 
-以 Fig. 4 中的算子 [001_attention_softmax_dropout_value_matmul_backward](https://research.nvidia.com/benchmarks/sol-execbench/kernel/1) 为例，B200 榜单记录的提交耗时为 **0.002197 ms**，低于该题 **0.081720 ms** 的 SOL 下界。线上评测服务会将超过 1 的 SOL score 截为 **1**。
+以 Fig. 4 中的算子 [001_attention_softmax_dropout_value_matmul_backward](https://research.nvidia.com/benchmarks/sol-execbench/kernel/1) 为例，B200 榜单记录的提交耗时为 **0.002197 ms**，低于该题 **0.081720 ms** 的 SOL 下界。线上评测服务会将超过 1 的 SOL 分数截为 **1**。
 
 {{< figure
     src="sol-execbench-kernel-001-b200-leaderboard.png"
@@ -127,11 +127,11 @@ if shift is None or shift < _MIN_SHIFT or shift > _MAX_SHIFT:
     return False
 ```
 
-这对应了保存记录中的 evaluator 版本（[NVIDIA, 2026b](https://github.com/NVIDIA/SOL-ExecBench/tree/a9fa0804c793d438e70850c33fe34426e66d53dd)；commit `a9fa080`）的分配方式：每轮所有输入共同前移 256～2048 字节，但新地址中复制的仍是同一份输入数据（[分配器源码](https://github.com/NVIDIA/SOL-ExecBench/blob/a9fa0804c793d438e70850c33fe34426e66d53dd/src/sol_execbench/core/bench/io.py#L621)）。因此，地址轮换没有阻止缓存，反而给缓存提供了识别依据。
+这与记录中评测器版本（[NVIDIA, 2026b](https://github.com/NVIDIA/SOL-ExecBench/tree/a9fa0804c793d438e70850c33fe34426e66d53dd)；commit `a9fa080`）的内存分配方式一致：每轮所有输入共同前移 256～2048 字节，但新地址中复制的仍是同一份输入数据（[分配器源码](https://github.com/NVIDIA/SOL-ExecBench/blob/a9fa0804c793d438e70850c33fe34426e66d53dd/src/sol_execbench/core/bench/io.py#L621)）。因此，地址轮换没有阻止缓存，反而给缓存提供了识别依据。
 
-正确性阶段会重新生成输入；缓存未命中时，提交正常计算。[计时阶段](https://github.com/NVIDIA/SOL-ExecBench/blob/a9fa0804c793d438e70850c33fe34426e66d53dd/src/sol_execbench/driver/templates/eval_driver.py#L584)反复使用相同输入值，预热便有机会填充缓存。命中后，`_reusable` 更新保存的地址，启动一个只写入整数 0 的 Triton marker kernel，再让 `run` 返回旧输出。
+正确性阶段会重新生成输入；缓存未命中时，该提交会正常执行计算。[计时阶段](https://github.com/NVIDIA/SOL-ExecBench/blob/a9fa0804c793d438e70850c33fe34426e66d53dd/src/sol_execbench/driver/templates/eval_driver.py#L584)反复使用相同输入值，预热便有机会填充缓存。命中后，`_reusable` 更新保存的地址，启动一个只写入整数 0 的 Triton marker kernel，再让 `run` 返回旧输出。
 
-该版本的 CUPTI 计时器会在预热后记录候选的 GPU 活动序列，并匹配后续迭代的序列。它能记录 kernel、内存复制等活动，却无法仅凭序列一致判断这些活动是否完成了 RMSNorm。发现序列时若已走缓存路径，后续也可以只匹配到 marker（[计时源码](https://github.com/NVIDIA/SOL-ExecBench/blob/a9fa0804c793d438e70850c33fe34426e66d53dd/src/sol_execbench/core/bench/timing.py#L154)）。
+该版本的 CUPTI 计时器会在预热后记录候选的 GPU 活动序列，并匹配后续迭代的序列。它能记录 kernel、内存复制等活动，却无法仅凭序列一致判断这些活动是否完成了 RMSNorm。如果在记录活动序列时就已经走了缓存路径，后续迭代只需匹配到这个 marker 即可（[计时源码](https://github.com/NVIDIA/SOL-ExecBench/blob/a9fa0804c793d438e70850c33fe34426e66d53dd/src/sol_execbench/core/bench/timing.py#L154)）。
 
 2026 年 11 月 23 日保存的 [rmsnorm-evaluation.json](rmsnorm-evaluation.json) 中，这份提交在 B200 上对一个 BF16 workload（`1 × 8192 × 8192`，`eps = 1e-5`）得到 `PASSED`，最大绝对与相对误差均为 0，报告耗时 **2.064 μs**。配置是 10 次预热、50 次计时、seed 200；未锁频，也没有测量参考耗时。记录没有逐次缓存命中日志；上述源码路径与评测流程提供了一种解释：**正确性阶段正常计算，计时阶段复用缓存。**
 
@@ -167,7 +167,7 @@ if (!dirty) return;
 
 这份代码还会在 `S <= 4096` 时捕获、重放 CUDA Graph。**Graph 重放仍会执行 GPU 计算；这里的问题是输入不再刷新。** [PyTorch 文档](https://docs.pytorch.org/docs/2.15/notes/cuda.html#cuda-graphs)说明了固定地址与更新数据的区别：重放复用捕获时的地址，但可以读取这些地址里的新内容。若使用内部静态输入，就需要在重放前写入本次输入；不能靠调用次数来决定是否更新。
 
-这个例子与前一个的节省来源不同：前者可以跳过 RMSNorm 本身，这里省掉的是输入准备，并对旧数据继续计算。
+这个例子与前一例省下耗时的环节不同：前者直接跳过了 RMSNorm 本身，这里省掉的是输入准备，后续仍基于旧数据继续计算。
 
 ### 例子三：利用输入分布，删掉整个计算分支
 
@@ -196,7 +196,7 @@ needed = [all_args[i] for i in _NEED_IDX]
 
 计时阶段，评测器重复传入同一批对象。第一次调用启动一个合并 15 份数据的 120-group kernel，其余 14 次只返回缓存的输出。**GPU 上只运行了一个 kernel，总耗时却被除以 15。**
 
-这个案例确实完成了矩阵乘法，也可能获得真实的批处理吞吐收益；但把整批耗时除以 15，得到的是跨调用摊销后的读数。它没有证明一个独立请求能以同样延迟完成。如果生产接口允许合批，这可以是合法优化，同时需要报告等待成批的时间。**评测需要验证的，不只是答案对不对，还包括分数采用的工作单位是否符合任务约定。**
+这个案例确实完成了矩阵乘法，也可能获得真实的批处理吞吐收益；但把整批耗时除以 15，得到的是跨调用摊销后的读数。它没有证明一个独立请求能以同样延迟完成。如果生产接口本身允许合批，这可以算作合法优化，但也需要把等待多个请求攒成一个 batch 的排队时间一并算进去。**评测需要验证的，不只是答案对不对，还包括计分对应的工作量是否符合任务约定。**
 
 ## 公开报告中还有哪些方法
 
@@ -242,7 +242,7 @@ SOL-ExecBench 论文 v1 描述的是 CUDA Event 计时。例子一采用的评�
 
 1. **在计时流程中改变输入值，并核对输出。** 同形状下测试原地修改、重新分配，以及相同地址偏移但不同内容的输入。生成数据和比较结果可以放在计时区间外，但不能让正确性只覆盖另一条执行路径。
 2. **改变调用历史与数值分布。** 调整预热次数，交错输入和形状；只改未抽样位置，或放大被忽略的计算分支。前者检查状态复用，后者检查容差与输入覆盖，两者需要分别测试。
-3. **保护参考数据与评分过程。** 写清楚允许的缓存、预处理、合批及计时范围，把参考答案、计时器和权威记录放到候选不能任意读写的边界。保留正常实现作为正对照，以缓存、删分支和计时绕过实现作为负对照；新增检查需要既拒绝漏洞，也接受合法优化。
+3. **保护参考数据与评分过程。** 写清楚允许的缓存、预处理、合批及计时范围，把参考答案、计时器和权威记录与候选代码隔离，防止其任意读写。保留正常实现作为正对照，以缓存、删分支和计时绕过实现作为负对照；新增检查需要既拒绝漏洞，也接受合法优化。
 
 这些措施针对的是本文案例；它们需要用保留的漏洞实现逐项验证，不能因为增加了随机种子、CUPTI 或代码审核，就宣称整个评测已经可靠。
 
@@ -272,7 +272,7 @@ SOL-ExecBench 论文 v1 描述的是 CUDA Event 计时。例子一采用的评�
 
 ### 用形式化验证加强语义检查
 
-SF Tensor 的形式化正确性工作（[Koska et al., 2026](https://sf-tensor.com/news/formal-correctness)）尝试从 PTX 建立符号模型，通过求解器验证实现与规格等价，覆盖随机测试容易漏掉的分支、mask 和同步问题。它把“测过若干输入”推进到“在模型与前提下证明性质”，但早期实现将浮点数视为精确实数，不能据此保证实际浮点误差。
+SF Tensor 的形式化正确性工作（[Koska et al., 2026](https://sf-tensor.com/news/formal-correctness)）尝试从 PTX 建立符号模型，通过求解器验证实现与规格等价，覆盖随机测试容易漏掉的分支、mask 和同步问题。它把验证从“抽测若干输入”推进到“在给定模型与前提下证明等价性”，但早期实现将浮点数视为精确实数，不能据此保证实际浮点误差。
 
 {{< figure
     src="random-testing-vs-formal-verification.png"
@@ -286,17 +286,17 @@ SF Tensor 的形式化正确性工作（[Koska et al., 2026](https://sf-tensor.c
 
 OpenAI 的 CoT 监控研究（[Baker et al., 2025](https://arxiv.org/abs/2503.11926v1)）展示了用监控发现作弊轨迹、人工调查并修补环境漏洞的过程。对 kernel Agent，可以同时保留工具调用、提交差异、GPU 活动与权威测试结果，用监控寻找新模式，再把确认的漏洞变成回归负例。
 
-监控本身也要验收。OpenAI 的后续实践（[OpenAI, 2026](https://openai.com/safety-alignment/how-we-detect-frontier-model-misalignment/)）采用分层调查，并随机抽查未触发告警的样本、用历史事件和红队测试漏检。只看告警率会漏掉隐蔽行为；实际 hacking、监控召回与误报、有效计算通过率和防护开销，需要分开报告。
+监控本身也要验收。OpenAI 的后续实践（[OpenAI, 2026](https://openai.com/safety-alignment/how-we-detect-frontier-model-misalignment/)）采用分层调查，并随机抽查未触发告警的样本、用历史事件和红队测试漏检。只看告警率会漏掉隐蔽行为；实际作弊率、监控的召回率与误报率、有效计算通过率以及防护开销，需要分开统计和报告。
 
 ### 训练中惩罚已证实的绕过行为
 
-评测漏洞进入训练后，还可能影响后续行为。Denison 等人用构造课程奖励较轻的 specification gaming；在未直接训练奖励篡改的测试场景中，模型也曾在少数试次里改写模拟奖励代码（[Denison et al., 2024](https://arxiv.org/abs/2406.10162v3)）。这展示了投机行为跨场景泛化的一条路径，不能据此估计部署模型的作弊率。
+评测漏洞进入训练后，还可能影响后续行为。Denison 等人设计了一组渐进式训练任务，对较轻的 specification gaming 给予奖励；结果在未直接训练奖励篡改的测试场景中，模型也曾在少数实验里改写模拟奖励代码（[Denison et al., 2024](https://arxiv.org/abs/2406.10162v3)）。这展示了投机行为跨场景泛化的一条路径，但不能据此估计部署模型的作弊率。
 
-Anthropic 的研究（[MacDiarmid et al., 2025](https://arxiv.org/abs/2511.18397v1)）发现，在其 coding RL 设置中，足够权重的偏好奖励或专门的 hacking 检测惩罚可以抑制已知作弊。普通聊天型 RLHF 则不能保证修复 agentic 行为；inoculation prompting 主要减少作弊向其他失配行为的泛化，并没有修复评分器漏洞。
+Anthropic 的研究（[MacDiarmid et al., 2025](https://arxiv.org/abs/2511.18397v1)）发现，在其 coding RL 设置中，足够权重的偏好奖励或专门的 hacking 检测惩罚可以抑制已知作弊。普通聊天型 RLHF 则不能保证纠正 agentic 场景下的作弊行为；inoculation prompting 主要减少作弊向其他失配行为的泛化，并没有修复评分器漏洞。
 
-也要避免把“更少说出作弊意图”当成成功。OpenAI 的实验表明，直接对 CoT 施加强优化压力，可能让剩余作弊更难被监控发现。因此，应依据可靠的行为与执行证据判定候选是否有效，再独立检查监控和训练干预的效果。
+也要避免把“模型不再说出作弊意图”当作治理成功。OpenAI 的实验表明，直接对 CoT 施加强优化压力，可能让剩余作弊更难被监控发现。因此，应依据可靠的行为与执行证据判定候选是否有效，再独立检查监控和训练干预的效果。
 
-MONA（[Farquhar et al., 2025](https://arxiv.org/html/2501.13011v2)）则尝试改变多步优化的激励：只把单步或短期回报用于优化，并加入监督者对长期影响的预先评价，减少“先削弱检查、再从后续高分中获益”的动机。论文实验覆盖三个构造场景，也不解决单步硬编码等漏洞。对 kernel RL，这提供了奖励设计思路，仍需保留独立的数值、调用契约与计时验收。
+MONA（[Farquhar et al., 2025](https://arxiv.org/html/2501.13011v2)）则尝试改变多步优化的激励：只把单步或短期回报用于优化，并引入监督者对长期影响的评估，减少“先削弱检查、再从后续高分中获益”的动机。不过论文实验只覆盖了三个合成场景，也无法解决单步硬编码等漏洞。对 kernel RL 而言，它提供了一种奖励设计思路，但仍需保留独立的数值、调用语义与计时验收。
 
 ## 总结
 
